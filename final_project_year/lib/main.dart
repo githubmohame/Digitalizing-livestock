@@ -1,3 +1,4 @@
+import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/add_worker_screen.dart';
 import 'package:final_project_year/main_screens/chart_screen.dart';
 import 'package:final_project_year/main_screens/connect_farm_and_farmer.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false,
-      home: ChartScreen(),
+      home: AddAdmin(),
     );
   }
 }

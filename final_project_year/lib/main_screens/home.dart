@@ -1,4 +1,11 @@
 import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/main_screens/add_admin_screen.dart';
+import 'package:final_project_year/main_screens/add_animal.dart';
+import 'package:final_project_year/main_screens/chart_screen.dart';
+import 'package:final_project_year/main_screens/farm_screen.dart';
+import 'package:final_project_year/main_screens/farmer_screen.dart';
+import 'package:final_project_year/main_screens/login.dart';
+import 'package:final_project_year/main_screens/screen_location/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -24,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.only(bottomRight: Radius.circular(100)),
-                        color: Color(0x0FFFb0b348),
+                        color: Color(0x0FF9c6644),
                       ),
                     ),
                     Align(
@@ -60,21 +67,21 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       height: 200,
                       width: 200,
-                      child: FloatingActionButton(heroTag: 'farmer',
+                      child: FloatingActionButton(heroTag: 'statistics',
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.asset('assets/images/farmer.png'),
                               Text(
-                                "عدد المربين",
+                                "عدد المربين الافراد",
                                 style: TextStyle(
-                                    color: Color(0x0FFFb0b348),
+                                    color: Color(0x0FF9c6644),
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 6578654.toString(),
                                 style: TextStyle(
-                                    color: Color(0x0FFFb0b348),
+                                    color: Color(0x0FF9c6644),
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -93,13 +100,13 @@ class HomeScreen extends StatelessWidget {
                               Text(
                                 "عدد المزارع\n",
                                 style: TextStyle(
-                                    color: Color(0x0FFFb0b348),
+                                    color: Color(0x0FF9c6644),
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 6578654.toString(),
                                 style: TextStyle(
-                                    color: Color(0x0FFFb0b348),
+                                    color: Color(0x0FF9c6644),
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -128,13 +135,38 @@ class HomeScreen extends StatelessWidget {
                               Text(
                                 "عدد رؤس الماشية ",
                                 style: TextStyle(
-                                    color: Color(0x0FFFb0b348),
+                                    color: Color(0x0FF9c6644),
                                     fontWeight: FontWeight.bold),
                               ),
                               Text(
                                 6578654.toString(),
                                 style: TextStyle(
-                                    color: Color(0x0FFFb0b348),
+                                    color: Color(0x0FF9c6644),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          )),
+                    ),
+                    Container(
+                      height: 200,
+                      width: 200,
+                      child: FloatingActionButton(heroTag: 'cows',
+                          backgroundColor: Colors.white,
+                          onPressed: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  ChartScreen(),
+                    ));
+              }),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/images/drawer_statistics.png"),
+                              Text(
+                                "الاحصائيات",
+                                style: TextStyle(
+                                    color: Color(0x0FF9c6644),
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -148,124 +180,191 @@ class HomeScreen extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Card(
-                        color: Color(0x0FFFc5c4be),
-                        elevation: 10,
-                        child: Container(
-                            width: 150,
-                            height: 150,
-                            child: Column(
-                              children: [
-                                Image.asset('assets/images/add_animal.png'),
-                                Text(
-                                  "اضافة حيوان",
-                                  style: TextStyle(
-                                      color: Color(0x0FFa58363),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )),
-                      ),
-                    ),
-                    Expanded(
-                      child: Card(
-                        color: Color(0x0FFFc5c4be),
-                        elevation: 10,
-                        child: Container(
-                            width: 150,
-                            height: 150,
-                            child: Column(
-                              children: [
-                                Image.asset('assets/images/add_farmer.png'),
-                                Text("اضافه مربي"),
-                              ],
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Card(
-                        color: Color(0x0FFFc5c4be),
-                        elevation: 10,
-                        child: Container(
-                            width: 150,
-                            height: 150,
-                            child: Column(
-                              children: [
-                                Image.asset('assets/images/add_field.png'),
-                                Text("اضافة مزرعة"),
-                              ],
-                            )),
-                      ),
-                    ),
-                    Expanded(
-                      child: Card(
-                        color: Color(0x0FFFc5c4be),
-                        elevation: 10,
-                        child: Container(
-                            width: 150,
-                            height: 150,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/statistics.png'),
-                                Text(
-                                  "الاحصائيات",
-                                  style: TextStyle(
-                                      color: Color(0x0FFa58363),
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(onTap:() {
-                        print('object');
-                      }, 
-                        child: Card(
-                          color: Color(0x0FFFc5c4be),
-                          elevation: 10,
-                          child: Container(
-                              width: 150,
-                              height: 150,
-                              child: Column(
-                                children: [
-                                  Image.asset('assets/images/location-pin.png'),
-                                  Text("اضافة مكان"),
-                                ],
-                              )),
+                      child: Container(margin: EdgeInsets.only(right: 100),
+                        child: GestureDetector(onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  UpdateAnimal(),
+                    ));
+              }),
+                          child: Card(
+                            color: Color(0x0FFFc5c4be),
+                            elevation: 10,
+                            child: Container(
+                                width: 150,
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                    Image.asset('assets/images/add_animal.png'),
+                                    Text(
+                                      "اضافة حيوان",
+                                      style: TextStyle(
+                                          color: Color(0x0FFa58363),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                )),
+                          ),
                         ),
                       ),
                     ),
                     Expanded(
-                      child: Card(
-                        color: Color(0x0FFFc5c4be),
-                        elevation: 10,
-                        child: Container(
-                            width: 150,
-                            height: 150,
-                            child: Column(
-                              children: [
-                                 Icon( Icons.person,size:80,color:Colors.brown),
-                                Text("تسجيل الدخول"),
-                              ],
-                            )),
+                      child: Container(margin: EdgeInsets.only(left: 100),
+                        child: GestureDetector(onTap: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Farmer(),
+                    ));
+              },
+                          child: Card(
+                            color: Color(0x0FFFc5c4be),
+                            elevation: 10,
+                            child: Container(
+                                width: 150,
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                    Image.asset('assets/images/add_farmer.png'),
+                                    Text("اضافه مربي",style: TextStyle(
+                                          color: Color(0x0FFa58363),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),),
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(margin: EdgeInsets.only(right: 100),
+                        child: GestureDetector( onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FarmScreen(),
+                    ));
+              }),
+                          child: Card(
+                            color: Color(0x0FFFc5c4be),
+                            elevation: 10,
+                            child: Container(
+                                width: 150,
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                    Image.asset('assets/images/add_field.png'),
+                                    Text("اضافة مزرعة",style: TextStyle(
+                                          color: Color(0x0FFa58363),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),),
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  Expanded(
+                      child: Container(margin: EdgeInsets.only(left: 100),
+                        child: GestureDetector( onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  UpdateLocation(),
+                    ));
+              }), 
+                          child: Card(
+                            color: Color(0x0FFFc5c4be),
+                            elevation: 10,
+                            child: Container(
+                                width: 150,
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                    Image.asset('assets/images/location-pin.png'),
+                                    Text("اضافة مكان",style:  TextStyle(
+                                          color: Color(0x0FFa58363),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),),
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    
+                   
+                  ],
+                ),
+                 Row(
+                  children: [
+                    Expanded(
+                      child: Container(margin: EdgeInsets.only(right: 100),
+                        child: GestureDetector(onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>  AddAdmin(),
+                    ));
+              }),
+                          child: Card(
+                            color: Color(0x0FFFc5c4be),
+                            elevation: 10,
+                            child: Container(
+                                width: 150,
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                     Icon( Icons.person,size:80,color:Colors.brown),
+                                    Text("تسجيل المدرين"),
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ),
+                    ),
+                     Expanded(
+                      child: Container(margin: EdgeInsets.only(left:100),
+                        child: GestureDetector( onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LogIN(),
+                    ));
+              }),
+                          child: Card(
+                            color: Color(0x0FFFc5c4be),
+                            elevation: 10,
+                            child: Container(
+                                width: 150,
+                                height: 150,
+                                child: Column(
+                                  children: [
+                                     Icon( Icons.person,size:80,color:Colors.brown),
+                                    Text("تسجيل الدخول",style: TextStyle(
+                                          color: Color(0x0FFa58363),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),),
+                                  ],
+                                )),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -278,3 +377,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+

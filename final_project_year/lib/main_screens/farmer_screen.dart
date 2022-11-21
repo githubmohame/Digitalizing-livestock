@@ -34,7 +34,7 @@ class Farmer extends StatelessWidget {
                     Navigator.pop(context);
                   },
                   icon: Icon(Icons.arrow_back)):null,
-            backgroundColor: Color(0x0FFFb0b348), title: Text("اضافه المربين")),
+            backgroundColor: Colors.brown, title: Text("اضافه المربين")),
         body: SingleChildScrollView(
           child: Form(
               child: Column(

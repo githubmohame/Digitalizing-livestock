@@ -20,7 +20,7 @@ class ScreenAddAnimal extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-            child: SelectGavernorate(),
+            child: SelectGavernorate(title: 'النوع'),
           ),
         ),
         TextField(
@@ -32,12 +32,12 @@ class ScreenAddAnimal extends StatelessWidget {
                   color: Colors.white,
                 ),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 5)),
+                    borderSide: BorderSide(color: Colors.brown, width: 5)),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)),
-                focusColor: Colors.green,
+                    borderSide: BorderSide(color: Colors.brown, width: 2)),
+                focusColor: Colors.brown,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)))),
+                    borderSide: BorderSide(color: Colors.brown, width: 2)))),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -69,7 +69,7 @@ class ScreenAddAnimal extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.grey),
                   overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.green)),
+                      (states) => Colors.brown)),
               onPressed: () {},
               child: Text(
                 "حفظ",
@@ -101,7 +101,11 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-            child: SelectCity(),
+            child: SelectCity(titles: ['النوع','الفصيلة'],list: [
+                  {"id": 0, "name": "اسيوط"},
+                  {"id": 1, "name": "القاهرة"},
+                  {"id": 2, "name": "المنةفية"}
+                ],),
           ),
         ),
         TextField(
@@ -113,12 +117,12 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
                   color: Colors.white,
                 ),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 5)),
+                    borderSide: BorderSide(color: Colors.brown, width: 5)),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)),
-                focusColor: Colors.green,
+                    borderSide: BorderSide(color: Colors.brown, width: 2)),
+                focusColor: Colors.brown,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)))),
+                    borderSide: BorderSide(color: Colors.brown, width: 2)))),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -150,7 +154,7 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.grey),
                   overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.green)),
+                      (states) => Colors.brown)),
               onPressed: () {},
               child: Text(
                 "حفظ",
@@ -178,7 +182,7 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(backgroundColor: Colors.green,
+        bottomNavigationBar: BottomNavigationBar(backgroundColor: Colors.grey,
             currentIndex: index,
             onTap: (value) {
               setState(() {
@@ -187,16 +191,16 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
             },selectedItemColor: Colors.brown,selectedLabelStyle: TextStyle(  color: Colors.brown,fontSize: 20),
             items: [
               BottomNavigationBarItem(
-                label: 'تعديل المركز او المدينة',
+                label: 'تعديل النوع',
                 icon: Container()
               ),
               BottomNavigationBarItem(
-                label: 'تعديل القرية والشارع',
+                label: "تعديل الفصيلة",
                 icon:Container(),
               ),
             ]),
-        backgroundColor: Color(0x0FFFb0b348),
-        appBar: AppBar(elevation: 0, backgroundColor: Color(0x0FFFb0b348)),
+        backgroundColor: Colors.white,
+        appBar: AppBar(title:Text("تعديل الفصيلة او النوع"),elevation: 0, backgroundColor: Colors.brown),
         drawer: MainDrawer(index: 7),
         body: list[index],
       ),

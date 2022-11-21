@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ScreenGavernorate extends StatelessWidget {
   const ScreenGavernorate({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class ScreenGavernorate extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-            child: SelectGavernorate(),
+            child: SelectGavernorate(title: 'المحافظة'),
           ),
         ),
         TextField(
@@ -31,12 +32,12 @@ class ScreenGavernorate extends StatelessWidget {
                   color: Colors.white,
                 ),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 5)),
+                    borderSide: BorderSide(color: Colors.brown, width: 5)),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)),
-                focusColor: Colors.green,
+                    borderSide: BorderSide(color: Colors.brown, width: 2)),
+                focusColor: Colors.brown,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)))),
+                    borderSide: BorderSide(color: Colors.brown, width: 2)))),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -68,7 +69,7 @@ class ScreenGavernorate extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.grey),
                   overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.green)),
+                      (states) => Colors.brown)),
               onPressed: () {},
               child: Text(
                 "حفظ",
@@ -83,8 +84,13 @@ class ScreenGavernorate extends StatelessWidget {
 }
 
 class SelectGavernorate extends StatefulWidget {
-  SelectGavernorate({Key? key, this.village}) : super(key: key);
   String? village;
+  String title;
+  SelectGavernorate({
+    Key? key,
+    this.village,
+    required this.title,
+  }) : super(key: key);
   @override
   State<SelectGavernorate> createState() => _SelectGavernorateState();
 }
@@ -97,8 +103,8 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
         Container(
             child: CustomeDropdownButton(
                 func: (int value) {
-                  /*BlocProvider.of<ChoiceCubit>(context)
-                      .updateGavernorate(value);*/
+                  BlocProvider.of<ChoiceCubit>(context)
+                      .updateGavernorate(value);
                 },
                 list: [
                   {"id": 0, "name": "اسيوط"},
@@ -107,15 +113,22 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
                 ],
                 expanded: true,
                 value: 0,
-                text: "المحافظة")),
+                text: widget.title)),
       ],
     );
   }
 }
 
 class SelectCity extends StatefulWidget {
-  SelectCity({Key? key, this.village}) : super(key: key);
+  List<Map<String, dynamic>> list;
   String? village;
+  List<String> titles;
+  SelectCity({
+    Key? key,
+    required this.list,
+    this.village,
+    required this.titles,
+  }) : super(key: key);
   @override
   State<SelectCity> createState() => _SelectCityState();
 }
@@ -132,17 +145,15 @@ class _SelectCityState extends State<SelectCity> {
             )),
             child: CustomeDropdownButton(
                 func: (int value) {
-                  BlocProvider.of<ChoiceCubit>(context)
-                      .updateGavernorate(value);
+                  BlocProvider.of<ChoiceCubit>(context).updateCity(value);
                 },
                 list: [
-                  {"id": 0, "name": "اسيوط"},
                   {"id": 1, "name": "القاهرة"},
-                  {"id": 2, "name": "المنةفية"}
+                  {"id": 0, "name": "القاهرة"}
                 ],
                 expanded: true,
                 value: 0,
-                text: "المحافظة")),
+                text: widget.titles[0])),
         Container(
           decoration: BoxDecoration(
               border: Border.all(
@@ -159,13 +170,10 @@ class _SelectCityState extends State<SelectCity> {
                   func: (int value) {
                     BlocProvider.of<ChoiceCubit>(context).updateCity(value);
                   },
-                  list: [
-                    {"id": 1, "name": "القاهرة"},
-                    {"id": 0, "name": "القاهرة"}
-                  ],
+                  list: widget.list,
                   expanded: true,
                   value: 0,
-                  text: "المركز او المدينة");
+                  text: widget.titles[1]);
             },
           ),
         ),
@@ -189,7 +197,14 @@ class ScreenCity extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-            child: SelectCity(),
+            child: SelectCity(
+              titles: ['المحافظة', 'المركز'],
+              list: [
+                {"id": 0, "name": "اسيوط"},
+                {"id": 1, "name": "القاهرة"},
+                {"id": 2, "name": "المنةفية"}
+              ],
+            ),
           ),
         ),
         TextField(
@@ -201,12 +216,12 @@ class ScreenCity extends StatelessWidget {
                   color: Colors.white,
                 ),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 5)),
+                    borderSide: BorderSide(color: Colors.brown, width: 5)),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)),
-                focusColor: Colors.green,
+                    borderSide: BorderSide(color: Colors.brown, width: 2)),
+                focusColor: Colors.brown,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)))),
+                    borderSide: BorderSide(color: Colors.brown, width: 2)))),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -238,7 +253,7 @@ class ScreenCity extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.grey),
                   overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.green)),
+                      (states) => Colors.brown)),
               onPressed: () {},
               child: Text(
                 "حفظ",
@@ -279,12 +294,12 @@ class ScreenVillage extends StatelessWidget {
                   color: Colors.white,
                 ),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 5)),
+                    borderSide: BorderSide(color: Colors.brown, width: 5)),
                 focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)),
-                focusColor: Colors.green,
+                    borderSide: BorderSide(color: Colors.brown, width: 2)),
+                focusColor: Colors.brown,
                 enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.green, width: 2)))),
+                    borderSide: BorderSide(color: Colors.brown, width: 2)))),
         Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -316,7 +331,7 @@ class ScreenVillage extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.grey),
                   overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.green)),
+                      (states) => Colors.brown)),
               onPressed: () {},
               child: Text(
                 "حفظ",
@@ -343,15 +358,19 @@ class _UpdateLocationState extends State<UpdateLocation> {
   int index = 0;
   @override
   Widget build(BuildContext context) {
-    return Directionality(textDirection: TextDirection.rtl,
+    return Directionality(
+      textDirection: TextDirection.rtl,
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(backgroundColor: Colors.green,
+        bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.grey,
             currentIndex: index,
             onTap: (value) {
               setState(() {
                 index = value;
               });
-            },selectedItemColor: Colors.brown,selectedLabelStyle: TextStyle(  color: Colors.brown,fontSize: 20),
+            },
+            selectedItemColor: Colors.brown,
+            selectedLabelStyle: TextStyle(color: Colors.brown, fontSize: 20),
             items: [
               BottomNavigationBarItem(
                 label: 'تعديل المحافظة',
@@ -366,8 +385,8 @@ class _UpdateLocationState extends State<UpdateLocation> {
                 icon: Image(image: AssetImage('assets/images/village.png')),
               ),
             ]),
-        backgroundColor: Color(0x0FFFb0b348),
-        appBar: AppBar(elevation: 0, backgroundColor: Color(0x0FFFb0b348)),
+        backgroundColor: Colors.white,
+        appBar: AppBar(elevation: 0, backgroundColor: Colors.brown),
         drawer: MainDrawer(index: 6),
         body: list[index],
       ),

@@ -23,7 +23,7 @@ class element_has_css_class(object):
 		try:
 			select3=self.driver.find_element(By.ID,(self.name))
 			select3.click()
-			return driver
+			return self.driver
 		except:
 			pass
 class element_has_css_class2(object):
@@ -44,54 +44,59 @@ def solution():
 	driver = webdriver.Chrome(ChromeDriverManager().install()) 
 	driver.get("https://alzahraa.mans.edu.eg/studentApplications")
 	x=driver.find_elements(By.TAG_NAME,("a"))
+	driver.implicitly_wait(10)
 	x[8].click()
-	your_element = WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsDwn")) 
-	select= Select(driver.find_element(By.ID,'cmbAddress') )
-	list=WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class2(select,)) 
+	WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsDwn")) 
 	counter=0
+	select= Select(driver.find_element(By.ID,'cmbAddress') )
+	list=select.options
 	while(len(list)>gavernorate):
-			if(counter==0):
-				list1,f,driver=WebDriverWait(driver, 20,poll_frequency=2 ).until(element_has_css_class2(select,)) 
-				#f.select_by_visible_text(list1[gavernorate].text)
-				class  fun1(object):
-					def __call__(self, driver):
-						select= Select(driver.find_element(By.ID,'cmbAddress') )
-						list1,f,driver1=WebDriverWait(driver, 20,poll_frequency=2 ).until(element_has_css_class2(select,))
-						try:
-							name.append(list1[gavernorate].get_attribute("title"))
-							select.select_by_index(gavernorate)
-						except:
-							return
-						return name
-				WebDriverWait(driver, 12,poll_frequency=2).until(fun1())
-			elif(counter==1):
-				list1,f,driver1=WebDriverWait(driver, 20,poll_frequency=2 ).until(element_has_css_class2(select,)) 
-				if len(list1)<=city:
-					print(city)
-					city=0
-					gavernorate+=1
-				list1,f,driver1=WebDriverWait(driver, 20,poll_frequency=2 ).until(element_has_css_class2(select,))
-				select= Select(driver.find_element(By.ID,'cmbAddress') )
-				def func(a):
-					pass
-				class  func(object):
-					def __call__(self, driver):
-						select= Select(driver.find_element(By.ID,'cmbAddress') )
-						select.select_by_index(city)
-						name.append(list1[city].text)
-						return name
-				WebDriverWait(driver, 20,poll_frequency=2 ).until(func())
-			try:
-				your_element = WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsDwn")) 
-				counter+=1
-				time.sleep(10)
-			except:
-				while(counter>0):        
-					driver = WebDriverWait(driver, 20,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsUp"))
-					counter-=1
-				print(counter)
-				counter=0
-				name=[]
+			class  fun1(object):
+				def __call__(self, driver):
+					select= Select(driver.find_element(By.ID,'cmbAddress') )
+					list1,f,driver1=WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class2(select,))
+					try:
+						name.append(list1[gavernorate].get_attribute("title"))
+						select.select_by_index(gavernorate)
+					except:
+						return
+					return name
+			WebDriverWait(driver, 12,poll_frequency=2).until(fun1())
+			time.sleep(4)
+			list2,f,driver1=WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class2(select,))
+			time.sleep(4)
+			WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsDwn")) 
+			time.sleep(4)
+			counter+=1
+			class  func(object):
+				def __call__(self, driver):
+					select= Select(driver.find_element(By.ID,'cmbAddress') )
+					select.select_by_index(city)
+					list1=[i.text for i in select.options]
+					name.append(list1[city])
+					return name
+			time.sleep(2)
+			WebDriverWait(driver, 20,poll_frequency=2 ).until(func())
 			city+=1
-	print(gavernorate)
+			try:
+				WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsDwn")) 
+				time.sleep(4)
+				counter+=1
+			except:
+				pass
+			print(counter)
+			while(counter>0):        
+				WebDriverWait(driver, 6,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsUp"))
+				time.sleep(4)
+				print(counter)
+				counter-=1
+			print(counter)
+			if(name in array):
+				print('Error')
+				print(name)
+			array.append(name)
+			print(counter)
+			name=[] 
+			print('done')
+			time.sleep(12)
 solution()

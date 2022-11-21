@@ -1,89 +1,118 @@
 import 'dart:math';
 
+import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ChartScreen extends StatelessWidget {
   ChartScreen({Key? key}) : super(key: key);
-  TooltipBehavior tooltipBehavior = TooltipBehavior(enable: true);
+  TooltipBehavior tooltipBehavior = TooltipBehavior(tooltipPosition: TooltipPosition.pointer,shared: true,canShowMarker: true,
+    enable: true,
+    builder: (data, point, series, pointIndex, seriesIndex) {
+      return Container(color: Colors.white,height: 150,width: 150,child: Column(children: [
+        Text((series as ColumnSeries).xAxisName.toString()+":"+(data as Test).gavernorate),
+        Text((series as ColumnSeries).yAxisName.toString()+":"+(data as Test).weight.toString()),
+      ],),);
+    },
+  );
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.green,
-        ),
-        backgroundColor: Color(0x0FFFb0b348),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                child: SfCircularChart(
-                  title: ChartTitle(text: 'tell me'),
-                  legend: Legend(isVisible: true),
-                  tooltipBehavior: tooltipBehavior,
-                  series: <CircularSeries>[
-                    PieSeries<Test, String>(
-                        enableTooltip: true,
-                        groupTo: 2,
-                        //groupMode: CircularChartGroupMode.point,
-                        dataLabelSettings: DataLabelSettings(isVisible: true),
-                        dataSource: getTest(),
-                        xValueMapper: (Test datum, index) => datum.gavernorate,
-                        yValueMapper: (Test datum, index) => datum.weight)
-                  ],
-                ),
-              ),
-              Container(height: 1300 ,
-                child: SfCartesianChart(
-                  title: ChartTitle(text: 'tell me'),
-                  series: <ChartSeries>[
-                    BarSeries<Test, String>(  
-                        dataSource: getTest(),
-                        xValueMapper: (Test datum, index) => datum.gavernorate,
-                        yValueMapper: (Test datum, index) => datum.weight)
-                  ],
-                  primaryXAxis: CategoryAxis(),
-                ),
-              ),
-               SfCartesianChart(
-                title: ChartTitle(text: 'tell me'),
-                series: <ColumnSeries<Test,String>>[
-                  ColumnSeries<Test, String>(
-                      dataSource: getTest(),
-                      xValueMapper: (Test datum, index) => datum.gavernorate,
-                      yValueMapper: (Test datum, index) => datum.weight)
-                ],
-                primaryXAxis: CategoryAxis(),
-              ),
-                SfCartesianChart(
-                title: ChartTitle(text: 'tell me'),
-                series: <ChartSeries>[
-                  BarSeries<Test, String>(
-                      dataSource: getTest(),
-                      xValueMapper: (Test datum, index) => datum.gavernorate,
-                      yValueMapper: (Test datum, index) => datum.weight)
-                ],
-                primaryXAxis: CategoryAxis(),
-              ),
-                SfCartesianChart(
-                title: ChartTitle(text: 'tell me'),
-                series: <ChartSeries>[
-                  BarSeries<Test, String>(
-                      dataSource: getTest(),
-                      xValueMapper: (Test datum, index) => datum.gavernorate,
-                      yValueMapper: (Test datum, index) => datum.weight)
-                ],
-                primaryXAxis: CategoryAxis(),
-              ),
-               
-            ],
+    return Directionality(textDirection:TextDirection.rtl ,
+      child: Scaffold(drawer: MainDrawer(index:8 ),
+          appBar: AppBar( title: Center(child: Text('الاحصائيات')),
+            backgroundColor: Colors.brown,
           ),
-        ));
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(height: 500,
+                  child: SfCircularChart(
+                    title: ChartTitle(text: 'عدد مزارع الالبان'),
+                    legend: Legend(isVisible: true),
+                    series: <CircularSeries>[
+                      PieSeries<Test, String>(
+                          //groupTo: 2,
+                          //groupMode: CircularChartGroupMode.point,
+                          dataLabelSettings: DataLabelSettings(isVisible: true),dataLabelMapper: (Test datum, index) => datum.gavernorate+'\n'+datum.weight.toString(),
+                          dataSource: getTest(1),
+                          xValueMapper: (Test datum, index) => datum.gavernorate,
+                          yValueMapper: (Test datum, index) => datum.weight)
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 700,
+                  child: SfCartesianChart(
+                    legend: Legend(isVisible: true),
+                    tooltipBehavior: tooltipBehavior,
+                    title: ChartTitle(text: 'عدد مزارع اللحوم'),
+                    series: <ColumnSeries>[
+                      ColumnSeries<Test, String>(xAxisName:"المحافظات" ,
+                          enableTooltip: true,yAxisName: "عدد المزارع",
+                          dataSource: getTest(1),
+                          xValueMapper: (Test datum, index) => datum.gavernorate,
+                          yValueMapper: (Test datum, index) => datum.weight)
+                    ],
+                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 16,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w300
+                                  ))),
+                    
+                  ),
+                ),
+                Container(height: 1400,
+                  child: SfCartesianChart(
+                    title: ChartTitle(text: 'عدد رؤوس الماشية'),tooltipBehavior: tooltipBehavior,
+                    series: <ColumnSeries<Test, String>>[
+                      ColumnSeries<Test, String>(enableTooltip: true,
+                          dataSource: getTest(-1),
+                          xValueMapper: (Test datum, index) => datum.gavernorate,
+                          yValueMapper: (Test datum, index) => datum.weight)
+                    ],
+                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 16,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w300
+                                  ))),
+                  ),
+                ),
+                Container(height: 500,
+                  child: SfCartesianChart(tooltipBehavior: tooltipBehavior,
+                    title: ChartTitle(text: 'عدد المربين'),
+                    series: <ColumnSeries>[
+                      ColumnSeries<Test, String>(enableTooltip: true,
+                          dataSource: getTest(-1),
+                          xValueMapper: (Test datum, index) => datum.gavernorate,
+                          yValueMapper: (Test datum, index) => datum.weight)
+                    ],
+                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Roboto',
+                                      fontSize: 16,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.w300
+                                  ))),
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
   }
 }
 
-List<Test> getTest() {
-  return List<Test>.generate(100, (index) => Test(gavernorate: "t"+index.toString(),weight: (2*index).toDouble())).reversed.toList();
+List<Test> getTest(int x) {
+  return List<Test>.generate(
+      30,
+      (index) => Test(
+          gavernorate: "t" + index.toString(),
+          weight: (2*1* index).toDouble())).reversed.toList();
 }
 
 class Test {

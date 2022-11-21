@@ -13,11 +13,11 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       borderOnForeground: true,
-      color: Color(0x0FFFb0b348),
+      color:  Colors.grey,
       child: Container(
           height: 80,
           decoration: BoxDecoration(
-              color: Color(0x0FFFb0b348),
+              color: Colors.transparent,
               borderRadius: BorderRadius.circular(30)),
           child: Row(
             children: [
@@ -70,9 +70,9 @@ class ListFarmer extends StatelessWidget {
               title: Center(
                 child: Text('عرض المربين'),
               ),
-              backgroundColor: Colors.green,
+              backgroundColor: Colors.brown,
             ),
-            backgroundColor: Color(0xFF848478),
+            backgroundColor: Colors.white,
             body: ListView.builder(
                 itemCount: 100,
                 itemBuilder: (context, index) {

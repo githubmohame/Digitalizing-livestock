@@ -1,3 +1,6 @@
+import 'package:final_project_year/main_screens/add_admin_screen.dart';
+import 'package:final_project_year/main_screens/add_animal.dart';
+import 'package:final_project_year/main_screens/chart_screen.dart';
 import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/screen_location/screen_gavernorate.dart';
@@ -18,11 +21,11 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0x0FFFb0b348),
+      backgroundColor: Color(0x0FF9c6644),
       child: ListView(
          children: [
           Container(
-            height: 100 ,color:index==0? Colors.green:Color(0x0FFFb0b348) ,
+            height: 100 ,color:index==0? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(
               leading: Image.asset('assets/images/field.png'),
               title: Text("اضافة مزرعة", style: TextStyle(color: Colors.white)),
@@ -40,9 +43,9 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           //
-          Container(color: index==1? Colors.green:Color(0x0FFFb0b348),
+          Container(color: index==1? Colors.grey:Color(0x0FF9c6644),
             height: 100 ,
-            child: ListTile(horizontalTitleGap: 0,leading: Icon(Icons.home,size: 35,color:Colors.grey ),
+            child: ListTile(horizontalTitleGap: 0,leading: Icon(Icons.home,size: 35,color:Colors.white ),
             contentPadding:EdgeInsets.zero ,minVerticalPadding: 0,
               title:
                   Text("صفحة الترحيب", style: TextStyle(color: Colors.white)),
@@ -59,16 +62,16 @@ class MainDrawer extends StatelessWidget {
             height: 1,
             color: Colors.black,
           ),
-          Container(height: 100,color:index==2? Colors.green:Color(0x0FFFb0b348) ,
+          Container(height: 100,color:index==2? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,leading: Image.asset('assets/images/farmer.png',height: 50,width:50),
               title: Text("اضافة مربي", style: TextStyle(color: Colors.white)),
-              onTap: (() {
+              onTap: () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => Farmer(),
                     ));
-              }),
+              },
             ),
           ),
           Container(
@@ -76,7 +79,7 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-            height: 100 ,color:index==3? Colors.green:Color(0x0FFFb0b348) ,
+            height: 100 ,color:index==3? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
               leading: Image.asset('assets/images/network.png'),
               title: Text("ربط المزرعة اضافة بالمربين",
@@ -95,7 +98,7 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-            height: 100 ,color:index==4? Colors.green:Color(0x0FFFb0b348) ,
+            height: 100 ,color:index==4? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
               leading: Icon(Icons.person,size: 50,color:Colors.grey),
               title: Text( "تسجيل الدخول",
@@ -114,7 +117,7 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
            Container(
-            height: 100 ,color:index==5? Colors.green:Color(0x0FFFb0b348) ,
+            height: 100 ,color:index==5? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
               leading:  Image(image: AssetImage('assets/images/list.png')),
               title: Text( "عرض المربين",
@@ -133,7 +136,7 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
            Container(
-            height: 100 ,color:index==6? Colors.green:Color(0x0FFFb0b348) ,
+            height: 100 ,color:index==6? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
               leading:  Icon(Icons.location_on),
               title: Text(  "اضافة او تعديل مكان",
@@ -152,7 +155,7 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
            Container(
-            height: 100 ,color:index==7? Colors.green:Color(0x0FFFb0b348) ,
+            height: 100 ,color:index==7? Colors.grey:Color(0x0FF9c6644) ,
             child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
               leading:  Icon(Icons.pets),
               title: Text(  "اضافة او تعديل حيوان",
@@ -161,7 +164,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>  UpdateLocation(),
+                      builder: (context) =>  UpdateAnimal(),
                     ));
               }),
             ),
@@ -169,6 +172,40 @@ class MainDrawer extends StatelessWidget {
           Container(
             height: 1,
             color: Colors.black,
+          ),
+          Container(
+            height: 100 ,color:index==8? Colors.grey:Color(0x0FF9c6644) ,
+            child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
+              leading:  Image(image: AssetImage('assets/images/drawer_statistics.png')),
+              title: Text(  "االاحصائيات",
+                  style: TextStyle(color: Colors.white)),
+              onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  ChartScreen(),
+                    ));
+              }),
+            ),
+          ),
+          Container(
+            height: 1,
+            color: Colors.black,
+          ),
+           Container(
+            height: 100 ,color:index==9? Colors.grey:Color(0x0FF9c6644) ,
+            child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
+              leading:   Icon(Icons.person),
+              title: Text(  'تسجيل المدرين',
+                  style: TextStyle(color: Colors.white)),
+              onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  AddAdmin(),
+                    ));
+              }),
+            ),
           ),
         ],
       ),

@@ -82,7 +82,7 @@ class FarmScreen extends StatelessWidget {
       child: Scaffold(
         drawer: MainDrawer(index: 0),
         appBar: AppBar(
-            backgroundColor: Color(0x0FFFb0b348), title: Text("اضافه المزرعة")),
+            backgroundColor: Color(0x0FF9c6644), title: Text("اضافه المزرعة")),
         body: SingleChildScrollView(
           child: Form(
               child: Column(
@@ -201,8 +201,8 @@ class FarmScreen extends StatelessWidget {
                   child: CustomeType(
                     title: "نوع المزرعة",
                     list: [
-                      {"kill me": 1},
-                      {"go to hell": 0}
+                      {"عام": 1},
+                      {"خاص": 0}
                     ],
                   ),
                 ),
