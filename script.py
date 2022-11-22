@@ -43,6 +43,9 @@ def solution():
 	array=[]
 	driver = webdriver.Chrome(ChromeDriverManager().install()) 
 	driver.get("https://alzahraa.mans.edu.eg/studentApplications")
+	time.sleep(4)
+	window_before = driver.window_handles[0]
+	driver.switch_to.window(window_before)
 	x=driver.find_elements(By.TAG_NAME,("a"))
 	driver.implicitly_wait(10)
 	x[8].click()
