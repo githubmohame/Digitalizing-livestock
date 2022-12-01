@@ -53,7 +53,10 @@ def solution():
 	counter=0
 	select= Select(driver.find_element(By.ID,'cmbAddress') )
 	list=select.options
-	while(len(list)>gavernorate):
+	len(list)
+	while(3>gavernorate):
+			max_city=0
+			print(gavernorate)
 			class  fun1(object):
 				def __call__(self, driver):
 					select= Select(driver.find_element(By.ID,'cmbAddress') )
@@ -72,14 +75,34 @@ def solution():
 			time.sleep(4)
 			counter+=1
 			class  func(object):
+				def __init__(self):
+					pass
 				def __call__(self, driver):
 					select= Select(driver.find_element(By.ID,'cmbAddress') )
-					select.select_by_index(city)
-					list1=[i.text for i in select.options]
-					name.append(list1[city])
-					return name
+					if(len(select.options)<=city):
+							global max_city
+							max_city=1
+							list1=[i.text for i in select.options]
+					else:
+						select.select_by_index(city)
+						list1=[i.text for i in select.options]
+						name.append(list1[city])
+					return list1
 			time.sleep(2)
-			WebDriverWait(driver, 20,poll_frequency=2 ).until(func())
+			is_end=WebDriverWait(driver, 20,poll_frequency=2 ).until(func())
+			time.sleep(4)
+			if(len(is_end)<=city):
+				print(counter)
+				while(counter>0):        
+					WebDriverWait(driver, 6,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsUp"))
+					time.sleep(4)
+					counter-=1
+				print("max city")
+				counter=0
+				city=0
+				gavernorate+=1
+				name=[] 
+				continue
 			city+=1
 			try:
 				WebDriverWait(driver, 12,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsDwn")) 
@@ -87,19 +110,22 @@ def solution():
 				counter+=1
 			except:
 				pass
-			print(counter)
+			select= Select(driver.find_element(By.ID,'cmbAddress') )
+			time.sleep(4)
+			if(counter>=2):
+				list1=[i.text for i in select.options]
+				for i in list1:
+					array.append([name[0],name[1],i])
+			elif(counter>=1):
+				array.append([name[0],name[1],name[1]])
 			while(counter>0):        
 				WebDriverWait(driver, 6,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsUp"))
 				time.sleep(4)
-				print(counter)
 				counter-=1
-			print(counter)
 			if(name in array):
 				print('Error')
-				print(name)
-			array.append(name)
-			print(counter)
+			#array.append(name)
 			name=[] 
-			print('done')
 			time.sleep(12)
+	print(array)
 solution()

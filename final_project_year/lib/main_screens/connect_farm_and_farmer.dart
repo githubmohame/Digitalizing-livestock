@@ -124,7 +124,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                         backgroundColor: MaterialStateProperty.resolveWith(
                             (states) => Colors.grey),
                         overlayColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.green)),
+                            (states) => Colors.brown)),
                     onPressed: () {
                       Navigator.push(
                           context,
@@ -213,7 +213,6 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
               return previous.gavernorate != current.gavernorate;
             },
             builder: (context, state) {
-              print("city");
               return CustomeDropdownButton(
                   func: (int value) {
                     BlocProvider.of<ChoiceCubit>(context).updateCity(value);

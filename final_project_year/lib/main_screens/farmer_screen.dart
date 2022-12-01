@@ -12,7 +12,6 @@ class Farmer extends StatelessWidget {
       list[0].text = "رقم التليفون" + phone.toString();
       list[1].text = "الرقم القومي:" + ssn.toString();
       list[2].text = "الاسم:" + name.toString();
-      print(name);
     }
   }
   bool edit = true;
@@ -35,7 +34,7 @@ class Farmer extends StatelessWidget {
                   },
                   icon: Icon(Icons.arrow_back)):null,
             backgroundColor: Colors.brown, title: Text("اضافه المربين")),
-        body: SingleChildScrollView(
+        body: SingleChildScrollView( 
           child: Form(
               child: Column(
             children: [
@@ -89,10 +88,10 @@ class Farmer extends StatelessWidget {
                     } catch (e) {
                       return null;
                     }
-                  },
+                  } ,
                   decoration: InputDecoration(
                       border: InputBorder.none, hintText: "الاسم"),
-                  keyboardType: TextInputType.text,
+                  keyboardType:TextInputType.name,
                 ),
               ),
               !edit?Container(child: Column(crossAxisAlignment: CrossAxisAlignment.start,mainAxisAlignment: MainAxisAlignment.start,children: [
@@ -121,7 +120,7 @@ class Farmer extends StatelessWidget {
                   ),
                 ),
               ],),):Container(
-                height: 200,
+                height:300,
                 child: Row(
                   children: [
                     Expanded(
@@ -142,7 +141,7 @@ class Farmer extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.grey),
                     overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.green)),
+                        (states) => Colors.brown)),
                 onPressed: () {
                   Navigator.push(
                       context,

@@ -61,123 +61,120 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 200,
-                      width: 200,
-                      child: FloatingActionButton(heroTag: 'statistics',
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset('assets/images/farmer.png'),
-                              Text(
-                                "عدد المربين الافراد",
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                6578654.toString(),
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          backgroundColor: Colors.white,
-                          onPressed: () {}),
-                    ),
-                    Container(
-                      height: 200,
-                      width: 200,
-                      child: FloatingActionButton(heroTag:'farm',
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset('assets/images/field.png'),
-                              Text(
-                                "عدد المزارع\n",
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                6578654.toString(),
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                          backgroundColor: Colors.white,
-                          onPressed: () {}),
-                    ),
-                  ],
+                Container(height: 200,
+                  child: Flex(direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: FloatingActionButton(mini: true,heroTag: 'farmer',
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/farmer.png'),
+                                Text(
+                                  "عدد المربين الافراد",
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  6578654.toString(),
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: Colors.white,
+                            onPressed: () {}),
+                      ),
+                      Expanded(
+                        child: FloatingActionButton(heroTag:'farm',
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/field.png'),
+                                Text(
+                                  "عدد المزارع\n",
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  6578654.toString(),
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: Colors.white,
+                            onPressed: () {}),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: 200,
-                      width: 200,
-                      child: FloatingActionButton(heroTag: 'cows',
-                          backgroundColor: Colors.white,
-                          onPressed: () {},
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset("assets/images/cow_head.png"),
-                              Text(
-                                "عدد رؤس الماشية ",
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                6578654.toString(),
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )),
-                    ),
-                    Container(
-                      height: 200,
-                      width: 200,
-                      child: FloatingActionButton(heroTag: 'cows',
-                          backgroundColor: Colors.white,
-                          onPressed: (() {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>  ChartScreen(),
-                    ));
+                Container(height: 200,
+                  child: Flex(direction: Axis.horizontal,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: FloatingActionButton(heroTag: 'cows',
+                            backgroundColor: Colors.white,
+                            onPressed: () {},
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/cow_head.png"),
+                                Text(
+                                  "عدد رؤس الماشية ",
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  6578654.toString(),
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                      ),
+                      Expanded(
+
+                        child: FloatingActionButton(heroTag: 'statistics1',
+                            backgroundColor: Colors.white,
+                            onPressed: (() {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>  ChartScreen(),
+                      ));
               }),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset("assets/images/drawer_statistics.png"),
-                              Text(
-                                "الاحصائيات",
-                                style: TextStyle(
-                                    color: Color(0x0FF9c6644),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          )),
-                    ),
-                  ],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset("assets/images/drawer_statistics.png"),
+                                Text(
+                                  "الاحصائيات",
+                                  style: TextStyle(
+                                      color: Color(0x0FF9c6644),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 20,
                 ),
-                Row(
+                Flex(direction: Axis.horizontal,mainAxisAlignment: MainAxisAlignment.spaceEvenly  ,
                   children: [
                     Expanded(
                       child: Container(margin: EdgeInsets.only(right: 100),
@@ -192,9 +189,8 @@ class HomeScreen extends StatelessWidget {
                             color: Color(0x0FFFc5c4be),
                             elevation: 10,
                             child: Container(
-                                width: 150,
                                 height: 150,
-                                child: Column(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset('assets/images/add_animal.png'),
                                     Text(
@@ -223,9 +219,8 @@ class HomeScreen extends StatelessWidget {
                             color: Color(0x0FFFc5c4be),
                             elevation: 10,
                             child: Container(
-                                width: 150,
                                 height: 150,
-                                child: Column(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset('assets/images/add_farmer.png'),
                                     Text("اضافه مربي",style: TextStyle(
@@ -260,7 +255,7 @@ class HomeScreen extends StatelessWidget {
                             child: Container(
                                 width: 150,
                                 height: 150,
-                                child: Column(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset('assets/images/add_field.png'),
                                     Text("اضافة مزرعة",style: TextStyle(
@@ -288,7 +283,7 @@ class HomeScreen extends StatelessWidget {
                             child: Container(
                                 width: 150,
                                 height: 150,
-                                child: Column(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Image.asset('assets/images/location-pin.png'),
                                     Text("اضافة مكان",style:  TextStyle(
@@ -329,7 +324,7 @@ class HomeScreen extends StatelessWidget {
                             child: Container(
                                 width: 150,
                                 height: 150,
-                                child: Column(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                      Icon( Icons.person,size:80,color:Colors.brown),
                                     Text("تسجيل المدرين"),
@@ -354,7 +349,7 @@ class HomeScreen extends StatelessWidget {
                             child: Container(
                                 width: 150,
                                 height: 150,
-                                child: Column(
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                      Icon( Icons.person,size:80,color:Colors.brown),
                                     Text("تسجيل الدخول",style: TextStyle(

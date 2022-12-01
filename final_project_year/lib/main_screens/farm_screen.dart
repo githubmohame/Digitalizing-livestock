@@ -170,7 +170,7 @@ class FarmScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 70,
+                height: 100,
                 padding: EdgeInsets.all(0),
                 child: CustomeDropdownButton(
                   list: [
@@ -183,7 +183,7 @@ class FarmScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 200,
+                height: 300,
                 child: Row(
                   children: [
                     Expanded(
@@ -219,7 +219,7 @@ class FarmScreen extends StatelessWidget {
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.grey),
                     overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.green)),
+                        (states) => Colors.brown)),
                 onPressed: () {
                   Navigator.push(
                       context,
@@ -281,7 +281,6 @@ class _SelectLocationState extends State<SelectLocation> {
               return previous.gavernorate != current.gavernorate;
             },
             builder: (context, state) {
-              print("city");
               return CustomeDropdownButton(
                   func: (int value) {
                     BlocProvider.of<ChoiceCubit>(context).updateCity(value);
@@ -307,7 +306,6 @@ class _SelectLocationState extends State<SelectLocation> {
                   previous.gavernorate != current.gavernorate;
             },
             builder: (context, state) {
-              print('village');
               return CustomeDropdownButton(
                   func: (int value) {
                     BlocProvider.of<ChoiceCubit>(context).updateVillage(value);
@@ -390,7 +388,7 @@ class _CustomeTypeState extends State<CustomeType> {
                     List<int> list = state.list;
                     CustomeButton d;
                     if (list.contains(index)) {
-                      d = CustomeButton(
+                      d = CustomeButton(customeColor: Colors.brown,
                         f: (bool click) {
                           if (click) {
                             BlocProvider.of<SelectMuiltTypeCubit>(context)
@@ -404,7 +402,7 @@ class _CustomeTypeState extends State<CustomeType> {
                         text: widget.list[index].keys.toList()[0],
                       );
                     } else {
-                      d = CustomeButton(
+                      d = CustomeButton(customeColor: Colors.brown,
                         f: (bool click) {
                           if (click) {
                             BlocProvider.of<SelectMuiltTypeCubit>(context)
@@ -434,9 +432,10 @@ class CustomeButton extends StatefulWidget {
   String text;
   bool click;
   Function f;
+  Color customeColor;
   CustomeButton({
     Key? key,
-    required this.text,
+    required this.text,required this.customeColor,
     required this.click,
     required this.f,
   }) : super(key: key);
@@ -455,7 +454,7 @@ class _CustomeButtonState extends State<CustomeButton> {
                   borderRadius: BorderRadius.circular(0),
                   side: BorderSide(color: Colors.grey))),
           backgroundColor: MaterialStateProperty.resolveWith(
-              (states) => widget.click ? Colors.green[200] : null)),
+              (states) => widget.click ?  widget.customeColor: null)),
       onPressed: () {
         widget.click = !widget.click;
         widget.f(widget.click);

@@ -45,17 +45,19 @@ class MainDrawer extends StatelessWidget {
           //
           Container(color: index==1? Colors.grey:Color(0x0FF9c6644),
             height: 100 ,
-            child: ListTile(horizontalTitleGap: 0,leading: Icon(Icons.home,size: 35,color:Colors.white ),
-            contentPadding:EdgeInsets.zero ,minVerticalPadding: 0,
-              title:
-                  Text("صفحة الترحيب", style: TextStyle(color: Colors.white)),
-              onTap: (() {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                    ));
-              }),
+            child: Center(
+              child: ListTile(horizontalTitleGap: 0,leading: Icon(Icons.home,size: 35,color:Colors.white ),
+              contentPadding:EdgeInsets.zero ,minVerticalPadding: 0,
+                title:
+                    Text("صفحة الترحيب", style: TextStyle(color: Colors.white)),
+                onTap: (() {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ));
+                }),
+              ),
             ),
           ),
           Container(
@@ -63,15 +65,19 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(height: 100,color:index==2? Colors.grey:Color(0x0FF9c6644) ,
-            child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,leading: Image.asset('assets/images/farmer.png',height: 50,width:50),
-              title: Text("اضافة مربي", style: TextStyle(color: Colors.white)),
-              onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Farmer(),
-                    ));
-              },
+            child: Center(
+              child: Center(
+                child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,leading: Image.asset('assets/images/farmer.png',height: 50,width:50),
+                  title: Text("اضافة مربي", style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Farmer(),
+                        ));
+                  },
+                ),
+              ),
             ),
           ),
           Container(
@@ -80,17 +86,19 @@ class MainDrawer extends StatelessWidget {
           ),
           Container(
             height: 100 ,color:index==3? Colors.grey:Color(0x0FF9c6644) ,
-            child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
-              leading: Image.asset('assets/images/network.png'),
-              title: Text("ربط المزرعة اضافة بالمربين",
-                  style: TextStyle(color: Colors.white)),
-              onTap: (() {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ConnectFarmAndFarmerScreen(),
-                    ));
-              }),
+            child: Center(
+              child: ListTile(contentPadding:EdgeInsets.zero ,minVerticalPadding: 1,
+                leading: Image.asset('assets/images/network.png'),
+                title: Text("ربط المزرعة اضافة بالمربين",
+                    style: TextStyle(color: Colors.white)),
+                onTap: (() {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConnectFarmAndFarmerScreen(),
+                      ));
+                }),
+              ),
             ),
           ),
           Container(
