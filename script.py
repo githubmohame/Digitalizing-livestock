@@ -15,6 +15,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.ui import Select
+from table_location import open_file
 class element_has_css_class(object):
 	def __init__(self, driver,name):
 		self.driver= driver
@@ -38,7 +39,7 @@ class element_has_css_class2(object):
 			pass
 def solution():
 	name=[]
-	gavernorate=0
+	gavernorate=3
 	city=0
 	array=[]
 	driver = webdriver.Chrome(ChromeDriverManager().install()) 
@@ -54,9 +55,7 @@ def solution():
 	select= Select(driver.find_element(By.ID,'cmbAddress') )
 	list=select.options
 	len(list)
-	while(3>gavernorate):
-			max_city=0
-			print(gavernorate)
+	while(7>gavernorate):
 			class  fun1(object):
 				def __call__(self, driver):
 					select= Select(driver.find_element(By.ID,'cmbAddress') )
@@ -92,15 +91,16 @@ def solution():
 			is_end=WebDriverWait(driver, 20,poll_frequency=2 ).until(func())
 			time.sleep(4)
 			if(len(is_end)<=city):
-				print(counter)
+				#print(counter)
 				while(counter>0):        
 					WebDriverWait(driver, 6,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsUp"))
 					time.sleep(4)
 					counter-=1
-				print("max city")
+				#print("max city")
 				counter=0
 				city=0
 				gavernorate+=1
+				print(gavernorate)
 				name=[] 
 				continue
 			city+=1
@@ -123,9 +123,11 @@ def solution():
 				time.sleep(4)
 				counter-=1
 			if(name in array):
-				print('Error')
+				#print('Error')
+				pass
 			#array.append(name)
 			name=[] 
 			time.sleep(12)
-	print(array)
+	print(len(array))
+	open_file(array)
 solution()
