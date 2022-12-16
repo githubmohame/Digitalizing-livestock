@@ -6,3 +6,4 @@
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
+<!-- Under Application Tag  <meta-data android:name="io.flutter.embedding.android.EnableImpeller" android:value="true" />-->

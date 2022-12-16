@@ -15,7 +15,7 @@ class ScreenAddAnimal extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('تعديل في النوع',
+          const Text('تعديل في النوع',
               style: TextStyle(color: Colors.white, fontSize: 20)),
           Container(
             child: BlocProvider(
@@ -24,7 +24,7 @@ class ScreenAddAnimal extends StatelessWidget {
               child: SelectGavernorate(title: 'النوع'),
             ),
           ),
-          TextField(
+          const TextField(
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   hintText: "تعديل الاسم",
@@ -44,7 +44,7 @@ class ScreenAddAnimal extends StatelessWidget {
             children: [
               OutlinedButton(
                 style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
+                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30))),
@@ -53,17 +53,17 @@ class ScreenAddAnimal extends StatelessWidget {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "مسح",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               OutlinedButton(
                 style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
+                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30))),
@@ -72,7 +72,7 @@ class ScreenAddAnimal extends StatelessWidget {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.brown)),
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "حفظ",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -98,7 +98,7 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text('تعديل في الفصيلة',
+          const Text('تعديل في الفصيلة',
               style: TextStyle(color: Colors.white, fontSize: 20)),
           Container(
             child: BlocProvider(
@@ -111,7 +111,7 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
                   ],),
             ),
           ),
-          TextField(
+          const TextField(
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   hintText: "تعديل الاسم",
@@ -131,7 +131,7 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
             children: [
               OutlinedButton(
                 style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
+                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30))),
@@ -140,17 +140,17 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "مسح",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               OutlinedButton(
                 style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
+                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30))),
@@ -159,7 +159,7 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.brown)),
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "حفظ",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -180,33 +180,35 @@ class UpdateAnimal extends StatefulWidget {
 }
 
 class _UpdateAnimalState extends State<UpdateAnimal> {
-  List<Widget> list = [ScreenAddAnimal(),  ScreenAddAnimalSubtype()];
+  List<Widget> list = [const ScreenAddAnimal(),  const ScreenAddAnimalSubtype()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(backgroundColor: Colors.grey,
-            currentIndex: index,
-            onTap: (value) {
-              setState(() {
-                index = value;
-              });
-            },selectedItemColor: Colors.brown,selectedLabelStyle: TextStyle(  color: Colors.brown,fontSize: 20),
-            items: [
-              BottomNavigationBarItem(
-                label: 'تعديل النوع',
-                icon: Container()
-              ),
-              BottomNavigationBarItem(
-                label: "تعديل الفصيلة",
-                icon:Container(),
-              ),
-            ]),
-        backgroundColor: Colors.white,
-        appBar: AppBar(title:Text("تعديل الفصيلة او النوع"),elevation: 0, backgroundColor: Colors.brown),
-        drawer: MainDrawer(index: 7),
-        body: list[index],
+      child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
+        child: Scaffold(
+          bottomNavigationBar: BottomNavigationBar(backgroundColor: Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),unselectedItemColor: Colors.white,
+              currentIndex: index,
+              onTap: (value) {
+                setState(() {
+                  index = value;
+                });
+              },selectedItemColor: Colors.white,selectedLabelStyle: const TextStyle(  color: Colors.brown,fontSize: 20),
+              items: [
+                BottomNavigationBarItem(
+                  label: 'تعديل النوع',
+                  icon: Container()
+                ),
+                BottomNavigationBarItem(
+                  label: "تعديل الفصيلة",
+                  icon:Container(),
+                ),
+              ]),
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(title:const Text("تعديل الفصيلة او النوع"),elevation: 0, backgroundColor: Colors.transparent),
+          drawer: MainDrawer(index: 7),
+          body: list[index],
+        ),
       ),
     );
   }

@@ -15,7 +15,7 @@ class AddWorkerScreen extends StatelessWidget {
       child: Scaffold(
         drawer:MainDrawer(index: 50),
         appBar:
-            AppBar(backgroundColor: Colors.green, title: Text("اضافه عمال")),
+            AppBar(backgroundColor: Colors.green, title: const Text("اضافه عمال")),
         body: SingleChildScrollView(
           child: Form(
               child: Column(
@@ -27,10 +27,10 @@ class AddWorkerScreen extends StatelessWidget {
                     border: Border.all(
                   color: Colors.grey,
                 )),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   validator: (value) {},
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: InputBorder.none, hintText: "رقم التليفون"),
                   keyboardType: TextInputType.phone,
                 ),
@@ -41,11 +41,11 @@ class AddWorkerScreen extends StatelessWidget {
                     border: Border.all(
                   color: Colors.grey,
                 )),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   validator: (value) {},
                   decoration:
-                      InputDecoration(border: InputBorder.none, hintText: "كود المزرعة"),
+                      const InputDecoration(border: InputBorder.none, hintText: "السجل التجاري"),
                   keyboardType: TextInputType.text,
                 ),
               ),
@@ -55,10 +55,10 @@ class AddWorkerScreen extends StatelessWidget {
                     border: Border.all(
                   color: Colors.grey,
                 )),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: TextFormField(
                   validator: (value) {},
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       border: InputBorder.none, hintText: "الاسم"),
                   keyboardType: TextInputType.text,
                 ),
@@ -74,7 +74,7 @@ class AddWorkerScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              CustomeCheckBox(),
+              const CustomeCheckBox(),
               OutlinedButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -82,7 +82,7 @@ class AddWorkerScreen extends StatelessWidget {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green)),
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "حفظ",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -116,7 +116,7 @@ class _CustomeCheckBoxState extends State<CustomeCheckBox> {
             });
           },
         ),
-        Text("ساكن في المزرعة"),
+        const Text("ساكن في المزرعة"),
       ],
     );
   }

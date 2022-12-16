@@ -19,14 +19,14 @@ class ChartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(textDirection:TextDirection.rtl ,
       child: Scaffold(drawer: MainDrawer(index:8 ),
-          appBar: AppBar( title: Center(child: Text('الاحصائيات')),
+          appBar: AppBar( title: const Center(child: Text('الاحصائيات')),
             backgroundColor: Colors.brown,
           ),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Container(height: 500,
+                SizedBox(height: 500,
                   child: SfCircularChart(
                     title: ChartTitle(text: 'عدد مزارع الالبان'),
                     legend: Legend(isVisible: true),
@@ -34,14 +34,14 @@ class ChartScreen extends StatelessWidget {
                       PieSeries<Test, String>(
                           //groupTo: 2,
                           //groupMode: CircularChartGroupMode.point,
-                          dataLabelSettings: DataLabelSettings(isVisible: true),dataLabelMapper: (Test datum, index) => datum.gavernorate+'\n'+datum.weight.toString(),
+                          dataLabelSettings: const DataLabelSettings(isVisible: true),dataLabelMapper: (Test datum, index) => datum.gavernorate+'\n'+datum.weight.toString(),
                           dataSource: getTest(1),
                           xValueMapper: (Test datum, index) => datum.gavernorate,
                           yValueMapper: (Test datum, index) => datum.weight)
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 700,
                   child: SfCartesianChart(
                     legend: Legend(isVisible: true),
@@ -54,7 +54,7 @@ class ChartScreen extends StatelessWidget {
                           xValueMapper: (Test datum, index) => datum.gavernorate,
                           yValueMapper: (Test datum, index) => datum.weight)
                     ],
-                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: TextStyle(
+                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Roboto',
                                       fontSize: 16,
@@ -64,7 +64,7 @@ class ChartScreen extends StatelessWidget {
                     
                   ),
                 ),
-                Container(height: 1400,
+                SizedBox(height: 1400,
                   child: SfCartesianChart(
                     title: ChartTitle(text: 'عدد رؤوس الماشية'),tooltipBehavior: tooltipBehavior,
                     series: <ColumnSeries<Test, String>>[
@@ -73,7 +73,7 @@ class ChartScreen extends StatelessWidget {
                           xValueMapper: (Test datum, index) => datum.gavernorate,
                           yValueMapper: (Test datum, index) => datum.weight)
                     ],
-                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: TextStyle(
+                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Roboto',
                                       fontSize: 16,
@@ -82,7 +82,7 @@ class ChartScreen extends StatelessWidget {
                                   ))),
                   ),
                 ),
-                Container(height: 500,
+                SizedBox(height: 500,
                   child: SfCartesianChart(tooltipBehavior: tooltipBehavior,
                     title: ChartTitle(text: 'عدد المربين'),
                     series: <ColumnSeries>[
@@ -91,7 +91,7 @@ class ChartScreen extends StatelessWidget {
                           xValueMapper: (Test datum, index) => datum.gavernorate,
                           yValueMapper: (Test datum, index) => datum.weight)
                     ],
-                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: TextStyle(
+                    primaryXAxis: CategoryAxis(isVisible: true,title: AxisTitle(text: "المحافظات" ,textStyle: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Roboto',
                                       fontSize: 16,

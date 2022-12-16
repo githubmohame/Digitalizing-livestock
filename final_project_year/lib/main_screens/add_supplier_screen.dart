@@ -9,13 +9,12 @@ class AddSupplierScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         drawer: MainDrawer(index: 50),
         appBar:
-            AppBar(backgroundColor: Colors.green, title: Text("اضافه عمال")),
+            AppBar(backgroundColor: Colors.green, title: const Text("اضافه عمال")),
         body: SingleChildScrollView(
           child: Form(
               child: Column(
@@ -27,10 +26,12 @@ class AddSupplierScreen extends StatelessWidget {
                     border: Border.all(
                   color: Colors.grey,
                 )),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: TextFormField(
-                  validator: (value) {},
-                  decoration: InputDecoration(
+                  validator: (value) {
+                    return null;
+                  },
+                  decoration: const InputDecoration(
                       border: InputBorder.none, hintText: "رقم التليفون"),
                   keyboardType: TextInputType.phone,
                 ),
@@ -41,11 +42,13 @@ class AddSupplierScreen extends StatelessWidget {
                     border: Border.all(
                   color: Colors.grey,
                 )),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: TextFormField(
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                   decoration:
-                      InputDecoration(border: InputBorder.none, hintText: "كود المزرعة"),
+                      const InputDecoration(border: InputBorder.none, hintText: "السجل التجاري"),
                   keyboardType: TextInputType.text,
                 ),
               ),
@@ -55,10 +58,12 @@ class AddSupplierScreen extends StatelessWidget {
                     border: Border.all(
                   color: Colors.grey,
                 )),
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: TextFormField(
-                  validator: (value) {},
-                  decoration: InputDecoration(
+                  validator: (value) {
+                    return null;
+                  },
+                  decoration: const InputDecoration(
                       border: InputBorder.none, hintText: "الاسم"),
                   keyboardType: TextInputType.text,
                 ),
@@ -81,7 +86,7 @@ class AddSupplierScreen extends StatelessWidget {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green)),
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "حفظ",
                   style: TextStyle(color: Colors.white),
                 ),

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,77 +12,85 @@ class ScreenGavernorate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text('تعديل في المحافظات',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-          Container(
-            child: BlocProvider(
-              create: (context) =>
-                  ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-              child: SelectGavernorate(title: 'المحافظة'),
+    return Builder(
+      builder: (context) {
+        return Center(
+          child: Container(width: 500,color: Colors.white.withOpacity(0.5),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text('تعديل في المحافظات',
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  Container(
+                    child: BlocProvider(
+                      create: (context) =>
+                          ChoiceCubit(city: 0, gavernorate: 0, village: 0),
+                      child: SelectGavernorate(title: 'المحافظة'),
+                    ),
+                  ),
+                  const TextField(
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                          hintText: "تعديل الاسم",fillColor: Colors.white,filled: true,
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.white,
+                          ),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.brown, width: 5)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.brown, width: 2)),
+                          focusColor: Colors.brown,
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.brown, width: 2)))),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                            shape: MaterialStateProperty.resolveWith((states) =>
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30))),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.grey),
+                            overlayColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.red)),
+                        onPressed: () {},
+                        child: const Text(
+                          "مسح",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      OutlinedButton(
+                        style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                            shape: MaterialStateProperty.resolveWith((states) =>
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30))),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.grey),
+                            overlayColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.brown)),
+                        onPressed: () {},
+                        child: const Text(
+                          "حفظ",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-          TextField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                  hintText: "تعديل الاسم",
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: Colors.white,
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 5)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)),
-                  focusColor: Colors.brown,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)))),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red)),
-                onPressed: () {},
-                child: Text(
-                  "مسح",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {},
-                child: Text(
-                  "حفظ",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      }
     );
   }
 }
@@ -102,20 +112,19 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-            child: CustomeDropdownButton(
-                func: (int value) {
-                  BlocProvider.of<ChoiceCubit>(context)
-                      .updateGavernorate(value);
-                },
-                list: [
-                  {"id": 0, "name": "اسيوط"},
-                  {"id": 1, "name": "القاهرة"},
-                  {"id": 2, "name": "المنةفية"}
-                ],
-                expanded: true,
-                value: 0,
-                text: widget.title)),
+        CustomeDropdownButton(
+            func: (int value) {
+              BlocProvider.of<ChoiceCubit>(context)
+                  .updateGavernorate(value);
+            },
+            list: const [
+              {"id": 0, "name": "اسيوط"},
+              {"id": 1, "name": "القاهرة"},
+              {"id": 2, "name": "المنةفية"}
+            ],
+            expanded: true,
+            value: 0,
+            text: widget.title),
       ],
     );
   }
@@ -149,7 +158,7 @@ class _SelectCityState extends State<SelectCity> {
                 func: (int value) {
                   BlocProvider.of<ChoiceCubit>(context).updateCity(value);
                 },
-                list: [
+                list: const [
                   {"id": 1, "name": "القاهرة"},
                   {"id": 0, "name": "القاهرة"}
                 ],
@@ -188,83 +197,81 @@ class ScreenCity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text('تعديل في المحافظات',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-          Container(
-            child: BlocProvider(
-              create: (context) =>
-                  ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-              child: SelectCity(
-                titles: ['المحافظة', 'المركز'],
-                list: [
-                  {"id": 0, "name": "اسيوط"},
-                  {"id": 1, "name": "القاهرة"},
-                  {"id": 2, "name": "المنةفية"}
-                ],
-              ),
-            ),
-          ),
-          TextField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                  hintText: "تعديل الاسم",
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: Colors.white,
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 5)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)),
-                  focusColor: Colors.brown,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)))),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Center(
+      child: Container(width:500,color: Colors.white.withOpacity(0.5),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red)),
-                onPressed: () {},
-                child: Text(
-                  "مسح",
-                  style: TextStyle(color: Colors.white),
+              const Text('تعديل في المحافظات',
+                  style: TextStyle(color: Colors.white, fontSize: 20)),
+              BlocProvider(
+                create: (context) =>
+                    ChoiceCubit(city: 0, gavernorate: 0, village: 0),
+                child: SelectCity(
+                  titles: const ['المحافظة', 'المركز'],
+                  list: const [
+                    {"id": 0, "name": "اسيوط"},
+                    {"id": 1, "name": "القاهرة"},
+                    {"id": 2, "name": "المنةفية"}
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {},
-                child: Text(
-                  "حفظ",
+              const TextField(
                   style: TextStyle(color: Colors.white),
-                ),
+                  decoration: InputDecoration(fillColor: Colors.white,filled: true,
+                      hintText: "تعديل الاسم",
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: Colors.white,
+                      ),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.brown, width: 5)),
+                     )),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        shape: MaterialStateProperty.resolveWith((states) =>
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.grey),
+                        overlayColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.red)),
+                    onPressed: () {},
+                    child: const Text(
+                      "مسح",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        shape: MaterialStateProperty.resolveWith((states) =>
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.grey),
+                        overlayColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.brown)),
+                    onPressed: () {},
+                    child: const Text(
+                      "حفظ",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -275,79 +282,82 @@ class ScreenVillage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text('تعديل في المحافظات',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-          Container(
-            child: BlocProvider(
-              create: (context) =>
-                  ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-              child: SelectLocation(),
-            ),
-          ),
-          TextField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                  hintText: "تعديل الاسم",
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: Colors.white,
-                  ),
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 5)),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)),
-                  focusColor: Colors.brown,
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)))),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Center(
+      child: Container(color: Colors.white.withOpacity(0.5),width: 500,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red)),
-                onPressed: () {},
-                child: Text(
-                  "مسح",
-                  style: TextStyle(color: Colors.white),
-                ),
+              const Text('تعديل في المحافظات',
+                  style: TextStyle(color: Colors.white, fontSize: 20)),
+              BlocProvider(
+                create: (context) =>
+                    ChoiceCubit(city: 0, gavernorate: 0, village: 0),
+                child: SelectLocation(),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {},
-                child: Text(
-                  "حفظ",
-                  style: TextStyle(color: Colors.white),
+                Container(margin: EdgeInsets.only(left: 10,right: 10),
+                  child: TextField(
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(fillColor: Colors.white,filled: true,
+                        hintText: "تعديل الاسم",
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.white,
+                        ),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.brown, width: 5)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.brown, width: 2)),
+                        focusColor: Colors.brown,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.brown, width: 2)))),
                 ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        shape: MaterialStateProperty.resolveWith((states) =>
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.grey),
+                        overlayColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.red)),
+                    onPressed: () {},
+                    child: const Text(
+                      "مسح",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        shape: MaterialStateProperty.resolveWith((states) =>
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.grey),
+                        overlayColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.brown)),
+                    onPressed: () {},
+                    child: const Text(
+                      "حفظ",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
-    ;
   }
 }
 
@@ -359,41 +369,43 @@ class UpdateLocation extends StatefulWidget {
 }
 
 class _UpdateLocationState extends State<UpdateLocation> {
-  List<Widget> list = [ScreenGavernorate(), ScreenCity(), ScreenVillage()];
+  List<Widget> list = [const ScreenGavernorate(), const ScreenCity(), const ScreenVillage()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.grey,
-            currentIndex: index,
-            onTap: (value) {
-              setState(() {
-                index = value;
-              });
-            },
-            selectedItemColor: Colors.brown,
-            selectedLabelStyle: TextStyle(color: Colors.brown, fontSize: 20),
-            items: [
-              BottomNavigationBarItem(
-                label: 'تعديل المحافظة',
-                icon: Image(image: AssetImage('assets/images/gavernorate.png')),
-              ),
-              BottomNavigationBarItem(
-                label: 'تعديل المركز او المدينة',
-                icon: Image(image: AssetImage('assets/images/city.png')),
-              ),
-              BottomNavigationBarItem(
-                label: 'تعديل القرية والشارع',
-                icon: Image(image: AssetImage('assets/images/village.png')),
-              ),
-            ]),
-        backgroundColor: Colors.white,
-        appBar: AppBar(elevation: 0, backgroundColor: Colors.brown,title: Text('تعديل الاماكن'),),
-        drawer: MainDrawer(index: 6),
-        body: list[index],
+      child: Container(decoration:BoxDecoration(color:  Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
+        child: Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
+              currentIndex: index,unselectedFontSize:15,showUnselectedLabels: true,selectedFontSize: 20,
+              onTap: (value) {
+                setState(() {
+                  index = value;
+                });//
+              },unselectedItemColor: Colors.white,
+              selectedItemColor: Colors.white,
+              selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 20),
+              items: const [
+                BottomNavigationBarItem(
+                  label: 'تعديل المحافظة',
+                  icon: Image(image: AssetImage('assets/images/gavernorate.png')),
+                ),
+                BottomNavigationBarItem(
+                  label: 'تعديل المركز او المدينة',
+                  icon: Image(image: AssetImage('assets/images/city.png')),
+                ),
+                BottomNavigationBarItem(backgroundColor: Colors.white,
+                  label: 'تعديل القرية والشارع',
+                  icon: Image(image: AssetImage('assets/images/village.png')),
+                ),
+              ]),
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(elevation: 0, backgroundColor: Colors.transparent,title: const Text('تعديل الاماكن'),),
+          drawer: MainDrawer(index: 6),
+          body: list[index],
+        ),
       ),
     );
   }

@@ -20,6 +20,7 @@ abstract class ConnectFarmerFarmState {
   });
 }
 
+// ignore: must_be_immutable
 class ConnectFarmerFarmInitial extends ConnectFarmerFarmState {
   ConnectFarmerFarmInitial(
       {super.village='',super.ssn = 0,
