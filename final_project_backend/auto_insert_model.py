@@ -39,7 +39,7 @@ def insert_subtype():
    col1=list(ws.rows)
    for i   in range(len(col1)):
       l1=[i.value for i in col1[i]]
-      if(l1[0] is None or l1[0]=='السلالة'):
+      if(l1[0] is None or l1[0]=='السلالة' or l1[0]=='—'):
          continue
       l1=[i.value for i in col1[i]]
       #print(l1[1])

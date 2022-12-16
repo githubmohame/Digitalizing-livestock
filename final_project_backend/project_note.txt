@@ -1,4 +1,0 @@
-يوجد نوع  واحد في اكثر من دولة
-delete from digital_livestock_animal_sub_type;
-delete from digital_livestock_connect_sub_animal_for_what;
-commit;

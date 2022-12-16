@@ -4,9 +4,10 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 import uuid
 # Create your models here.
 
-class for_what_use_animal(models.Model):
+'''class for_what_use_animal(models.Model):
     name=models.CharField(max_length=20)
     id=models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    '''
 class animal_type(models.Model):
      name=models.CharField(max_length=20)
      id=models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -14,10 +15,11 @@ class animal_sub_type(models.Model):
     name=models.CharField(max_length=20)
     id=models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     animal_type=models.ForeignKey(animal_type,on_delete=models.CASCADE)
-    country=models.CharField(max_length=20,null=True)
-class connect_sub_animal_for_what(models.Model):
+    #country=models.CharField(max_length=20,null=True)
+'''class connect_sub_animal_for_what(models.Model):
     animal_sub_type=models.ForeignKey(animal_sub_type,on_delete=models.CASCADE)
     for_what_use_animal=models.ForeignKey(for_what_use_animal,on_delete=models.CASCADE)
+    '''
 class governorate(models.Model):
     name=models.CharField(max_length=20)
     id=models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -90,6 +92,6 @@ class work_place(models.Model):
             ]
 class animals_in_work_place(models.Model):
     animal_sub_type=models.ForeignKey(animal_sub_type,on_delete=models.CASCADE)
-    work_place_id=models.ForeignKey(work_place,on_delete=models.CASCADE)
+    work_place=models.ForeignKey(work_place,on_delete=models.CASCADE)
     animal_number=models.SmallIntegerField(null=False)
     is_male=models.BooleanField(null=False,blank=False)
