@@ -8,95 +8,77 @@ class ConnectSuppliersFarmer extends StatelessWidget {
   Widget build(BuildContext context) {
    return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        drawer:MainDrawer(index: 15),
-        appBar:
-            AppBar(backgroundColor: Colors.brown, title: const Text("ربط الموردين بالمزرعة")),
-        body: SingleChildScrollView(
-          child: Form(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
+      child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
+        child: Scaffold(backgroundColor: Colors.transparent,
+          drawer:MainDrawer(index: 15),
+          appBar:
+              AppBar(elevation: 0,backgroundColor: Colors.transparent, title: const Text("ربط الموردين بالمزرعة")),
+          body: Center(
+            child: Container(padding: EdgeInsets.all(10),width: 700,color: Colors.white.withOpacity(0.5),
+              child: SingleChildScrollView(
+                child: Form(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      validator: (value) {},
+                      decoration:
+                          const InputDecoration(fillColor: Colors.white,filled: true,border: InputBorder.none, hintText: "الرقم القومي للمورد"),
+                      keyboardType: TextInputType.text,
+                    ),Container(height: 10,),
+                    TextFormField(
+                      validator: (value) {},
+                      decoration:
+                          const InputDecoration(fillColor: Colors.white,filled: true,border: InputBorder.none, hintText: "اسم المزرعة"),
+                      keyboardType: TextInputType.text,
+                    ),Container(height: 10,),
+                    TextFormField(
+                      validator: (value) {},
+                      decoration:
+                          const InputDecoration(fillColor: Colors.white,filled: true,border: InputBorder.none, hintText: "السجل التجاري"),
+                      keyboardType: TextInputType.text,
+                    ),Container(height: 10,),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                          shape: MaterialStateProperty.resolveWith((states) =>
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.brown)),
+                      onPressed: () {
+                        
+                      },
+                      child: const Text(
+                        "حفظ",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                     SizedBox(height: 10,),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                          shape: MaterialStateProperty.resolveWith((states) =>
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.red)),
+                      onPressed: () {
+                      },
+                      child: const Text(
+                        "حذف",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  validator: (value) {},
-                  decoration:
-                      const InputDecoration(border: InputBorder.none, hintText: "الرقم القومي للمورد"),
-                  keyboardType: TextInputType.text,
-                ),
               ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  validator: (value) {},
-                  decoration:
-                      const InputDecoration(border: InputBorder.none, hintText: "اسم المزرعة"),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  validator: (value) {},
-                  decoration:
-                      const InputDecoration(border: InputBorder.none, hintText: "السجل التجاري"),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {
-                  
-                },
-                child: const Text(
-                  "حفظ",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-               SizedBox(height: 10,),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red)),
-                onPressed: () {
-                },
-                child: const Text(
-                  "حذف",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          )),
+            ),
+          ),
         ),
       ),
     );

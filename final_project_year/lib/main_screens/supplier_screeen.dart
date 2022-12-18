@@ -24,122 +24,96 @@ class Supplier extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold( 
-        drawer: MainDrawer(index: 12),
-        appBar: AppBar(leading: !edit?IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.arrow_back)):null,
-            backgroundColor: Colors.brown, title: const Text("اضافه موردين")),
-        body: SingleChildScrollView( 
-          child: Form(
-              child: Column(
-            children: [
-               Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
+      child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
+        child: Scaffold( backgroundColor: Colors.transparent,
+          drawer: MainDrawer(index: 12),
+          appBar: AppBar(elevation: 0,leading: !edit?IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(Icons.arrow_back)):null,
+              backgroundColor: Colors.transparent, title: const Text("اضافه موردين")),
+          body: Center(
+            child: SingleChildScrollView( 
+              child: Container(padding: EdgeInsets.all(20),width: 700,color: Colors.white.withOpacity(0.5),
+                child: Form(
+                    child: Column(
+                  children: [
+                     TextFormField(
+                       enabled: edit,
+                       controller: list[0],
+                       validator: (value) {
+                         return null;
+                       },
+                       decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                           border: InputBorder.none, hintText:'الاسم الاول'),
+                       keyboardType: TextInputType.text,
+                     ),Container(height: 10,),
+                    TextFormField(
+                      enabled: edit,
+                      controller: list[0],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText:'الاسم الثاني'),
+                      keyboardType: TextInputType.text,
+                    ),Container(height: 10,),
+                    TextFormField(
+                      enabled: edit,
+                      controller: list[0],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText: "رقم التليفون"),
+                      keyboardType: TextInputType.phone,
+                    ),Container(height: 10,),
+                    TextFormField(
+                      enabled: edit,
+                      controller: list[1],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText: "الرقم القومي"),
+                      keyboardType: TextInputType.number,
+                    ),Container(height: 10,),
+                    BlocProvider(
+                      create: (context) => SelectMuiltTypeCubit(list: []),
+                      child: Container(
+                        child: CustomeType(
+                          title: "نوع التوريد",
+                          list: const [
+                            {"برسيم": 1},
+                            {"حبوب": 0}
+                          ],
+                        ),
+                      ),
+                    ),
+                    !edit?Container():OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                          shape: MaterialStateProperty.resolveWith((states) =>
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.brown)),
+                      onPressed: () {
+                       
+                      },
+                      child: const Text(
+                        "حفظ",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
                 )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  enabled: edit,
-                  controller: list[0],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText:'الاسم الاول'),
-                  keyboardType: TextInputType.text,
-                ),
               ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  enabled: edit,
-                  controller: list[0],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText:'الاسم الثاني'),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  enabled: edit,
-                  controller: list[0],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText: "رقم التليفون"),
-                  keyboardType: TextInputType.phone,
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  enabled: edit,
-                  controller: list[1],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText: "الرقم القومي"),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              BlocProvider(
-                create: (context) => SelectMuiltTypeCubit(list: []),
-                child: Container(
-                  child: CustomeType(
-                    title: "نوع التوريد",
-                    list: const [
-                      {"برسيم": 1},
-                      {"حبوب": 0}
-                    ],
-                  ),
-                ),
-              ),
-              !edit?Container():OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {
-                 
-                },
-                child: const Text(
-                  "حفظ",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          )),
+            ),
+          ),
         ),
       ),
     );

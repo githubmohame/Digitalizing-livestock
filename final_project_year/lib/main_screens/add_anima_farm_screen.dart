@@ -21,177 +21,128 @@ class AddAnimalScreen extends StatelessWidget {
     final _formKey = GlobalKey<FormState>();
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        drawer: MainDrawer(index: 12),
-        appBar: AppBar(
-            backgroundColor: const Color(0x0FF9c6644),
-            title: const Text("اضافة حيوانات للمزرعة")),
-        body: SingleChildScrollView(
-          child: Form(
-              child: Column(
-            children: [
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: list[0],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText: "السجل التجاري"),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: list[0],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText: 'اسم المزرعة'),
-                  keyboardType: TextInputType.text,
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
-                )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: list[2],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText: "عدد الحيوانات"),
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              Container(
-                height: 150,
-                child: Row(
+      child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
+        child: Scaffold(backgroundColor: Colors.transparent,
+          drawer: MainDrawer(index: 13),
+          appBar: AppBar(elevation: 0,
+              backgroundColor:Colors.transparent,
+              title: const Text("اضافة حيوانات للمزرعة")),
+          body: Center(
+            child: Container(padding: EdgeInsets.all(50),width: 700,color: Colors.white.withOpacity(0.5),
+              child: SingleChildScrollView(
+                child: Form(
+                    child: Column(
                   children: [
-                    Expanded(
-                      child: BlocProvider<ChoiceCubit>(
-                        create: (context) =>
-                            ChoiceCubit(gavernorate: 0, city: 0, village: 0),
-                        child: SelectAnimalType(),
+                    TextFormField(
+                      controller: list[0],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText: "السجل التجاري"),
+                      keyboardType: TextInputType.text,
+                    ),
+                    Container(height: 10,),
+                    TextFormField(
+                      controller: list[0],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText: 'اسم المزرعة'),
+                      keyboardType: TextInputType.text,
+                    ),
+                    Container(height: 10,),
+                    TextFormField(
+                      controller: list[2],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText: "عدد الحيوانات"),
+                      keyboardType: TextInputType.number,
+                    ),
+                    Container(height: 10,),
+                    Container(
+                      height: 150,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: BlocProvider<ChoiceCubit>(
+                              create: (context) =>
+                                  ChoiceCubit(gavernorate: 0, city: 0, village: 0),
+                              child: SelectAnimalType(),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    Container(height: 0,),
+                    TextFormField(
+                      controller: list[3],
+                      validator: (value) {
+                        return null;
+                      },
+                      decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                          border: InputBorder.none, hintText: "التكلفة الكلية"),
+                      keyboardType: TextInputType.number,
+                    ),
+                    Container(height: 0,),
+                    CustomeCheckbox(
+                      value: false,
+                      text: "انثي",
+                    ),
+                    Container(height: 10,),
+                    Row(mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.resolveWith((states) =>
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30))),
+                                backgroundColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.red),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.red)),
+                            onPressed: () {},
+                            child: const Text(
+                              "مسح",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: OutlinedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.resolveWith((states) =>
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(30))),
+                                backgroundColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.green),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.green)),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ShowInfoScreen(),
+                                  ));
+                            },
+                            child: const Text(
+                              "حفظ",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
-                ),
-              ),
-              Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                  color: Colors.grey,
                 )),
-                padding: const EdgeInsets.all(10),
-                child: TextFormField(
-                  controller: list[3],
-                  validator: (value) {
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                      border: InputBorder.none, hintText: "التكلفة الكلية"),
-                  keyboardType: TextInputType.number,
-                ),
               ),
-              CustomeCheckbox(
-                value: false,
-                text: "انثي",
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(200, 50)),
-                        shape: MaterialStateProperty.resolveWith((states) =>
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30))),
-                        backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.grey),
-                        overlayColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.red)),
-                    onPressed: () {},
-                    child: const Text(
-                      "مسح",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(200, 50)),
-                        shape: MaterialStateProperty.resolveWith((states) =>
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30))),
-                        backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.grey),
-                        overlayColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.brown)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ShowInfoScreen(),
-                          ));
-                    },
-                    child: const Text(
-                      "حفظ",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(200, 50)),
-                        shape: MaterialStateProperty.resolveWith((states) =>
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30))),
-                        backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.grey),
-                        overlayColor: MaterialStateProperty.resolveWith(
-                            (states) => Colors.blue)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ShowInfoScreen(),
-                          ));
-                    },
-                    child: const Text(
-                      "عرض",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )),
+            ),
+          ),
         ),
       ),
     );
@@ -301,7 +252,7 @@ class _CustomeCheckboxState extends State<CustomeCheckbox> {
             });
           },
         ),
-        Text(widget.text,style: TextStyle(color: Colors.black),)
+        Text(widget.text,style: TextStyle(color: Colors.white),)
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
+import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/home.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
 import 'package:final_project_year/main_screens/supplier_screeen.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(debugShowCheckedModeBanner: false,
-      home: ConnectFarmAndFarmerScreen(),
+      home: FarmScreen(),
     );
   }
 }
