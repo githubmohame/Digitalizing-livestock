@@ -376,35 +376,46 @@ class _UpdateLocationState extends State<UpdateLocation> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(decoration:BoxDecoration(color:  Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
-        child: Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
-              currentIndex: index,unselectedFontSize:15,showUnselectedLabels: true,selectedFontSize: 20,
-              onTap: (value) {
-                setState(() {
-                  index = value;
-                });//
-              },unselectedItemColor: Colors.white,
-              selectedItemColor: Colors.white,
-              selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 20),
-              items: const [
-                BottomNavigationBarItem(
-                  label: 'تعديل المحافظة',
-                  icon: Image(image: AssetImage('assets/images/gavernorate.png')),
-                ),
-                BottomNavigationBarItem(
-                  label: 'تعديل المركز او المدينة',
-                  icon: Image(image: AssetImage('assets/images/city.png')),
-                ),
-                BottomNavigationBarItem(backgroundColor: Colors.white,
-                  label: 'تعديل القرية والشارع',
-                  icon: Image(image: AssetImage('assets/images/village.png')),
-                ),
-              ]),
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(elevation: 0, backgroundColor: Colors.transparent,title: const Text('تعديل الاماكن'),),
-          drawer: MainDrawer(index: 6),
-          body: list[index],
+        child: LayoutBuilder(
+          builder: (context,constraint) {
+            return Scaffold(
+              bottomNavigationBar: BottomNavigationBar(
+                  backgroundColor: Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
+                  currentIndex: index,unselectedFontSize:15,showUnselectedLabels: true,selectedFontSize: 20,
+                  onTap: (value) {
+                    setState(() {
+                      index = value;
+                    });//
+                  },unselectedItemColor: Colors.white,
+                  selectedItemColor: Colors.white,
+                  selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 20),
+                  items: const [
+                    BottomNavigationBarItem(
+                      label: 'تعديل المحافظة',
+                      icon: Image(image: AssetImage('assets/images/gavernorate.png')),
+                    ),
+                    BottomNavigationBarItem(
+                      label: 'تعديل المركز او المدينة',
+                      icon: Image(image: AssetImage('assets/images/city.png')),
+                    ),
+                    BottomNavigationBarItem(backgroundColor: Colors.white,
+                      label: 'تعديل القرية والشارع',
+                      icon: Image(image: AssetImage('assets/images/village.png')),
+                    ),
+                  ]),
+              backgroundColor: Colors.transparent,
+              appBar:  constraint.maxWidth<900?AppBar(elevation: 0, backgroundColor: Colors.transparent,title: const Text('تعديل الاماكن'),):null,
+              drawer: MainDrawer(index: 6),
+              body: Column(
+                children: [
+                constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:6)):Container(),
+                Spacer(),
+                  list[index],
+                  Spacer(),
+                ],
+              ),
+            );
+          }
         ),
       ),
     );

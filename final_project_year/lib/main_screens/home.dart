@@ -16,354 +16,365 @@ class HomeScreen extends StatelessWidget {
         GlobalKey<ScaffoldState>();
     return Directionality(textDirection: TextDirection.rtl,
       child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
-        child: Scaffold(appBar: AppBar(elevation: 0,title: Container(
-                          child: const Text("مرحبا بك",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold))),leading:  Container(
-                           margin: const EdgeInsets.only(top: 0),
-                           child: IconButton(
-                             icon: const Icon(
-                               Icons.menu,
-                               color: Colors.white,
-                               size: 30,
-                             ),
-                             onPressed: () {
-                               _scaffoldKey.currentState!.openDrawer();
-                             },
-                           )), backgroundColor: Colors.transparent),backgroundColor: Colors.transparent,
-          key: _scaffoldKey,
-          drawer: MainDrawer(index: 1),
-          body: SingleChildScrollView(
-            child: SafeArea(
-                child: Center(
-                  child: Container(margin: EdgeInsets.all(20),width:600,color: Colors.white.withOpacity(0.5),
-              child: Column(
-                children: [
-                  /*Stack(
-                    alignment: AlignmentDirectional.topStart,
+        child: LayoutBuilder(
+          builder: (context,constraint) {
+            return Scaffold(appBar: constraint.maxWidth<900?AppBar(elevation: 0,title: Container(
+                              child: const Text("مرحبا بك",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold))),leading:  Container(
+                               margin: const EdgeInsets.only(top: 0),
+                               child: IconButton(
+                                 icon: const Icon(
+                                   Icons.menu,
+                                   color: Colors.white,
+                                   size: 30,
+                                 ),
+                                 onPressed: () {
+                                   _scaffoldKey.currentState!.openDrawer();
+                                 },
+                               )), backgroundColor: Colors.transparent):null,backgroundColor: Colors.transparent,
+              key: _scaffoldKey,
+              drawer: MainDrawer(index: 1),
+              body: SingleChildScrollView(
+                child: Container(height:1094,
+                  child: Column(
                     children: [
-                      Container(
-                        height: 200,
-                        decoration: const BoxDecoration(
-                          borderRadius:
-                              BorderRadius.only(bottomRight: Radius.circular(100)),
-                          color: Color(0xff9c6644),
-                        ),
-                      ),
+                      constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:1)):Container(),
+                      SafeArea(
+                          child: Center(
+                            child: Container(margin: EdgeInsets.all(20),width:600,color: Colors.white.withOpacity(0.5),
+                        child: Column(
+                          children: [
+                            /*Stack(
+                              alignment: AlignmentDirectional.topStart,
+                              children: [
+                                Container(
+                                  height: 200,
+                                  decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.only(bottomRight: Radius.circular(100)),
+                                    color: Color(0xff9c6644),
+                                  ),
+                                ),
+                                
+                               
+                              ],
+                            ),*/
+                            SizedBox(height: 200,
+                              child: Flex(direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Expanded(
+                                    child: FloatingActionButton(mini: true,heroTag: 'farmer',
+                                        backgroundColor: Colors.white,
+                                        onPressed: () {},
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset('assets/images/farmer.png'),
+                                            const Text(
+                                              "عدد المربين الافراد",
+                                              style: TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              6578654.toString(),
+                                              style: const TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        )),
+                                  ),
+                                  Expanded(
+                                    child: FloatingActionButton(heroTag:'farm',
+                                        backgroundColor: Colors.white,
+                                        onPressed: () {},
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset('assets/images/field.png'),
+                                            const Text(
+                                              "عدد المزارع\n",
+                                              style: TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              6578654.toString(),
+                                              style: const TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        )),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            SizedBox(height: 200,
+                              child: Flex(direction: Axis.horizontal,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Expanded(
+                                    child: FloatingActionButton(heroTag: 'cows',
+                                        backgroundColor: Colors.white,
+                                        onPressed: () {},
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset("assets/images/cow_head.png"),
+                                            const Text(
+                                              "عدد رؤس الماشية ",
+                                              style: TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              6578654.toString(),
+                                              style: const TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        )),
+                                  ),
+                                  Expanded(
                       
-                     
-                    ],
-                  ),*/
-                  SizedBox(height: 200,
-                    child: Flex(direction: Axis.horizontal,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: FloatingActionButton(mini: true,heroTag: 'farmer',
-                              backgroundColor: Colors.white,
-                              onPressed: () {},
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/images/farmer.png'),
-                                  const Text(
-                                    "عدد المربين الافراد",
-                                    style: TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    6578654.toString(),
-                                    style: const TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
+                                    child: FloatingActionButton(heroTag: 'statistics1',
+                                        backgroundColor: Colors.white,
+                                        onPressed: (() {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>  ChartScreen(),
+                                  ));
+                          }),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset("assets/images/drawer_statistics.png"),
+                                            const Text(
+                                              "الاحصائيات",
+                                              style: TextStyle(
+                                                  color: Color(0xff9c6644),
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        )),
                                   ),
                                 ],
-                              )),
-                        ),
-                        Expanded(
-                          child: FloatingActionButton(heroTag:'farm',
-                              backgroundColor: Colors.white,
-                              onPressed: () {},
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/images/field.png'),
-                                  const Text(
-                                    "عدد المزارع\n",
-                                    style: TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    6578654.toString(),
-                                    style: const TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(height: 200,
-                    child: Flex(direction: Axis.horizontal,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: FloatingActionButton(heroTag: 'cows',
-                              backgroundColor: Colors.white,
-                              onPressed: () {},
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset("assets/images/cow_head.png"),
-                                  const Text(
-                                    "عدد رؤس الماشية ",
-                                    style: TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    6578654.toString(),
-                                    style: const TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                        ),
-                        Expanded(
-          
-                          child: FloatingActionButton(heroTag: 'statistics1',
-                              backgroundColor: Colors.white,
-                              onPressed: (() {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>  ChartScreen(),
-                        ));
-                }),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset("assets/images/drawer_statistics.png"),
-                                  const Text(
-                                    "الاحصائيات",
-                                    style: TextStyle(
-                                        color: Color(0xff9c6644),
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Flex(direction: Axis.horizontal,mainAxisAlignment: MainAxisAlignment.spaceEvenly  ,
-                    children: [
-                      Expanded(
-                        child: Container(margin: const EdgeInsets.only(right: 100),
-                          child: GestureDetector(onTap: (() {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  UpdateAnimal(),
-                      ));
-                }),
-                            child: Card(
-                              color: const Color(0xfffc5c4be),
-                              elevation: 10,
-                              child: SizedBox(
-                                  height: 150,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/images/add_animal.png'),
-                                      const Text(
-                                        "اضافة حيوان",
-                                        style: TextStyle(
-                                            color: Color(0xffa58363),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Flex(direction: Axis.horizontal,mainAxisAlignment: MainAxisAlignment.spaceEvenly  ,
+                              children: [
+                                Expanded(
+                                  child: Container(margin: const EdgeInsets.only(right: 100),
+                                    child: GestureDetector(onTap: (() {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  UpdateAnimal(),
+                                ));
+                          }),
+                                      child: Card(
+                                        color: const Color(0xfffc5c4be),
+                                        elevation: 10,
+                                        child: SizedBox(
+                                            height: 150,
+                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset('assets/images/add_animal.png'),
+                                                const Text(
+                                                  "اضافة حيوان",
+                                                  style: TextStyle(
+                                                      color: Color(0xffa58363),
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold),
+                                                ),
+                                              ],
+                                            )),
                                       ),
-                                    ],
-                                  )),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(margin: const EdgeInsets.only(left: 100),
+                                    child: GestureDetector(onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Farmer(),
+                                ));
+                          },
+                                      child: Card(
+                                        color: const Color(0xfffc5c4be),
+                                        elevation: 10,
+                                        child: SizedBox(
+                                            height: 150,
+                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset('assets/images/add_farmer.png'),
+                                                const Text("اضافه مربي",style: TextStyle(
+                                                      color: Color(0xffa58363),
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold),),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(margin: const EdgeInsets.only(right: 100),
+                                    child: GestureDetector( onTap: (() {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const FarmScreen(),
+                                ));
+                          }),
+                                      child: Card(
+                                        color: const Color(0xfffc5c4be),
+                                        elevation: 10,
+                                        child: SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset('assets/images/add_field.png'),
+                                                const Text("اضافة مزرعة",style: TextStyle(
+                                                      color: Color(0xffa58363),
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold),),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              Expanded(
+                                  child: Container(margin: const EdgeInsets.only(left: 100),
+                                    child: GestureDetector( onTap: (() {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  UpdateLocation(),
+                                ));
+                          }), 
+                                      child: Card(
+                                        color: const Color(0xfffc5c4be),
+                                        elevation: 10,
+                                        child: SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset('assets/images/location-pin.png'),
+                                                const Text("اضافة مكان",style:  TextStyle(
+                                                      color: Color(0xffa58363),
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold),),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                
+                               
+                              ],
+                            ),
+                             Row(
+                              children: [
+                                Expanded(
+                                  child: Container(margin: const EdgeInsets.only(right: 100),
+                                    child: GestureDetector(onTap: (() {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>  const AddAdmin(),
+                                ));
+                          }),
+                                      child: Card(
+                                        color: const Color(0xfffc5c4be),
+                                        elevation: 10,
+                                        child: SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                 const Icon( Icons.person,size:80,color:Colors.brown),
+                                                const Text("تسجيل المدرين"),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                 Expanded(
+                                  child: Container(margin: const EdgeInsets.only(left:100),
+                                    child: GestureDetector( onTap: (() {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LogIN(),
+                                ));
+                          }),
+                                      child: Card(
+                                        color: const Color(0xfffc5c4be),
+                                        elevation: 10,
+                                        child: SizedBox(
+                                            width: 150,
+                                            height: 150,
+                                            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                 const Icon( Icons.person,size:80,color:Colors.brown),
+                                                const Text("تسجيل الدخول",style: TextStyle(
+                                                      color: Color(0xffa58363),
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.bold),),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        child: Container(margin: const EdgeInsets.only(left: 100),
-                          child: GestureDetector(onTap: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Farmer(),
-                      ));
-                },
-                            child: Card(
-                              color: const Color(0xfffc5c4be),
-                              elevation: 10,
-                              child: SizedBox(
-                                  height: 150,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/images/add_farmer.png'),
-                                      const Text("اضافه مربي",style: TextStyle(
-                                            color: Color(0xffa58363),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
+                          )),
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(margin: const EdgeInsets.only(right: 100),
-                          child: GestureDetector( onTap: (() {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FarmScreen(),
-                      ));
-                }),
-                            child: Card(
-                              color: const Color(0xfffc5c4be),
-                              elevation: 10,
-                              child: SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/images/add_field.png'),
-                                      const Text("اضافة مزرعة",style: TextStyle(
-                                            color: Color(0xffa58363),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
-                    Expanded(
-                        child: Container(margin: const EdgeInsets.only(left: 100),
-                          child: GestureDetector( onTap: (() {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  UpdateLocation(),
-                      ));
-                }), 
-                            child: Card(
-                              color: const Color(0xfffc5c4be),
-                              elevation: 10,
-                              child: SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset('assets/images/location-pin.png'),
-                                      const Text("اضافة مكان",style:  TextStyle(
-                                            color: Color(0xffa58363),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      
-                     
-                    ],
-                  ),
-                   Row(
-                    children: [
-                      Expanded(
-                        child: Container(margin: const EdgeInsets.only(right: 100),
-                          child: GestureDetector(onTap: (() {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>  const AddAdmin(),
-                      ));
-                }),
-                            child: Card(
-                              color: const Color(0xfffc5c4be),
-                              elevation: 10,
-                              child: SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                       const Icon( Icons.person,size:80,color:Colors.brown),
-                                      const Text("تسجيل المدرين"),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
-                       Expanded(
-                        child: Container(margin: const EdgeInsets.only(left:100),
-                          child: GestureDetector( onTap: (() {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LogIN(),
-                      ));
-                }),
-                            child: Card(
-                              color: const Color(0xfffc5c4be),
-                              elevation: 10,
-                              child: SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                       const Icon( Icons.person,size:80,color:Colors.brown),
-                                      const Text("تسجيل الدخول",style: TextStyle(
-                                            color: Color(0xffa58363),
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
-                )),
-          ),
+            );
+          }
         ),
       ),
     );

@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'package:file_picker/file_picker.dart';
 import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:latlong2/latlong.dart';
 import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_type_cubit.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
+import 'package:geolocator/geolocator.dart';
 class CustomeDropdownButton extends StatefulWidget {
   int value;
   String text;
@@ -91,305 +93,336 @@ class FarmScreen extends StatelessWidget {
         child: LayoutBuilder(builder: (context, constraint) {
           print(constraint.maxWidth);
           return Scaffold(
-             appBar: constraint.maxWidth<900?AppBar(elevation: 0,
-                  backgroundColor: Colors.transparent,
-                  title: const Text("اضافه المزرعة")):null, 
+            appBar: constraint.maxWidth < 900
+                ? AppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    title: const Text("اضافه المزرعة"))
+                : null,
             backgroundColor: Colors.red.withOpacity(0),
-            drawer:constraint.maxWidth< 900 ?MainDrawer(index: 0):null,
-            body: Column(
-              children: [
-                 constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index: 0)):Container(),
-                Spacer(flex: 2),
-                Container(
-                  height: 600,
-                  width: 700,
-                  color: Colors.white.withOpacity(0.5),
-                  child: Form(
-                      child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {},
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: 'رقم السجل الضريبي'),
-                            keyboardType: TextInputType.number,
+            drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
+            body: SingleChildScrollView(
+              child: Container(
+                height: 1600 + 678,
+                child: Column(
+                  children: [
+                    constraint.maxWidth > 900
+                        ? Container(
+                            height: 100, child: ComputerDrawer(index: 0))
+                        : Container(),
+                    Container(height: 20),
+                    Container(
+                      height: 1600,
+                      width: 700,
+                      color: Colors.white.withOpacity(0.5),
+                      child: Form(
+                          child: Column(
+                        children: [
+                          constraint.maxWidth > 900
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                        color: Colors.transparent,
+                                      )),
+                                      margin: const EdgeInsets.all(10),
+                                      child: Text(
+                                        "اضافة مزرعة",
+                                        style: TextStyle(
+                                            fontSize: 30,
+                                            color: Colors.grey.shade900),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {},
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: 'رقم السجل الضريبي'),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.grey,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {},
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: 'المساحة الكلية للمزرعة'),
-                            keyboardType: TextInputType.number,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.grey,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {},
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: 'المساحة الكلية للمزرعة'),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {},
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: 'ادخل اسم المزرعة'),
-                            keyboardType: TextInputType.text,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {},
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: 'ادخل اسم المزرعة'),
+                              keyboardType: TextInputType.text,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {
-                              try {
-                                return int.parse(value ?? "0") <= 0
-                                    ? " العدد يجب ان يكون اكبر من 0"
-                                    : null;
-                              } catch (e) {
-                                return null;
-                              }
-                            },
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: "اعدد الملاعب"),
-                            keyboardType: TextInputType.number,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {
+                                try {
+                                  return int.parse(value ?? "0") <= 0
+                                      ? " العدد يجب ان يكون اكبر من 0"
+                                      : null;
+                                } catch (e) {
+                                  return null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: "اعدد الملاعب"),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {
-                              try {
-                                return int.parse(value ?? "0") <= 0
-                                    ? " العدد يجب ان يكون اكبر من 0"
-                                    : null;
-                              } catch (e) {
-                                return null;
-                              }
-                            },
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: "سعة الملاعب"),
-                            keyboardType: TextInputType.number,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {
+                                try {
+                                  return int.parse(value ?? "0") <= 0
+                                      ? " العدد يجب ان يكون اكبر من 0"
+                                      : null;
+                                } catch (e) {
+                                  return null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: "سعة الملاعب"),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {
-                              try {
-                                return int.parse(value ?? "0") <= 0
-                                    ? "  0العدد يجب ان يكون اكبر من او يساوي"
-                                    : null;
-                              } catch (e) {
-                                return null;
-                              }
-                            },
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: "اعدد العنابر"),
-                            keyboardType: TextInputType.number,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {
+                                try {
+                                  return int.parse(value ?? "0") <= 0
+                                      ? "  0العدد يجب ان يكون اكبر من او يساوي"
+                                      : null;
+                                } catch (e) {
+                                  return null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: "اعدد العنابر"),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {
-                              try {
-                                return int.parse(value ?? "0") <= 0
-                                    ? "  0العدد يجب ان يكون اكبر من او يساوي"
-                                    : null;
-                              } catch (e) {
-                                return null;
-                              }
-                            },
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: 'عدد عنابر العزل'),
-                            keyboardType: TextInputType.number,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {
+                                try {
+                                  return int.parse(value ?? "0") <= 0
+                                      ? "  0العدد يجب ان يكون اكبر من او يساوي"
+                                      : null;
+                                } catch (e) {
+                                  return null;
+                                }
+                              },
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: 'عدد عنابر العزل'),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                          )),
-                          margin: const EdgeInsets.all(10),
-                          child: TextFormField(
-                            validator: (value) {},
-                            decoration: const InputDecoration(
-                                fillColor: Colors.white,
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: "ادخل عدد الافدنة الملحقة"),
-                            keyboardType: TextInputType.number,
+                          Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                              color: Colors.white,
+                            )),
+                            margin: const EdgeInsets.all(10),
+                            child: TextFormField(
+                              validator: (value) {},
+                              decoration: const InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  hintText: "ادخل عدد الافدنة الملحقة"),
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: 70,
-                          margin: const EdgeInsets.all(10),
-                          child: CustomeDropdownButton(
-                            list: const [
-                              {"id": 0, "name": "عام"},
-                              {"id": 1, "name": "خاص"}
-                            ],
-                            expanded: true,
-                            text: "نوع القطاع",
-                            value: 0,
-                          ),
-                        ),
-                        Container(
-                            margin: EdgeInsets.all(10),
-                            child: GoogleMapComponent()),
-                        SizedBox(
-                          height: 260,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  child: BlocProvider(
-                                create: (context) => ChoiceCubit(
-                                    city: 0, gavernorate: 0, village: 0),
-                                child: SelectLocation(),
-                              )),
-                            ],
-                          ),
-                        ),
-                        BlocProvider(
-                          create: (context) => SelectMuiltTypeCubit(list: []),
-                          child: Container(
-                            color: Colors.white,
-                            margin: EdgeInsets.all(10),
-                            child: CustomeType(
-                              title: "نوع المزرعة",
+                          Container(
+                            height: 70,
+                            margin: const EdgeInsets.all(10),
+                            child: CustomeDropdownButton(
                               list: const [
-                                {"عام": 1},
-                                {"خاص": 0}
+                                {"id": 0, "name": "عام"},
+                                {"id": 1, "name": "خاص"}
+                              ],
+                              expanded: true,
+                              text: "نوع القطاع",
+                              value: 0,
+                            ),
+                          ),
+                          Container(
+                              height: 200,
+                              margin: EdgeInsets.all(10),
+                              child: GoogleMapComponent()),
+                          Container(
+                            height: 300,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: BlocProvider(
+                                  create: (context) => ChoiceCubit(
+                                      city: 0, gavernorate: 0, village: 0),
+                                  child: SelectLocation(),
+                                )),
                               ],
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            OutlinedButton(
-                              style: ButtonStyle(
-                                  fixedSize: MaterialStateProperty.all(
-                                      const Size(200, 50)),
-                                  shape: MaterialStateProperty.resolveWith(
-                                      (states) => RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30))),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith(
-                                          (states) => Colors.green),
-                                  overlayColor:
-                                      MaterialStateProperty.resolveWith(
-                                          (states) => Colors.green)),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ShowInfoScreen(),
-                                    ));
-                              },
-                              child: const Text(
-                                "حفظ",
-                                style: TextStyle(color: Colors.white),
+                          BlocProvider(
+                            create: (context) => SelectMuiltTypeCubit(list: []),
+                            child: Container(
+                              color: Colors.white,
+                              margin: EdgeInsets.all(10),
+                              child: CustomeType(
+                                title: "نوع المزرعة",
+                                list: const [
+                                  {"عام": 1},
+                                  {"خاص": 0}
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            OutlinedButton(
-                              style: ButtonStyle(
-                                  fixedSize: MaterialStateProperty.all(
-                                      const Size(200, 50)),
-                                  shape: MaterialStateProperty.resolveWith(
-                                      (states) => RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30))),
-                                  backgroundColor:
-                                      MaterialStateProperty.resolveWith(
-                                          (states) => Colors.red),
-                                  overlayColor:
-                                      MaterialStateProperty.resolveWith(
-                                          (states) => Colors.red)),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ShowInfoScreen(),
-                                    ));
-                              },
-                              child: const Text(
-                                "حذف",
-                                style: TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                        const Size(200, 50)),
+                                    shape: MaterialStateProperty.resolveWith(
+                                        (states) => RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30))),
+                                    backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.green),
+                                    overlayColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.green)),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ShowInfoScreen(),
+                                      ));
+                                },
+                                child: const Text(
+                                  "حفظ",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              SizedBox(
+                                height: 10,
+                              ),
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                        const Size(200, 50)),
+                                    shape: MaterialStateProperty.resolveWith(
+                                        (states) => RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30))),
+                                    backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.red),
+                                    overlayColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.red)),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ShowInfoScreen(),
+                                      ));
+                                },
+                                child: const Text(
+                                  "حذف",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
                     ),
-                  )),
+                    Spacer()
+                  ],
                 ),
-                Spacer()
-              ],
+              ),
             ),
           );
         }),
@@ -412,7 +445,7 @@ class _SelectLocationState extends State<SelectLocation> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(5),
             decoration: BoxDecoration(
                 border: Border.all(
               color: Colors.white,
@@ -431,7 +464,7 @@ class _SelectLocationState extends State<SelectLocation> {
                 value: 0,
                 text: "المحافظة")),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
               border: Border.all(
             color: Colors.white,
@@ -457,7 +490,7 @@ class _SelectLocationState extends State<SelectLocation> {
           ),
         ),
         Container(
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
               border: Border.all(
             color: Colors.white,
@@ -643,43 +676,130 @@ class GoogleMapComponent extends StatefulWidget {
 }
 
 class _GoogleMapComponentState extends State<GoogleMapComponent> {
+  LatLng point = LatLng(0, 0);
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.white,
-                )),
-            margin: const EdgeInsets.all(10),
-            child: TextFormField(
-              validator: (value) {},
-              decoration: const InputDecoration(
-                  border: InputBorder.none, hintText: 'المساحة الكلية للمزرعة'),
-              keyboardType: TextInputType.number,
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.brown)),
+                child: Text(
+                  'ادخال الاحداثيات',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                
+                },
+              ),
             ),
+            Expanded(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.brown)),
+                child: Text(
+                  'اخذ الاحداث اللحالي',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async{
+                   Position p= await _determinePosition();
+                 this.point=  LatLng(p.latitude, p.longitude);
+                 setState(() {
+                   
+                 });
+                },
+              ),
+            ),
+            Expanded(
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.brown)),
+                child: Text(
+                  'تحميل ملف سيغه shape file',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: ()async {
+                  FilePickerResult? result = await FilePicker.platform.pickFiles(
+  type: FileType.custom,
+  allowedExtensions: ['shp', '.shpx',],
+);
+
+                },
+              ),
+            )
+          ],
+        ),
+        Container(
+          height: 200 - 32,
+          child: FlutterMap(
+            options: MapOptions( 
+              onTap: (tapPosition, point) {
+                this.point = point;
+                setState(() {
+                  
+                });
+              },
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                      height: 200,
+                      width: 200,
+                      point: point,
+                      builder: (context) => Icon(Icons.location_on))
+                ],
+              ),
+            ],
           ),
         ),
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: Container(
-            height: 50,
-            child: TextButton(
-                onPressed: () async {
-                  launchUrlString(
-                      'https://www.google.com/maps/place/%D9%85%D8%B4%D8%AA%D9%84+%D8%AF%D9%85%D9%8A%D8%A7%D8%B7+%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D9%87+%D9%85%D8%A7%D8%B3%D9%87+%D9%81%D9%84%D9%88%D8%B1%E2%80%AD/@31.4375592,31.6625208,15z/data=!4m8!1m2!3m1!2z2YXYt9i52YUg2KfYqNmGINin2YTYr9mK2YPigK0!3m4!1s0x14f9e3b19117100d:0x7afd6519c0a84ac7!8m2!3d31.4375566!4d31.6609561');
-                },
-                style: TextButton.styleFrom(backgroundColor: Colors.white),
-                child: Text(
-                  'تغير ال google map',
-                  style: TextStyle(color: Colors.brown),
-                )),
-          ),
-        )
       ],
     );
   }
+  Future<Position> _determinePosition() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    bool serviceEnabled;
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the 
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale 
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately. 
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.');
+    } 
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
 }

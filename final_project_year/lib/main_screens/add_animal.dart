@@ -186,28 +186,38 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
       child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
-        child: Scaffold(
-          bottomNavigationBar: BottomNavigationBar(backgroundColor: Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),unselectedItemColor: Colors.white,
-              currentIndex: index,
-              onTap: (value) {
-                setState(() {
-                  index = value;
-                });
-              },selectedItemColor: Colors.white,selectedLabelStyle: const TextStyle(  color: Colors.brown,fontSize: 20),
-              items: [
-                BottomNavigationBarItem(
-                  label: 'تعديل النوع',
-                  icon: Container()
-                ),
-                BottomNavigationBarItem(
-                  label: "تعديل الفصيلة",
-                  icon:Container(),
-                ),
-              ]),
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(title:const Text("تعديل الفصيلة او النوع"),elevation: 0, backgroundColor: Colors.transparent),
-          drawer: MainDrawer(index: 7),
-          body: list[index],
+        child: LayoutBuilder(
+          builder: (context,constraint) {
+            return Scaffold(
+              bottomNavigationBar: BottomNavigationBar(backgroundColor: Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),unselectedItemColor: Colors.white,
+                  currentIndex: index,
+                  onTap: (value) {
+                    setState(() {
+                      index = value;
+                    });
+                  },selectedItemColor: Colors.white,selectedLabelStyle: const TextStyle(  color: Colors.brown,fontSize: 20),
+                  items: [
+                    BottomNavigationBarItem(
+                      label: 'تعديل النوع',
+                      icon: Container()
+                    ),
+                    BottomNavigationBarItem(
+                      label: "تعديل الفصيلة",
+                      icon:Container(),
+                    ),
+                  ]),
+              backgroundColor: Colors.transparent,
+              appBar:constraint.maxWidth<900?AppBar(title:const Text("تعديل الفصيلة او النوع"),elevation: 0, backgroundColor: Colors.transparent):null,
+              drawer: MainDrawer(index: 7),
+              body:  Column(
+                children: [
+                constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:7)):Container(),
+                Spacer(),
+                  Container(color: Colors.white.withOpacity(0.5),child: list[index],width: 600,),
+                  Spacer(),
+                ],)
+            );
+          }
         ),
       ),
     );

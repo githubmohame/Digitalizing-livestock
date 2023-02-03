@@ -14,11 +14,8 @@ class ItemList extends StatelessWidget {
     return Card(
       borderOnForeground: true,
       color:  Colors.grey,
-      child: Container(
-          height: 80,
-          decoration: BoxDecoration(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(30)),
+      child: Card(
+           elevation: 10,surfaceTintColor: Colors.amber,
           child: Row(
             children: [
               CircleAvatar(
@@ -32,25 +29,11 @@ class ItemList extends StatelessWidget {
                 children: [
                   Text('الاسم:' + 'محمد ايمن',
                       style: TextStyle(color: Colors.black, fontSize: 15)),
+            Text('عدد المزارع:'+890.toString(),style: TextStyle( fontWeight: FontWeight.bold),),
+          Text('رقم التليقون:'+8799.toString())
                 ],
               ),
-              Expanded(child: SizedBox()),
-              TextButton(
-                child: Text(
-                  'عرض المعلومات',
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Farmer(city: 'مصر',country: 'مصر' ,village:  'مصر',
-                              edit: false,
-                              name: "محمد ايمن محمد سليمان",
-                              phone: '0909888',
-                              ssn: '755677889654')));
-                },
-              )
+              
             ],
           )),
     );
@@ -64,21 +47,26 @@ class ListFarmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.rtl,
-        child: Scaffold(
-            drawer: MainDrawer(index: 5),
-            appBar: AppBar(
-              title: Center(
-                child: Text('عرض المربين'),
+        child: Container(decoration: BoxDecoration(
+          color: Colors.transparent,
+          image: DecorationImage(
+              fit: BoxFit.cover, image: AssetImage('assets/images/farm.jpg'))),
+          child: Scaffold(
+              drawer: MainDrawer(index: 5),
+              appBar: AppBar(
+                title: Center(
+                  child: Text('عرض المربين'),
+                ),
+                backgroundColor: Colors.transparent,
               ),
-              backgroundColor: Colors.brown,
-            ),
-            backgroundColor: Colors.white,
-            body: ListView.builder(
-                itemCount: 100,
-                itemBuilder: (context, index) {
-                  return ItemList(
-                    name: "محمد ايمن",
-                  );
-                })));
+              backgroundColor: Colors.transparent,
+              body: ListView.builder(
+                  itemCount: 100,
+                  itemBuilder: (context, index) {
+                    return ItemList(
+                      name: "محمد ايمن",
+                    );
+                  })),
+        ));
   }
 }

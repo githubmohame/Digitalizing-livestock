@@ -29,146 +29,157 @@ class Farmer extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
-        child: Scaffold( backgroundColor: Colors.transparent,
-          drawer: MainDrawer(index: 2),
-          appBar: AppBar(elevation: 0,leading: !edit?IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.arrow_back)):null,
-              backgroundColor: Colors.transparent, title: const Text("اضافه المربين")),
-          body: Center(
-            child: Container(margin: EdgeInsets.all(20),width:600,color: Colors.white.withOpacity(0.5),
-              child: SingleChildScrollView( 
-                child: Form(
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,mainAxisSize: MainAxisSize.min,
-                  children: [
-                     Container(
-                      height: 50,
-                      decoration: BoxDecoration(),
-                      padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        enabled: edit,
-                        controller: list[0],
-                        validator: (value) {
-                          return null;
+        child: LayoutBuilder(
+          builder: (context,constraint) {
+            return Scaffold( backgroundColor: Colors.transparent,
+              drawer: MainDrawer(index: 2),
+              appBar: constraint.maxWidth<900?AppBar(elevation: 0,leading: !edit?IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
                         },
-                        decoration: const InputDecoration(fillColor: Colors.white,filled: true,
-                            border: InputBorder.none, hintText:'الاسم الاول'),
-                        keyboardType: TextInputType.text,
+                        icon: const Icon(Icons.arrow_back)):null,
+                  backgroundColor: Colors.transparent, title: const Text("اضافه المربين")):null,
+              body: Column(
+                children: [
+                  constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:2)):Container(),
+                  Spacer(flex: 2),
+                  Center(
+                    child: Container(margin: EdgeInsets.all(20),width:600,color: Colors.white.withOpacity(0.5),
+                      child: SingleChildScrollView( 
+                        child: Form(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.center,mainAxisSize: MainAxisSize.min,
+                          children: [
+                             Container(
+                              height: 50,
+                              decoration: BoxDecoration(),
+                              padding: const EdgeInsets.all(10),
+                              child: TextFormField(
+                                enabled: edit,
+                                controller: list[0],
+                                validator: (value) {
+                                  return null;
+                                },
+                                decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                                    border: InputBorder.none, hintText:'الاسم الاول'),
+                                keyboardType: TextInputType.text,
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(),
+                              padding: const EdgeInsets.all(10),
+                              child: TextFormField(
+                                enabled: edit,
+                                controller: list[0],
+                                validator: (value) {
+                                  return null;
+                                },
+                                decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                                    border: InputBorder.none, hintText:'الاسم الثاني'),
+                                keyboardType: TextInputType.text,
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(),
+                              padding: const EdgeInsets.all(10),
+                              child: TextFormField(
+                                enabled: edit,
+                                controller: list[0],
+                                validator: (value) {
+                                  return null;
+                                },
+                                decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                                    border: InputBorder.none, hintText:'البريد الالكتروني'),
+                                keyboardType: TextInputType.text,
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(),
+                              padding: const EdgeInsets.all(10),
+                              child: TextFormField(
+                                enabled: edit,
+                                controller: list[0],
+                                validator: (value) {
+                                  return null;
+                                },
+                                decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                                    border: InputBorder.none, hintText: "رقم التليفون"),
+                                keyboardType: TextInputType.phone,
+                              ),
+                            ),
+                            Container(
+                              height: 50,
+                              decoration: BoxDecoration(),
+                              padding: const EdgeInsets.all(10),
+                              child: TextFormField(
+                                enabled: edit,
+                                controller: list[1],
+                                validator: (value) {
+                                  return null;
+                                },
+                                decoration: const InputDecoration(fillColor: Colors.white,filled: true,
+                                    border: InputBorder.none, hintText: "الرقم القومي"),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            Container(margin: EdgeInsets.all(10),child: CustomePasswordEnterTextField(widgetIndex: 2)),
+                            !edit?Container():OutlinedButton(
+                              style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                                  shape: MaterialStateProperty.resolveWith((states) =>
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(30))),
+                                  backgroundColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.green),
+                                  overlayColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.green)),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ShowInfoScreen(),
+                                    ));
+                              },
+                              child: const Text(
+                                "حفظ",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                             SizedBox(height: 10,),
+                            OutlinedButton(
+                              style: ButtonStyle(
+                                  fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                                  shape: MaterialStateProperty.resolveWith((states) =>
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(30))),
+                                  backgroundColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.red),
+                                  overlayColor: MaterialStateProperty.resolveWith(
+                                      (states) => Colors.red)),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ShowInfoScreen(),
+                                    ));
+                              },
+                              child: const Text(
+                                "حذف",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        )),
                       ),
                     ),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(),
-                      padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        enabled: edit,
-                        controller: list[0],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(fillColor: Colors.white,filled: true,
-                            border: InputBorder.none, hintText:'الاسم الثاني'),
-                        keyboardType: TextInputType.text,
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(),
-                      padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        enabled: edit,
-                        controller: list[0],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(fillColor: Colors.white,filled: true,
-                            border: InputBorder.none, hintText:'البريد الالكتروني'),
-                        keyboardType: TextInputType.text,
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(),
-                      padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        enabled: edit,
-                        controller: list[0],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(fillColor: Colors.white,filled: true,
-                            border: InputBorder.none, hintText: "رقم التليفون"),
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(),
-                      padding: const EdgeInsets.all(10),
-                      child: TextFormField(
-                        enabled: edit,
-                        controller: list[1],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(fillColor: Colors.white,filled: true,
-                            border: InputBorder.none, hintText: "الرقم القومي"),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                    Container(margin: EdgeInsets.all(10),child: CustomePasswordEnterTextField(widgetIndex: 2)),
-                    !edit?Container():OutlinedButton(
-                      style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                          shape: MaterialStateProperty.resolveWith((states) =>
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30))),
-                          backgroundColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.green),
-                          overlayColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.green)),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ShowInfoScreen(),
-                            ));
-                      },
-                      child: const Text(
-                        "حفظ",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                     SizedBox(height: 10,),
-                    OutlinedButton(
-                      style: ButtonStyle(
-                          fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                          shape: MaterialStateProperty.resolveWith((states) =>
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30))),
-                          backgroundColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.red),
-                          overlayColor: MaterialStateProperty.resolveWith(
-                              (states) => Colors.red)),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ShowInfoScreen(),
-                            ));
-                      },
-                      child: const Text(
-                        "حذف",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                )),
+                  ),
+                   Spacer(flex: 2),
+                ],
               ),
-            ),
-          ),
+            );
+          }
         ),
       ),
     );
