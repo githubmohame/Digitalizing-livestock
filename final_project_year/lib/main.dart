@@ -6,6 +6,8 @@ import 'package:final_project_year/main_screens/supplier_screeen.dart';
 import 'package:final_project_year/main_screens/workers_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'main_screens/screen_location/bash_board_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(theme: ThemeData(
         useMaterial3: true
       ),debugShowCheckedModeBanner: false,
-      home: FarmScreen(),
+      home: DashBoardScreen(),
     );
   }
 }

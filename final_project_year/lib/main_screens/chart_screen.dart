@@ -9,7 +9,7 @@ import 'package:final_project_year/common_component/main_diwer.dart';
 
 class ChartScreen extends StatelessWidget {
   final List<ChartData> chartData = List.generate(
-    30,
+    5,
     (index) {
       return ChartData('juuu', 90 * (index + 12));
     },
@@ -59,45 +59,45 @@ class ChartScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
             ),
             backgroundColor: Colors.transparent,
-            body: Center(
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.white.withOpacity(0.6),
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      PieChart2(
-                          f: Map.fromIterables(
-                              List.generate(
-                                  27, (index) => (900 * index).toString()),
-                              List.generate(
-                                  27, (index) => 900 * index.toDouble()))),
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        height: 700,
-                        child: Container(
-                            width: 1700,
-                            child: BarChart(
-                              BarChartData(
-                                  barTouchData: BarTouchData(
-                                      touchTooltipData: BarTouchTooltipData(
-                                          direction: TooltipDirection.bottom)),
-                                  groupsSpace: 15,
-                                  barGroups: getTest2()
-                                  // read about it in the BarChartData section
-                                  ),
-                              swapAnimationDuration:
-                                  Duration(milliseconds: 150), // Optional
-                              swapAnimationCurve: Curves.linear, // Optional
-                            )),
-                      ),
-                      Container(
-                        height: 90,
-                      )
-                    ],
+            body: Row(
+              children: [ Spacer(),
+                SingleChildScrollView(scrollDirection: Axis.vertical,
+                  child: Container(
+                     child: Wrap(direction: Axis.vertical,
+                      alignment: WrapAlignment.center,spacing: 50,crossAxisAlignment: WrapCrossAlignment.center,runSpacing: 50,
+                      children: [
+                         
+                        Container(width: 500,decoration: BoxDecoration(color: Colors.white.withOpacity(0.3),borderRadius: BorderRadius.circular(30)),
+                         
+                          child:  SfCircularChart(series: <CircularSeries>[
+                              // Render pie chart
+                              PieSeries<ChartData, String>(dataSource: chartData,xValueMapper: (datum, index) => datum.name,yValueMapper: (datum, index) => datum.number,dataLabelMapper: (datum, index) => datum.name, explode: true,dataLabelSettings: DataLabelSettings(isVisible: true))
+                          ]),
+                        ) ,Container(width: 500,decoration: BoxDecoration(color: Colors.white.withOpacity(0.3),borderRadius: BorderRadius.circular(30)),
+                         
+                          child:  SfCircularChart(series: <CircularSeries>[
+                              // Render pie chart
+                              PieSeries<ChartData, String>(dataSource: chartData,xValueMapper: (datum, index) => datum.name,yValueMapper: (datum, index) => datum.number,dataLabelMapper: (datum, index) => datum.name, explode: true,dataLabelSettings: DataLabelSettings(isVisible: true))
+                          ]),
+                        ),Container(width: 500,decoration: BoxDecoration(color: Colors.white.withOpacity(0.3),borderRadius: BorderRadius.circular(30)),
+                         
+                          child:  SfCircularChart(series: <CircularSeries>[
+                              // Render pie chart
+                              PieSeries<ChartData, String>(dataSource: chartData,xValueMapper: (datum, index) => datum.name,yValueMapper: (datum, index) => datum.number,dataLabelMapper: (datum, index) => datum.name, explode: true,dataLabelSettings: DataLabelSettings(isVisible: true))
+                          ]),
+                        ),
+                        Container(width: 500,decoration: BoxDecoration(color: Colors.white.withOpacity(0.3),borderRadius: BorderRadius.circular(30)),
+                         
+                          child:  SfCircularChart(series: <CircularSeries>[
+                              // Render pie chart
+                              PieSeries<ChartData, String>(dataSource: chartData,xValueMapper: (datum, index) => datum.name,yValueMapper: (datum, index) => datum.number,dataLabelMapper: (datum, index) => datum.name, explode: true,dataLabelSettings: DataLabelSettings(isVisible: true))
+                          ]),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ),
+                ),Spacer(),
+              ],
             )),
       ),
     );
