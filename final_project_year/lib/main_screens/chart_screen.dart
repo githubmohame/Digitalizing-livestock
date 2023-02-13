@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 
+import 'package:final_project_year/common_component/background.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -45,17 +46,14 @@ class ChartScreen extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          color: Colors.transparent,
-          image: DecorationImage(
-              fit: BoxFit.cover, image: AssetImage('assets/images/farm.jpg'))),
+    return BackgroundScreen(
+     
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
             drawer: MainDrawer(index: 8),
             appBar: AppBar(
-              title: const Center(child: Text('الاحصائيات')),
+              title: const Center(child: Text('الاحصائيات',style: TextStyle(color: Colors.white),)),
               backgroundColor: Colors.transparent,
             ),
             backgroundColor: Colors.transparent,

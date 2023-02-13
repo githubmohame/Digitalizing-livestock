@@ -1,3 +1,4 @@
+import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,10 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       borderOnForeground: true,
-      color:  Colors.grey,
+      color: Color(0xFF467061),
       child: Card(
-           elevation: 10,surfaceTintColor: Colors.amber,
+          elevation: 10,
+          surfaceTintColor: Color(0xFF467061),
           child: Row(
             children: [
               CircleAvatar(
@@ -29,11 +31,13 @@ class ItemList extends StatelessWidget {
                 children: [
                   Text('الاسم:' + 'محمد ايمن',
                       style: TextStyle(color: Colors.black, fontSize: 15)),
-            Text('عدد المزارع:'+890.toString(),style: TextStyle( fontWeight: FontWeight.bold),),
-          Text('رقم التليقون:'+8799.toString())
+                  Text(
+                    'عدد المزارع:' + 890.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('رقم التليقون:' + 8799.toString())
                 ],
               ),
-              
             ],
           )),
     );
@@ -47,26 +51,40 @@ class ListFarmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
         textDirection: TextDirection.rtl,
-        child: Container(decoration: BoxDecoration(
-          color: Colors.transparent,
-          image: DecorationImage(
-              fit: BoxFit.cover, image: AssetImage('assets/images/farm.jpg'))),
+        child: BackgroundScreen(
           child: Scaffold(
               drawer: MainDrawer(index: 5),
               appBar: AppBar(
                 title: Center(
-                  child: Text('عرض المربين'),
+                  child: Text('عرض المربين',style: TextStyle(color: Colors.white),),
                 ),
                 backgroundColor: Colors.transparent,
               ),
               backgroundColor: Colors.transparent,
-              body: ListView.builder(
-                  itemCount: 100,
-                  itemBuilder: (context, index) {
-                    return ItemList(
-                      name: "محمد ايمن",
-                    );
-                  })),
+              body: LayoutBuilder(builder: (context, constraint) {
+                print(constraint.maxWidth);
+                return Row(children: [
+                  constraint.maxWidth >= 1000 ? Spacer() : Container(),
+                  Expanded(
+                    child: Container(
+                      width: 400,
+                      color: Color(0xFF467061),
+                      child: Card(
+                        color: Color(0xFF467061),
+                        elevation: 20,
+                        child: ListView.builder(
+                            itemCount: 100,
+                            itemBuilder: (context, index) {
+                              return ItemList(
+                                name: "محمد ايمن",
+                              );
+                            }),
+                      ),
+                    ),
+                  ),
+                  constraint.maxWidth >= 1000 ? Spacer() : Container(),
+                ]);
+              })),
         ));
   }
 }

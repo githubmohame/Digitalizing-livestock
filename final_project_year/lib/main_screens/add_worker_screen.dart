@@ -19,82 +19,86 @@ class AddWorkerScreen extends StatelessWidget {
           appBar: constraint.maxWidth < 900
               ? AppBar(
                   backgroundColor: Colors.green,
-                  title: const Text("اضافه عمال"))
+                  title: const Text("اضافه عمال",style: TextStyle(color: Colors.white),))
               : null,
           body: SingleChildScrollView(
             child: Form(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.grey,
-                  )),
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    validator: (value) {},
-                    decoration: const InputDecoration(
-                        border: InputBorder.none, hintText: "رقم التليفون"),
-                    keyboardType: TextInputType.phone,
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.grey,
-                  )),
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    validator: (value) {},
-                    decoration: const InputDecoration(
-                        border: InputBorder.none, hintText: "السجل التجاري"),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.grey,
-                  )),
-                  padding: const EdgeInsets.all(10),
-                  child: TextFormField(
-                    validator: (value) {},
-                    decoration: const InputDecoration(
-                        border: InputBorder.none, hintText: "الاسم"),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                BlocProvider(
-                  create: (context) => SelectMuiltTypeCubit(list: []),
-                  child: Container(
-                    child: CustomeType(
-                      title: "ظبيعة العمل",
-                      list: [
-                        {"kill me": 1},
-                        {"go to hell": 0}
-                      ],
+                child: Card(color: Color(0xFF467061),
+                  child: Container(padding: EdgeInsets.all(50),
+                    child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.grey,
+                      )),
+                      padding: const EdgeInsets.all(10),
+                      child: TextFormField(
+                        validator: (value) {},
+                        decoration: const InputDecoration(
+                            border: InputBorder.none, hintText: "رقم التليفون"),
+                        keyboardType: TextInputType.phone,
+                      ),
                     ),
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.grey,
+                      )),
+                      padding: const EdgeInsets.all(10),
+                      child: TextFormField(
+                        validator: (value) {},
+                        decoration: const InputDecoration(
+                            border: InputBorder.none, hintText: "السجل التجاري"),
+                        keyboardType: TextInputType.text,
+                      ),
+                    ),
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.grey,
+                      )),
+                      padding: const EdgeInsets.all(10),
+                      child: TextFormField(
+                        validator: (value) {},
+                        decoration: const InputDecoration(
+                            border: InputBorder.none, hintText: "الاسم"),
+                        keyboardType: TextInputType.text,
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (context) => SelectMuiltTypeCubit(list: []),
+                      child: Container(
+                        child: CustomeType(
+                          title: "ظبيعة العمل",
+                          list: [
+                            {"kill me": 1},
+                            {"go to hell": 0}
+                          ],
+                        ),
+                      ),
+                    ),
+                    const CustomeCheckBox(),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.green)),
+                      onPressed: () {},
+                      child: const Text(
+                        "حفظ",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                                ],
+                              ),
                   ),
-                ),
-                const CustomeCheckBox(),
-                OutlinedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.grey),
-                      overlayColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.green)),
-                  onPressed: () {},
-                  child: const Text(
-                    "حفظ",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            )),
+                )),
           ),
         );
       }),

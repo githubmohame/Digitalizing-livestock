@@ -1,4 +1,5 @@
 import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
+import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/screen_location/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
@@ -39,46 +40,47 @@ class ScreenAddAnimal extends StatelessWidget {
                   focusColor: Colors.brown,
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.brown, width: 2)))),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red)),
-                onPressed: () {},
-                child: const Text(
-                  "مسح",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {},
-                child: const Text(
-                  "حفظ",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
+          Wrap( 
+                        children: [
+                          
+                          OutlinedButton(
+                            style: ButtonStyle(
+                                fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                                shape: MaterialStateProperty.resolveWith((states) =>
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.zero)),
+                                backgroundColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.green),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.green)),
+                            onPressed: () {
+                              
+                            },
+                            child: const Text(
+                              "حفظ",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ) ,Container(width: 20,height: 20,),
+                           OutlinedButton(
+                        style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                            shape: MaterialStateProperty.resolveWith((states) =>
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero)),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.red),
+                            overlayColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.red)),
+                        onPressed: () {
+                        },
+                        child: const Text(
+                          "حذف",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ), 
+                        ],
+                      ),
+                         
         ],
       ),
     );
@@ -126,46 +128,47 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
                   focusColor: Colors.brown,
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.brown, width: 2)))),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.red)),
-                onPressed: () {},
-                child: const Text(
-                  "مسح",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              OutlinedButton(
-                style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                    shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30))),
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.grey),
-                    overlayColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.brown)),
-                onPressed: () {},
-                child: const Text(
-                  "حفظ",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
+          Wrap( 
+                        children: [
+                          
+                          OutlinedButton(
+                            style: ButtonStyle(
+                                fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                                shape: MaterialStateProperty.resolveWith((states) =>
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.zero)),
+                                backgroundColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.green),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.green)),
+                            onPressed: () {
+                              
+                            },
+                            child: const Text(
+                              "حفظ",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ) ,Container(width: 20,height: 20,),
+                           OutlinedButton(
+                        style: ButtonStyle(
+                            fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                            shape: MaterialStateProperty.resolveWith((states) =>
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.zero)),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.red),
+                            overlayColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.red)),
+                        onPressed: () {
+                        },
+                        child: const Text(
+                          "حذف",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ), 
+                        ],
+                      ),
+                         
         ],
       ),
     );
@@ -185,7 +188,7 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
   @override
   Widget build(BuildContext context) {
     return Directionality(textDirection: TextDirection.rtl,
-      child: Container(decoration:BoxDecoration(color: Colors.transparent,image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))),
+      child: BackgroundScreen (
         child: LayoutBuilder(
           builder: (context,constraint) {
             return Scaffold(
@@ -207,13 +210,13 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
                     ),
                   ]),
               backgroundColor: Colors.transparent,
-              appBar:constraint.maxWidth<900?AppBar(title:const Text("تعديل الفصيلة او النوع"),elevation: 0, backgroundColor: Colors.transparent):null,
+              appBar:constraint.maxWidth<900?AppBar(title:const Text("تعديل الفصيلة او النوع",style: TextStyle(color: Colors.white),),elevation: 0, backgroundColor: Colors.transparent):null,
               drawer: MainDrawer(index: 7),
               body:  Column(
                 children: [
                 constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:7)):Container(),
                 Spacer(),
-                  Container(color: Colors.white.withOpacity(0.5),child: list[index],width: 600,),
+                  Card(elevation: 20,color:Color(0xFF467061),child: Container( child: list[index],width: 600,)),
                   Spacer(),
                 ],)
             );

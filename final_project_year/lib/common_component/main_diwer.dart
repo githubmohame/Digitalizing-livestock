@@ -12,7 +12,7 @@ import 'package:final_project_year/main_screens/supplier_screeen.dart';
 import 'package:final_project_year/main_screens/workers_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project_year/main_screens/add_anima_farm_screen.dart';
+import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:final_project_year/main_screens/home.dart';
@@ -27,13 +27,13 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color(0x0FF9a0507),
+      backgroundColor: const Color(0xFF003e29),
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
           Container(
-             height: 100,
-            color: index == 0 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 0 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               leading: Image.asset('assets/images/field.png'),
               title: const Text("اضافة مزرعة",
@@ -53,8 +53,8 @@ class MainDrawer extends StatelessWidget {
           ),
           //
           Container(
-            color: index == 1 ? Colors.grey : const Color(0x0FF9a0507),
-             height: 100,
+            color: index == 1 ? Colors.grey : const Color(0xFF003e29),
+            height: 100,
             child: Center(
               child: ListTile(
                 horizontalTitleGap: 0,
@@ -78,15 +78,15 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 2 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 2 ? Colors.grey : const Color(0xFF003e29),
             child: Center(
               child: Center(
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   minVerticalPadding: 1,
                   leading: Image.asset('assets/images/farmer.png',
-                       height: 100, width: 50),
+                      height: 100, width: 50),
                   title: const Text("اضافة مربي",
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
@@ -105,8 +105,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 3 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 3 ? Colors.grey : const Color(0xFF003e29),
             child: Center(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
@@ -129,8 +129,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 4 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 4 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -151,8 +151,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 5 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 5 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -173,8 +173,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 6 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 6 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -195,8 +195,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 7 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 7 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -217,8 +217,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 8 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 8 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -240,8 +240,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 10 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 10 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -262,8 +262,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 11 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 11 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -283,8 +283,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 12 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 12 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -304,8 +304,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 13 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 13 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -315,7 +315,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddAnimalScreen(),
+                      builder: (context) => ConnectAnimalFarm(),
                     ));
               }),
             ),
@@ -325,8 +325,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 14 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 14 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -346,8 +346,8 @@ class MainDrawer extends StatelessWidget {
             color: Colors.black,
           ),
           Container(
-             height: 100,
-            color: index == 15 ? Colors.grey : const Color(0x0FF9a0507),
+            height: 100,
+            color: index == 15 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -371,21 +371,23 @@ class MainDrawer extends StatelessWidget {
 //
 class ComputerDrawer extends StatelessWidget {
   int index;
-    ComputerDrawer({required this.index, super.key});
+  ComputerDrawer({required this.index, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0x0FF9a0507),
+      color: const Color(0xFF003e29),
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: [Container(
+        children: [
+          Container(
             height: 1,
             color: Colors.black,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 0 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 0 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               leading: Image.asset('assets/images/field.png'),
               title: const Text("اضافة مزرعة",
@@ -398,12 +400,11 @@ class ComputerDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),Container(
-            height: 1,
-            color: Colors.black,width:1
           ),
-          Container(width: 400,
-            color: index == 1 ? Colors.grey : const Color(0x0FF9a0507),
+          Container(height: 1, color: Colors.black, width: 1),
+          Container(
+            width: 400,
+            color: index == 1 ? Colors.grey : const Color(0xFF003e29),
             height: 10,
             child: Center(
               child: ListTile(
@@ -425,18 +426,20 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 2 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 2 ? Colors.grey : const Color(0xFF003e29),
             child: Center(
               child: Center(
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   minVerticalPadding: 1,
                   leading: Image.asset('assets/images/farmer.png',
-                       height: 100, width: 50),
+                      height: 100, width: 50),
                   title: const Text("اضافة مربي",
                       style: TextStyle(color: Colors.white)),
                   onTap: () {
@@ -452,11 +455,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 3 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 3 ? Colors.grey : const Color(0xFF003e29),
             child: Center(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
@@ -476,11 +481,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 4 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 4 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -498,11 +505,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 5 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 5 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -520,11 +529,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 6 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 6 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -542,11 +553,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 7 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 7 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -564,11 +577,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 8 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 8 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -587,11 +602,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 10 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 10 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -609,11 +626,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 11 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 11 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -630,11 +649,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 12 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 12 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -651,11 +672,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 13 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 13 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -665,18 +688,20 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddAnimalScreen(),
+                      builder: (context) => ConnectAnimalFarm(),
                     ));
               }),
             ),
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 14 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 14 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
@@ -693,11 +718,13 @@ class ComputerDrawer extends StatelessWidget {
           ),
           Container(
             height: 1,
-            color: Colors.black,width: 1,
+            color: Colors.black,
+            width: 1,
           ),
-          Container(width: 400,
+          Container(
+            width: 400,
             height: 10,
-            color: index == 15 ? Colors.grey : const Color(0x0FF9a0507),
+            color: index == 15 ? Colors.grey : const Color(0xFF003e29),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,

@@ -17,7 +17,7 @@ class ShowInfoScreen extends StatelessWidget {
                 child: AppBar(
                     backgroundColor: Colors.brown,
                     title: const Center(
-                      child: Text("عرض معلومات المربي"),
+                      child: Text("عرض معلومات المربي",style: TextStyle(color: Colors.white),),
                     )))),
         body: SafeArea(
           child: LayoutBuilder(builder: (context, con) {
