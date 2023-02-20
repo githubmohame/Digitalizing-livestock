@@ -13,6 +13,7 @@ import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:final_project_year/main_screens/login.dart';
+import 'package:final_project_year/main_screens/screen_location/bash_board_screen.dart';
 import 'package:final_project_year/main_screens/screen_location/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
       child: BackgroundScreen( 
         child: LayoutBuilder(
           builder: (context,constraint) {
-            return Scaffold(appBar: constraint.maxWidth<900?AppBar(elevation: 0,title: Container(
+            return constraint.maxWidth>900?DashBoardScreen():Scaffold(appBar: constraint.maxWidth<900?AppBar(elevation: 0,title: Container(
                               child: const Text("مرحبا بك",
                                   style: TextStyle(
                                       color: Colors.white,
@@ -51,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                 child: Container(height:1894,
                   child: Column(
                     children: [
-                      constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:1)):Container(),
+                      //Container(height: 100, child: ComputerDrawer(index:1)) 
                       SafeArea(
                           child: Center(
                             child: Container(margin: EdgeInsets.all(20),width:600,color: Color(0xFF467061),
@@ -156,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                                             ],
                                           )),
                                     ),
-                                    Expanded(
+                                    /*Expanded(
                                               
                                       child: FloatingActionButton(heroTag: 'statistics1',
                                           backgroundColor: Colors.white,
@@ -179,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                                               ),
                                             ],
                                           )),
-                                    ),
+                                    ),*/
                                   ],
                                 ),
                               ),
@@ -377,7 +378,7 @@ class HomeScreen extends StatelessWidget {
                                 ],
                               ),
                                Row(
-                                children: [Expanded(
+                                children: [/*Expanded(
                                     child: Container(margin: const EdgeInsets.only(  right: 100),
                                       child: GestureDetector(onTap: (() {
                               Navigator.pushReplacement(
@@ -401,9 +402,9 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                   Expanded(
-                                    child: Container(margin: const EdgeInsets.only( left: 100),
+                                    child: Container(margin: const EdgeInsets.only(right: 100, left: 100),
                                       child: GestureDetector(onTap: (() {
                               Navigator.pushReplacement(
                                   context,
@@ -433,7 +434,7 @@ class HomeScreen extends StatelessWidget {
                                Row(
                                 children: [
                                   Expanded(
-                                    child: Container(margin: const EdgeInsets.only(right: 100),
+                                    child: Container(margin: const EdgeInsets.only(left: 100,right: 100),
                                       child: GestureDetector(onTap: (() {
                               Navigator.pushReplacement(
                                   context,
@@ -457,7 +458,7 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                   Expanded(
+                                   /*Expanded(
                                     child: Container(margin: const EdgeInsets.only(left:100),
                                       child: GestureDetector( onTap: (() {
                               Navigator.pushReplacement(
@@ -484,13 +485,13 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
                                Row(
                                 children: [
                                   Expanded(
-                                    child: Container(margin: const EdgeInsets.only(right: 100),
+                                    child: Container(margin: const EdgeInsets.only(left:100,right: 100),
                                       child: GestureDetector(onTap: (() {
                               Navigator.pushReplacement(
                                   context,
@@ -514,7 +515,7 @@ class HomeScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Expanded(
+                                   /*Expanded(
                                     child: Container(margin: const EdgeInsets.only( left:100),
                                       child: GestureDetector( onTap: (() {
                               Navigator.pushReplacement(
@@ -541,10 +542,10 @@ class HomeScreen extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
-                               Row(
+                               /*Row(
                                 children: [
                                   Expanded(
                                     child: Container(margin: const EdgeInsets.only(right: 100),
@@ -600,7 +601,7 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ],
-                              ),
+                              ),*/
                                
                             ],
                           ),

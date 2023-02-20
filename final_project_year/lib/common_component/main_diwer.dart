@@ -168,7 +168,7 @@ class MainDrawer extends StatelessWidget {
               }),
             ),
           ),
-          Container(
+           Container(
             height: 1,
             color: Colors.black,
           ),
@@ -189,7 +189,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ), 
           Container(
             height: 1,
             color: Colors.black,
@@ -212,7 +212,7 @@ class MainDrawer extends StatelessWidget {
               }),
             ),
           ),
-          Container(
+          /*Container(
             height: 1,
             color: Colors.black,
           ),
@@ -234,7 +234,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),*/
           Container(
             height: 1,
             color: Colors.black,
@@ -256,7 +256,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),/*
           Container(
             height: 1,
             color: Colors.black,
@@ -298,7 +298,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),*/
           Container(
             height: 1,
             color: Colors.black,
@@ -319,7 +319,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),/*
           Container(
             height: 1,
             color: Colors.black,
@@ -361,7 +361,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),*/
         ],
       ),
     );

@@ -201,9 +201,8 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                       .updateGavernorate(value);
                 },
                 list: [
-                  {"id": 0, "name": "اسيوط"},
-                  {"id": 1, "name": "القاهرة"},
-                  {"id": 2, "name": "المنةفية"}
+                  {"id": 0, "name": "ابقار"},
+                  
                 ],
                 expanded: true,
                 value: 0,
@@ -224,9 +223,8 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                     BlocProvider.of<ChoiceCubit>(context).updateCity(value);
                   },
                   list: [
-                    {"id": 1, "name": "القاهرة"},
-                    {"id": 0, "name": "القاهرة"}
-                  ],
+                    {"id": 0, "name": "البراازلي"},
+                   ],
                   expanded: true,
                   value: 0,
                   text: "فصيله الحيوان");

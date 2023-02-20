@@ -158,6 +158,23 @@ class FarmScreen extends StatelessWidget {
                                 height: 50,
                                 decoration: BoxDecoration(
                                     border: Border.all(
+                                  color: Colors.white,
+                                )),
+                                margin: const EdgeInsets.all(10),
+                                child: TextFormField(
+                                  validator: (value) {},
+                                  decoration: const InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      border: InputBorder.none,
+                                      hintText: 'عدد عمال المزرعة'),
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
+                              Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
                                   color: Colors.grey,
                                 )),
                                 margin: const EdgeInsets.all(10),

@@ -34,11 +34,7 @@ class Farmer extends StatelessWidget {
           builder: (context,constraint) {
             return Scaffold( backgroundColor: Colors.transparent,
               drawer: MainDrawer(index: 2),
-              appBar: constraint.maxWidth<900?AppBar(elevation: 0,leading: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back)) ,
+              appBar: constraint.maxWidth<900?AppBar(elevation: 0,
                   backgroundColor: Colors.transparent, title: const Text("اضافه المربين",style: TextStyle(color: Colors.white),)):null,
               body: Column(
                 children: [

@@ -22,7 +22,9 @@ class ScreenAddAnimal extends StatelessWidget {
             child: BlocProvider(
               create: (context) =>
                   ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-              child: SelectGavernorate(title: 'النوع'),
+              child: SelectGavernorate(title: 'النوع',list:  [
+              {"id": 0, "name": "ابقار"},
+             ],),
             ),
           ),
           const TextField(
@@ -107,10 +109,11 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
               create: (context) =>
                   ChoiceCubit(city: 0, gavernorate: 0, village: 0),
               child: SelectCity(titles: ['النوع','الفصيلة'],list: [
-                    {"id": 0, "name": "اسيوط"},
-                    {"id": 1, "name": "القاهرة"},
-                    {"id": 2, "name": "المنةفية"}
-                  ],),
+                    {"id": 0, "name": "برازلي"},
+                    
+                  ],list2:const [
+                  {"id": 0, "name": "ابقار"},
+                 ],),
             ),
           ),
           const TextField(

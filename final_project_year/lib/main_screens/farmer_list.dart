@@ -1,6 +1,7 @@
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
+import 'package:final_project_year/main_screens/screen_location/bash_board_screen.dart';
 import 'package:flutter/material.dart';
 
 class ItemList extends StatelessWidget {
@@ -64,6 +65,7 @@ class ListFarmer extends StatelessWidget {
               body: LayoutBuilder(builder: (context, constraint) {
                 print(constraint.maxWidth);
                 return Row(children: [
+
                   constraint.maxWidth >= 1000 ? Spacer() : Container(),
                   Expanded(
                     child: Container(
@@ -72,13 +74,20 @@ class ListFarmer extends StatelessWidget {
                       child: Card(
                         color: Color(0xFF467061),
                         elevation: 20,
-                        child: ListView.builder(
-                            itemCount: 100,
-                            itemBuilder: (context, index) {
-                              return ItemList(
-                                name: "محمد ايمن",
-                              );
-                            }),
+                        child: Column(
+                          children: [
+                            CustomeSearch(width: double.infinity,text:'ادخل اسم المربي' ),
+                            Expanded(
+                              child: ListView.builder(
+                                  itemCount: 100,
+                                  itemBuilder: (context, index) {
+                                    return ItemList(
+                                      name: "محمد ايمن",
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
