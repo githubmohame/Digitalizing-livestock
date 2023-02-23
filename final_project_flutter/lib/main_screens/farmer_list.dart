@@ -1,7 +1,7 @@
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
-import 'package:final_project_year/main_screens/screen_location/bash_board_screen.dart';
 import 'package:flutter/material.dart';
 
 class ItemList extends StatelessWidget {

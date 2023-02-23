@@ -13,10 +13,10 @@ import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:final_project_year/main_screens/login.dart';
-import 'package:final_project_year/main_screens/screen_location/bash_board_screen.dart';
-import 'package:final_project_year/main_screens/screen_location/screen_gavernorate.dart';
+import 'package:final_project_year/screen_location/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 
+import 'bash_board_screen.dart';
 import 'connect_workers_farm.dart';
 
 class HomeScreen extends StatelessWidget {
