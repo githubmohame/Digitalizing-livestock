@@ -17,11 +17,19 @@ class villageSerializer(serializers.ModelSerializer):
         
 class platoonSerializer(serializers.ModelSerializer):
     class Meta:
-        models=platoon
-        field=['name']
+        model=platoon
+        fields=['name']
         
 class speciesSerializer(serializers.ModelSerializer):
     class Meta:
-        models=species
-        field=['name']
+        model=species
+        fields=['name']
         
+class section_typeSerializer(serializers.ModelSerializer):
+        class Meta:
+            model=section_type
+            fields=['name']
+class farm_typeSerializer(serializers.ModelSerializer):
+        class Meta:
+            model=farm_type
+            fields=['name']

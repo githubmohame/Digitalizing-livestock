@@ -35,7 +35,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 children: [
                  constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:10)):Container(),
                   Spacer(),
-                  Card(color: Color(0xFF467061),elevation: 20,
+                  Card(color: Color(0xFF357515
+
+),elevation: 20,
                     child: Container(width: 600,
                       child: SingleChildScrollView(
                         child: SafeArea(

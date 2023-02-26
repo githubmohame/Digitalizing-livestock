@@ -1,10 +1,11 @@
+import 'package:final_project_year/api_function.dart/locations_api.dart';
+import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
+import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
-import 'package:final_project_year/bloc/connect_farmer_farm/cubit/connect_farmer_farm_cubit.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 
@@ -23,24 +24,26 @@ class ConnectAnimalFarm extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
-         
         child: Scaffold(
           backgroundColor: Colors.transparent,
           drawer: MainDrawer(index: 13),
           appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.transparent,
-              title: const Text("اضافة حيوانات للمزرعة",style: TextStyle(color: Colors.white),)),
+              title: const Text(
+                "اضافة حيوانات للمزرعة",
+                style: TextStyle(color: Colors.white),
+              )),
           body: Center(
-            child: Card( color: Color(0xFF467061),
+            child: Card(
+              color: Color(0xFF357515),
               child: Container(
                 padding: EdgeInsets.all(50),
                 width: 700,
-                 
                 child: SingleChildScrollView(
                   child: Form(
                       child: Column(
-                                      children: [
+                    children: [
                       TextFormField(
                         controller: list[0],
                         validator: (value) {
@@ -91,9 +94,9 @@ class ConnectAnimalFarm extends StatelessWidget {
                         child: Row(
                           children: [
                             Expanded(
-                              child: BlocProvider<ChoiceCubit>(
-                                create: (context) => ChoiceCubit(
-                                    gavernorate: 0, city: 0, village: 0),
+                              child: BlocProvider<AnimalCubit>(
+                                create: (context) => AnimalCubit(
+                                    platoon: 'الابقار', species: ''),
                                 child: SelectAnimalType(),
                               ),
                             ),
@@ -125,49 +128,52 @@ class ConnectAnimalFarm extends StatelessWidget {
                       Container(
                         height: 10,
                       ),
-                      Wrap( 
+                      Wrap(
                         children: [
-                          
                           OutlinedButton(
                             style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                                shape: MaterialStateProperty.resolveWith((states) =>
-                                    RoundedRectangleBorder(
+                                fixedSize: MaterialStateProperty.all(
+                                    const Size(200, 50)),
+                                shape: MaterialStateProperty.resolveWith(
+                                    (states) => RoundedRectangleBorder(
                                         borderRadius: BorderRadius.zero)),
-                                backgroundColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.green),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) => Colors.green),
                                 overlayColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.green)),
-                            onPressed: () {
-                              
-                            },
+                            onPressed: () {},
                             child: const Text(
                               "حفظ",
                               style: TextStyle(color: Colors.white),
                             ),
-                          ) ,Container(width: 20,height: 20,),
-                           OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                            shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero)),
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.red),
-                            overlayColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.red)),
-                        onPressed: () {
-                        },
-                        child: const Text(
-                          "حذف",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ), 
+                          ),
+                          Container(
+                            width: 20,
+                            height: 20,
+                          ),
+                          OutlinedButton(
+                            style: ButtonStyle(
+                                fixedSize: MaterialStateProperty.all(
+                                    const Size(200, 50)),
+                                shape: MaterialStateProperty.resolveWith(
+                                    (states) => RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.zero)),
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) => Colors.red),
+                                overlayColor: MaterialStateProperty.resolveWith(
+                                    (states) => Colors.red)),
+                            onPressed: () {},
+                            child: const Text(
+                              "حذف",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ],
                       ),
-                         
-                                      ],
-                                    )),
+                    ],
+                  )),
                 ),
               ),
             ),
@@ -195,39 +201,54 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                 border: Border.all(
               color: Colors.grey,
             )),
-            child: CustomeDropdownButton(
-                func: (int value) {
-                  BlocProvider.of<ChoiceCubit>(context)
-                      .updateGavernorate(value);
-                },
-                list: [
-                  {"id": 0, "name": "ابقار"},
-                  
-                ],
-                expanded: true,
-                value: 0,
-                text: "نوع الحيوان")),
+            child: FutureBuilder(
+                future: platoon_type_api(),
+                builder: (context, snap) {
+                  if (snap.connectionState == ConnectionState.done &&
+                      snap.data is List<Map<String, String>> &&
+                      snap.data!.isNotEmpty)
+                    return CustomeDropdownButton(
+                        func: (String value) {
+                          BlocProvider.of<AnimalCubit>(context)
+                              .updatePlatoon(platoon: value);
+                        },
+                        list: snap.data ??
+                            [
+                              {"id": '', "name": "ابقار"},
+                            ],
+                        expanded: true,
+                        value:'الابقار'?? 'ابقار',
+                        text: "نوع الحيوان");
+                  return Container();
+                })),
         Container(
           decoration: BoxDecoration(
               border: Border.all(
             color: Colors.grey,
           )),
-          child: BlocBuilder<ChoiceCubit, ChoiceState>(
+          child: BlocBuilder<AnimalCubit, AnimalInitial>(
             buildWhen: (previous, current) {
               //
-              return previous.gavernorate != current.gavernorate;
+              return previous.platoon != current.platoon;
             },
             builder: (context, state) {
-              return CustomeDropdownButton(
-                  func: (int value) {
-                    BlocProvider.of<ChoiceCubit>(context).updateCity(value);
-                  },
-                  list: [
-                    {"id": 0, "name": "البراازلي"},
-                   ],
-                  expanded: true,
-                  value: 0,
-                  text: "فصيله الحيوان");
+              return FutureBuilder(
+                  future: animal_species_api(platoon: state.platoon),
+                  builder: (context, snap) {
+                    if (snap.connectionState == ConnectionState.done &&
+                        snap.data is List<Map<String, String>> &&
+                        snap.data!.isNotEmpty)
+                      return CustomeDropdownButton(
+                          func: (String value) {},
+                          list: snap.data ??
+                              [
+                                {"id": '', "name": "البراازلي"},
+                              ],
+                          expanded: true,
+                          value: snap.data![0]['name'] ?? 'ابقار',
+                          text: "فصيله الحيوان");
+                    return Container();
+                  });
             },
           ),
         )

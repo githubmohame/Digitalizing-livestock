@@ -1,4 +1,4 @@
-from digital_livestock.models import governorate,city,village,section_type,platoon
+from digital_livestock.models import governorate,city,village,section_type,platoon,farm_type,species
 import pandas as pd
 def insert_into_governorate():
     df=pd.read_excel('./locations.xlsx')
@@ -47,15 +47,33 @@ def insert_section_type():
     sec.name='عام'
     sec.save()
 #insert_section_type()
-def insert_animal_type():
-    pass
-def insert_animal_subtype():
-    pass
-
 def remove_newline_governorate_model():
     for i in governorate.objects.all():
         i.name=i.name.replace('\n','')
         i.save()
         print(i.name.count('\n'))
 
-remove_newline_governorate_model()
+#remove_newline_governorate_model()
+def insert_farrm_type(list1):
+    for i in list1:
+        f1=farm_type()
+        f1.name=i
+        f1.save()
+        
+#insert_farrm_type(list1=['انتاج طلايع','انتاج البان','انتاج لحوم'])
+
+def insert_species(platoon1:str,list1:list):
+     for i in list1:
+         sp1=species()
+         sp1.name=i
+         sp1.platoon=platoon.objects.get(name=platoon1)
+         sp1.save()
+         
+def insert_platoon_type(list1):
+    for i in list1:
+        pl1=platoon()
+        pl1.name=i
+        pl1.save()
+        
+#insert_platoon_type(list1=['الجمال',"الماعز",'الابقار'])
+insert_species(list1=['الأكتين الشقراء','الآيرشاير','الجيرسي','الهولشتاين','الأنجوس','هيريفورد','شاروليز'],platoon1='الابقار')

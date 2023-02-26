@@ -23,7 +23,9 @@ class AddWorkerScreen extends StatelessWidget {
               : null,
           body: SingleChildScrollView(
             child: Form(
-                child: Card(color: Color(0xFF467061),
+                child: Card(color: Color(0xFF357515
+
+),
                   child: Container(padding: EdgeInsets.all(50),
                     child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,

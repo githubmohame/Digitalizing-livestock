@@ -1,4 +1,3 @@
-import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
@@ -34,7 +33,9 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                   children: [
                     constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:3)):Container(),
                     Spacer(),
-                    Card(color: Color(0xFF467061),elevation: 20,
+                    Card(color: Color(0xFF357515
+
+),elevation: 20,
                       child: Container(height: 400,
                         margin: EdgeInsets.all(20),
                         width: 600,

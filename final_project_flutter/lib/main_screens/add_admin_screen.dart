@@ -1,4 +1,4 @@
-
+import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/choice/cubit/choice_cubit.dart';
 
 class AddAdmin extends StatelessWidget {
   const AddAdmin({super.key});
@@ -130,8 +129,8 @@ class AddAdmin extends StatelessWidget {
                               children: [
                                 Expanded(
                                     child: BlocProvider(
-                                  create: (context) => ChoiceCubit(
-                                      city: 0, gavernorate: 0, village: 0),
+                                  create: (context) => LocationCubit(
+                                      city: '', gavernorate: '', village: ''),
                                   child: SelectLocation(),
                                 )),
                               ],

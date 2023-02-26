@@ -41,7 +41,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const FarmScreen(),
+                      builder: (context) =>   FarmScreen(),
                     ));
               }),
             ),
@@ -395,7 +395,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const FarmScreen(),
+                      builder: (context) =>   FarmScreen(),
                     ));
               }),
             ),

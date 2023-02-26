@@ -55,3 +55,17 @@ def animal_plotoon_api(request :Request):
 def animal_species_api(request :Request):
 	ser1=speciesSerializer( instance= species.objects.all().filter(platoon=platoon.objects.get(name=request.data['filter']))  ,many=True)
 	return response.Response(ser1.data)
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def section_type_api(request :Request):
+	ser1=section_typeSerializer( instance= section_type.objects.all()  ,many=True)
+	return response.Response(ser1.data)
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def farm_type_api(request :Request):
+	ser1=farm_typeSerializer( instance= farm_type.objects.all()  ,many=True)
+	return response.Response(ser1.data)

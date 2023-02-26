@@ -1,17 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: must_be_immutable
 
+import 'package:final_project_year/api_function.dart/locations_api.dart';
+import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 
 class ScreenGavernorate extends StatelessWidget {
-  const ScreenGavernorate({Key? key}) : super(key: key);
-
+  ScreenGavernorate({Key? key}) : super(key: key);
+  SelectGavernorate selectGavernorate = SelectGavernorate(
+    title: 'المحافظة',
+    list: const [
+      {"id": "اسيوط"},
+      {"id": "القاهرة"},
+      {"id": "المنةفية"}
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
@@ -20,7 +28,7 @@ class ScreenGavernorate extends StatelessWidget {
           width: 500,
           child: SingleChildScrollView(
             child: Card(
-              color: Color(0xFF467061),
+              color: Color(0xFF357515),
               elevation: 20,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,17 +38,15 @@ class ScreenGavernorate extends StatelessWidget {
                       style: TextStyle(color: Colors.white, fontSize: 20)),
                   Container(
                     child: BlocProvider(
-                      create: (context) =>
-                          ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-                      child: SelectGavernorate(title: 'المحافظة',list: const [
-              {"id": 0, "name": "اسيوط"},
-              {"id": 1, "name": "القاهرة"},
-              {"id": 2, "name": "المنةفية"}
-            ],),
+                      create: (context) => LocationCubit(
+                          city: 'مركز دكرنس',
+                          gavernorate: 'الدقهلية',
+                          village: 'الجزيره'),
+                      child: selectGavernorate,
                     ),
                   ),
                   const TextField(
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.brown),
                       decoration: InputDecoration(
                           hintText: "تعديل الاسم",
                           fillColor: Colors.white,
@@ -73,7 +79,9 @@ class ScreenGavernorate extends StatelessWidget {
                                 (states) => Colors.grey),
                             overlayColor: MaterialStateProperty.resolveWith(
                                 (states) => Colors.red)),
-                        onPressed: () {},
+                        onPressed: () {
+                          print(selectGavernorate.gavernorate);
+                        },
                         child: const Text(
                           "مسح",
                           style: TextStyle(color: Colors.white),
@@ -112,16 +120,16 @@ class ScreenGavernorate extends StatelessWidget {
 }
 
 class SelectGavernorate extends StatefulWidget {
-  String? village;
+  String? gavernorate;
   String title;
-  List<Map<String,dynamic>> list;
-    SelectGavernorate({
+  List<Map<String, String>> list;
+  SelectGavernorate({
     Key? key,
-    this.village,
+    this.gavernorate,
     required this.title,
     required this.list,
   }) : super(key: key);
-   
+
   @override
   State<SelectGavernorate> createState() => _SelectGavernorateState();
 }
@@ -131,32 +139,43 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomeDropdownButton(
-            func: (int value) {
-              BlocProvider.of<ChoiceCubit>(context).updateGavernorate(value);
-            },
-            list:  widget.list,
-            expanded: true,
-            value: 0,
-            text: widget.title),
+        FutureBuilder(
+            future: gavernorate_api(),
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.done &&
+                  snap.data is List<Map<String, String>> &&
+                  snap.data!.isNotEmpty)
+                return CustomeDropdownButton(
+                    func: (String value) {
+                      BlocProvider.of<LocationCubit>(context)
+                          .updateGavernorate(value);
+                      widget.gavernorate = value;
+                      print(widget.gavernorate);
+                    },
+                    list: snap.data!,
+                    expanded: true,
+                    value: snap.data![0]['name']!,
+                    text: widget.title);
+              return Container();
+            }),
       ],
     );
   }
 }
 
 class SelectCity extends StatefulWidget {
-  List<Map<String, dynamic>> list;
-  List<Map<String, dynamic>> list2;
-  String? village;
+  List<Map<String, String>> list;
+  List<Map<String, String>> list2;
+  String? city;
   List<String> titles;
-    SelectCity({
+  SelectCity({
     Key? key,
     required this.list,
     required this.list2,
-    this.village,
+    this.city,
     required this.titles,
   }) : super(key: key);
-   
+
   @override
   State<SelectCity> createState() => _SelectCityState();
 }
@@ -171,33 +190,55 @@ class _SelectCityState extends State<SelectCity> {
                 border: Border.all(
               color: Colors.grey,
             )),
-            child: CustomeDropdownButton(
-                func: (int value) {
-                  BlocProvider.of<ChoiceCubit>(context).updateCity(value);
-                },
-                list: widget.list2,
-                expanded: true,
-                value: 0,
-                text: widget.titles[0])),
+            child: FutureBuilder(
+                future: gavernorate_api(),
+                builder: (context, snap) {
+                  if (snap.connectionState == ConnectionState.done &&
+                      snap.data is List<Map<String, String>> &&
+                      snap.data!.isNotEmpty)
+                    return CustomeDropdownButton(
+                        func: (String value) {
+                          print(value);
+                          BlocProvider.of<LocationCubit>(context)
+                              .updateGavernorate(value);
+                        },
+                        list: snap.data ?? [],
+                        expanded: true,
+                        value: snap.data![0]['name']!,
+                        text: widget.titles[0]);
+                  return Container();
+                })),
         Container(
           decoration: BoxDecoration(
               border: Border.all(
             color: Colors.grey,
           )),
-          child: BlocBuilder<ChoiceCubit, ChoiceState>(
+          child: BlocBuilder<LocationCubit, LocationState>(
             buildWhen: (previous, current) {
               //
               return previous.gavernorate != current.gavernorate;
             },
             builder: (context, state) {
-              return CustomeDropdownButton(
-                  func: (int value) {
-                    BlocProvider.of<ChoiceCubit>(context).updateCity(value);
-                  },
-                  list: widget.list,
-                  expanded: true,
-                  value: 0,
-                  text: widget.titles[1]);
+              return FutureBuilder(
+                  future: city_api(gavernorate: state.gavernorate),
+                  builder: (context, snap) {
+                    print(snap.data);
+                    if (snap.connectionState == ConnectionState.done &&
+                        snap.data is List<Map<String, String>> &&
+                        snap.data!.isNotEmpty)
+                      return CustomeDropdownButton(
+                          func: (String value) {
+                            BlocProvider.of<LocationCubit>(context)
+                                .updateCity(value);
+                            widget.city = value;
+                            print(widget.city);
+                          },
+                          list: snap.data ?? [],
+                          expanded: true,
+                          value: snap.data![0]['name']!,
+                          text: widget.titles[1]);
+                    return Container();
+                  });
             },
           ),
         ),
@@ -207,8 +248,19 @@ class _SelectCityState extends State<SelectCity> {
 }
 
 class ScreenCity extends StatelessWidget {
-  const ScreenCity({Key? key}) : super(key: key);
-
+  ScreenCity({Key? key}) : super(key: key);
+  SelectCity selectCity = SelectCity(
+    list2: const [
+      {"id": "القاهرة"},
+      {"id": "القاهرة"}
+    ],
+    titles: const ['المحافظة', 'المركز'],
+    list: const [
+      {"id": "اسيوط"},
+      {"id": "القاهرة"},
+      {"id": "المنةفية"}
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -216,7 +268,7 @@ class ScreenCity extends StatelessWidget {
         width: 500,
         child: SingleChildScrollView(
           child: Card(
-            color: Color(0xFF467061),
+            color: Color(0xFF357515),
             elevation: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -226,21 +278,11 @@ class ScreenCity extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 20)),
                 BlocProvider(
                   create: (context) =>
-                      ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-                  child: SelectCity(list2:const [
-                  {"id": 1, "name": "القاهرة"},
-                  {"id": 0, "name": "القاهرة"}
-                ], 
-                    titles: const ['المحافظة', 'المركز'],
-                    list: const [
-                      {"id": 0, "name": "اسيوط"},
-                      {"id": 1, "name": "القاهرة"},
-                      {"id": 2, "name": "المنةفية"}
-                    ],
-                  ),
+                      LocationCubit(city: '', gavernorate: '', village: ''),
+                  child: selectCity,
                 ),
                 const TextField(
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.brown),
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
@@ -267,7 +309,9 @@ class ScreenCity extends StatelessWidget {
                               (states) => Colors.grey),
                           overlayColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.red)),
-                      onPressed: () {},
+                      onPressed: () {
+                        print(selectCity.city);
+                      },
                       child: const Text(
                         "مسح",
                         style: TextStyle(color: Colors.white),
@@ -305,13 +349,13 @@ class ScreenCity extends StatelessWidget {
 }
 
 class ScreenVillage extends StatelessWidget {
-  const ScreenVillage({Key? key}) : super(key: key);
-
+  ScreenVillage({Key? key}) : super(key: key);
+  SelectLocation selectLocation = SelectLocation();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
-        color: Color(0xFF467061),
+        color: Color(0xFF357515),
         elevation: 20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -320,14 +364,16 @@ class ScreenVillage extends StatelessWidget {
             const Text('تعديل في المحافظات',
                 style: TextStyle(color: Colors.white, fontSize: 20)),
             BlocProvider(
-              create: (context) =>
-                  ChoiceCubit(city: 0, gavernorate: 0, village: 0),
-              child: SelectLocation(),
+              create: (context) => LocationCubit(
+                  city: 'مركز دكرنس',
+                  gavernorate: 'الدقهلية',
+                  village: 'الجزيره'),
+              child: selectLocation,
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               child: TextField(
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.brown),
                   decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
@@ -360,7 +406,9 @@ class ScreenVillage extends StatelessWidget {
                           (states) => Colors.grey),
                       overlayColor: MaterialStateProperty.resolveWith(
                           (states) => Colors.red)),
-                  onPressed: () {},
+                  onPressed: () {
+                    print(selectLocation.village);
+                  },
                   child: const Text(
                     "مسح",
                     style: TextStyle(color: Colors.white),
@@ -402,11 +450,7 @@ class UpdateLocation extends StatefulWidget {
 }
 
 class _UpdateLocationState extends State<UpdateLocation> {
-  List<Widget> list = [
-    const ScreenGavernorate(),
-    const ScreenCity(),
-    const ScreenVillage()
-  ];
+  List<Widget> list = [ScreenGavernorate(), ScreenCity(), ScreenVillage()];
   int index = 0;
   @override
   Widget build(BuildContext context) {

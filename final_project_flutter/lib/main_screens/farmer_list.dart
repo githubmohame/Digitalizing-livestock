@@ -70,9 +70,13 @@ class ListFarmer extends StatelessWidget {
                   Expanded(
                     child: Container(
                       width: 400,
-                      color: Color(0xFF467061),
+                      color: Color(0xFF357515
+
+),
                       child: Card(
-                        color: Color(0xFF467061),
+                        color: Color(0xFF357515
+
+),
                         elevation: 20,
                         child: Column(
                           children: [

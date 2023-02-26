@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:file_picker/file_picker.dart';
-import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
+import 'package:final_project_year/api_function.dart/locations_api.dart';
+import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
@@ -11,12 +12,13 @@ import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_typ
 import 'package:flutter_map/flutter_map.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:geolocator/geolocator.dart';
+
 class CustomeDropdownButton extends StatefulWidget {
-  int value;
+  String value;
   String text;
   bool expanded = false;
-  List<Map<String, dynamic>> list;
-  Function(int value)? func;
+  List<Map<String, String>> list;
+  void Function(String value)? func;
   CustomeDropdownButton({
     Key? key,
     this.func,
@@ -44,7 +46,7 @@ class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
                 Text(widget.text),
               ],
             ),
-            DropdownButton<int>(
+            DropdownButton<String>(
               style: TextStyle(color: Colors.brown),
               isExpanded: widget.expanded,
               underline: Container(),
@@ -53,14 +55,17 @@ class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
               value: widget.value,
               items: List.generate(widget.list.length, (index) {
                 return DropdownMenuItem(
-                    value: widget.list[index]["id"],
-                    child: Text(widget.list[index]["name"]));
+                    value: widget.list[index]["name"],
+                    child: Text(
+                      widget.list[index]["name"].toString(),
+                    ));
               }),
               onChanged: (value) {
                 setState(() {
-                  widget.value = value ?? 0;
-                  if (widget.func is Function(int value) && value is int) {
-                    widget.func!(value);
+                  widget.value = value ?? widget.list[0]['name']!;
+                  print(widget.func is Function(String value));
+                  if (widget.func is Function(String value)) {
+                    widget.func!(widget.value);
                   }
                 });
               },
@@ -79,14 +84,13 @@ Future<List<Map<String, dynamic>>> f1() {
 }
 
 class FarmScreen extends StatelessWidget {
-  const FarmScreen({Key? key}) : super(key: key);
-
+  FarmScreen({Key? key}) : super(key: key);
+  CustomeType customeType = CustomeType(list: [], title: '');
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
-         
         child: LayoutBuilder(builder: (context, constraint) {
           print(constraint.maxWidth);
           return Scaffold(
@@ -94,13 +98,16 @@ class FarmScreen extends StatelessWidget {
                 ? AppBar(
                     elevation: 0,
                     backgroundColor: Colors.transparent,
-                    title: const Text("اضافه المزرعة",style: TextStyle(color: Colors.white),))
+                    title: const Text(
+                      "اضافه المزرعة",
+                      style: TextStyle(color: Colors.white),
+                    ))
                 : null,
             backgroundColor: Colors.red.withOpacity(0),
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: Container(
-                height: 1600 +178,
+                height: 1600 + 178,
                 child: Container(
                   child: Column(
                     children: [
@@ -109,7 +116,9 @@ class FarmScreen extends StatelessWidget {
                               height: 100, child: ComputerDrawer(index: 0))
                           : Container(),
                       Container(height: 20),
-                      Card(color: Color(0xFF467061),
+                      Card(
+                        elevation: 30,
+                        color: Color(0xFF357515),
                         child: Container(
                           height: 1600,
                           width: 700,
@@ -118,7 +127,8 @@ class FarmScreen extends StatelessWidget {
                             children: [
                               constraint.maxWidth > 900
                                   ? Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Container(
                                           height: 50,
@@ -325,18 +335,26 @@ class FarmScreen extends StatelessWidget {
                               Container(
                                 height: 70,
                                 margin: const EdgeInsets.all(10),
-                                child: CustomeDropdownButton(
-                                  list: const [
-                                    {"id": 0, "name": "عام"},
-                                    {"id": 1, "name": "خاص"}
-                                  ],
-                                  expanded: true,
-                                  text: "نوع القطاع",
-                                  value: 0,
-                                ),
+                                child: FutureBuilder(
+                                    future: section_type_api(),
+                                    builder: (context, snap) {
+                                      if (snap.connectionState ==
+                                          ConnectionState.done)
+                                        return CustomeDropdownButton(
+                                          list: snap.data ??
+                                              const [
+                                                {"name": "عام"},
+                                                {"name": "خاص"}
+                                              ],
+                                          expanded: true,
+                                          text: "نوع القطاع",
+                                          value: 'خاص',
+                                        );
+                                      return Container();
+                                    }),
                               ),
                               Container(
-                                  height: 200,
+                                  height: 230,
                                   margin: EdgeInsets.all(10),
                                   child: GoogleMapComponent()),
                               Container(
@@ -345,32 +363,41 @@ class FarmScreen extends StatelessWidget {
                                   children: [
                                     Expanded(
                                         child: BlocProvider(
-                                      create: (context) => ChoiceCubit(
-                                          city: 0, gavernorate: 0, village: 0),
+                                      create: (context) => LocationCubit(
+                                          city: 'مركز دكرنس',
+                                          gavernorate: 'الدقهلية',
+                                          village: 'الجزيره'),
                                       child: SelectLocation(),
                                     )),
                                   ],
                                 ),
                               ),
-                              BlocProvider(
-                                create: (context) => SelectMuiltTypeCubit(list: []),
-                                child: Container(
-                                  color: Colors.white,
-                                  margin: EdgeInsets.all(10),
-                                  child: CustomeType(
-                                    title: "نوع المزرعة",
-                                    list: const [
-                                      {"عام": 1},
-                                      {"خاص": 0}
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              FutureBuilder(
+                                  future: farm_type_api(),
+                                  builder: (context, snap) {
+                                    if (snap.connectionState ==
+                                        ConnectionState.done) {
+                                      customeType = CustomeType(
+                                          title: "نوع المزرعة",
+                                          list: snap.data ?? []);
+                                      return BlocProvider(
+                                        create: (context) =>
+                                            SelectMuiltTypeCubit(list: []),
+                                        child: Container(
+                                          color: Colors.white,
+                                          margin: EdgeInsets.all(10),
+                                          child: customeType,
+                                        ),
+                                      );
+                                    }
+                                    return Container();
+                                  }),
                               const SizedBox(
                                 height: 10,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   OutlinedButton(
                                     style: ButtonStyle(
@@ -387,12 +414,7 @@ class FarmScreen extends StatelessWidget {
                                             MaterialStateProperty.resolveWith(
                                                 (states) => Colors.green)),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ShowInfoScreen(),
-                                          ));
+                                      print(customeType);
                                     },
                                     child: const Text(
                                       "حفظ",
@@ -417,12 +439,7 @@ class FarmScreen extends StatelessWidget {
                                             MaterialStateProperty.resolveWith(
                                                 (states) => Colors.red)),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ShowInfoScreen(),
-                                          ));
+                                        print(customeType.list);
                                     },
                                     child: const Text(
                                       "حذف",
@@ -467,42 +484,64 @@ class _SelectLocationState extends State<SelectLocation> {
                 border: Border.all(
               color: Colors.white,
             )),
-            child: CustomeDropdownButton(
-                func: (int value) {
-                  BlocProvider.of<ChoiceCubit>(context)
-                      .updateGavernorate(value);
-                },
-                list: const [
-                  {"id": 0, "name": "اسيوط"},
-                  {"id": 1, "name": "القاهرة"},
-                  {"id": 2, "name": "المنةفية"}
-                ],
-                expanded: true,
-                value: 0,
-                text: "المحافظة")),
+            child: FutureBuilder(
+                future: gavernorate_api(),
+                builder: (context, snap) {
+                  try {
+                    if (snap.connectionState == ConnectionState.done) {
+                      print(snap.data.toString() + "\tjuuuyyt445443");
+                      return CustomeDropdownButton(
+                          func: (String value) {
+                            BlocProvider.of<LocationCubit>(context)
+                                .updateGavernorate(value);
+                          },
+                          list: snap.data ??
+                              const [
+                                {"name": "اسيوط"},
+                                {"name": "القاهرة"},
+                                {"name": "المنةفية"}
+                              ],
+                          expanded: true,
+                          value: snap.data!.first['name'] ?? 'اسيوط',
+                          text: "المحافظة");
+                    }
+                  } catch (e) {}
+
+                  return Container();
+                })),
         Container(
           margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
               border: Border.all(
             color: Colors.white,
           )),
-          child: BlocBuilder<ChoiceCubit, ChoiceState>(
+          child: BlocBuilder<LocationCubit, LocationState>(
             buildWhen: (previous, current) {
               //
               return previous.gavernorate != current.gavernorate;
             },
             builder: (context, state) {
-              return CustomeDropdownButton(
-                  func: (int value) {
-                    BlocProvider.of<ChoiceCubit>(context).updateCity(value);
-                  },
-                  list: const [
-                    {"id": 1, "name": "القاهرة"},
-                    {"id": 0, "name": "القاهرة"}
-                  ],
-                  expanded: true,
-                  value: 0,
-                  text: "المركز او المدينة");
+              return FutureBuilder(
+                  future: city_api(gavernorate: state.gavernorate),
+                  builder: (context, snap) {
+                    if (snap.connectionState == ConnectionState.done) {
+                      return CustomeDropdownButton(
+                          func: (String value) {
+                            BlocProvider.of<LocationCubit>(context)
+                                .updateCity(value);
+                          },
+                          list: snap.data ??
+                              const [
+                                {"name": "اسيوط"},
+                                {"name": "القاهرة"},
+                                {"name": "المنةفية"}
+                              ],
+                          expanded: true,
+                          value: snap.data!.first['name'] ?? 'اسيوط',
+                          text: "المركز او المدينة");
+                    }
+                    return Container();
+                  });
             },
           ),
         ),
@@ -512,23 +551,33 @@ class _SelectLocationState extends State<SelectLocation> {
               border: Border.all(
             color: Colors.white,
           )),
-          child: BlocBuilder<ChoiceCubit, ChoiceState>(
+          child: BlocBuilder<LocationCubit, LocationState>(
             buildWhen: (previous, current) {
               return previous.city != current.city ||
-                  previous.gavernorate != current.gavernorate;
+                  previous.city != current.city;
             },
             builder: (context, state) {
-              return CustomeDropdownButton(
-                  func: (int value) {
-                    BlocProvider.of<ChoiceCubit>(context).updateVillage(value);
-                  },
-                  list: const [
-                    {"id": 1, "name": "القاهرة"},
-                    {"id": 0, "name": "القاهرة"}
-                  ],
-                  expanded: true,
-                  value: 0,
-                  text: "القرية او الشارع");
+              return FutureBuilder(
+                  future: village_api(city: state.city),
+                  builder: (context, snap) {
+                    if (snap.connectionState == ConnectionState.done)
+                      return CustomeDropdownButton(
+                          func: (String value) {
+                            BlocProvider.of<LocationCubit>(context)
+                                .updateVillage(value);
+                            widget.village = value;
+                          },
+                          list: snap.data ??
+                              const [
+                                {"name": "اسيوط"},
+                                {"name": "القاهرة"},
+                                {"name": "المنةفية"}
+                              ],
+                          expanded: true,
+                          value: snap.data!.first['name'] ?? 'اسيوط',
+                          text: "القرية او الشارع");
+                    return Container();
+                  });
             },
           ),
         ),
@@ -554,6 +603,7 @@ class _CustomeTypeState extends State<CustomeType> {
   _CustomeTypeState();
   @override
   Widget build(BuildContext context) {
+    print('list' + widget.list.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -617,7 +667,7 @@ class _CustomeTypeState extends State<CustomeType> {
                           }
                         },
                         click: true,
-                        text: widget.list[index].keys.toList()[0],
+                        text: widget.list[index].values.toList()[0],
                       );
                     } else {
                       d = CustomeButton(
@@ -632,7 +682,7 @@ class _CustomeTypeState extends State<CustomeType> {
                           }
                         },
                         click: false,
-                        text: widget.list[index].keys.toList()[0],
+                        text: widget.list[index].values.toList()[0],
                       );
                     }
                     return d;
@@ -709,9 +759,7 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                   'ادخال الاحداثيات',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () {
-                
-                },
+                onPressed: () {},
               ),
             ),
             Expanded(
@@ -723,12 +771,10 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                   'اخذ الاحداث اللحالي',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () async{
-                   Position p= await _determinePosition();
-                 this.point=  LatLng(p.latitude, p.longitude);
-                 setState(() {
-                   
-                 });
+                onPressed: () async {
+                  Position p = await _determinePosition();
+                  this.point = LatLng(p.latitude, p.longitude);
+                  setState(() {});
                 },
               ),
             ),
@@ -741,12 +787,15 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                   'تحميل ملف سيغه shape file',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: ()async {
-                  FilePickerResult? result = await FilePicker.platform.pickFiles(
-  type: FileType.custom,
-  allowedExtensions: ['shp', '.shpx',],
-);
-
+                onPressed: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.custom,
+                    allowedExtensions: [
+                      'shp',
+                      '.shpx',
+                    ],
+                  );
                 },
               ),
             )
@@ -755,12 +804,10 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
         Container(
           height: 200 - 32,
           child: FlutterMap(
-            options: MapOptions( 
+            options: MapOptions(
               onTap: (tapPosition, point) {
                 this.point = point;
-                setState(() {
-                  
-                });
+                setState(() {});
               },
             ),
             children: [
@@ -783,6 +830,7 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
       ],
     );
   }
+
   Future<Position> _determinePosition() async {
     LocationPermission permission = await Geolocator.requestPermission();
     bool serviceEnabled;
@@ -790,7 +838,7 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       // Location services are not enabled don't continue
-      // accessing the position and request users of the 
+      // accessing the position and request users of the
       // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
@@ -801,22 +849,21 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale 
+        // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         return Future.error('Location permissions are denied');
       }
     }
-    
+
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately. 
+      // Permissions are denied forever, handle appropriately.
       return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-    } 
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
-
 }

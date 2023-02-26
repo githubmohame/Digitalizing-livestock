@@ -1,6 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
 
-import 'package:final_project_year/bloc/choice/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
@@ -41,7 +40,9 @@ class Farmer extends StatelessWidget {
                   constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:2)):Container(),
                   Spacer(flex: 2),
                   Center(
-                    child: Card(color: Color(0xFF467061),elevation: 20,
+                    child: Card(color: Color(0xFF357515
+
+),elevation: 20,
                       child: Container(margin: EdgeInsets.all(20),width:600,
                         child: SingleChildScrollView( 
                           child: Form(

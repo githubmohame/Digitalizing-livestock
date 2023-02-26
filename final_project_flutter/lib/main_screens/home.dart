@@ -55,7 +55,9 @@ class HomeScreen extends StatelessWidget {
                       //Container(height: 100, child: ComputerDrawer(index:1)) 
                       SafeArea(
                           child: Center(
-                            child: Container(margin: EdgeInsets.all(20),width:600,color: Color(0xFF467061),
+                            child: Container(margin: EdgeInsets.all(20),width:600,color: Color(0xFF357515
+
+),
                         child: Card(elevation: 20,color: Colors.transparent,borderOnForeground: false,   
                           child: Column(
                             children: [
@@ -259,7 +261,7 @@ class HomeScreen extends StatelessWidget {
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const FarmScreen(),
+                                      builder: (context) =>   FarmScreen(),
                                   ));
                             }),
                                         child: Card(
