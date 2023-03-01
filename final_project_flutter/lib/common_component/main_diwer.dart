@@ -1,4 +1,5 @@
 import 'package:final_project_year/main_screens/add_animal.dart';
+import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:final_project_year/main_screens/chart_screen.dart';
 import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
 import 'package:final_project_year/main_screens/connect_suppliers_farm.dart';
@@ -8,7 +9,7 @@ import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
 import 'package:final_project_year/main_screens/supplier_screeen.dart';
 import 'package:final_project_year/main_screens/workers_screen.dart';
-import 'package:final_project_year/screen_location/screen_gavernorate.dart';
+import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
@@ -41,7 +42,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>   FarmScreen(),
+                      builder: (context) => FarmScreen(),
                     ));
               }),
             ),
@@ -66,7 +67,7 @@ class MainDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => const DashBoardScreen(),
                       ));
                 }),
               ),
@@ -167,7 +168,7 @@ class MainDrawer extends StatelessWidget {
               }),
             ),
           ),
-           Container(
+          Container(
             height: 1,
             color: Colors.black,
           ),
@@ -184,11 +185,11 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UpdateLocation(),
+                      builder: (context) => AddLocationScreen(),
                     ));
               }),
             ),
-          ), 
+          ),
           Container(
             height: 1,
             color: Colors.black,
@@ -255,7 +256,8 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),/*
+          ),
+          /*
           Container(
             height: 1,
             color: Colors.black,
@@ -318,7 +320,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),/*
+          ), /*
           Container(
             height: 1,
             color: Colors.black,
@@ -395,7 +397,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>   FarmScreen(),
+                      builder: (context) => FarmScreen(),
                     ));
               }),
             ),
@@ -417,7 +419,7 @@ class ComputerDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => const DashBoardScreen(),
                       ));
                 }),
               ),
@@ -545,7 +547,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UpdateLocation(),
+                      builder: (context) => AddLocationScreen(),
                     ));
               }),
             ),

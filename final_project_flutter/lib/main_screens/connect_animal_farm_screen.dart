@@ -1,4 +1,4 @@
-import 'package:final_project_year/api_function.dart/locations_api.dart';
+import 'package:final_project_year/api_function.dart/app_api.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
@@ -217,7 +217,7 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                               {"id": '', "name": "ابقار"},
                             ],
                         expanded: true,
-                        value:'الابقار'?? 'ابقار',
+                        value:'الابقار' ,
                         text: "نوع الحيوان");
                   return Container();
                 })),

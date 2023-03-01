@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: must_be_immutable
 
-import 'package:final_project_year/api_function.dart/locations_api.dart';
+import 'package:final_project_year/api_function.dart/app_api.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,9 +79,7 @@ class ScreenGavernorate extends StatelessWidget {
                                 (states) => Colors.grey),
                             overlayColor: MaterialStateProperty.resolveWith(
                                 (states) => Colors.red)),
-                        onPressed: () {
-                          print(selectGavernorate.gavernorate);
-                        },
+                        onPressed: () {},
                         child: const Text(
                           "مسح",
                           style: TextStyle(color: Colors.white),
@@ -150,7 +148,6 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
                       BlocProvider.of<LocationCubit>(context)
                           .updateGavernorate(value);
                       widget.gavernorate = value;
-                      print(widget.gavernorate);
                     },
                     list: snap.data!,
                     expanded: true,
@@ -198,7 +195,6 @@ class _SelectCityState extends State<SelectCity> {
                       snap.data!.isNotEmpty)
                     return CustomeDropdownButton(
                         func: (String value) {
-                          print(value);
                           BlocProvider.of<LocationCubit>(context)
                               .updateGavernorate(value);
                         },
@@ -222,7 +218,6 @@ class _SelectCityState extends State<SelectCity> {
               return FutureBuilder(
                   future: city_api(gavernorate: state.gavernorate),
                   builder: (context, snap) {
-                    print(snap.data);
                     if (snap.connectionState == ConnectionState.done &&
                         snap.data is List<Map<String, String>> &&
                         snap.data!.isNotEmpty)
@@ -231,7 +226,6 @@ class _SelectCityState extends State<SelectCity> {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateCity(value);
                             widget.city = value;
-                            print(widget.city);
                           },
                           list: snap.data ?? [],
                           expanded: true,
@@ -309,9 +303,7 @@ class ScreenCity extends StatelessWidget {
                               (states) => Colors.grey),
                           overlayColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.red)),
-                      onPressed: () {
-                        print(selectCity.city);
-                      },
+                      onPressed: () {},
                       child: const Text(
                         "مسح",
                         style: TextStyle(color: Colors.white),
@@ -350,7 +342,9 @@ class ScreenCity extends StatelessWidget {
 
 class ScreenVillage extends StatelessWidget {
   ScreenVillage({Key? key}) : super(key: key);
-  SelectLocation selectLocation = SelectLocation();
+  SelectLocation selectLocation = SelectLocation(
+    village: '',
+  );
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -368,7 +362,10 @@ class ScreenVillage extends StatelessWidget {
                   city: 'مركز دكرنس',
                   gavernorate: 'الدقهلية',
                   village: 'الجزيره'),
-              child: selectLocation,
+              child: Builder(builder: (context) {
+                selectLocation.village = 'الجزيره';
+                return selectLocation;
+              }),
             ),
             Container(
               margin: EdgeInsets.only(left: 10, right: 10),
@@ -406,9 +403,7 @@ class ScreenVillage extends StatelessWidget {
                           (states) => Colors.grey),
                       overlayColor: MaterialStateProperty.resolveWith(
                           (states) => Colors.red)),
-                  onPressed: () {
-                    print(selectLocation.village);
-                  },
+                  onPressed: () {},
                   child: const Text(
                     "مسح",
                     style: TextStyle(color: Colors.white),
@@ -442,14 +437,14 @@ class ScreenVillage extends StatelessWidget {
   }
 }
 
-class UpdateLocation extends StatefulWidget {
-  UpdateLocation({Key? key}) : super(key: key);
+class AddLocationScreen extends StatefulWidget {
+  AddLocationScreen({Key? key}) : super(key: key);
 
   @override
-  State<UpdateLocation> createState() => _UpdateLocationState();
+  State<AddLocationScreen> createState() => _AddLocationScreenState();
 }
 
-class _UpdateLocationState extends State<UpdateLocation> {
+class _AddLocationScreenState extends State<AddLocationScreen> {
   List<Widget> list = [ScreenGavernorate(), ScreenCity(), ScreenVillage()];
   int index = 0;
   @override

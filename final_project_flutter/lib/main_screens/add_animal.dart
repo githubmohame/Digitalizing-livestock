@@ -1,16 +1,16 @@
-import 'package:final_project_year/api_function.dart/locations_api.dart';
+import 'package:final_project_year/api_function.dart/app_api.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
-import 'package:final_project_year/screen_location/screen_gavernorate.dart';
+import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ScreenAddAnimal extends StatelessWidget {
-  const ScreenAddAnimal({Key? key}) : super(key: key);
+class AddAnimalScreen extends StatelessWidget {
+  const AddAnimalScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,21 +32,21 @@ class ScreenAddAnimal extends StatelessWidget {
               ),
             ),
           ),
-          const TextField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+           const TextField(
+              style: TextStyle(color: Colors.black),
+              decoration: InputDecoration(filled: true,fillColor: Colors.white,
                   hintText: "تعديل الاسم",
                   prefixIcon: Icon(
                     Icons.email,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 5)),
+                      borderSide: BorderSide(color: Colors.white, width: 5)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)),
-                  focusColor: Colors.brown,
+                      borderSide: BorderSide(color: Colors.white, width: 2)),
+                  focusColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)))),
+                      borderSide: BorderSide(color: Colors.white, width: 2)))),
           Wrap(
             children: [
               OutlinedButton(
@@ -121,20 +121,20 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
             ),
           ),
           const TextField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+              style: TextStyle(color: Colors.black),
+              decoration: InputDecoration(filled: true,fillColor: Colors.white,
                   hintText: "تعديل الاسم",
                   prefixIcon: Icon(
                     Icons.email,
-                    color: Colors.white,
+                    color: Colors.black,
                   ),
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 5)),
+                      borderSide: BorderSide(color: Colors.white, width: 5)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)),
-                  focusColor: Colors.brown,
+                      borderSide: BorderSide(color: Colors.white, width: 2)),
+                  focusColor: Colors.white,
                   enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.brown, width: 2)))),
+                      borderSide: BorderSide(color: Colors.white, width: 2)))),
           Wrap(
             children: [
               OutlinedButton(
@@ -189,7 +189,7 @@ class UpdateAnimal extends StatefulWidget {
 }
 
 class _UpdateAnimalState extends State<UpdateAnimal> {
-  List<Widget> list = [const ScreenAddAnimal(), const ScreenAddAnimalSubtype()];
+  List<Widget> list = [const AddAnimalScreen(), const ScreenAddAnimalSubtype()];
   int index = 0;
   @override
   Widget build(BuildContext context) {

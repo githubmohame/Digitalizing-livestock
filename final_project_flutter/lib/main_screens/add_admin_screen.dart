@@ -6,10 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class AddAdmin extends StatelessWidget {
-  const AddAdmin({super.key});
-
+  AddAdmin({super.key});
+  SelectLocation selectLocation = SelectLocation(village: '');
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -128,11 +127,20 @@ class AddAdmin extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child: BlocProvider(
-                                  create: (context) => LocationCubit(
-                                      city: '', gavernorate: '', village: ''),
-                                  child: SelectLocation(),
-                                )),
+                                    child:BlocProvider(
+                                      create: (context) => LocationCubit(
+                                          city: 'مركز دكرنس',
+                                          gavernorate: 'الدقهلية',
+                                          village: 'الجزيره'),
+                                      child: Builder(builder: (context) {
+                                         
+                                        selectLocation.village =
+                                            selectLocation == ''
+                                                ? 'الجزيره'
+                                                : selectLocation.village;
+                                        return selectLocation;
+                                      }),
+                                    )),
                               ],
                             ),
                           ),
