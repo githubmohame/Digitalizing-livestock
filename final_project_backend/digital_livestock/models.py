@@ -60,8 +60,8 @@ class UserManager(BaseUserManager):
 
         return self.create_user(ssn, name, phone,  password, village, **other_fields)
 
-    def create_user(self, ssn, name, phone, password, village=None, **other_fields):
-        user = self.model(ssn=ssn, name=name, phone=phone, village=village)
+    def create_user(self, ssn, lname,fname, phone, password, village=None, **other_fields):
+        user = self.model(fname=fname,ssn=ssn, lname=lname, phone=phone, village=village)
         user.set_password(password)
         user.save()
         return user
@@ -70,8 +70,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     ssn = models.CharField(max_length=13, primary_key=True, validators=[RegexValidator(regex='''[1-9]{1,1}[0-9]{12,12}''')])
     USERNAME_FIELD = 'ssn'
-    REQUIRED_FIELDS = ['phone', 'name',]
-    name = models.CharField(max_length=30, blank=False, validators=[
+    REQUIRED_FIELDS = ['phone', 'fname',]
+    fname = models.CharField(max_length=30, blank=False, validators=[
         RegexValidator(regex='''[a-zA-Z]''')
     ])
     phone = models.CharField(max_length=12, blank=False, validators=[
@@ -80,7 +80,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     photo = models.ImageField(upload_to='personal_images')
     village = models.ForeignKey(village, null=True, on_delete=models.CASCADE)
     objects = UserManager()
-
+    email=models.EmailField(null=True)
+    lname = models.CharField(null=True,max_length=30, blank=False, validators=[
+        RegexValidator(regex='''[a-zA-Z]''')
+    ])
 
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)

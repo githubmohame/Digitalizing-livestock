@@ -3,7 +3,7 @@ from digital_livestock.models import *
 class governorateSerializer(serializers.ModelSerializer):
     class Meta:
         model=governorate
-        fields=['name']
+        fields=['name','id']
         
 class citySerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,3 +33,12 @@ class farm_typeSerializer(serializers.ModelSerializer):
         class Meta:
             model=farm_type
             fields=['name']
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+            model=User
+            fields=['fname','lname','email','phone','ssn','password']
+class FarmSerializer(serializers.ModelSerializer):
+    class Meta:
+            model=farm
+            fields="__all__"
