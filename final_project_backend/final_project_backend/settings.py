@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'digital_livestock',
+    'django.contrib.gis',
     'rest_framework',
 ]
 REST_FRAMEWORK = {
@@ -83,8 +84,15 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'media_directory')
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+'ENGINE': 'django.contrib.gis.db.backends.mysql'
+#'django.db.backends.sqlite3'#"django.contrib.gis.db.backends.spatialite"
+,
+'NAME':"test_db",
+'PASSWORD':'Mohammmed123#',
+'USER':"root",
+ 'PORT':'3306','HOST':"localhost"
+#'NAME':  BASE_DIR / 'db.sqlite3',
+ 
     }
 }
 

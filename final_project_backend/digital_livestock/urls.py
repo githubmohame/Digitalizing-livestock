@@ -13,4 +13,10 @@ urlpatterns = [
       ,path('create_farmer', create_farmer)
        ,path('create_farm', create_farm)
        ,path('modify_gavernorate',  modified_gavernorate)
+       ,path('modify_city',  modified_city)
+       ,path('modify_village',  modified_village)
+        ,path('farm_api', farm_api)
+        ,path('modified_species',modified_species)
+        ,path('modified_platoon', modified_platoon)
+        ,path('farmer_api',  farmer_api)
 ]

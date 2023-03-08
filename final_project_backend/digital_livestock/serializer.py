@@ -8,22 +8,22 @@ class governorateSerializer(serializers.ModelSerializer):
 class citySerializer(serializers.ModelSerializer):
     class Meta:
         model=city
-        fields=['name']
+        fields=['name','id']
 
 class villageSerializer(serializers.ModelSerializer):
     class Meta:
         model=village
-        fields=['name']
+        fields=['name','id']
         
 class platoonSerializer(serializers.ModelSerializer):
     class Meta:
         model=platoon
-        fields=['name']
+        fields=['name','id']
         
 class speciesSerializer(serializers.ModelSerializer):
     class Meta:
         model=species
-        fields=['name']
+        fields=['name','id']
         
 class section_typeSerializer(serializers.ModelSerializer):
         class Meta:
@@ -34,7 +34,7 @@ class farm_typeSerializer(serializers.ModelSerializer):
             model=farm_type
             fields=['name']
 
-class UserSerializer(serializers.ModelSerializer):
+class FarmerSerializer(serializers.ModelSerializer):
     class Meta:
             model=User
             fields=['fname','lname','email','phone','ssn','password']
