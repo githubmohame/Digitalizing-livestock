@@ -2,12 +2,13 @@
 import 'package:flutter/material.dart';
 
 class CustomePasswordEnterTextField extends StatefulWidget {
-     int widgetIndex;
-    CustomePasswordEnterTextField({
+  int widgetIndex;
+  CustomePasswordEnterTextField({
     Key? key,
     required this.widgetIndex,
   }) : super(key: key);
-
+  String? password;
+  GlobalKey<FormState> f = GlobalKey<FormState>();
   @override
   State<CustomePasswordEnterTextField> createState() =>
       _CustomePasswordEnterTextFieldState();
@@ -15,54 +16,70 @@ class CustomePasswordEnterTextField extends StatefulWidget {
 
 class _CustomePasswordEnterTextFieldState
     extends State<CustomePasswordEnterTextField> {
-  bool showPassword = false;  
+  bool showPassword = false;
+  List<TextEditingController> _list1 = [
+    TextEditingController(),
+    TextEditingController(),
+  ];
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 138,
-      color: Colors.transparent,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            obscureText: !showPassword,
-            obscuringCharacter: '*',
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                fillColor: Colors.white,
-                focusColor: Colors.brown,
-                filled: true,
-                hintText: " ادخل الرقم السري"),
-          ),
-          SizedBox(height: 10),
-          TextField(
-            obscureText: !showPassword,
-            obscuringCharacter: '*',
-            decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey)),
-                fillColor: Colors.white,
-                focusColor: Colors.brown,
-                filled: true,
-                hintText: " ادخل الرقم السري"),
-          ),
-          Row(
-            children: [
-              Checkbox(
-                  side: BorderSide(color: Colors.white),
-                  value: showPassword,
-                  onChanged: (value) {
-                    setState(() {
-                      showPassword = value ?? false;
-                    });
-                  }),
-              Text('اظهار كلمة المرور',
-                  style: TextStyle(
-                      color:Colors.black, fontWeight: FontWeight.w100))
-            ],
-          )
-        ],
+    return Form(
+      key: widget.f,
+      child: Container(
+        height: 138+24,
+        color: Colors.transparent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: _list1[0],
+              obscureText: !showPassword,
+              obscuringCharacter: '*',
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  fillColor: Colors.white,
+                  focusColor: Colors.brown,
+                  filled: true,
+                  hintText: " ادخل الرقم السري"),
+            ),
+            SizedBox(height: 10),
+            TextFormField(
+              controller: _list1[1],
+              obscureText: !showPassword,
+              validator: (value) {
+                if (_list1[0].text != _list1[1].text ||
+                    _list1[0].text.isEmpty) {
+                  return 'the password and confirmation not equal or the pasword is  empty';
+                }
+                widget.password = _list1[0].text;
+              },
+              obscuringCharacter: '*',
+              decoration: InputDecoration(
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.grey)),
+                  fillColor: Colors.white,
+                  focusColor: Colors.brown,
+                  filled: true,
+                  hintText: " ادخل الرقم السري"),
+            ),
+            Row(
+              children: [
+                Checkbox(
+                    side: BorderSide(color: Colors.white),
+                    value: showPassword,
+                    onChanged: (value) {
+                      setState(() {
+                        showPassword = value ?? false;
+                      });
+                    }),
+                Text('اظهار كلمة المرور',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w100))
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -100,7 +117,11 @@ class _CustomePasswordUpdateTextFieldState
                 focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                   color: Colors.brown,
-                )),prefixIcon: Icon(Icons.password,color: Colors.grey,),
+                )),
+                prefixIcon: Icon(
+                  Icons.password,
+                  color: Colors.grey,
+                ),
                 filled: true,
                 border: OutlineInputBorder(
                     borderSide: BorderSide(

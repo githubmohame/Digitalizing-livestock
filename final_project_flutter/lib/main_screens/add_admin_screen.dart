@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddAdmin extends StatelessWidget {
   AddAdmin({super.key});
-  SelectLocation selectLocation = SelectLocation(village: '');
+  SelectLocation selectLocation = SelectLocation(village: '', city: '');
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -127,20 +127,20 @@ class AddAdmin extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                    child:BlocProvider(
-                                      create: (context) => LocationCubit(
-                                          city: 'مركز دكرنس',
-                                          gavernorate: 'الدقهلية',
-                                          village: 'الجزيره'),
-                                      child: Builder(builder: (context) {
-                                         
-                                        selectLocation.village =
-                                            selectLocation == ''
-                                                ? 'الجزيره'
-                                                : selectLocation.village;
-                                        return selectLocation;
-                                      }),
-                                    )),
+                                    child: BlocProvider(
+                                  create: (context) => LocationCubit(
+                                      city: 'مركز دكرنس',
+                                      gavernorate: 'الدقهلية',
+                                      village: 'الجزيره'),
+                                  child: Builder(builder: (context) {
+                                    selectLocation.village =
+                                        selectLocation == ''
+                                            ? 'الجزيره'
+                                            : selectLocation.village;
+                                    selectLocation.city = 'مركز دكرنس';
+                                    return selectLocation;
+                                  }),
+                                )),
                               ],
                             ),
                           ),

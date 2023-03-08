@@ -1,3 +1,4 @@
+import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:final_project_year/main_screens/chart_screen.dart';
@@ -666,7 +667,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Supplier(),
+                      builder: (context) => AddAdmin(),
                     ));
               }),
             ),

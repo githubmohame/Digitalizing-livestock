@@ -1,9 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart' as dio;
 import 'package:file_picker/file_picker.dart';
-import 'package:final_project_year/common_component/custome_text_field.dart';
-import 'package:final_project_year/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,11 +13,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import 'package:final_project_year/api_function.dart/app_api.dart';
+import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_type_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
+import 'package:final_project_year/common_component/custome_stackbar.dart';
+import 'package:final_project_year/common_component/custome_text_field.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/validations.dart';
 
 class CustomeDropdownButton extends StatefulWidget {
   String value;
@@ -108,9 +112,35 @@ class _FarmScreenState extends State<FarmScreen> {
 
   double errorHeight = 0;
 
+  GoogleMapComponent googleMapComponent = GoogleMapComponent();
   SelectLocation selectLocation = SelectLocation(
+    city: '',
     village: '',
   );
+  void update_screen() {
+    errorHeight = 0;
+    errorHeight = funcStringValidation(
+        value: controller[0].text, errorHeight: errorHeight);
+    errorHeight =
+        funcNumValidation(value: controller[1].text, errorHeight: errorHeight);
+    errorHeight =
+        funcNumValidation(value: controller[2].text, errorHeight: errorHeight);
+    errorHeight =
+        funcNumValidation(errorHeight: errorHeight, value: controller[3].text);
+    errorHeight = funcStringValidation(
+        value: controller[4].text, errorHeight: errorHeight);
+    errorHeight = funcStringValidation(
+        value: controller[5].text, errorHeight: errorHeight);
+    errorHeight = funcStringValidation(
+        value: controller[6].text, errorHeight: errorHeight);
+    errorHeight = funcStringValidation(
+        value: controller[7].text, errorHeight: errorHeight);
+    errorHeight = funcStringValidation(
+        value: controller[8].text, errorHeight: errorHeight);
+    setState(() {
+      print(errorHeight);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,8 +177,7 @@ class _FarmScreenState extends State<FarmScreen> {
                         color: Color(0xFF357515),
                         child: Container(
                           padding: EdgeInsets.all(20),
-                          height:
-                              1780 + 52  + 30 +  25 + errorHeight,
+                          height: 1780 + 52 + 30 + 25 + errorHeight,
                           width: 700,
                           child: Form(
                               key: _formGlobalKey,
@@ -190,14 +219,16 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField(inputFormatters:  [FilteringTextInputFormatter.allow(
-                                          RegExp(r'[ا-ي0-9]'))],
+                                  CustomeTextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[ا-ي0-9]'))
+                                    ],
                                     controller: controller[0],
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
 
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
                                     },
@@ -217,14 +248,15 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField(inputFormatters:  [FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))],
+                                  CustomeTextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]'))
+                                    ],
                                     controller: controller[1],
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
                                       if (s1.isNotEmpty) {
-
-                                        errorHeight += 10;
                                         return s1;
                                       }
                                       s1 += biggerMin(
@@ -232,7 +264,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       if (s1.isEmpty) {
                                         return null;
                                       }
-                                      errorHeight += 10;
+
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -251,14 +283,15 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField(inputFormatters:  [FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))],
+                                  CustomeTextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]'))
+                                    ],
                                     controller: controller[2],
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
                                       if (s1.isNotEmpty) {
-
-                                        errorHeight += 10;
                                         return s1;
                                       }
                                       s1 += biggerMin(
@@ -266,7 +299,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       if (s1.isEmpty) {
                                         return null;
                                       }
-                                         errorHeight += 10;
+
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -285,7 +318,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField( inputFormatters: [
+                                  CustomeTextField(
+                                    inputFormatters: [
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'^[ا-ي ]{1,}[0-8]{0,8}'))
                                     ],
@@ -293,7 +327,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
                                       if (s1.isNotEmpty) {
@@ -303,7 +336,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                         return null;
                                       }
 
-                                        errorHeight += 10;
                                       return s1;
                                     },
                                     keyboardType: TextInputType.text,
@@ -322,7 +354,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField( inputFormatters: [
+                                  CustomeTextField(
+                                    inputFormatters: [
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'[0-9]'))
                                     ],
@@ -330,10 +363,9 @@ class _FarmScreenState extends State<FarmScreen> {
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
- 
+
                                       s1 += biggerMin(
                                           s1: value.toString(), min: 0);
 
@@ -341,7 +373,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                         return null;
                                       }
 
-                                        errorHeight += 10;
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -360,7 +391,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField( inputFormatters: [
+                                  CustomeTextField(
+                                    inputFormatters: [
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'[0-9]'))
                                     ],
@@ -368,7 +400,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
 
@@ -378,7 +409,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                         return null;
                                       }
 
-                                        errorHeight += 10;
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -397,7 +427,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField( inputFormatters: [
+                                  CustomeTextField(
+                                    inputFormatters: [
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'[0-9]'))
                                     ],
@@ -406,7 +437,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                       String s1 = isEmpty(s1: value.toString());
 
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
 
@@ -416,7 +446,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                         return null;
                                       }
 
-                                        errorHeight += 10;
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -435,7 +464,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                  CustomeTextField( inputFormatters: [
+                                  CustomeTextField(
+                                    inputFormatters: [
                                       FilteringTextInputFormatter.allow(
                                           RegExp(r'[0-9]'))
                                     ],
@@ -444,7 +474,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                       String s1 = isEmpty(s1: value.toString());
 
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
 
@@ -454,7 +483,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                         return null;
                                       }
 
-                                        errorHeight += 10;
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -483,7 +511,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                       String s1 = isEmpty(s1: value.toString());
 
                                       if (s1.isNotEmpty) {
-                                        errorHeight += 10;
                                         return s1;
                                       }
 
@@ -493,7 +520,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                         return null;
                                       }
 
-                                        errorHeight += 10;
                                       return s1;
                                     },
                                     keyboardType: TextInputType.number,
@@ -502,7 +528,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                   Container(
                                       height: 319,
                                       margin: EdgeInsets.all(10),
-                                      child: GoogleMapComponent()),
+                                      child: googleMapComponent),
                                   Container(
                                     height: 260,
                                     child: Row(
@@ -515,9 +541,14 @@ class _FarmScreenState extends State<FarmScreen> {
                                               village: 'الجزيره'),
                                           child: Builder(builder: (context) {
                                             selectLocation.village =
-                                                selectLocation == ''
+                                                selectLocation.village == ''
                                                     ? 'الجزيره'
                                                     : selectLocation.village;
+
+                                            selectLocation.city =
+                                                selectLocation.city == ''
+                                                    ? 'الدقهلية'
+                                                    : selectLocation.city;
                                             return selectLocation;
                                           }),
                                         )),
@@ -549,9 +580,22 @@ class _FarmScreenState extends State<FarmScreen> {
                                             overlayColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.green)),
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          update_screen();
+
                                           if (_formGlobalKey.currentState!
                                               .validate()) {
+                                            showSnackbar(
+                                              context: context,
+                                              row: [
+                                                Icon(Icons.task_alt,
+                                                    color: Colors.green),
+                                                Text('تم',
+                                                    style: TextStyle(
+                                                        color: Colors.green))
+                                              ],
+                                            );
+                                            print(googleMapComponent.point);
                                             print(farmType
                                                 .customeFarmType.item_choose);
                                             print(sectionType
@@ -562,10 +606,106 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 in controller) {
                                               print(i.text);
                                             }
+                                            var f = dio.MultipartFile.fromBytes(
+                                                await File(
+                                                        '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
+                                                    .readAsBytes(),
+                                                filename: 'locations.shp');
+                                            dio.Dio dio1 = dio.Dio();
+                                            Map<String, dynamic> dic1 = {
+                                              'operation': "insert",
+                                              'attached_area': 12,
+                                              r'farm_type': farmType
+                                                      .customeFarmType
+                                                      .item_choose
+                                                      .isNotEmpty
+                                                  ? json.encode(farmType
+                                                      .customeFarmType
+                                                      .item_choose)
+                                                  : null,
+                                              r'isolated_wards':
+                                                  int.parse(controller[7].text),
+                                              'number_of_arc':
+                                                  int.parse(controller[8].text),
+                                              'number_of_workers':
+                                                  int.parse(controller[1].text),
+                                              'playground':
+                                                  int.parse(controller[4].text),
+                                              'section_type': sectionType
+                                                      .customeDropdownButtonSectionType
+                                                      .value
+                                                      .isNotEmpty
+                                                  ? sectionType
+                                                      .customeDropdownButtonSectionType
+                                                      .value
+                                                  : null,
+                                              'wards':
+                                                  controller[6].text.isNotEmpty
+                                                      ? int.parse(
+                                                          controller[6].text)
+                                                      : null,
+                                              'total_area_of_farm':
+                                                  controller[2].text.isNotEmpty
+                                                      ? int.parse(
+                                                          controller[2].text)
+                                                      : null,
+                                              'farm_name':
+                                                  controller[3].text.isNotEmpty
+                                                      ? controller[3].text
+                                                      : null,
+                                              'huge_playground':
+                                                  controller[5].text.isNotEmpty
+                                                      ? int.parse(
+                                                          controller[5].text)
+                                                      : null,
+                                              'id': controller[0].text,
+                                              "city": this.selectLocation.city,
+                                              'village':
+                                                  this.selectLocation.village
+                                            };
+                                            if (googleMapComponent.point
+                                                is LatLng) {
+                                              dic1['geometry'] = json.encode({
+                                                "type": "Point",
+                                                "coordinates": [
+                                                  googleMapComponent
+                                                      .point!.latitude,
+                                                  googleMapComponent
+                                                      .point!.longitude
+                                                ]
+                                              });
+                                            } else if (googleMapComponent.file
+                                                is String) {
+                                              print('dog');
+                                              dic1['geometry'] =
+                                                  dio.MultipartFile.fromBytes(
+                                                      await File(
+                                                              googleMapComponent
+                                                                  .file
+                                                                  .toString())
+                                                          .readAsBytes(),
+                                                      filename:
+                                                          'locations.zip');
+                                            } else {
+                                              dic1['geometry'] = null;
+                                            }
+                                            dio.FormData formData =
+                                                dio.FormData.fromMap(
+                                                    dic1,
+                                                    dio.ListFormat.multi,
+                                                    false);
+                                            var res =
+                                                await farm_api(form: formData);
+                                            print(res.data);
+                                            return null;
                                           }
-                                        setState(() {
-                                          
-                                        });
+                                          showSnackbar(context: context, row: [
+                                            Icon(Icons.error,
+                                                color: Colors.red),
+                                            Text('مشكلة',
+                                                style: TextStyle(
+                                                    color: Colors.red))
+                                          ]);
                                         },
                                         child: const Text(
                                           "حفظ",
@@ -592,11 +732,135 @@ class _FarmScreenState extends State<FarmScreen> {
                                             overlayColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.red)),
-                                        onPressed: () {
+                                        onPressed: () async {
                                           print(farmType.customeFarmType.list);
+                                          dio.FormData formData =
+                                              dio.FormData.fromMap({
+                                            'id': controller[0].text,
+                                            'operation': 'delete'
+                                          });
+                                          var res =
+                                              await farm_api(form: formData);
+                                          print(res.data);
+                                          return null;
                                         },
                                         child: const Text(
                                           "حذف",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      OutlinedButton(
+                                        style: ButtonStyle(
+                                            fixedSize:
+                                                MaterialStateProperty.all(
+                                                    const Size(200, 50)),
+                                            shape: MaterialStateProperty.resolveWith(
+                                                (states) =>
+                                                    RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                30))),
+                                            backgroundColor:
+                                                MaterialStateProperty.resolveWith(
+                                                    (states) => Colors.red),
+                                            overlayColor:
+                                                MaterialStateProperty.resolveWith(
+                                                    (states) => Colors.red)),
+                                        onPressed: () async {
+                                          var f = dio.MultipartFile.fromBytes(
+                                              await File(
+                                                      '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
+                                                  .readAsBytes(),
+                                              filename: 'locations.shp');
+                                          dio.Dio dio1 = dio.Dio();
+                                          Map<String, dynamic> dic1 = {
+                                            'operation': "update",
+                                            'attached_area': 12,
+                                            r'farm_type': farmType
+                                                    .customeFarmType
+                                                    .item_choose
+                                                    .isNotEmpty
+                                                ? json.encode(farmType
+                                                    .customeFarmType
+                                                    .item_choose)
+                                                : null,
+                                            r'isolated_wards':
+                                                int.parse(controller[7].text),
+                                            'number_of_arc':
+                                                int.parse(controller[8].text),
+                                            'number_of_workers':
+                                                int.parse(controller[1].text),
+                                            'playground':
+                                                int.parse(controller[4].text),
+                                            'section_type': sectionType
+                                                    .customeDropdownButtonSectionType
+                                                    .value
+                                                    .isNotEmpty
+                                                ? sectionType
+                                                    .customeDropdownButtonSectionType
+                                                    .value
+                                                : null,
+                                            'wards': controller[6]
+                                                    .text
+                                                    .isNotEmpty
+                                                ? int.parse(controller[6].text)
+                                                : null,
+                                            'total_area_of_farm': controller[2]
+                                                    .text
+                                                    .isNotEmpty
+                                                ? int.parse(controller[2].text)
+                                                : null,
+                                            'farm_name':
+                                                controller[3].text.isNotEmpty
+                                                    ? controller[3].text
+                                                    : null,
+                                            'huge_playground': controller[5]
+                                                    .text
+                                                    .isNotEmpty
+                                                ? int.parse(controller[5].text)
+                                                : null,
+                                            'id': controller[0].text,
+                                            "city": this.selectLocation.city,
+                                            'village':
+                                                this.selectLocation.village
+                                          };
+                                          if (googleMapComponent.point
+                                              is LatLng) {
+                                            dic1['geometry'] = json.encode({
+                                              "type": "Point",
+                                              "coordinates": [
+                                                googleMapComponent
+                                                    .point!.latitude,
+                                                googleMapComponent
+                                                    .point!.longitude
+                                              ]
+                                            });
+                                          } else if (googleMapComponent.file
+                                              is String) {
+                                            dic1['geometry'] =
+                                                dio.MultipartFile.fromBytes(
+                                                    await File(
+                                                            googleMapComponent
+                                                                .file
+                                                                .toString())
+                                                        .readAsBytes(),
+                                                    filename: 'locations.zip');
+                                          } else {
+                                            dic1['geometry'] = null;
+                                          }
+                                          dio.FormData formData =
+                                              dio.FormData.fromMap(dic1,
+                                                  dio.ListFormat.multi, false);
+                                          var res =
+                                              await farm_api(form: formData);
+                                          print(res.data);
+                                          return null;
+                                        },
+                                        child: const Text(
+                                          "تعديل",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
@@ -684,10 +948,13 @@ class SectionType extends StatelessWidget {
 
 class SelectLocation extends StatelessWidget {
   String village;
+  String city;
   SelectLocation({
     Key? key,
     required this.village,
+    required this.city,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     print('build');
@@ -724,28 +991,33 @@ class SelectLocation extends StatelessWidget {
 
                   return Container();
                 })),
-        Container(
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: Colors.white,
-          )),
-          child: BlocBuilder<LocationCubit, LocationState>(
-            buildWhen: (previous, current) {
-              //
-              print(previous.gavernorate != current.gavernorate);
-              return previous.gavernorate != current.gavernorate;
-            },
-            builder: (context, state) {
-              print('build');
-              return FutureBuilder(
-                  future: city_api(gavernorate: state.gavernorate),
-                  builder: (context, snap) {
-                    if (snap.connectionState == ConnectionState.done) {
-                      return CustomeDropdownButton(
+        BlocBuilder<LocationCubit, LocationState>(
+          buildWhen: (previous, current) {
+            //
+            print(previous.gavernorate != current.gavernorate);
+            return previous.gavernorate != current.gavernorate;
+          },
+          builder: (context, state) {
+            print('build');
+            return FutureBuilder(
+                future: city_api(gavernorate: state.gavernorate),
+                builder: (context, snap) {
+                  if (snap.connectionState == ConnectionState.done &&
+                      snap.data is List<Map<String, String>> &&
+                      snap.data!.isNotEmpty) {
+                    city = snap.data!.first['name'] ?? 'اسيوط';
+
+                    return Container(
+                      margin: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.white,
+                      )),
+                      child: CustomeDropdownButton(
                           func: (String value) {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateCity(value);
+                            city = value;
                           },
                           list: snap.data ??
                               const [
@@ -755,32 +1027,37 @@ class SelectLocation extends StatelessWidget {
                               ],
                           expanded: true,
                           value: snap.data!.first['name'] ?? 'اسيوط',
-                          text: "المركز او المدينة");
-                    }
-                    return Container();
-                  });
-            },
-          ),
+                          text: "المركز او المدينة"),
+                    );
+                  }
+                  return Container(
+                    height: 0,
+                    width: 0,
+                  );
+                });
+          },
         ),
-        Container(
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: Colors.white,
-          )),
-          child: BlocBuilder<LocationCubit, LocationState>(
-            buildWhen: (previous, current) {
-              print(previous.city != current.city);
-              return previous.city != current.city;
-            },
-            builder: (context, state) {
-              print('build village');
-              return FutureBuilder(
-                  future: village_api(city: state.city),
-                  builder: (context, snap) {
-                    print(snap.data);
-                    if (snap.connectionState == ConnectionState.done)
-                      return CustomeDropdownButton(
+        BlocBuilder<LocationCubit, LocationState>(
+          buildWhen: (previous, current) {
+            print(previous.city != current.city);
+            return previous.city != current.city;
+          },
+          builder: (context, state) {
+            print('build village');
+            return FutureBuilder(
+                future: village_api(city: state.city),
+                builder: (context, snap) {
+                  print(snap.data);
+                  if (snap.connectionState == ConnectionState.done &&
+                      snap.data is List<Map<String, String>> &&
+                      snap.data!.isNotEmpty)
+                    return Container(
+                      margin: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.white,
+                      )),
+                      child: CustomeDropdownButton(
                           func: (String value) {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateVillage(value);
@@ -794,11 +1071,14 @@ class SelectLocation extends StatelessWidget {
                               ],
                           expanded: true,
                           value: snap.data!.first['name'] ?? 'اسيوط',
-                          text: "القرية او الشارع");
-                    return Container();
-                  });
-            },
-          ),
+                          text: "القرية او الشارع"),
+                    );
+                  return Container(
+                    height: 0,
+                    width: 0,
+                  );
+                });
+          },
         ),
       ],
     );
@@ -958,14 +1238,14 @@ class _CustomeButtonState extends State<CustomeButton> {
 }
 
 class GoogleMapComponent extends StatefulWidget {
-  const GoogleMapComponent({super.key});
-
+  GoogleMapComponent({super.key});
+  LatLng? point;
+  String? file;
   @override
   State<GoogleMapComponent> createState() => _GoogleMapComponentState();
 }
 
 class _GoogleMapComponentState extends State<GoogleMapComponent> {
-  LatLng point = LatLng(0, 0);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -996,7 +1276,7 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                 ),
                 onPressed: () async {
                   Position p = await _determinePosition();
-                  this.point = LatLng(p.latitude, p.longitude);
+                  widget.point = LatLng(p.latitude, p.longitude);
                   setState(() {});
                 },
               ),
@@ -1012,14 +1292,24 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: [
-                      'shp',
-                      '.shpx',
-                    ],
-                  );
+                  FilePickerResult? result = await FilePicker.platform
+                      .pickFiles(
+                          allowMultiple: false,
+                          type: FileType.custom,
+                          allowedExtensions: [
+                        'geojson',
+                        'json',
+                        'zip',
+                      ]);
+                  if (result is FilePickerResult) {
+                    PlatformFile r1 = result.files[0];
+                    widget.file = r1.path;
+                    print(widget.file);
+                    if (widget.file is String) {
+                      widget.point = null;
+                    }
+                    setState(() {});
+                  }
                 },
               ),
             )
@@ -1030,7 +1320,8 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
           child: FlutterMap(
             options: MapOptions(
               onTap: (tapPosition, point) {
-                this.point = point;
+                widget.point = point;
+                widget.file = null;
                 setState(() {});
               },
             ),
@@ -1040,13 +1331,15 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                 userAgentPackageName: 'dev.fleaflet.flutter_map.example',
               ),
               MarkerLayer(
-                markers: [
-                  Marker(
-                      height: 200,
-                      width: 200,
-                      point: point,
-                      builder: (context) => Icon(Icons.location_on))
-                ],
+                markers: widget.point is LatLng
+                    ? [
+                        Marker(
+                            height: 200,
+                            width: 200,
+                            point: widget.point!,
+                            builder: (context) => Icon(Icons.location_on))
+                      ]
+                    : [],
               ),
             ],
           ),

@@ -18,7 +18,7 @@ class CustomeTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(inputFormatters: inputFormatters,
+    return TextFormField(inputFormatters: inputFormatters,onSaved: validator,
       controller: controller,
       validator: validator,
       decoration: const InputDecoration(
