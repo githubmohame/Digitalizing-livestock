@@ -904,7 +904,7 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                 GestureDetector(onTap: () {
                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return AddAnimalScreen();
+                        return UpdateAnimal();
                       },
                     ));
                 },

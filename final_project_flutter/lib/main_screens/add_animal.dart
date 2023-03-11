@@ -9,15 +9,23 @@ import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddAnimalScreen extends StatelessWidget {
+class AddAnimalScreen extends StatefulWidget {
   AddAnimalScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AddAnimalScreen> createState() => _AddAnimalScreenState();
+}
+
+class _AddAnimalScreenState extends State<AddAnimalScreen> {
   SelectPlotoon selectPlotoon = SelectPlotoon(
     title: 'النوع',
     list: [
       {"id": "ابقار"},
     ],
   );
+
   TextEditingController controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -28,10 +36,19 @@ class AddAnimalScreen extends StatelessWidget {
           const Text('تعديل في النوع',
               style: TextStyle(color: Colors.white, fontSize: 20)),
           Container(
-            child: BlocProvider(
-              create: (context) => AnimalCubit(platoon: '', species: ''),
-              child: selectPlotoon,
-            ),
+            child: FutureBuilder(
+                future: animal_api(),
+                builder: (context, snap) {
+                  if (snap.data != null && snap.data!.length > 0) {
+                    return BlocProvider(
+                      create: (context) => AnimalCubit(
+                          platoon:  snap.data![0]['platoon'],
+                          species: snap.data![0]['species']),
+                      child: selectPlotoon,
+                    );
+                  }
+                  return Container();
+                }),
           ),
           TextField(
               controller: controller,
@@ -63,11 +80,18 @@ class AddAnimalScreen extends StatelessWidget {
                         (states) => Colors.green),
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green)),
-                onPressed: () {
-                  modify_platoon_api(
+                onPressed: () async {
+                  await modify_platoon_api(
                       operation: 'update',
                       platoon: selectPlotoon.village.toString(),
                       new_name: controller.text);
+                  selectPlotoon = SelectPlotoon(
+                    title: 'النوع',
+                    list: [
+                      {"id": "ابقار"},
+                    ],
+                  );
+                  setState(() {});
                 },
                 child: const Text(
                   "حفظ",
@@ -93,6 +117,13 @@ class AddAnimalScreen extends StatelessWidget {
                       operation: 'delete',
                       platoon: selectPlotoon.village.toString(),
                       new_name: controller.text);
+                  setState(() {});
+                  selectPlotoon = SelectPlotoon(
+                    title: 'النوع',
+                    list: [
+                      {"id": "ابقار"},
+                    ],
+                  );
                 },
                 child: const Text(
                   "حذف",
@@ -113,11 +144,18 @@ class AddAnimalScreen extends StatelessWidget {
                         (states) => Colors.red),
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
-                onPressed: () {
-                  modify_platoon_api(
+                onPressed: () async {
+                  await modify_platoon_api(
                       operation: 'insert',
                       platoon: selectPlotoon.village.toString(),
                       new_name: controller.text);
+                  selectPlotoon = SelectPlotoon(
+                    title: 'النوع',
+                    list: [
+                      {"id": "ابقار"},
+                    ],
+                  );
+                  setState(() {});
                 },
                 child: const Text(
                   "اضافة",
@@ -154,9 +192,19 @@ class ScreenAddAnimalSubtype extends StatelessWidget {
           const Text('تعديل في الفصيلة',
               style: TextStyle(color: Colors.white, fontSize: 20)),
           Container(
-            child: BlocProvider(
-                create: (context) => AnimalCubit(platoon: '', species: ''),
-                child: selectSpecies),
+            child: FutureBuilder(future: animal_api(),
+              builder: (context,snap) {
+                  if (snap.data != null && snap.data!.length > 0) {
+                    return BlocProvider(
+                      create: (context) => AnimalCubit(
+                          platoon:  snap.data![0]['platoon'],
+                          species: snap.data![0]['species']),
+                      child:  selectSpecies,
+                    );
+                  }
+                  return Container();
+              }
+            ),
           ),
           TextField(
               controller: controller,
@@ -357,8 +405,9 @@ class _SelectAnimalState extends State<SelectPlotoon> {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data is List<Map<String, String>> &&
                   snap.data!.isNotEmpty) {
-                widget.village = snap.data![0]['name']!;
+                widget.village = snap.data![0]['id']!;
                 return CustomeDropdownButton(
+                    id: 'id',
                     func: (String value) {
                       BlocProvider.of<AnimalCubit>(context)
                           .updatePlatoon(platoon: value);
@@ -366,7 +415,7 @@ class _SelectAnimalState extends State<SelectPlotoon> {
                     },
                     list: snap.data!,
                     expanded: true,
-                    value: snap.data![0]['name']!,
+                    value: snap.data![0]['id']!,
                     text: widget.title);
               }
 
@@ -411,6 +460,7 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                       snap.data is List<Map<String, String>> &&
                       snap.data!.isNotEmpty) {
                     return CustomeDropdownButton(
+                        id: 'id',
                         func: (String value) {
                           print(value);
                           BlocProvider.of<AnimalCubit>(context)
@@ -418,7 +468,7 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                         },
                         list: snap.data ?? [],
                         expanded: true,
-                        value: snap.data![0]['name']!,
+                        value: snap.data![0]['id']!,
                         text: widget.titles[0]);
                   }
 
@@ -442,15 +492,17 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                     if (snap.connectionState == ConnectionState.done &&
                         snap.data is List<Map<String, String>> &&
                         snap.data!.isNotEmpty) {
-                      widget.species = snap.data![0]['name']!;
+                      print(snap.data);
+                      widget.species = snap.data![0]['id']!;
                       return CustomeDropdownButton(
+                          id: 'id',
                           func: (String value) {
                             //BlocProvider.of<LocationCubit>(context)
                             //  .updateCity(value);
                           },
                           list: snap.data ?? [],
                           expanded: true,
-                          value: snap.data![0]['name']!,
+                          value: snap.data![0]['id']!,
                           text: widget.titles[1]);
                     }
                     widget.species = null;

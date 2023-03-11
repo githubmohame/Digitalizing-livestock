@@ -121,22 +121,25 @@ class farm(models.Model):
     location = models.GeometryField(null=True,geography=False )
     total_area_of_farm=models.PositiveIntegerField(null=True)
 
-class connect_farmm_farmtype(models.Model):
+class connect_farm_farmtype(models.Model):
     farm=models.ForeignKey(farm,on_delete=models.CASCADE)
     farm_type=models.ForeignKey(farm_type,on_delete=models.CASCADE)
 class connect_animal_farm(models.Model):
-    animal_sub_type = models.ForeignKey(
-        species, on_delete=models.CASCADE)
-    work_place = models.ForeignKey(farm, on_delete=models.CASCADE)
+    animal_sub_type = models.ForeignKey(species, on_delete=models.CASCADE)
+    farm_id = models.ForeignKey(farm, on_delete=models.CASCADE)
     animal_number = models.PositiveIntegerField(null=False)
     is_male = models.BooleanField(null=False, blank=False)
-    total_money = models.PositiveIntegerField(validators=[])
+    #total_money = models.PositiveIntegerField(validators=[])
+    date=models.DateField(null=True, blank=True, )
+    
 
 
-'''
-Ssn: 3010906121153
-Phone: 010242159778
-Name: mohamed
-
-
-'''
+class connect_farm_farmer(models.Model):
+    farm=models.ForeignKey(farm,on_delete=models.CASCADE)
+    farmer=models.ForeignKey(User,on_delete=models.CASCADE)
+    total_cost=models.PositiveIntegerField ()
+    date=models.DateField()
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['farm', 'farmer' ,], name="connect_farm_farmer_uk")
+        ]

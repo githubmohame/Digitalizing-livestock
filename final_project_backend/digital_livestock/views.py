@@ -2,27 +2,36 @@ from django.shortcuts import render
 from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
 # Create your views here.
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.conf import settings
 from rest_framework import permissions
 from django.db import connection
 from rest_framework.decorators import api_view,authentication_classes,permission_classes,throttle_classes
 from rest_framework.throttling import UserRateThrottle
 from django.http.response import  JsonResponse
-import json
 from rest_framework import response
 from rest_framework.request import Request
-from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.gdal import DataSource
 from .serializer import *
 from rest_framework.authentication import BaseAuthentication
-import json
-from django.contrib.gis.gdal.geometries import Polygon
-import tempfile
+from django.contrib.gis.gdal.geometries import Polygon,Point
 import geopandas as gpd
+from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
 	if(dic1.get('geometry')!=None):
 			try:
 				if(type(dic1.get('geometry'))==str):
-					setattr(obj,'location', GEOSGeometry(str(dic1.get('geometry') )))
+					#print( (dic1.get('geometry')) )
+					import json
+					from django.contrib.gis.geos import Point
+					from django.contrib.gis.geos import GEOSGeometry
+					data=json.loads(dic1.get('geometry'))
+					print( *(data['Point']['coordinates'] ))
+					print( Point (*(data['Point']['coordinates'])))
+					setattr(obj,'location',GEOSGeometry(str( Point (*(data['Point']['coordinates'])))))
+					print('rrrrr33422222')
 				else:
 					with open('m',mode='wb' ) as binary_file:
 						binary_file.write(dic1.get('geometry').read())
@@ -46,10 +55,15 @@ def set_geometry(obj:models.Model,dic1:dict[str,]):
 						print('end loop')
 						setattr(obj,'location',str(muilt_plog))
 					except:
+						print('gggggggr4554322')
 						import json
 						from django.contrib.gis.geos import GEOSGeometry
-						with open('m')as f:
-							data=json.loads(f.read())
+						try:
+							with open('m')as f:
+								data=json.loads(f.read())
+						except:
+							
+							data=json.loads(dic1.get('geometry'))
 						list1=[]
 						if(len(data['features'])>100):
 							count=100
@@ -60,13 +74,20 @@ def set_geometry(obj:models.Model,dic1:dict[str,]):
 							geom=GEOSGeometry(geom_str)
 							list1.append(geom)
 					
-				print(muilt_plog.geom_type)
-			except:
-				print('done error')
+					print(muilt_plog.geom_type)
+			except Exception as e:
+				print(e.args)
 				return JsonResponse({'Error':'file format error'})
+class CustomerAccessPermission(permissions.BasePermission):
+
+	def has_permission(self, request, view):
+		return True
+	def has_permission(self, request, view):
+		return True
 class CustomerBackend(BaseAuthentication):
 	def authenticate(self, request, **kwargs):
-		return (User.objects.get(ssn=3010906121153),None)
+		print(User.objects.all( )[0])
+		return (User.objects.all( )[0],None)
 class OncePerDayUserThrottle(UserRateThrottle):
 	rate = '1/day'
 @api_view(['GET','POST'])
@@ -75,20 +96,21 @@ class OncePerDayUserThrottle(UserRateThrottle):
 def governorate_api(request :Request):
 	print((request.data))
 	ser1=governorateSerializer( instance= governorate.objects.all() ,many=True)
+	print(ser1)
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def city_api(request :Request):
-	ser1=citySerializer( instance= city.objects.all().filter(governorate=governorate.objects.get(name=request.data['filter'])) ,many=True)
-	print(city.objects.all().filter(governorate=governorate.objects.get(name=request.data['filter'])))
+	ser1=citySerializer( instance= city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])) ,many=True)
+	print(city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])))
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def village_api(request :Request):
 	 
-	ser1=villageSerializer( instance= village.objects.all().filter(city=city.objects.get(name=request.data['filter'])) ,many=True)
+	ser1=villageSerializer( instance= village.objects.all().filter(city=city.objects.get(id=request.data['filter'])) ,many=True)
 	return response.Response(ser1.data)
 
 
@@ -100,10 +122,10 @@ def animal_plotoon_api(request :Request):
 	return response.Response(ser1.data)
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def animal_species_api(request :Request):
-	ser1=speciesSerializer( instance= species.objects.all().filter(platoon=platoon.objects.get(name=request.data['filter']))  ,many=True)
+	ser1=speciesSerializer( instance= species.objects.all().filter(platoon=platoon.objects.get(id=request.data['filter']))  ,many=True)
 	return response.Response(ser1.data)
 
 
@@ -122,10 +144,17 @@ def farm_type_api(request :Request):
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
-def check_email_password(request :Request):
-	print( request.data['ssn'])
-	User.objects.all().filter(ssn=request.data['ssn']).filter(password=request.data['ssn'])
-	return  JsonResponse({"token":"loop"})
+def login(request :Request):
+	user1=User.objects.all().filter(ssn=request.data['ssn']).filter(is_superuser=True )
+	print( user1.count())
+	if(user1.count()>0):
+		print(request.data.get('password'))
+		if(user1[0].check_password(request.data.get('password'))):
+			return  JsonResponse({"token":True})
+	else:
+		return JsonResponse({"token":False})
+
+'''
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -134,6 +163,8 @@ def check_email_password(request :Request):
 	print( type(request.data ))
 	User.objects.all().filter(ssn=request.data['ssn']).filter(password=request.data['ssn'])
 	return  JsonResponse({"token":"loop"})
+
+'''
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -164,10 +195,11 @@ def create_farm(request :Request):
 def modified_gavernorate(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
-		g1=governorate.objects.get(name=request.data['gavernorate']).delete()
+		g1=governorate.objects.get(id=request.data['gavernorate']).delete()
+		print(g1)
 		return  JsonResponse({"gg":g1})
 	if(oper=='update'):
-		g1=governorate.objects.get(name=request.data['gavernorate'])
+		g1=governorate.objects.get(id=request.data['gavernorate'])
 		set_geometry(obj=g1,dic1=request.data)
 		g1.name=request.data['new_name']
 		g1.save()
@@ -186,17 +218,17 @@ def modified_gavernorate(request :Request):
 def modified_city(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
-		g1=city.objects.get(name=request.data['city']).delete()
+		g1=city.objects.get(id=request.data['city']).delete()
 		return  JsonResponse({"gg":g1})
 	if(oper=='update'):
-		g1=city.objects.get(name=request.data['city'])
+		g1=city.objects.get(id=request.data['city'])
 		g1.name=request.data['new_name']
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
 	if(oper=='insert'):
 		g1=city()
 		g1.name=request.data['new_name']
-		g1.governorate=city.objects.get(name=request.data['city']).governorate
+		g1.governorate=city.objects.get(id=request.data['city']).governorate
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
 	g1=citySerializer(instance=g1)
@@ -208,17 +240,17 @@ def modified_city(request :Request):
 def modified_village(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
-		g1=village.objects.get(name=request.data['village']).delete()
+		g1=village.objects.get(id=request.data['village']).delete()
 		return  JsonResponse({"gg":g1})
 	if(oper=='update'):
-		g1=village.objects.get(name=request.data['village'])
+		g1=village.objects.get(id=request.data['village'])
 		set_geometry(obj=g1,dic1=request.data)
 		g1.name=request.data['new_name']
 		g1.save()
 	if(oper=='insert'):
 		g1=village()
 		g1.name=request.data['new_name']
-		g1.city=city.objects.get(name=request.data['city'])
+		g1.city=city.objects.get(id=request.data['city'])
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
 	print(g1.name)
@@ -244,13 +276,19 @@ def farm_api(request :Request):
 		farm1=farm()
 		dic1=request.data.dict() 
 		except1=set_geometry(obj=farm1,dic1=dic1)
+		print('done')
+		print(except1)
 		if(isinstance(except1,JsonResponse)):
+			
 			return except1
 		farm1.attached_area=dic1['attached_area']
 		print(dic1.get('farm_type')==None)
 		if(dic1.get('farm_type')==None):
 			return JsonResponse({'error': None})
-		dic1['farm_type']=json.loads((dic1['farm_type']))
+
+
+		import json
+		dic1['farm_type']= json.loads(dic1['farm_type'])
 		print(isinstance ( dic1.get('farm_type')    ,type(list())|type( set)|type(tuple) ) )
 		if(not isinstance ( dic1.get('farm_type')    ,type(list())|type( set)|type(tuple) )):
 			return JsonResponse({'error':"the farm  type should be iterable type"})
@@ -262,20 +300,18 @@ def farm_api(request :Request):
 		farm1.number_of_arc=float(dic1['number_of_arc'])
 		farm1.number_of_workers=dic1['number_of_workers']
 		farm1.playground=dic1['playground']
-		farm1.section_type=section_type.objects.get(name= dic1['section_type'])
+		farm1.section_type=section_type.objects.get(id= dic1['section_type'])
 		farm1.wards=dic1['wards']
-		farm1.village=village.objects.get(name=dic1['village'])
+		farm1.village=village.objects.get(id=dic1['village'])
 		farm1.total_area_of_farm=dic1['total_area_of_farm']
 		farm1.farm_name=dic1['farm_name']
 		farm1.huge_playground=dic1['huge_playground']
-
+		
 		farm1.id=dic1['id']
 		print(farm1.id)
-		print('done')
 		farm1.save()
-		print()
 		for i in set(dic1.get('farm_type')):
-			con_farmm_farmt1=connect_farmm_farmtype()
+			con_farmm_farmt1=connect_farm_farmtype()
 			con_farmm_farmt1.farm=farm1
 			con_farmm_farmt1.farm_type=farm_type.objects.get(name=i)
 			con_farmm_farmt1.save()
@@ -287,6 +323,7 @@ def farm_api(request :Request):
 				return JsonResponse({'message':'error', })
 			d1=farm.objects.all().filter(id=request.data.get('id')).delete()
 			print(d1)
+			return JsonResponse({"message":"sucess"})
 	if(request.data['operation']=='update'):
 			print(request.data.get("city"))
 			if(request.data.get('id')==None):
@@ -296,30 +333,35 @@ def farm_api(request :Request):
 			except:
 				return JsonResponse({'message':'id not valid', })
 			dic1=request.data.dict()
-			print(type(dic1) )
 			for key  in dic1:
-				print(dic1.get(key) )
+				if(key=='geometry'):
+					except1=set_geometry(obj=d1,dic1=dic1)
+					print('done')
+					print(except1)
+					if(isinstance(except1,JsonResponse)):
+						return except1
+					continue
 				if(key=='farm_type'):
 					import json
-					connect_farmm_farmtype.objects.all().filter(farm=farm.objects.get(id=request.data['id'])).delete()
+					connect_farm_farmtype.objects.all().filter(farm=farm.objects.get(id=request.data['id'])).delete()
 					for i in set(json.loads(dic1.get('farm_type'))):
-						con_farmm_farmt1=connect_farmm_farmtype()
+						con_farmm_farmt1=connect_farm_farmtype()
 						con_farmm_farmt1.farm=d1
 						con_farmm_farmt1.farm_type=farm_type.objects.get(name=i)
 						con_farmm_farmt1.save()
 					continue
 				if(key=='section_type'):
-					 
-					d1.section_type=section_type.objects.get(name= dic1['section_type'])
+					d1.section_type=section_type.objects.get(id= dic1['section_type'])
 					d1.save()
 					continue
 				if(key=='village'):
-					print( village.objects.all().filter(city=city.objects.get(name=request.data.get('city')),name=request.data.get('village')))
+					print( village.objects.all().filter( id=request.data.get('village')))
+					d1.village=village.objects.all().get( id=request.data.get('village'))
 					print(d1.village.name)
 					continue
-				print(key)
-				print(d1.village.name)
+					print(d1.village.name)
 				setattr(d1,key,request.data[key])
+
 			d1.save()
 
 			return JsonResponse({"error":"message"})
@@ -329,10 +371,10 @@ def farm_api(request :Request):
 def modified_species(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
-		g1=species.objects.get(name=request.data['species']).delete()
+		g1=species.objects.get(id=request.data['species']).delete()
 		return  JsonResponse({"gg":g1})
 	if(oper=='update'):
-		g1=species.objects.get(name=request.data['species'])
+		g1=species.objects.get(id=request.data['species'])
 		g1.name=request.data['new_name']
 		g1.save()
 	if(oper=='insert'):
@@ -350,14 +392,15 @@ def modified_species(request :Request):
 def modified_platoon(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
-		g1=platoon.objects.get(name=request.data['platoon']).delete()
+		g1=platoon.objects.get(id=request.data['platoon']).delete()
 		print(request.data)
 		return  JsonResponse({"gg":'kkk'})
 	if(oper=='update'):
-		g1=platoon.objects.get(name=request.data['gavernorate'])
+		g1=platoon.objects.get(id=request.data['platoon'])
 		g1.name=request.data['new_name']
 		g1.save()
 	if(oper=='insert'):
+		print(request.data)
 		g1=platoon()
 		g1.name=request.data['new_name']
 		g1.save()
@@ -389,6 +432,7 @@ def farmer_api(request :Request):
 			print(k)
 		dic1=request.data.dict()
 		dic1.pop('operation')
+	
 		user1:User=User.objects.get(ssn=int(request.data['ssn']))
 		for key,value in dic1.items() :
 			if(value ==None  and  key not in ['ssn','fnane','lname','email','password','phone','photo']):
@@ -408,31 +452,150 @@ def farmer_api(request :Request):
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
-def connect_farmer_farm(request :Request):
-	oper=request.data['operation']
-	if(oper=='delete'):
-		dic1=request.data.dict()
-		dic1.pop('operation')
-		user1:User=user1.objects.get(ssn=request.data['ssn'])
-		if(user1.is_superuser):
-			return  JsonResponse({"error":'it is not valid user'})
+def add_farm_animal(request :Request):
+	print(request.data)
+	from datetime import datetime
+	if(request.data['operation']=='insert'):
+		print(request.data)
+		print(farm.objects.all().filter( id=request.data.get('farm_id')).count())
+		if(request.data.get('date')!=None):
+			date=datetime.strptime(request.data.get('date'),'%Y-%m-%d %H:%M:%S.%f').date()
+			date=datetime(date.year,date.month,date.day,0,0,0)
+			print(species.objects.all().filter(id=request.data['species']).count())
+			if (connect_animal_farm.objects.filter(animal_sub_type=species.objects.all().get(id=request.data['species']).id,date=date,is_male=request.data.get('is_male'),farm_id=farm.objects.get(id= request.data.get('farm_id')).id).count()!=0):
+				connect_animal_farm1=connect_animal_farm.objects.get(animal_sub_type=species.objects.all().get(id=request.data['species']).id,date=date,is_male=request.data.get('is_male'),farm_id=farm.objects.get(id= request.data.get('farm_id')).id)
+				connect_animal_farm1.animal_number=request.data.get('animal_number')
+				connect_animal_farm1.date=date
+				connect_animal_farm1.save()
+			else:
+				connect_animal_farm1=connect_animal_farm()
+				connect_animal_farm1.animal_number=request.data.get('animal_number')
+				connect_animal_farm1.animal_sub_type=species.objects.get(id=request.data.get('species'))
+			#connect_animal_farm1.total_money=request.data.get('total_money')
+			bool1=False
+			print(type(request.data.get('is_male')))
+			if(request.data.get('is_male')=='1'):
+				print('kkkuuyytt')
+				bool1=True
+			connect_animal_farm1.is_male=bool1
+			connect_animal_farm1.farm_id=farm.objects.get(id= request.data.get('farm_id'))
+			connect_animal_farm1.date=date.date()
+			connect_animal_farm1.save()
 		else:
-			user1.delete()
-	if(oper=='update'):
-		dic1=request.data.dict()
-		dic1.pop('operation')
-		for i in User.objects.all():
-			print(i.ssn==request.data['ssn'])
-		for key,value in request.data.dict() and value !=None  and key in ['ssn','fnane','lname','email','password','phone','photo']:
-			setattr(user1,key,value)
-		user1.save()
-	if(oper=='insert'):
-		dic1=request.data.dict()
-		dic1.pop('operation')
-		print(set(dic1) ,set(['ssn','fname','lname','email','password','phone','photo','job','age']))
-		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
-			print(dic1)
-			user1=User.objects.create_user(**dic1)
-	
-	user1=FarmerSerializer(instance= user1)
-	return  response.Response(data=user1.data)
+			connect_animal_farm1=connect_animal_farm()
+			connect_animal_farm1.animal_number=request.data.get('animal_number')
+			connect_animal_farm1.animal_sub_type=species.objects.get(id=request.data.get('species'))
+			#connect_animal_farm1.total_money=request.data.get('total_money')
+			bool1=False
+			print(type(request.data.get('is_male')))
+			if(request.data.get('is_male')=='1'):
+				print('kkkuuyytt')
+				bool1=True
+			connect_animal_farm1.is_male=bool1
+			connect_animal_farm1.farm_id=farm.objects.get( id=request.data.get('farm_id'))
+			connect_animal_farm1.date=datetime(datetime.now().year,datetime.now().month,datetime.now().day,0,0,0).date()
+			connect_animal_farm1.save()
+		user1=connectFarmAnimalSeralizer(instance= connect_animal_farm1)
+		return  response.Response(data=user1.data)
+	if(request.data['operation']=='delete'):
+		date=datetime.strptime(request.data.get('date'),'%Y-%m-%d %H:%M:%S.%f').date()
+		date=datetime(date.year,date.month,date.day,0,0,0)
+		con1=connect_animal_farm.objects.filter(date=date ,farm_id=farm.objects.get( id=request.data.get('farm_id')) ,is_male=request.data.get('is_male'),animal_sub_type=species.objects.get(id=request.data.get('species'))).delete()
+		if(request.data['animal_number']!=None):
+			con1.animal_number-=request.data['animal_number']
+			con1.save()
+		else:
+			con1.delete()
+		return JsonResponse({"message":con1})
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def get_locations(request :Request):
+	pass
+	g1=village.objects.all()[0]
+	g1Seralizer= locatinSeralizer(instance=g1)
+	print(g1Seralizer.data )
+	return response.Response(data=g1Seralizer.data)
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def get_animal(request :Request):
+	pass
+	g1=species.objects.all()[0]
+	g1Seralizer= animalSeralizer(instance=g1)
+	print(g1Seralizer.data )
+	return response.Response(data=g1Seralizer.data)
+
+@api_view(['GET','POST'])
+@permission_classes([CustomerAccessPermission])
+@authentication_classes([CustomerBackend])
+def change_password_email(request :Request):
+	if(User.objects.filter(email=request.data['email']).count()==0):
+		print('uuuuuuuuuuuuuuuuuuuuuuuu')
+		return JsonResponse({"error":"login first"})
+	from uuid import uuid4
+	code=uuid4()
+	render(request,template_name='confirm_code.html', context={"code":code})
+	print('jjuuuuuuuuffrrrr\n')
+	html_content = render_to_string('confirm_code.html', context={"code":code}).strip()
+	subject = 'HTML Email'
+
+
+	msg = EmailMultiAlternatives(subject, html_content,from_email=settings.EMAIL_HOST_USER , to=[request.data.get('email')],reply_to= [request.data.get('email')])
+	msg.content_subtype = 'html'  # Main content is text/html
+	msg.mixed_subtype = 'related'
+	 # This is critical, otherwise images will be displayed as attachments!
+	msg.send()
+	print(code)
+	import redis
+	r=redis.Redis()
+	#send_mail('change_password','the code is   '+str(code  ),settings.EMAIL_HOST_USER,[request.data.get('email')],fail_silently=False)
+	r.setex(name=str(code  ),time=5*60,value=request.data.get('email'))
+	return JsonResponse({"message":code})
+
+@api_view(['GET','POST'])
+@permission_classes([CustomerAccessPermission])
+@authentication_classes([CustomerBackend])
+def change_password_done(request :Request):
+	import redis
+	r=redis.Redis()
+	email=r.get(request.data.get('code'))
+	print(email)
+	print(request.data.get('password'))
+	if(isinstance(email,bytes)):
+		email=email.decode()
+	if(email!=None):
+		print('kkjjuytrewww123\n')
+		print(email)
+		user=User.objects.get(email=email)
+		user.set_password(request.data.get('password'))
+		user.save()
+	return JsonResponse({"message":'done'})
+
+
+
+
+
+@api_view(['GET','POST'])
+@permission_classes([CustomerAccessPermission])
+@authentication_classes([CustomerBackend])
+def connect_farm_farmer_api(request :Request):
+	if(request.data.get('operation')=='insert'):
+		print(request.data.get('farm_id'))
+		try:
+			connect_farm_farmer1=connect_farm_farmer()
+			connect_farm_farmer1.farmer=User.objects.get(ssn=request.data.get('farmer_id'))
+			connect_farm_farmer1.farm=farm.objects.get(id=request.data.get('farm_id'))
+			connect_farm_farmer1.total_cost=request.data.get('total_cost')
+			connect_farm_farmer1.save()
+			con1=connectFarmFarmerSeralizer(instance=connect_farm_farmer1)
+		except:
+			print('hhhhtttrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+			connect_farm_farmer1=connect_farm_farmer.objects.get(farmer_id=User.objects.get(ssn=request.data.get('farmer_id')),farm=farm.objects.get(id=request.data.get('farm_id')))
+			connect_farm_farmer1.total_cost=request.data.get('total_cost')
+			con1=connectFarmFarmerSeralizer(instance=connect_farm_farmer1)
+		return response.Response(data=con1.data)
+	if(request.data.get('operation')=='delete'):
+		connect_farm_farmer1=connect_farm_farmer.objects.filter(farm=request.data.get('farm_id'),farmer=request.data.get('farmer_id')).delete()
+		return JsonResponse({"message":connect_farm_farmer1})

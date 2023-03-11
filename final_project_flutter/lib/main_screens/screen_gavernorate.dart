@@ -40,169 +40,247 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
       return Center(
         child: Container(
           width: 500,
-          child: SingleChildScrollView(
-            child: Card(
-              color: Color(0xFF357515),
-              elevation: 20,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Text('تعديل في المحافظات',
-                      style: TextStyle(color: Colors.white, fontSize: 20)),
-                  Container(
-                    child: BlocProvider(
-                      create: (context) => LocationCubit(
-                          city: 'مركز دكرنس',
-                          gavernorate: 'الدقهلية',
-                          village: 'الجزيره'),
-                      child: selectGavernorate,
-                    ),
-                  ),
-                  TextField(
-                      controller: controller,
-                      style: TextStyle(color: Colors.brown),
-                      decoration: InputDecoration(
-                          hintText: "تعديل الاسم",
-                          fillColor: Colors.white,
-                          filled: true,
-                          prefixIcon: Icon(
-                            Icons.email,
-                            color: Colors.white,
+          child: Card(
+            color: Color(0xFF357515),
+            elevation: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text('تعديل في المحافظات',
+                    style: TextStyle(color: Colors.white, fontSize: 20)),
+                /*
+                    
+                    FutureBuilder(
+                    future: location_api(),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.done &&
+                          snap.data is List<Map<String, dynamic>> &&
+                          snap.data!.isNotEmpty) {
+                        return BlocProvider(
+                          create: (context) => LocationCubit(
+                            city: snap.data![0]['city']!,
+                            gavernorate: snap.data![0]['governorate'],
+                            village: snap.data![0]['village']!,
                           ),
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.brown, width: 5)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.brown, width: 2)),
-                          focusColor: Colors.brown,
-                          enabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.brown, width: 2)))),
-                  //googleMapComponent,
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize:
-                                MaterialStateProperty.all(const Size(200, 50)),
-                            shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.grey),
-                            overlayColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.red)),
-                        onPressed: () async {
-                          Map<String, dynamic> dic1 = {
-                            'operation': 'delete',
-                            'gavernorate':
-                                selectGavernorate.gavernorate.toString(),
-                            'new_name': controller.text
-                          };
-                          selectGavernorate = SelectGavernorate(
-                            title: 'المحافظة',
-                            list: const [
-                              {"id": "اسيوط"},
-                              {"id": "القاهرة"},
-                              {"id": "المنةفية"}
-                            ],
+                          child: selectCity,
+                        );
+                      }
+                      return Container();
+                    }),
+                    
+                    */
+                Container(
+                  child: FutureBuilder(
+                      future: location_api(),
+                      builder: (context, snap) {
+                        if (snap.connectionState == ConnectionState.done &&
+                            snap.data is List<Map<String, dynamic>> &&
+                            snap.data!.isNotEmpty) {
+                          return BlocProvider(
+                            create: (context) =>LocationCubit(
+                            city: snap.data![0]['city']!,
+                            gavernorate: snap.data![0]['governorate'],
+                            village: snap.data![0]['village']!,
+                          ),
+                            child: selectGavernorate,
                           );
-                          setState(() {});
-                          modify_gavernorate_api(dic1: dic1);
-                        },
-                        child: const Text(
-                          "مسح",
-                          style: TextStyle(color: Colors.white),
+                        }
+                        return Container();
+                      }),
+                ),
+                TextField(
+                    controller: controller,
+                    style: TextStyle(color: Colors.brown),
+                    decoration: InputDecoration(
+                        hintText: "تعديل الاسم",
+                        fillColor: Colors.white,
+                        filled: true,
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.white,
                         ),
+                        border: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.brown, width: 5)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.brown, width: 2)),
+                        focusColor: Colors.brown,
+                        enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.brown, width: 2)))),
+                //googleMapComponent,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize:
+                              MaterialStateProperty.all(const Size(200, 50)),
+                          shape: MaterialStateProperty.resolveWith((states) =>
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.red)),
+                      onPressed: () async {
+                        Map<String, dynamic> dic1 = {
+                          'operation': 'delete',
+                          'gavernorate':
+                              selectGavernorate.gavernorate.toString(),
+                          'new_name': controller.text
+                        };
+                        selectGavernorate = SelectGavernorate(
+                          title: 'المحافظة',
+                          list: const [
+                            {"id": "اسيوط"},
+                            {"id": "القاهرة"},
+                            {"id": "المنةفية"}
+                          ],
+                        );
+                        await modify_gavernorate_api(dic1: dic1);
+                        selectGavernorate = SelectGavernorate(
+                          title: 'المحافظة',
+                          list: const [
+                            {"id": "اسيوط"},
+                            {"id": "القاهرة"},
+                            {"id": "المنةفية"}
+                          ],
+                        );
+                        setState(() {});
+                      },
+                      child: const Text(
+                        "مسح",
+                        style: TextStyle(color: Colors.white),
                       ),
-                      const SizedBox(
-                        height: 10,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize:
+                              MaterialStateProperty.all(const Size(200, 50)),
+                          shape: MaterialStateProperty.resolveWith((states) =>
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.brown)),
+                      onPressed: () async {
+                        Map<String, dynamic> dic1 = {
+                          'operation': 'update',
+                          'gavernorate':
+                              selectGavernorate.gavernorate.toString(),
+                          'new_name': controller.text
+                        };
+                        if (googleMapComponent.point is LatLng) {
+                          dic1['geometry'] = json.encode({
+                            "type": "Point",
+                            "coordinates": [
+                              googleMapComponent.point!.latitude,
+                              googleMapComponent.point!.longitude
+                            ]
+                          });
+                        } else if (googleMapComponent.file is String) {
+                          dic1['geometry'] = dio.MultipartFile.fromBytes(
+                              await File(googleMapComponent.file.toString())
+                                  .readAsBytes(),
+                              filename: 'locations.zip');
+                        } else {
+                          dic1['geometry'] = null;
+                        }
+                        selectGavernorate = SelectGavernorate(
+                          title: 'المحافظة',
+                          list: const [
+                            {"id": "اسيوط"},
+                            {"id": "القاهرة"},
+                            {"id": "المنةفية"}
+                          ],
+                        );
+                        await modify_gavernorate_api(dic1: dic1);
+                        selectGavernorate = SelectGavernorate(
+                          title: 'المحافظة',
+                          list: const [
+                            {"id": "اسيوط"},
+                            {"id": "القاهرة"},
+                            {"id": "المنةفية"}
+                          ],
+                        );
+                        setState(() {});
+                      },
+                      child: const Text(
+                        "تعديل",
+                        style: TextStyle(color: Colors.white),
                       ),
-                      OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize:
-                                MaterialStateProperty.all(const Size(200, 50)),
-                            shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.grey),
-                            overlayColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.brown)),
-                        onPressed: () async {},
-                        child: const Text(
-                          "حفظ",
-                          style: TextStyle(color: Colors.white),
-                        ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    OutlinedButton(
+                      style: ButtonStyle(
+                          fixedSize:
+                              MaterialStateProperty.all(const Size(200, 50)),
+                          shape: MaterialStateProperty.resolveWith((states) =>
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.grey),
+                          overlayColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.brown)),
+                      onPressed: () async {
+                        Map<String, dynamic> dic1 = {
+                          'operation': 'insert',
+                          'gavernorate':
+                              selectGavernorate.gavernorate.toString(),
+                          'new_name': controller.text
+                        };
+                        if (googleMapComponent.point is LatLng) {
+                          dic1['geometry'] = json.encode({
+                            "type": "Point",
+                            "coordinates": [
+                              googleMapComponent.point!.latitude,
+                              googleMapComponent.point!.longitude
+                            ]
+                          });
+                        } else if (googleMapComponent.file is String) {
+                          dic1['geometry'] = dio.MultipartFile.fromBytes(
+                              await File(googleMapComponent.file.toString())
+                                  .readAsBytes(),
+                              filename: 'locations.zip');
+                        } else {
+                          dic1['geometry'] = null;
+                        }
+                        selectGavernorate = SelectGavernorate(
+                          title: 'المحافظة',
+                          list: const [
+                            {"id": "اسيوط"},
+                            {"id": "القاهرة"},
+                            {"id": "المنةفية"}
+                          ],
+                        );
+                        await modify_gavernorate_api(dic1: dic1);
+                        selectGavernorate = SelectGavernorate(
+                          title: 'المحافظة',
+                          list: const [
+                            {"id": "اسيوط"},
+                            {"id": "القاهرة"},
+                            {"id": "المنةفية"}
+                          ],
+                        );
+                        setState(() {});
+                      },
+                      child: const Text(
+                        "اضافة",
+                        style: TextStyle(color: Colors.white),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize:
-                                MaterialStateProperty.all(const Size(200, 50)),
-                            shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30))),
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.grey),
-                            overlayColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.brown)),
-                        onPressed: () async {
-                          Map<String, dynamic> dic1 = {
-                            'operation': 'update',
-                            'gavernorate':
-                                selectGavernorate.gavernorate.toString(),
-                            'new_name': controller.text
-                          };
-                          if (googleMapComponent.point is LatLng) {
-                            dic1['geometry'] = json.encode({
-                              "type": "Point",
-                              "coordinates": [
-                                googleMapComponent.point!.latitude,
-                                googleMapComponent.point!.longitude
-                              ]
-                            });
-                          } else if (googleMapComponent.file is String) {
-                            dic1['geometry'] = dio.MultipartFile.fromBytes(
-                                await File(googleMapComponent.file.toString())
-                                    .readAsBytes(),
-                                filename: 'locations.zip');
-                          } else {
-                            dic1['geometry'] = null;
-                          }
-                          selectGavernorate = SelectGavernorate(
-                            title: 'المحافظة',
-                            list: const [
-                              {"id": "اسيوط"},
-                              {"id": "القاهرة"},
-                              {"id": "المنةفية"}
-                            ],
-                          );
-                          modify_gavernorate_api(dic1: dic1);
-                          selectGavernorate = SelectGavernorate(
-                            title: 'المحافظة',
-                            list: const [
-                              {"id": "اسيوط"},
-                              {"id": "القاهرة"},
-                              {"id": "المنةفية"}
-                            ],
-                          );
-                          setState(() {});
-                        },
-                        child: const Text(
-                          "اضافة",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -237,8 +315,10 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data is List<Map<String, String>> &&
                   snap.data!.isNotEmpty) {
-                widget.gavernorate = snap.data![0]['name']!;
+                print(snap.data);
+                widget.gavernorate = snap.data![0]['id']!;
                 return CustomeDropdownButton(
+                    id: 'id',
                     func: (String value) {
                       BlocProvider.of<LocationCubit>(context)
                           .updateGavernorate(value);
@@ -246,7 +326,7 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
                     },
                     list: snap.data!,
                     expanded: true,
-                    value: snap.data![0]['name']!,
+                    value: snap.data![0]['id']!,
                     text: widget.title);
               }
               return Container();
@@ -290,13 +370,14 @@ class _SelectCityState extends State<SelectCity> {
                       snap.data is List<Map<String, String>> &&
                       snap.data!.isNotEmpty)
                     return CustomeDropdownButton(
+                        id: 'id',
                         func: (String value) {
                           BlocProvider.of<LocationCubit>(context)
                               .updateGavernorate(value);
                         },
                         list: snap.data ?? [],
                         expanded: true,
-                        value: snap.data![0]['name']!,
+                        value: snap.data![0]['id']!,
                         text: widget.titles[0]);
                   return Container();
                 })),
@@ -317,8 +398,10 @@ class _SelectCityState extends State<SelectCity> {
                     if (snap.connectionState == ConnectionState.done &&
                         snap.data is List<Map<String, String>> &&
                         snap.data!.isNotEmpty) {
-                      widget.city = snap.data![0]['name']!;
+                      print(snap.data);
+                      widget.city = snap.data![0]['id']!;
                       return CustomeDropdownButton(
+                          id: 'id',
                           func: (String value) {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateCity(value);
@@ -326,7 +409,7 @@ class _SelectCityState extends State<SelectCity> {
                           },
                           list: snap.data ?? [],
                           expanded: true,
-                          value: snap.data![0]['name']!,
+                          value: snap.data![0]['id']!,
                           text: widget.titles[1]);
                     }
 
@@ -379,11 +462,23 @@ class _ScreenCityState extends State<ScreenCity> {
               children: [
                 const Text('تعديل في المحافظات',
                     style: TextStyle(color: Colors.white, fontSize: 20)),
-                BlocProvider(
-                  create: (context) =>
-                      LocationCubit(city: '', gavernorate: '', village: ''),
-                  child: selectCity,
-                ),
+                FutureBuilder(
+                    future: location_api(),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.done &&
+                          snap.data is List<Map<String, dynamic>> &&
+                          snap.data!.isNotEmpty) {
+                        return BlocProvider(
+                          create: (context) => LocationCubit(
+                            city: snap.data![0]['city']!,
+                            gavernorate: snap.data![0]['governorate'],
+                            village: snap.data![0]['village']!,
+                          ),
+                          child: selectCity,
+                        );
+                      }
+                      return Container();
+                    }),
                 TextField(
                     controller: controller,
                     style: TextStyle(color: Colors.brown),
@@ -435,7 +530,7 @@ class _ScreenCityState extends State<ScreenCity> {
                         } else {
                           dic1['geometry'] = null;
                         }
-                        modify_city_api(dic1: dic1);
+                        await modify_city_api(dic1: dic1);
                         selectCity = SelectCity(
                           list2: const [
                             {"id": "القاهرة"},
@@ -469,13 +564,13 @@ class _ScreenCityState extends State<ScreenCity> {
                               (states) => Colors.grey),
                           overlayColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.red)),
-                      onPressed: () {
+                      onPressed: () async {
                         Map<String, dynamic> dic1 = {
                           'operation': 'delete',
                           'city': selectCity.city.toString(),
                           'new_name': controller.text
                         };
-                        modify_city_api(dic1: dic1);
+                        await modify_city_api(dic1: dic1);
                         selectCity = SelectCity(
                           list2: const [
                             {"id": "القاهرة"},
@@ -532,7 +627,7 @@ class _ScreenCityState extends State<ScreenCity> {
                         } else {
                           dic1['geometry'] = null;
                         }
-                        modify_city_api(dic1: dic1);
+                        await modify_city_api(dic1: dic1);
                         selectCity = SelectCity(
                           list2: const [
                             {"id": "القاهرة"},
@@ -571,9 +666,7 @@ class ScreenVillage extends StatefulWidget {
 }
 
 class _ScreenVillageState extends State<ScreenVillage> {
-  SelectLocation selectLocation = SelectLocation(
-    village: '',city:""
-  );
+  SelectLocation selectLocation = SelectLocation(village: '', city: "");
 
   TextEditingController controller = TextEditingController();
 
@@ -581,7 +674,9 @@ class _ScreenVillageState extends State<ScreenVillage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(height:500,width:500,
+    return Container(
+      height: 500,
+      width: 500,
       child: SingleChildScrollView(
         child: Card(
           color: Color(0xFF357515),
@@ -594,9 +689,9 @@ class _ScreenVillageState extends State<ScreenVillage> {
                   style: TextStyle(color: Colors.white, fontSize: 20)),
               BlocProvider(
                 create: (context) => LocationCubit(
-                    city: 'مركز دكرنس',
-                    gavernorate: 'الدقهلية',
-                    village: 'الجزيره'),
+                    city: '039f34ca-a49f-4b95-8364-785d270b4b87',
+                    gavernorate: '52dadd31-ce6a-47f2-9710-5232d67b9c23',
+                    village: '254422a0-97f2-480e-b42d-eabf5c7c66b7'),
                 child: Builder(builder: (context) {
                   selectLocation.village = '';
                   return selectLocation;
@@ -632,7 +727,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
                 children: [
                   OutlinedButton(
                     style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(200, 50)),
                         shape: MaterialStateProperty.resolveWith((states) =>
                             RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30))),
@@ -643,18 +739,14 @@ class _ScreenVillageState extends State<ScreenVillage> {
                     onPressed: () {
                       Map<String, dynamic> dic1 = {
                         'operation': 'delete',
-                        'city':selectLocation.city,
+                        'city': selectLocation.city,
                         'village': selectLocation.village.toString(),
                         'new_name': controller.text
                       };
-                      selectLocation = SelectLocation(
-    village: '',city:""
-  );
+                      selectLocation = SelectLocation(village: '', city: "");
 
                       modify_village_api(dic1: dic1);
-                      selectLocation = SelectLocation(
-                        village: '',city:""
-                      );
+                      selectLocation = SelectLocation(village: '', city: "");
                       print('delete');
                       setState(() {});
                     },
@@ -668,7 +760,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(200, 50)),
                         shape: MaterialStateProperty.resolveWith((states) =>
                             RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30))),
@@ -679,7 +772,7 @@ class _ScreenVillageState extends State<ScreenVillage> {
                     onPressed: () async {
                       Map<String, dynamic> dic1 = {
                         'operation': 'insert',
-                        'city':selectLocation.city,
+                        'city': selectLocation.city,
                         'village': selectLocation.village.toString(),
                         'new_name': controller.text
                       };
@@ -700,12 +793,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
                         dic1['geometry'] = null;
                       }
                       modify_village_api(dic1: dic1);
-                      selectLocation = SelectLocation(
-                        village: '',city:""
-                      );
-                      selectLocation = SelectLocation(
-    village: '',city:""
-  );
+                      selectLocation = SelectLocation(village: '', city: "");
+                      selectLocation = SelectLocation(village: '', city: "");
 
                       setState(() {});
                     },
@@ -719,7 +808,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
-                        fixedSize: MaterialStateProperty.all(const Size(200, 50)),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(200, 50)),
                         shape: MaterialStateProperty.resolveWith((states) =>
                             RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30))),
@@ -730,7 +820,7 @@ class _ScreenVillageState extends State<ScreenVillage> {
                     onPressed: () async {
                       Map<String, dynamic> dic1 = {
                         'operation': 'insert',
-                        'city':selectLocation.city,
+                        'city': selectLocation.city,
                         'village': selectLocation.village.toString(),
                         'new_name': controller.text
                       };
@@ -751,12 +841,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
                         dic1['geometry'] = null;
                       }
                       modify_village_api(dic1: dic1);
-                      selectLocation = SelectLocation(
-                        village: '',city:""
-                      );
-                      selectLocation = SelectLocation(
-    village: '',city:""
-  );
+                      selectLocation = SelectLocation(village: '', city: "");
+                      selectLocation = SelectLocation(village: '', city: "");
 
                       setState(() {});
                     },

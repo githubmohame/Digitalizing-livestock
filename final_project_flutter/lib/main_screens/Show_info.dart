@@ -17,7 +17,10 @@ class ShowInfoScreen extends StatelessWidget {
                 child: AppBar(
                     backgroundColor: Colors.brown,
                     title: const Center(
-                      child: Text("عرض معلومات المربي",style: TextStyle(color: Colors.white),),
+                      child: Text(
+                        "عرض معلومات المربي",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     )))),
         body: SafeArea(
           child: LayoutBuilder(builder: (context, con) {
@@ -26,138 +29,40 @@ class ShowInfoScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  width: con.maxWidth > 800 ? con.maxWidth : 800,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(color: Colors.brown.shade100),
-                        child: LayoutBuilder(builder: (context, con) {
-                          return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                    width: con.maxWidth / 6,
-                                    child: const Text("السجل التجاري")),
-                                Expanded(
-                                    child: SizedBox(
-                                        width: con.maxWidth / 6,
-                                        child: const Text("عدد الرؤس"))),
-                                Expanded(
-                                    child: SizedBox(
-                                        width: con.maxWidth / 6,
-                                        child: const Text("الفصيلة"))),
-                                Expanded(
-                                    child: SizedBox(
-                                        width: con.maxWidth / 5,
-                                        child: const Text("التكلفة الكلية"))),
-                                SizedBox(
-                                    width: con.maxWidth / 6,
+                    width: con.maxWidth > 800 ? con.maxWidth : 800,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                             Expanded(child: Text('عدد الرؤوس')),
+                            Expanded(child: Text('الفصيلة')),
+                            Expanded(child: Text('التاريخ')),
+                            Expanded(
+                                child: ElevatedButton(
+                                    onPressed: () {}, child: Text('الخريطة'))),
+                            
+                          ],
+                        ),
+                        Container(height: 1,color: Colors.grey,),
+                        Container(height: 900-20,
+                              child: ListView.builder(itemCount: 100,
+                                itemBuilder: (context, index) {
+                                 return Container(height: 70,
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text("اتثي"),
+                                      children: [
+                                         Expanded(child: Text('عدد الرؤوس')),
+                                        Expanded(child: Text('الفصيلة')),
+                                        Expanded(child: Text('التاريخ')),
+                                        Expanded(
+                                            child: Container()),
                                       ],
-                                    )),
-                                Expanded(
-                                    child: Container(
-                                  width: con.maxWidth / 6,
-                                ))
-                              ]);
-                        }),
-                      ),
-                      Container(
-                          height: MediaQuery.of(context).size.height - 55 - 18,
-                          width: con.maxWidth > 800.0 ? con.maxWidth : 800.0,
-                          decoration:
-                              BoxDecoration(color: Colors.blue.shade100),
-                          child: ListView.builder(
-                              itemCount: 1000,
-                              // ignore: non_constant_identifier_names, avoid_types_as_parameter_names
-                              itemBuilder: (BuildContext, int) {
-                                if (int % 2 == 0) {
-                                  return Container(
-                                    color: Colors.brown,
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Expanded(
-                                              child: Text(
-                                                  "5tty667yyyuuuuiioo")),
-                                          Expanded(
-                                              child: Container(
-                                                  child: const Text("128797"))),
-                                          Expanded(
-                                              child: Container(
-                                                  child: const Text(
-                                                      "اافغغععهعاففققثث"))),
-                                          Expanded(
-                                              child: const Text("896667787666689")),
-                                          Expanded(
-                                            child: Checkbox(
-                                              value: true,
-                                              onChanged: (value) {},
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: CustomeButton(customeSecondColor: Colors.grey,
-                                              customeMainColor: Colors.brown,
-                                              cost: 655788543,
-                                              farmCode: 'ooiuu6788',
-                                              ssn: 9880088877,
-                                              female: true,
-                                              subtype: 'kklliio',
-                                              totalAnimal: 86,
-                                            ),
-                                          )
-                                        ]),
+                                    ),
                                   );
-                                } else {
-                                  //print(int % 2 == 0);
-                                  return Container(
-                                    color: Colors.grey,
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Expanded(
-                                              child: Text(
-                                                  "5tty667yyyuuuuiioo")),
-                                          const Expanded(
-                                              child: Text("128797")),
-                                          const Expanded(
-                                              child: Text(
-                                                  "اافغغععهعاففققثث")),
-                                          Expanded(
-                                              child: Container(
-                                                  child:
-                                                      const Text("896667787666689"))),
-                                          Expanded(
-                                            child: Checkbox(
-                                              value: false,
-                                              onChanged: (value) {},
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: CustomeButton(customeSecondColor: Colors.brown,
-                                              customeMainColor: Colors.grey,
-                                              cost: 655788543,
-                                              farmCode: 'ooiuu6788',
-                                              ssn: 9880088877,
-                                              female: true,
-                                              subtype: 'kklliio',
-                                              totalAnimal: 86,
-                                            ),
-                                          )
-                                        ]),
-                                  );
-                                }
-                              })),
-                    ],
-                  ),
-                ),
+                                },
+                              ),
+                            )
+                      ],
+                    )),
               ),
             );
           }),
@@ -178,7 +83,8 @@ class CustomeButton extends StatelessWidget {
   Color customeSecondColor;
   int totalAnimal;
   CustomeButton(
-      {required this.ssn,required this.customeSecondColor,
+      {required this.ssn,
+      required this.customeSecondColor,
       required this.farmCode,
       required this.female,
       required this.cost,

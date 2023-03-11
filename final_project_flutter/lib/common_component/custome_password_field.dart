@@ -26,7 +26,7 @@ class _CustomePasswordEnterTextFieldState
     return Form(
       key: widget.f,
       child: Container(
-        height: 138+24,
+        height: 138 + 24,
         color: Colors.transparent,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,8 +86,8 @@ class _CustomePasswordEnterTextFieldState
 }
 
 class CustomePasswordUpdateTextField extends StatefulWidget {
-  const CustomePasswordUpdateTextField({super.key});
-
+    CustomePasswordUpdateTextField({super.key});
+   TextEditingController controller = TextEditingController();
   @override
   State<CustomePasswordUpdateTextField> createState() =>
       _CustomePasswordUpdateTextFieldState();
@@ -104,7 +104,7 @@ class _CustomePasswordUpdateTextFieldState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
+          TextField(controller: widget.controller,
             obscureText: !showPassword,
             obscuringCharacter: '*',
             decoration: InputDecoration(

@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
+import 'package:final_project_year/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +19,12 @@ class ConnectAnimalFarm extends StatelessWidget {
     TextEditingController(),
     TextEditingController()
   ];
+  CustomeCheckbox customeCheckbox = CustomeCheckbox(
+    value: false,
+    text: "انثي",
+  );
+  DateTime? date;
+  SelectAnimalType animalType = SelectAnimalType();
   bool isCheck = false;
   @override
   Widget build(BuildContext context) {
@@ -42,71 +50,69 @@ class ConnectAnimalFarm extends StatelessWidget {
                 width: 700,
                 child: SingleChildScrollView(
                   child: Form(
+                      key: _formKey,
                       child: Column(
-                    children: [
-                      TextFormField(
-                        controller: list[0],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: InputBorder.none,
-                            hintText: "السجل التجاري"),
-                        keyboardType: TextInputType.text,
-                      ),
-                      Container(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        controller: list[0],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: InputBorder.none,
-                            hintText: 'اسم المزرعة'),
-                        keyboardType: TextInputType.text,
-                      ),
-                      Container(
-                        height: 10,
-                      ),
-                      TextFormField(
-                        controller: list[2],
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                            fillColor: Colors.white,
-                            filled: true,
-                            border: InputBorder.none,
-                            hintText: "عدد الحيوانات"),
-                        keyboardType: TextInputType.number,
-                      ),
-                      Container(
-                        height: 10,
-                      ),
-                      Container(
-                        height: 150,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: BlocProvider<AnimalCubit>(
-                                create: (context) => AnimalCubit(
-                                    platoon: 'الابقار', species: ''),
-                                child: SelectAnimalType(),
-                              ),
+                        children: [
+                          TextFormField(
+                            controller: list[0],
+                            validator: (value) {
+                              if (funcStringValidation(
+                                      value: value.toString(),
+                                      errorHeight: 0.0) ==
+                                  0.0) {
+                                return null;
+                              }
+                              return 'the field is required';
+                            },
+                            decoration: const InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: InputBorder.none,
+                                hintText: "السجل التجاري"),
+                            keyboardType: TextInputType.text,
+                          ),
+                          Container(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: list[1],
+                            validator: (value) {
+                              if (funcNumValidation(
+                                      value: value.toString(),
+                                      errorHeight: 0.0) ==
+                                  0) {
+                                return null;
+                              }
+                              return 'the number is not a number';
+                            },
+                            decoration: const InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                border: InputBorder.none,
+                                hintText: "عدد الحيوانات"),
+                            keyboardType: TextInputType.number,
+                          ),
+                          Container(
+                            height: 10,
+                          ),
+                          Container(
+                            height: 150,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: BlocProvider<AnimalCubit>(
+                                    create: (context) => AnimalCubit(
+                                        platoon: 'الابقار', species: ''),
+                                    child: animalType,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 0,
-                      ),
-                      TextFormField(
+                          ),
+                          Container(
+                            height: 0,
+                          ),
+                          /*TextFormField(
                         controller: list[3],
                         validator: (value) {
                           return null;
@@ -120,60 +126,107 @@ class ConnectAnimalFarm extends StatelessWidget {
                       ),
                       Container(
                         height: 0,
-                      ),
-                      CustomeCheckbox(
-                        value: false,
-                        text: "انثي",
-                      ),
-                      Container(
-                        height: 10,
-                      ),
-                      Wrap(
-                        children: [
-                          OutlinedButton(
-                            style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(
-                                    const Size(200, 50)),
-                                shape: MaterialStateProperty.resolveWith(
-                                    (states) => RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero)),
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith(
-                                        (states) => Colors.green),
-                                overlayColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.green)),
-                            onPressed: () {},
-                            child: const Text(
-                              "حفظ",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
+                      ),*/
+                          customeCheckbox,
+                          ElevatedButton(
+                              onPressed: () async {
+                                date = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(1990),
+                                    lastDate: DateTime(2050));
+                              },
+                              child: Text('choose date')),
                           Container(
-                            width: 20,
-                            height: 20,
+                            height: 10,
                           ),
-                          OutlinedButton(
-                            style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(
-                                    const Size(200, 50)),
-                                shape: MaterialStateProperty.resolveWith(
-                                    (states) => RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero)),
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith(
-                                        (states) => Colors.red),
-                                overlayColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.red)),
-                            onPressed: () {},
-                            child: const Text(
-                              "حذف",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                          Wrap(
+                            children: [
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                        const Size(200, 50)),
+                                    shape: MaterialStateProperty.resolveWith(
+                                        (states) => RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.zero)),
+                                    backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.green),
+                                    overlayColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.green)),
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    int k = 0;
+                                    print(customeCheckbox.value);
+                                    if (customeCheckbox.value) {
+                                      k = 1;
+                                    }
+                                    print(k);
+                                    Map<String, dynamic> dic1 = {
+                                      'operation': "insert",
+                                      'species': animalType.subtype,
+                                      "farm_id": list[0].text,
+                                      'animal_number': list[1].text,
+                                      'date': date,
+                                      "is_male": k,
+                                    };
+                                    print(animalType.subtype);
+                                    FormData formData = FormData.fromMap(
+                                        dic1, ListFormat.multi, false);
+                                    add_farmer_animal_api(form: formData);
+                                  }
+                                },
+                                child: const Text(
+                                  "حفظ",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              Container(
+                                width: 20,
+                                height: 20,
+                              ),
+                              OutlinedButton(
+                                style: ButtonStyle(
+                                    fixedSize: MaterialStateProperty.all(
+                                        const Size(200, 50)),
+                                    shape: MaterialStateProperty.resolveWith(
+                                        (states) => RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.zero)),
+                                    backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.red),
+                                    overlayColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.red)),
+                                onPressed: () {
+                                  int k = 0;
+                                  print(customeCheckbox.value);
+                                  if (customeCheckbox.value) {
+                                    k = 1;
+                                  }
+                                  Map<String, dynamic> dic1 = {
+                                    'operation': "delete",
+                                    'species': animalType.subtype,
+                                    "farm_id": list[0].text,
+                                    'animal_number': list[1].text,
+                                    'date': date,
+                                    "is_male": k,
+                                  };
+                                  print(animalType.subtype);
+                                  FormData formData = FormData.fromMap(
+                                      dic1, ListFormat.multi, false);
+                                  add_farmer_animal_api(form: formData);
+                                },
+                                child: const Text(
+                                  "حذف",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ],
-                  )),
+                      )),
                 ),
               ),
             ),
@@ -208,16 +261,17 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                       snap.data is List<Map<String, String>> &&
                       snap.data!.isNotEmpty)
                     return CustomeDropdownButton(
+                        id: 'id',
                         func: (String value) {
                           BlocProvider.of<AnimalCubit>(context)
                               .updatePlatoon(platoon: value);
                         },
                         list: snap.data ??
                             [
-                              {"id": '', "name": "ابقار"},
+                              {"id": '1', "name": "ابقار"},
                             ],
                         expanded: true,
-                        value:'الابقار' ,
+                        value: snap.data![0]['id'].toString(),
                         text: "نوع الحيوان");
                   return Container();
                 })),
@@ -239,13 +293,16 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                         snap.data is List<Map<String, String>> &&
                         snap.data!.isNotEmpty)
                       return CustomeDropdownButton(
-                          func: (String value) {},
+                          id: 'id',
+                          func: (String value) {
+                            widget.subtype = value;
+                          },
                           list: snap.data ??
                               [
-                                {"id": '', "name": "البراازلي"},
+                                {"id": '1', "name": "البراازلي"},
                               ],
                           expanded: true,
-                          value: snap.data![0]['name'] ?? 'ابقار',
+                          value: snap.data![0]['id'] ?? '1',
                           text: "فصيله الحيوان");
                     return Container();
                   });

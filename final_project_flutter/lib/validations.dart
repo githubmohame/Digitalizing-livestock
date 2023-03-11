@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 String isEmpty({required String s1}) {
   if (s1.isEmpty) {
     return 'the field should not be null';
@@ -29,13 +31,15 @@ String biggerMin({required String s1, required double min}) {
   }
 }
 
-double funcStringValidation({required String value,required errorHeight}) {
+double funcStringValidation({required String value, required errorHeight}) {
   String s1 = isEmpty(s1: value.toString());
-
+  print(value);
+  print(s1);
   if (s1.isNotEmpty) {
     errorHeight += 30;
     return errorHeight;
   }
+  print(errorHeight);
   return errorHeight;
 }
 

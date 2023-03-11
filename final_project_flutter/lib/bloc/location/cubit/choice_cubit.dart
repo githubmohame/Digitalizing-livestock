@@ -19,11 +19,11 @@ class LocationCubit extends Cubit<LocationState> {
     if (state.gavernorate != gavernorate) {
       List<Map<String, String>> l1 = await city_api(gavernorate: gavernorate);
       if (l1.isNotEmpty) {
-        List<Map<String, String>> l2 = await village_api(city: l1[0]['name']!);
+        List<Map<String, String>> l2 = await village_api(city: l1[0]['id']!);
         emit(LocationState(
-            city: l1[0]['name']!,
+            city: l1[0]['id']!,
             gavernorate: gavernorate,
-            village: l2[0]['name']!));
+            village: l2[0]['id']!));
         return  ;
       }
 
@@ -40,12 +40,12 @@ class LocationCubit extends Cubit<LocationState> {
         emit(LocationState(
             city: city,
             gavernorate: state.gavernorate,
-            village: l2[0]['name']!));
+            village: l2[0]['id']!));
         return;
       }
 
       emit(LocationState(
-          city: city, gavernorate: state.gavernorate, village: l2[0]['name']!));
+          city: city, gavernorate: state.gavernorate, village: l2[0]['id']!));
     }
   }
 

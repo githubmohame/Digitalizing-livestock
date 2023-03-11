@@ -28,11 +28,11 @@ class speciesSerializer(serializers.ModelSerializer):
 class section_typeSerializer(serializers.ModelSerializer):
         class Meta:
             model=section_type
-            fields=['name']
+            fields=['name','id']
 class farm_typeSerializer(serializers.ModelSerializer):
         class Meta:
             model=farm_type
-            fields=['name']
+            fields=['name','id']
 
 class FarmerSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,3 +42,43 @@ class FarmSerializer(serializers.ModelSerializer):
     class Meta:
             model=farm
             fields="__all__"
+
+
+class connectFarmAnimalSeralizer(serializers.ModelSerializer):
+    class Meta:
+            model=connect_animal_farm
+            fields="__all__"
+
+class citySeralizer(serializers.ModelSerializer):
+    class Meta:
+            
+            model=city
+            fields= ['id' ,'governorate_id' ]
+
+
+
+class locatinSeralizer(serializers.ModelSerializer):
+    city = citySeralizer(many=False, read_only=True)
+    class Meta:
+            
+            model=village
+            fields= ['id' , 'city']
+
+
+class animalSeralizer(serializers.ModelSerializer):
+     class Meta:
+            
+            model=species
+            fields= ['id' , 'platoon']
+
+
+class connectFarmFarmerSeralizer(serializers.ModelSerializer):
+     class Meta:
+            model=connect_farm_farmer
+            fields= ['farm' , 'farmer','total_cost']
+
+
+
+
+
+

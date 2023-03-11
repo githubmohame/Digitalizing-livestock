@@ -25,11 +25,13 @@ import 'package:final_project_year/validations.dart';
 class CustomeDropdownButton extends StatefulWidget {
   String value;
   String text;
+  String id;
   bool expanded = false;
   List<Map<String, String>> list;
   void Function(String value)? func;
   CustomeDropdownButton({
     Key? key,
+    required this.id,
     this.func,
     required this.value,
     required this.text,
@@ -64,13 +66,12 @@ class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
               value: widget.value,
               items: List.generate(widget.list.length, (index) {
                 return DropdownMenuItem(
-                    value: widget.list[index]["name"],
+                    value: widget.list[index]["id"],
                     child: Text(
                       widget.list[index]["name"].toString(),
                     ));
               }),
               onChanged: (value) {
-                print(value);
                 setState(() {
                   widget.value = value ?? widget.list[0]['name']!;
 
@@ -138,7 +139,6 @@ class _FarmScreenState extends State<FarmScreen> {
     errorHeight = funcStringValidation(
         value: controller[8].text, errorHeight: errorHeight);
     setState(() {
-      print(errorHeight);
     });
   }
 
@@ -148,7 +148,6 @@ class _FarmScreenState extends State<FarmScreen> {
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
         child: LayoutBuilder(builder: (context, constraint) {
-          //print(constraint.maxWidth);
           return Scaffold(
             appBar: constraint.maxWidth < 900
                 ? AppBar(
@@ -163,7 +162,8 @@ class _FarmScreenState extends State<FarmScreen> {
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: Container(
-                height: 1600 + 178 + 150 + 52 + 70 + 50 + 25 + errorHeight,
+                height:
+                    1600 + 178 + 150 + 52 + 70 + 50 + 25 + 100 + errorHeight,
                 child: Container(
                   child: Column(
                     children: [
@@ -177,7 +177,7 @@ class _FarmScreenState extends State<FarmScreen> {
                         color: Color(0xFF357515),
                         child: Container(
                           padding: EdgeInsets.all(20),
-                          height: 1780 + 52 + 30 + 25 + errorHeight,
+                          height: 1780 + 52 + 30 + 25 + 100 + errorHeight,
                           width: 700,
                           child: Form(
                               key: _formGlobalKey,
@@ -526,7 +526,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                   ),
                                   sectionType,
                                   Container(
-                                      height: 319,
+                                      height: 400,
                                       margin: EdgeInsets.all(10),
                                       child: googleMapComponent),
                                   Container(
@@ -534,24 +534,53 @@ class _FarmScreenState extends State<FarmScreen> {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                            child: BlocProvider(
-                                          create: (context) => LocationCubit(
-                                              city: 'مركز دكرنس',
-                                              gavernorate: 'الدقهلية',
-                                              village: 'الجزيره'),
-                                          child: Builder(builder: (context) {
-                                            selectLocation.village =
-                                                selectLocation.village == ''
-                                                    ? 'الجزيره'
-                                                    : selectLocation.village;
+                                            child: FutureBuilder(
+                                                future: location_api(),
+                                                builder: (context, snap) {
+                                                  if (snap.connectionState ==
+                                                          ConnectionState
+                                                              .done &&
+                                                      snap.data is List<
+                                                          Map<String,
+                                                              dynamic>> &&
+                                                      snap.data!.isNotEmpty) {
+                                                    return BlocProvider(
+                                                      create: (context) =>
+                                                          LocationCubit(
+                                                        city: snap.data![0]
+                                                            ['city'],
+                                                        gavernorate:
+                                                            snap.data![0]
+                                                                ['governorate'],
+                                                        village: snap.data![0]
+                                                            ['village'],
+                                                      ),
+                                                      child: Builder(
+                                                          builder: (context) {
+                                                        
+                                                        selectLocation
+                                                                    .village ==
+                                                                ''
+                                                            ? selectLocation
+                                                                    .village =snap.data![0]
+                                                                ['village']
+                                                            : null;
 
-                                            selectLocation.city =
-                                                selectLocation.city == ''
-                                                    ? 'الدقهلية'
-                                                    : selectLocation.city;
-                                            return selectLocation;
-                                          }),
-                                        )),
+                                                        selectLocation.city =
+                                                            selectLocation
+                                                                        .city ==
+                                                                    ''
+                                                                ? snap.data![0]
+                                                                    ['city']
+                                                                : selectLocation
+                                                                    .city;
+                                                        return selectLocation;
+                                                      }),
+                                                    );
+                                                  }
+
+                                                  return Container();
+                                                })),
                                       ],
                                     ),
                                   ),
@@ -559,15 +588,13 @@ class _FarmScreenState extends State<FarmScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                  Wrap(
                                     children: [
                                       OutlinedButton(
                                         style: ButtonStyle(
                                             fixedSize:
                                                 MaterialStateProperty.all(
-                                                    const Size(200, 50)),
+                                                    const Size(100, 50)),
                                             shape: MaterialStateProperty.resolveWith(
                                                 (states) =>
                                                     RoundedRectangleBorder(
@@ -595,17 +622,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                         color: Colors.green))
                                               ],
                                             );
-                                            print(googleMapComponent.point);
-                                            print(farmType
-                                                .customeFarmType.item_choose);
-                                            print(sectionType
-                                                .customeDropdownButtonSectionType
-                                                .value);
-                                            print(selectLocation.village);
-                                            for (TextEditingController i
-                                                in controller) {
-                                              print(i.text);
-                                            }
+                                            
                                             var f = dio.MultipartFile.fromBytes(
                                                 await File(
                                                         '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
@@ -666,17 +683,17 @@ class _FarmScreenState extends State<FarmScreen> {
                                             if (googleMapComponent.point
                                                 is LatLng) {
                                               dic1['geometry'] = json.encode({
-                                                "type": "Point",
-                                                "coordinates": [
-                                                  googleMapComponent
-                                                      .point!.latitude,
-                                                  googleMapComponent
-                                                      .point!.longitude
-                                                ]
+                                                "Point": {
+                                                  "coordinates": [
+                                                    googleMapComponent
+                                                        .point!.latitude,
+                                                    googleMapComponent
+                                                        .point!.longitude
+                                                  ]
+                                                }
                                               });
                                             } else if (googleMapComponent.file
                                                 is String) {
-                                              print('dog');
                                               dic1['geometry'] =
                                                   dio.MultipartFile.fromBytes(
                                                       await File(
@@ -696,7 +713,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     false);
                                             var res =
                                                 await farm_api(form: formData);
-                                            print(res.data);
                                             return null;
                                           }
                                           showSnackbar(context: context, row: [
@@ -719,7 +735,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                         style: ButtonStyle(
                                             fixedSize:
                                                 MaterialStateProperty.all(
-                                                    const Size(200, 50)),
+                                                    const Size(100, 50)),
                                             shape: MaterialStateProperty.resolveWith(
                                                 (states) =>
                                                     RoundedRectangleBorder(
@@ -733,7 +749,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.red)),
                                         onPressed: () async {
-                                          print(farmType.customeFarmType.list);
                                           dio.FormData formData =
                                               dio.FormData.fromMap({
                                             'id': controller[0].text,
@@ -741,7 +756,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                           });
                                           var res =
                                               await farm_api(form: formData);
-                                          print(res.data);
                                           return null;
                                         },
                                         child: const Text(
@@ -756,7 +770,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                         style: ButtonStyle(
                                             fixedSize:
                                                 MaterialStateProperty.all(
-                                                    const Size(200, 50)),
+                                                    const Size(100, 50)),
                                             shape: MaterialStateProperty.resolveWith(
                                                 (states) =>
                                                     RoundedRectangleBorder(
@@ -830,13 +844,14 @@ class _FarmScreenState extends State<FarmScreen> {
                                           if (googleMapComponent.point
                                               is LatLng) {
                                             dic1['geometry'] = json.encode({
-                                              "type": "Point",
-                                              "coordinates": [
-                                                googleMapComponent
-                                                    .point!.latitude,
-                                                googleMapComponent
-                                                    .point!.longitude
-                                              ]
+                                              "Point": {
+                                                "coordinates": [
+                                                  googleMapComponent
+                                                      .point!.latitude,
+                                                  googleMapComponent
+                                                      .point!.longitude
+                                                ]
+                                              }
                                             });
                                           } else if (googleMapComponent.file
                                               is String) {
@@ -856,7 +871,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                                   dio.ListFormat.multi, false);
                                           var res =
                                               await farm_api(form: formData);
-                                          print(res.data);
                                           return null;
                                         },
                                         child: const Text(
@@ -911,13 +925,14 @@ class SectionType extends StatelessWidget {
   SectionType({super.key});
   CustomeDropdownButton customeDropdownButtonSectionType =
       CustomeDropdownButton(
+    id: 'id',
     list: const [
       {"name": "عام"},
       {"name": "خاص"}
     ],
     expanded: true,
     text: "نوع القطاع",
-    value: 'خاص',
+    value: '1',
   );
   @override
   Widget build(BuildContext context) {
@@ -929,15 +944,15 @@ class SectionType extends StatelessWidget {
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
               customeDropdownButtonSectionType = CustomeDropdownButton(
-                list: snap.data ??
-                    const [
-                      {"name": "عام"},
-                      {"name": "خاص"}
-                    ],
-                expanded: true,
-                text: "نوع القطاع",
-                value: 'خاص',
-              );
+                  id: 'id',
+                  list: snap.data ??
+                      const [
+                        {"name": "عام"},
+                        {"name": "خاص"}
+                      ],
+                  expanded: true,
+                  text: "نوع القطاع",
+                  value: snap.data![0]['id'].toString());
               return customeDropdownButtonSectionType;
             }
             return Container();
@@ -957,7 +972,6 @@ class SelectLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -973,6 +987,7 @@ class SelectLocation extends StatelessWidget {
                   try {
                     if (snap.connectionState == ConnectionState.done) {
                       return CustomeDropdownButton(
+                          id: 'id',
                           func: (String value) {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateGavernorate(value);
@@ -984,7 +999,7 @@ class SelectLocation extends StatelessWidget {
                                 {"name": "المنةفية"}
                               ],
                           expanded: true,
-                          value: snap.data!.first['name'] ?? 'اسيوط',
+                          value: snap.data!.first['id'] ?? 'اسيوط',
                           text: "المحافظة");
                     }
                   } catch (e) {}
@@ -994,11 +1009,9 @@ class SelectLocation extends StatelessWidget {
         BlocBuilder<LocationCubit, LocationState>(
           buildWhen: (previous, current) {
             //
-            print(previous.gavernorate != current.gavernorate);
             return previous.gavernorate != current.gavernorate;
           },
           builder: (context, state) {
-            print('build');
             return FutureBuilder(
                 future: city_api(gavernorate: state.gavernorate),
                 builder: (context, snap) {
@@ -1014,6 +1027,7 @@ class SelectLocation extends StatelessWidget {
                         color: Colors.white,
                       )),
                       child: CustomeDropdownButton(
+                          id: 'id',
                           func: (String value) {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateCity(value);
@@ -1026,7 +1040,7 @@ class SelectLocation extends StatelessWidget {
                                 {"name": "المنةفية"}
                               ],
                           expanded: true,
-                          value: snap.data!.first['name'] ?? 'اسيوط',
+                          value: snap.data!.first['id'] ?? '1',
                           text: "المركز او المدينة"),
                     );
                   }
@@ -1039,15 +1053,12 @@ class SelectLocation extends StatelessWidget {
         ),
         BlocBuilder<LocationCubit, LocationState>(
           buildWhen: (previous, current) {
-            print(previous.city != current.city);
             return previous.city != current.city;
           },
           builder: (context, state) {
-            print('build village');
             return FutureBuilder(
                 future: village_api(city: state.city),
                 builder: (context, snap) {
-                  print(snap.data);
                   if (snap.connectionState == ConnectionState.done &&
                       snap.data is List<Map<String, String>> &&
                       snap.data!.isNotEmpty)
@@ -1058,6 +1069,7 @@ class SelectLocation extends StatelessWidget {
                         color: Colors.white,
                       )),
                       child: CustomeDropdownButton(
+                          id: 'id',
                           func: (String value) {
                             BlocProvider.of<LocationCubit>(context)
                                 .updateVillage(value);
@@ -1070,7 +1082,7 @@ class SelectLocation extends StatelessWidget {
                                 {"name": "المنةفية"}
                               ],
                           expanded: true,
-                          value: snap.data!.first['name'] ?? 'اسيوط',
+                          value: snap.data!.first['id'] ?? '1',
                           text: "القرية او الشارع"),
                     );
                   return Container(
@@ -1264,7 +1276,9 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                 onPressed: () {},
               ),
             ),
-            Spacer(),
+            Container(
+              width: 10,
+            ),
             Expanded(
               child: ElevatedButton(
                 style: ButtonStyle(
@@ -1281,7 +1295,9 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                 },
               ),
             ),
-            Spacer(),
+            Container(
+              width: 10,
+            ),
             Expanded(
               child: ElevatedButton(
                 style: ButtonStyle(
@@ -1304,7 +1320,6 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
                   if (result is FilePickerResult) {
                     PlatformFile r1 = result.files[0];
                     widget.file = r1.path;
-                    print(widget.file);
                     if (widget.file is String) {
                       widget.point = null;
                     }
@@ -1318,7 +1333,7 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
         Container(
           height: 300 - 32,
           child: FlutterMap(
-            options: MapOptions(
+            options: MapOptions(center: LatLng(27,24),zoom: 5,
               onTap: (tapPosition, point) {
                 widget.point = point;
                 widget.file = null;

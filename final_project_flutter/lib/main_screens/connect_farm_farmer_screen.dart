@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
+import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
+import 'package:final_project_year/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,60 +12,77 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
   List<TextEditingController> list = [
     TextEditingController(),
     TextEditingController(),
-    TextEditingController(),
     TextEditingController()
   ];
   bool isCheck = false;
+  bool delete = false;
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    return   LayoutBuilder(
-      builder: (context,constraint) {
-        return Directionality(
-            textDirection: TextDirection.rtl,
-            child: BackgroundScreen(
-             
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                drawer: MainDrawer(index: 3),
-                appBar: constraint.maxWidth<900? AppBar(
+    return LayoutBuilder(builder: (context, constraint) {
+      return Directionality(
+        textDirection: TextDirection.rtl,
+        child: BackgroundScreen(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            drawer: MainDrawer(index: 3),
+            appBar: constraint.maxWidth < 900
+                ? AppBar(
                     elevation: 0,
                     backgroundColor: Colors.transparent,
-                    title: const Text("ربط المزرعة بالمربين",style: TextStyle(color: Colors.white),)):null,
-                body: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:3)):Container(),
-                    Spacer(),
-                    Card(color: Color(0xFF357515
-
-),elevation: 20,
-                      child: Container(height: 400,
-                        margin: EdgeInsets.all(20),
-                        width: 600,
-  
-                        child: Form(
-                            child: Column(
+                    title: const Text(
+                      "ربط المزرعة بالمربين",
+                      style: TextStyle(color: Colors.white),
+                    ))
+                : null,
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                constraint.maxWidth > 900
+                    ? Container(height: 100, child: ComputerDrawer(index: 3))
+                    : Container(),
+                Spacer(),
+                Card(
+                  color: Color(0xFF357515),
+                  elevation: 20,
+                  child: Container(
+                    height: 500,
+                    margin: EdgeInsets.all(20),
+                    width: 600,
+                    child: Form(
+                        key: _formKey,
+                        child: Column(
                           children: [
                             Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                        color: Colors.transparent,
-                                      )),
-                                      margin: const EdgeInsets.all(10),
-                                      child: Text("ربط المزرعة بالمربين",style: TextStyle(fontSize: 30,color: Colors.grey.shade900),
-                                      ),
-                                    ),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                color: Colors.transparent,
+                              )),
+                              margin: const EdgeInsets.all(10),
+                              child: Text(
+                                "ربط المزرعة بالمربين",
+                                style: TextStyle(
+                                    fontSize: 30, color: Colors.grey.shade900),
+                              ),
+                            ),
                             Container(
-                              height: 50,
+                              margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
                                 controller: list[0],
                                 validator: (value) {
-                                  return null;
+                                  double num = funcStringValidation(
+                                      value: list[0].text, errorHeight: 0.0);
+                                  if (num == 0) {
+                                    return null;
+                                  }
+                                  return 'the field should not be empty';
                                 },
                                 decoration: const InputDecoration(
+                                    errorStyle: TextStyle(
+                                        color: Colors.white, fontSize: 15),
                                     fillColor: Colors.white,
                                     filled: true,
                                     border: InputBorder.none,
@@ -70,12 +90,12 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                 keyboardType: TextInputType.text,
                               ),
                             ),
-                            Container(
+                            /* Container(
                               height: 50,
                               decoration: BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
-                                controller: list[0],
+                                controller: list[1],
                                 validator: (value) {
                                   return null;
                                 },
@@ -86,17 +106,27 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                     hintText: 'اسم المزرعة'),
                                 keyboardType: TextInputType.text,
                               ),
-                            ),
+                            ),*/
                             Container(
-                              height: 50,
+                              margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
-                                controller: list[3],
+                                controller: list[1],
                                 validator: (value) {
-                                  return null;
+                                  if (delete) {
+                                    return null;
+                                  }
+                                  double num = funcStringValidation(
+                                      value: list[1].text, errorHeight: 0.0);
+                                  if (num == 0) {
+                                    return null;
+                                  }
+                                  return 'the field should not be empty';
                                 },
                                 decoration: const InputDecoration(
+                                    errorStyle: TextStyle(
+                                        color: Colors.white, fontSize: 15),
                                     fillColor: Colors.white,
                                     filled: true,
                                     border: InputBorder.none,
@@ -105,15 +135,22 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              height: 50,
+                              margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
-                                controller: list[0],
+                                controller: list[2],
                                 validator: (value) {
-                                  return null;
+                                  double num = funcNumValidation(
+                                      value: list[2].text, errorHeight: 0.0);
+                                  if (num == 0) {
+                                    return null;
+                                  }
+                                  return 'the field should not be empty';
                                 },
                                 decoration: const InputDecoration(
+                                    errorStyle: TextStyle(
+                                        color: Colors.white, fontSize: 15),
                                     fillColor: Colors.white,
                                     filled: true,
                                     border: InputBorder.none,
@@ -121,58 +158,89 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                 keyboardType: TextInputType.text,
                               ),
                             ),
-                            Wrap( 
-                        children: [
-                          
-                          OutlinedButton(
-                            style: ButtonStyle(
-                                fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                                shape: MaterialStateProperty.resolveWith((states) =>
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.zero)),
-                                backgroundColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.green),
-                                overlayColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.green)),
-                            onPressed: () {
-                              
-                            },
-                            child: const Text(
-                              "حفظ",
-                              style: TextStyle(color: Colors.white),
+                            Wrap(
+                              children: [
+                                OutlinedButton(
+                                  style: ButtonStyle(
+                                      fixedSize: MaterialStateProperty.all(
+                                          const Size(200, 50)),
+                                      shape: MaterialStateProperty.resolveWith(
+                                          (states) => RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.zero)),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.green),
+                                      overlayColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.green)),
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      Map<String, dynamic> dic1 = {
+                                        'operation': "insert",
+                                        "farmer_id": list[2].text,
+                                        'farm_id': list[0].text,
+                                        'total_cost': list[1].text
+                                      };
+                                      FormData formData =
+                                          FormData.fromMap(dic1);
+                                      connect_farm_farmer_api(
+                                          formData: formData);
+                                    }
+                                  },
+                                  child: const Text(
+                                    "حفظ",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                Container(
+                                  width: 20,
+                                  height: 20,
+                                ),
+                                OutlinedButton(
+                                  style: ButtonStyle(
+                                      fixedSize: MaterialStateProperty.all(
+                                          const Size(200, 50)),
+                                      shape: MaterialStateProperty.resolveWith(
+                                          (states) => RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.zero)),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.red),
+                                      overlayColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.red)),
+                                  onPressed: () {
+                                    delete = true;
+                                    if (list[2].text.isNotEmpty) {
+                                      Map<String, dynamic> dic1 = {
+                                        'operation': "delete",
+                                        "farmer_id": list[2].text,
+                                        'farm_id': list[0].text,
+                                      };
+                                      FormData formData =
+                                          FormData.fromMap(dic1);
+                                      connect_farm_farmer_api(
+                                          formData: formData);
+                                    }
+                                    delete = false;
+                                  },
+                                  child: const Text(
+                                    "حذف",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ) ,Container(width: 20,height: 20,),
-                           OutlinedButton(
-                        style: ButtonStyle(
-                            fixedSize: MaterialStateProperty.all(const Size(200, 50)),
-                            shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero)),
-                            backgroundColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.red),
-                            overlayColor: MaterialStateProperty.resolveWith(
-                                (states) => Colors.red)),
-                        onPressed: () {
-                        },
-                        child: const Text(
-                          "حذف",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ), 
-                        ],
-                      ),
-                         
                           ],
                         )),
-                      ),
-                    ),
-                    Spacer()
-                  ],
+                  ),
                 ),
-              ),
+                Spacer()
+              ],
             ),
-          );
-      }
-    );
+          ),
+        ),
+      );
+    });
   }
 }

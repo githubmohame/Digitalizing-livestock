@@ -1,9 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:final_project_year/apis/apis_functions.dart';
 
 void main() async {
-  dio.Dio dio1 = dio.Dio();
+  /*dio.Dio dio1 = dio.Dio();
   dio.FormData formData = dio.FormData.fromMap({
     'geometry': json.encode({
       "type": "Point",
@@ -26,5 +27,8 @@ void main() async {
         responseType: dio.ResponseType.json,
         listFormat: dio.ListFormat.multi,
       ));
-  print(res);
+  print(res);*/
+  login_api(formData: dio.FormData.fromMap({
+    "ssn":"3010906121153",'password':'999'
+  }));
 }
