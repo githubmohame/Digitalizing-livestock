@@ -3,6 +3,8 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:final_project_year/common_component/custome_secure_storage.dart';
+import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
@@ -78,11 +80,15 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                             snap.data is List<Map<String, dynamic>> &&
                             snap.data!.isNotEmpty) {
                           return BlocProvider(
-                            create: (context) =>LocationCubit(
-                            city: snap.data![0]['city']!,
-                            gavernorate: snap.data![0]['governorate'],
-                            village: snap.data![0]['village']!,
-                          ),
+                            create: (context) {
+                              selectGavernorate.gavernorate =
+                                  snap.data![0]['village']!;
+                              return LocationCubit(
+                                city: snap.data![0]['city']!,
+                                gavernorate: snap.data![0]['governorate'],
+                                village: snap.data![0]['village']!,
+                              );
+                            },
                             child: selectGavernorate,
                           );
                         }
@@ -126,12 +132,22 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                           overlayColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.red)),
                       onPressed: () async {
+                        print(selectGavernorate.gavernorate + "ooo" * 56);
                         Map<String, dynamic> dic1 = {
                           'operation': 'delete',
                           'gavernorate':
                               selectGavernorate.gavernorate.toString(),
                           'new_name': controller.text
                         };
+                        var res = await modify_gavernorate_api(dic1: dic1);
+                        if (res.containsKey('message')) {
+                          CustomeSecureStorage.setupdate_governorate();
+                          showSnackbardone(
+                              context: context, text: res['message']!);
+                        } else {
+                          showSnackbarerror(
+                              context: context, text: res['error']!);
+                        }
                         selectGavernorate = SelectGavernorate(
                           title: 'المحافظة',
                           list: const [
@@ -140,7 +156,7 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                             {"id": "المنةفية"}
                           ],
                         );
-                        await modify_gavernorate_api(dic1: dic1);
+
                         selectGavernorate = SelectGavernorate(
                           title: 'المحافظة',
                           list: const [
@@ -201,7 +217,15 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                             {"id": "المنةفية"}
                           ],
                         );
-                        await modify_gavernorate_api(dic1: dic1);
+                        var res = await modify_gavernorate_api(dic1: dic1);
+                        if (res.containsKey('message')) {
+                          CustomeSecureStorage.setupdate_governorate();
+                          showSnackbardone(
+                              context: context, text: res['message']!);
+                        } else {
+                          showSnackbarerror(
+                              context: context, text: res['error']!);
+                        }
                         selectGavernorate = SelectGavernorate(
                           title: 'المحافظة',
                           list: const [
@@ -262,7 +286,15 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                             {"id": "المنةفية"}
                           ],
                         );
-                        await modify_gavernorate_api(dic1: dic1);
+                        var res = await modify_gavernorate_api(dic1: dic1);
+                        if (res.containsKey('message')) {
+                          CustomeSecureStorage.setupdate_governorate();
+                          showSnackbardone(
+                              context: context, text: res['message']!);
+                        } else {
+                          showSnackbarerror(
+                              context: context, text: res['error']!);
+                        }
                         selectGavernorate = SelectGavernorate(
                           title: 'المحافظة',
                           list: const [
@@ -290,12 +322,12 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
 }
 
 class SelectGavernorate extends StatefulWidget {
-  String? gavernorate;
+  String gavernorate;
   String title;
   List<Map<String, String>> list;
   SelectGavernorate({
     Key? key,
-    this.gavernorate,
+    this.gavernorate = '',
     required this.title,
     required this.list,
   }) : super(key: key);
@@ -313,16 +345,18 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
             future: gavernorate_api(),
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.done &&
-                  snap.data is List<Map<String, String>> &&
+                  snap.data is List<Map<String, dynamic>> &&
                   snap.data!.isNotEmpty) {
-                print(snap.data);
+                //print(snap.data);
                 widget.gavernorate = snap.data![0]['id']!;
+                //print(widget.gavernorate);
                 return CustomeDropdownButton(
                     id: 'id',
                     func: (String value) {
                       BlocProvider.of<LocationCubit>(context)
                           .updateGavernorate(value);
                       widget.gavernorate = value;
+                      print(widget.gavernorate);
                     },
                     list: snap.data!,
                     expanded: true,
@@ -367,7 +401,7 @@ class _SelectCityState extends State<SelectCity> {
                 future: gavernorate_api(),
                 builder: (context, snap) {
                   if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, String>> &&
+                      snap.data is List<Map<String, dynamic>> &&
                       snap.data!.isNotEmpty)
                     return CustomeDropdownButton(
                         id: 'id',
@@ -396,9 +430,8 @@ class _SelectCityState extends State<SelectCity> {
                   future: city_api(gavernorate: state.gavernorate),
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.done &&
-                        snap.data is List<Map<String, String>> &&
+                        snap.data is List<Map<String, dynamic>> &&
                         snap.data!.isNotEmpty) {
-                      print(snap.data);
                       widget.city = snap.data![0]['id']!;
                       return CustomeDropdownButton(
                           id: 'id',
@@ -530,7 +563,17 @@ class _ScreenCityState extends State<ScreenCity> {
                         } else {
                           dic1['geometry'] = null;
                         }
-                        await modify_city_api(dic1: dic1);
+                        var res = await modify_city_api(dic1: dic1);
+                        print(res);
+                        if (res.containsKey('message')) {
+                          CustomeSecureStorage.setupdate_city();
+                          showSnackbardone(
+                              context: context, text: res['message']!);
+                        } else {
+                          print(res.toString() + "iiii777" * 90);
+                          showSnackbarerror(
+                              context: context, text: res['error']!);
+                        }
                         selectCity = SelectCity(
                           list2: const [
                             {"id": "القاهرة"},
@@ -570,7 +613,7 @@ class _ScreenCityState extends State<ScreenCity> {
                           'city': selectCity.city.toString(),
                           'new_name': controller.text
                         };
-                        await modify_city_api(dic1: dic1);
+                        var res = await modify_city_api(dic1: dic1);
                         selectCity = SelectCity(
                           list2: const [
                             {"id": "القاهرة"},
@@ -585,6 +628,14 @@ class _ScreenCityState extends State<ScreenCity> {
                         );
                         print('delete');
                         setState(() {});
+                        if (res.containsKey('message')) {
+                          CustomeSecureStorage.setupdate_city();
+                          showSnackbardone(
+                              context: context, text: res['message']!);
+                        } else {
+                          showSnackbarerror(
+                              context: context, text: res['error']!);
+                        }
                       },
                       child: const Text(
                         "مسح",
@@ -627,7 +678,7 @@ class _ScreenCityState extends State<ScreenCity> {
                         } else {
                           dic1['geometry'] = null;
                         }
-                        await modify_city_api(dic1: dic1);
+                        var res = await modify_city_api(dic1: dic1);
                         selectCity = SelectCity(
                           list2: const [
                             {"id": "القاهرة"},
@@ -641,6 +692,14 @@ class _ScreenCityState extends State<ScreenCity> {
                           ],
                         );
                         setState(() {});
+                        if (res.containsKey('message')) {
+                          CustomeSecureStorage.setupdate_city();
+                          showSnackbardone(
+                              context: context, text: res['message']!);
+                        } else {
+                          showSnackbarerror(
+                              context: context, text: res['error']!);
+                        }
                       },
                       child: const Text(
                         "حفظ",
@@ -736,18 +795,25 @@ class _ScreenVillageState extends State<ScreenVillage> {
                             (states) => Colors.grey),
                         overlayColor: MaterialStateProperty.resolveWith(
                             (states) => Colors.red)),
-                    onPressed: () {
+                    onPressed: () async {
+                      print(selectLocation.village);
                       Map<String, dynamic> dic1 = {
                         'operation': 'delete',
                         'city': selectLocation.city,
                         'village': selectLocation.village.toString(),
                         'new_name': controller.text
                       };
-                      selectLocation = SelectLocation(village: '', city: "");
 
-                      modify_village_api(dic1: dic1);
-                      selectLocation = SelectLocation(village: '', city: "");
+                      Map<String, String> map =
+                          await modify_village_api(dic1: dic1);
+
                       print('delete');
+                      if (map.containsKey('message')) {
+                        print('DELL KILL MESSAGE');
+                      }
+                      CustomeSecureStorage.setupdate_village();
+                      selectLocation = SelectLocation(village: '', city: "");
+                      //selectLocation = SelectLocation(village: '', city: "");
                       setState(() {});
                     },
                     child: const Text(
@@ -792,10 +858,13 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       } else {
                         dic1['geometry'] = null;
                       }
-                      modify_village_api(dic1: dic1);
+                      Map<String, String> map =
+                          await modify_village_api(dic1: dic1);
+                      print('uuuuuu' * 78);
+                      if (map.containsKey('message')) {
+                        CustomeSecureStorage.setupdate_village();
+                      }
                       selectLocation = SelectLocation(village: '', city: "");
-                      selectLocation = SelectLocation(village: '', city: "");
-
                       setState(() {});
                     },
                     child: const Text(
@@ -840,7 +909,11 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       } else {
                         dic1['geometry'] = null;
                       }
-                      modify_village_api(dic1: dic1);
+                      Map<String, String> map =
+                          await modify_village_api(dic1: dic1);
+                      if (map.containsKey('message')) {
+                        CustomeSecureStorage.setupdate_village();
+                      }
                       selectLocation = SelectLocation(village: '', city: "");
                       selectLocation = SelectLocation(village: '', city: "");
 

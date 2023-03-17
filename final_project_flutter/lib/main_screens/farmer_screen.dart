@@ -296,7 +296,7 @@ class _FarmerState extends State<Farmer> {
                                                   overlayColor:
                                                       MaterialStateProperty.resolveWith(
                                                           (states) => Colors.green)),
-                                              onPressed: () {
+                                              onPressed: () async{
                                                 update_screen();
 
                                                 if (f.currentState!
@@ -322,9 +322,20 @@ class _FarmerState extends State<Farmer> {
                                                         .password,
                                                   };
 
-                                                  farmer_api(
+                                                  var res =await farmer_api(
                                                       form: FormData.fromMap(
                                                           dic1));
+
+                                                    if (res.containsKey('message')) {
+                                            showSnackbardone(
+                                                context: context,
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
+                                          return null;       
                                                 }
                                               },
                                               child: const Text(
@@ -353,23 +364,24 @@ class _FarmerState extends State<Farmer> {
                                             overlayColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.red)),
-                                        onPressed: () {
+                                        onPressed: ()async {
                                           update_screen();
                                           Map<String, dynamic> dic1 = {};
                                           if (widget.list[4].text.isNotEmpty) {
                                             dic1['operation'] = 'delete';
                                             dic1['ssn'] = widget.list[4].text;
-                                            farmer_api(
+                                           var res= await farmer_api(
                                                 form: FormData.fromMap(dic1));
-                                            showSnackbar(
+                                             if (res.containsKey('message')) {
+                                            showSnackbardone(
                                                 context: context,
-                                                row: [
-                                                  Icon(Icons.done,
-                                                      color: Colors.green),
-                                                  Text('تم',
-                                                      style: TextStyle(
-                                                          color: Colors.green))
-                                                ]);
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
+                                          return null;
                                           }
                                         },
                                         child: const Text(
@@ -397,7 +409,7 @@ class _FarmerState extends State<Farmer> {
                                             overlayColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.red)),
-                                        onPressed: () {
+                                        onPressed: () async{
                                           update_screen();
                                           Map<String, dynamic> dic1 = {
                                             'operation': "update",
@@ -435,17 +447,18 @@ class _FarmerState extends State<Farmer> {
                                           };
                                           if (widget.list[4].text.isNotEmpty) {
                                             dic1['operation'] = 'update';
-                                            farmer_api(
+                                            var res=await farmer_api(
                                                 form: FormData.fromMap(dic1));
-                                            showSnackbar(
+                                             if (res.containsKey('message')) {
+                                            showSnackbardone(
                                                 context: context,
-                                                row: [
-                                                  Icon(Icons.done,
-                                                      color: Colors.green),
-                                                  Text('تم',
-                                                      style: TextStyle(
-                                                          color: Colors.green))
-                                                ]);
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
+                                          return null;
                                           }
                                         },
                                         child: const Text(

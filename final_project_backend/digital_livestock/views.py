@@ -77,7 +77,7 @@ def set_geometry(obj:models.Model,dic1:dict[str,]):
 					print(muilt_plog.geom_type)
 			except Exception as e:
 				print(e.args)
-				return JsonResponse({'Error':'file format error'})
+				return JsonResponse({'error':'خطأ في صيغة الملف'})
 class CustomerAccessPermission(permissions.BasePermission):
 
 	def has_permission(self, request, view):
@@ -151,6 +151,7 @@ def login(request :Request):
 		print(request.data.get('password'))
 		if(user1[0].check_password(request.data.get('password'))):
 			return  JsonResponse({"token":True})
+		return JsonResponse({"token":False})
 	else:
 		return JsonResponse({"token":False})
 
@@ -174,7 +175,12 @@ def create_farmer(request :Request):
 	u=User.objects.create_user(fname=request.data['fname'],ssn=request.data['ssn'],lname=request.data['lname'],password=request.data['password'],phone=request.data['phone'])
 	print(u)
 	return  JsonResponse({"token":"loop"})
+'''
 
+
+	return  response.Response(data=f1.data)
+
+'''
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
@@ -187,7 +193,6 @@ def create_farm(request :Request):
 	f1=FarmSerializer(data=query_dict)
 	print(f1.is_valid())
 	print(f1.errors)
-	return  response.Response(data=f1.data)
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -195,22 +200,26 @@ def create_farm(request :Request):
 def modified_gavernorate(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
+		print(request.data['gavernorate'])
 		g1=governorate.objects.get(id=request.data['gavernorate']).delete()
 		print(g1)
-		return  JsonResponse({"gg":g1})
+		print('done')
+		return  JsonResponse({"message":'تم مسح البيانات'})
 	if(oper=='update'):
 		g1=governorate.objects.get(id=request.data['gavernorate'])
 		set_geometry(obj=g1,dic1=request.data)
 		g1.name=request.data['new_name']
 		g1.save()
+		return  JsonResponse({"message":'تم تعديل البيانات'})
+
 	print('insert')
 	if(oper=='insert'):
 		g1=governorate()
 		g1.name=request.data['new_name']
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
-	g1=governorateSerializer(instance=g1)
-	return  response.Response(data=g1.data)
+		JsonResponse({"message":'تم اضافة البيانات'})
+
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -219,18 +228,23 @@ def modified_city(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
 		g1=city.objects.get(id=request.data['city']).delete()
-		return  JsonResponse({"gg":g1})
+		return  JsonResponse({"message":'تم مسح البيانات'})
+
 	if(oper=='update'):
 		g1=city.objects.get(id=request.data['city'])
 		g1.name=request.data['new_name']
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
+		return  JsonResponse({"message":'تم تعديل البيانات'})
+
 	if(oper=='insert'):
 		g1=city()
 		g1.name=request.data['new_name']
 		g1.governorate=city.objects.get(id=request.data['city']).governorate
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
+		return  JsonResponse({"message":'تم اضافة البيانات'})
+
 	g1=citySerializer(instance=g1)
 	return  response.Response(data=g1.data)
 
@@ -241,18 +255,22 @@ def modified_village(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
 		g1=village.objects.get(id=request.data['village']).delete()
-		return  JsonResponse({"gg":g1})
+		return  JsonResponse({"message":"تم مسح البينات"})
 	if(oper=='update'):
 		g1=village.objects.get(id=request.data['village'])
 		set_geometry(obj=g1,dic1=request.data)
 		g1.name=request.data['new_name']
 		g1.save()
+		return  JsonResponse({"message":"تم تعديل البينات"})
+
 	if(oper=='insert'):
 		g1=village()
 		g1.name=request.data['new_name']
 		g1.city=city.objects.get(id=request.data['city'])
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
+		return  JsonResponse({"message":"تم اضافة البينات"})
+
 	print(g1.name)
 	g1=villageSerializer(instance=g1)
 	return  response.Response(data=g1.data)
@@ -284,7 +302,7 @@ def farm_api(request :Request):
 		farm1.attached_area=dic1['attached_area']
 		print(dic1.get('farm_type')==None)
 		if(dic1.get('farm_type')==None):
-			return JsonResponse({'error': None})
+			return JsonResponse({'error':'اختارنوع للمزرعة'})
 
 
 		import json
@@ -306,7 +324,6 @@ def farm_api(request :Request):
 		farm1.total_area_of_farm=dic1['total_area_of_farm']
 		farm1.farm_name=dic1['farm_name']
 		farm1.huge_playground=dic1['huge_playground']
-		
 		farm1.id=dic1['id']
 		print(farm1.id)
 		farm1.save()
@@ -316,22 +333,22 @@ def farm_api(request :Request):
 			con_farmm_farmt1.farm_type=farm_type.objects.get(name=i)
 			con_farmm_farmt1.save()
 
-		return JsonResponse({"llo":986})
+		return JsonResponse({"message":'تم اضافة البيانات'})
 	if(request.data['operation']=='delete'):
 
 			if(request.data.get('id')==None):
-				return JsonResponse({'message':'error', })
+				return JsonResponse({'message':'من فضلك ادخل كود المزرعة', })
 			d1=farm.objects.all().filter(id=request.data.get('id')).delete()
 			print(d1)
-			return JsonResponse({"message":"sucess"})
+			return JsonResponse({"message":"تم مسح البيانات"})
 	if(request.data['operation']=='update'):
 			print(request.data.get("city"))
 			if(request.data.get('id')==None):
-				return JsonResponse({'message':'error', })
+				return JsonResponse({'error':'من فضلك ادخل كود المزرعة', })
 			try: 
 				d1=farm.objects.all().get(id=request.data.get('id'))
 			except:
-				return JsonResponse({'message':'id not valid', })
+				return JsonResponse({'error':'الكود غير صحيح', })
 			dic1=request.data.dict()
 			for key  in dic1:
 				if(key=='geometry'):
@@ -364,26 +381,41 @@ def farm_api(request :Request):
 
 			d1.save()
 
-			return JsonResponse({"error":"message"})
+			return  JsonResponse({"message":"تم تعديل البينات"})
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def modified_species(request :Request):
 	oper=request.data['operation']
+	print(oper)
+	print('jjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
 	if(oper=='delete'):
-		g1=species.objects.get(id=request.data['species']).delete()
-		return  JsonResponse({"gg":g1})
+		try:
+			g1=species.objects.get(id=request.data['species']).delete()
+			return  JsonResponse({"message":'تم مسح البيانات'})
+		except:
+			return JsonResponse({"error":' اختار الفصيلة'})
 	if(oper=='update'):
-		g1=species.objects.get(id=request.data['species'])
+		try:
+			g1=species.objects.get(id=request.data['species'])
+			g1.save()
+		except:
+			return JsonResponse({"error":' اختار الفصيلة'})
 		g1.name=request.data['new_name']
 		g1.save()
+		return JsonResponse({"message":'تم تعديل البيانات'})
 	if(oper=='insert'):
 		g1=species()
+		
+		if(request.data['new_name']=='' or request.data['new_name']==None):
+				return JsonResponse({"error":'يجب ادخال الاسم'})
 		g1.name=request.data['new_name']
-		g1.platoon=species.objects.get(name=request.data['species']).platoon 
-		g1.save()
-	g1=speciesSerializer(instance=g1)
-	return  response.Response(data=g1.data)
+		try:
+			g1.platoon=platoon.objects.get(id=request.data['platoon']) 
+			g1.save()
+		except:
+			return JsonResponse({"error":' اختار الفصيلة'})
+		return JsonResponse({"message":'تم اضافة البيانات'})
 
 
 @api_view(['GET','POST'])
@@ -392,21 +424,31 @@ def modified_species(request :Request):
 def modified_platoon(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
-		g1=platoon.objects.get(id=request.data['platoon']).delete()
-		print(request.data)
-		return  JsonResponse({"gg":'kkk'})
+		try:
+				g1=platoon.objects.get(id=request.data['platoon']).delete()
+				print(request.data)
+				return  JsonResponse({"message":'تم مسح البيانات'})
+		except:
+			return JsonResponse({"error":' اختار النوع'})
 	if(oper=='update'):
-		g1=platoon.objects.get(id=request.data['platoon'])
-		g1.name=request.data['new_name']
-		g1.save()
+		try:
+			g1=platoon.objects.get(id=request.data['platoon'])
+			if(request.data['new_name']=='' or request.data['new_name']==None):
+				return JsonResponse({"error":'يجب ادخال الاسم'})
+			g1.name=request.data['new_name']
+			g1.save()
+		except:
+			return JsonResponse({"error":' اختار النوع'})
+		return  JsonResponse({"message":'تم تعديل البيانات'})
 	if(oper=='insert'):
-		print(request.data)
+		print(request.data['new_name'])
 		g1=platoon()
+		if(request.data['new_name']=='' or request.data['new_name']==None):
+				return JsonResponse({"error":'يجب ادخال الاسم'})
 		g1.name=request.data['new_name']
 		g1.save()
-	g1=platoonSerializer(instance=g1)
-	return  response.Response(data=g1.data)
-
+		return  JsonResponse({"message":'تم تعديل البيانات'})
+	 
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -420,25 +462,27 @@ def farmer_api(request :Request):
 		dic1.pop('operation')
 		user1=User.objects.filter(ssn=dic1['ssn'])
 		if(len(user1)==0):
-			return  JsonResponse({"error":'it is not valid user ssn'})
+			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
 			print(int(i.ssn)==int(m))
 		if(user1[0].is_superuser):
-			return  JsonResponse({"error":'it is not valid user'})
+			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
 		else:
 			user1[0].delete()
-			return JsonResponse({"error":'KKII'})
+			return  JsonResponse({"message":'تم مسح البيانات'})
 	if(oper=='update'):
-		for i ,k in {'name':12}.items():
-			print(k)
+		 
 		dic1=request.data.dict()
 		dic1.pop('operation')
-	
+		user1=User.objects.filter(ssn=dic1['ssn'])
+		if(len(user1)==0):
+			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
 		user1:User=User.objects.get(ssn=int(request.data['ssn']))
 		for key,value in dic1.items() :
 			if(value ==None  and  key not in ['ssn','fnane','lname','email','password','phone','photo']):
 				continue
 			setattr(user1,key,value)
 		user1.save()
+		return JsonResponse({"message":"تم تعديل البيانات"})
 		print(user1.age)
 	if(oper=='insert'):
 		dic1=request.data.dict()
@@ -447,8 +491,7 @@ def farmer_api(request :Request):
 		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
 			print(dic1)
 			user1=User.objects.create_user(**dic1)
-	user1=FarmerSerializer(instance= user1)
-	return  response.Response(data=user1.data)
+	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
@@ -467,10 +510,12 @@ def add_farm_animal(request :Request):
 				connect_animal_farm1.animal_number=request.data.get('animal_number')
 				connect_animal_farm1.date=date
 				connect_animal_farm1.save()
+				message='تم تعديل البيانات'
 			else:
 				connect_animal_farm1=connect_animal_farm()
 				connect_animal_farm1.animal_number=request.data.get('animal_number')
 				connect_animal_farm1.animal_sub_type=species.objects.get(id=request.data.get('species'))
+				message='تم اضافة البيانات'
 			#connect_animal_farm1.total_money=request.data.get('total_money')
 			bool1=False
 			print(type(request.data.get('is_male')))
@@ -481,32 +526,26 @@ def add_farm_animal(request :Request):
 			connect_animal_farm1.farm_id=farm.objects.get(id= request.data.get('farm_id'))
 			connect_animal_farm1.date=date.date()
 			connect_animal_farm1.save()
-		else:
-			connect_animal_farm1=connect_animal_farm()
-			connect_animal_farm1.animal_number=request.data.get('animal_number')
-			connect_animal_farm1.animal_sub_type=species.objects.get(id=request.data.get('species'))
-			#connect_animal_farm1.total_money=request.data.get('total_money')
-			bool1=False
-			print(type(request.data.get('is_male')))
-			if(request.data.get('is_male')=='1'):
-				print('kkkuuyytt')
-				bool1=True
-			connect_animal_farm1.is_male=bool1
-			connect_animal_farm1.farm_id=farm.objects.get( id=request.data.get('farm_id'))
-			connect_animal_farm1.date=datetime(datetime.now().year,datetime.now().month,datetime.now().day,0,0,0).date()
-			connect_animal_farm1.save()
-		user1=connectFarmAnimalSeralizer(instance= connect_animal_farm1)
-		return  response.Response(data=user1.data)
+			user1=connectFarmAnimalSeralizer(instance= connect_animal_farm1)
+			return  JsonResponse({'message':message})
+		return JsonResponse({"errors":'من فضلك اختار تاريخ'})
 	if(request.data['operation']=='delete'):
 		date=datetime.strptime(request.data.get('date'),'%Y-%m-%d %H:%M:%S.%f').date()
 		date=datetime(date.year,date.month,date.day,0,0,0)
-		con1=connect_animal_farm.objects.filter(date=date ,farm_id=farm.objects.get( id=request.data.get('farm_id')) ,is_male=request.data.get('is_male'),animal_sub_type=species.objects.get(id=request.data.get('species'))).delete()
-		if(request.data['animal_number']!=None):
-			con1.animal_number-=request.data['animal_number']
+		con1=connect_animal_farm.objects.get(date=date ,farm_id=farm.objects.get( id=request.data.get('farm_id')) ,is_male=request.data.get('is_male'),animal_sub_type=species.objects.get(id=request.data.get('species')))
+		if(request.data['animal_number']!=None and request.data['animal_number']!= '' ):
+			print('hyttww3344')
+			print(request.data['animal_number'] )
+			print(type(int(request.data['animal_number'])))
+			con1.animal_number=int(request.data['animal_number'])
 			con1.save()
+			con1=connectFarmAnimalSeralizer(instance=con1)
+			print(con1.data)
+			return response.Response(data=con1.data)
 		else:
-			con1.delete()
-		return JsonResponse({"message":con1})
+			con1=con1.delete()
+			return JsonResponse({"message":'تم مسح البيانات'})
+
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
@@ -521,11 +560,15 @@ def get_locations(request :Request):
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def get_animal(request :Request):
-	pass
-	g1=species.objects.all()[0]
-	g1Seralizer= animalSeralizer(instance=g1)
-	print(g1Seralizer.data )
-	return response.Response(data=g1Seralizer.data)
+	try:
+		g1=species.objects.all()[0]
+		g1Seralizer= animalSeralizer(instance=g1)
+		print(g1Seralizer.data )
+		return response.Response(data=g1Seralizer.data)
+	except:
+		g1=species.DoesNotExist()
+		return JsonResponse({"error":None});
+		
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
@@ -539,7 +582,7 @@ def change_password_email(request :Request):
 	render(request,template_name='confirm_code.html', context={"code":code})
 	print('jjuuuuuuuuffrrrr\n')
 	html_content = render_to_string('confirm_code.html', context={"code":code}).strip()
-	subject = 'HTML Email'
+	subject = 'confirm email address'
 
 
 	msg = EmailMultiAlternatives(subject, html_content,from_email=settings.EMAIL_HOST_USER , to=[request.data.get('email')],reply_to= [request.data.get('email')])
@@ -552,7 +595,7 @@ def change_password_email(request :Request):
 	r=redis.Redis()
 	#send_mail('change_password','the code is   '+str(code  ),settings.EMAIL_HOST_USER,[request.data.get('email')],fail_silently=False)
 	r.setex(name=str(code  ),time=5*60,value=request.data.get('email'))
-	return JsonResponse({"message":code})
+	return JsonResponse({"message":'تم ارسال الرسالة'})
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
@@ -571,7 +614,7 @@ def change_password_done(request :Request):
 		user=User.objects.get(email=email)
 		user.set_password(request.data.get('password'))
 		user.save()
-	return JsonResponse({"message":'done'})
+	return JsonResponse({"message":'تم تغير كلمه المرور'})
 
 
 
@@ -590,12 +633,54 @@ def connect_farm_farmer_api(request :Request):
 			connect_farm_farmer1.total_cost=request.data.get('total_cost')
 			connect_farm_farmer1.save()
 			con1=connectFarmFarmerSeralizer(instance=connect_farm_farmer1)
+			return JsonResponse({"message":"تم اضافة البيانات"})
 		except:
 			print('hhhhtttrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
 			connect_farm_farmer1=connect_farm_farmer.objects.get(farmer_id=User.objects.get(ssn=request.data.get('farmer_id')),farm=farm.objects.get(id=request.data.get('farm_id')))
 			connect_farm_farmer1.total_cost=request.data.get('total_cost')
 			con1=connectFarmFarmerSeralizer(instance=connect_farm_farmer1)
-		return response.Response(data=con1.data)
+			return JsonResponse({"message":"تم تعديل البيانات"})
 	if(request.data.get('operation')=='delete'):
 		connect_farm_farmer1=connect_farm_farmer.objects.filter(farm=request.data.get('farm_id'),farmer=request.data.get('farmer_id')).delete()
-		return JsonResponse({"message":connect_farm_farmer1})
+		return JsonResponse({"message":"تم مسح البيانات"})
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def operation_admin_api(request :Request):
+	oper=request.data['operation']
+	print(oper)
+	if(oper=='delete'):
+		import json
+		dic1=request.data.dict()
+		dic1.pop('operation')
+		user1=User.objects.filter(ssn=dic1['ssn'])
+		if(len(user1)==0):
+			return  JsonResponse({"error":'it is not valid user ssn'})
+			print(int(i.ssn)==int(m))
+		else:
+			user1[0].delete()
+			return JsonResponse({"error":'تم مسح البيانات'})
+	if(oper=='update'):
+		for i ,k in {'name':12}.items():
+			print(k)
+		dic1=request.data.dict()
+		dic1.pop('operation')
+	
+		user1:User=User.objects.get(ssn=int(request.data['ssn']))
+		for key,value in dic1.items() :
+			if(value ==None  and  key not in ['ssn','fnane','lname','email','password','phone','photo']):
+				continue
+			setattr(user1,key,value)
+		user1.save()
+		return JsonResponse({"message":"تم تعديل البيانات"})
+		print(user1.age)
+	if(oper=='insert'):
+		dic1=request.data.dict()
+		dic1.pop('operation')
+		print(set(dic1) ,set(['ssn','fname','lname','email','password','phone','photo','job','age']))
+		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
+			print(dic1)
+			user1=User.objects.create_superuser(**dic1)
+			return JsonResponse({"message":"تم اضافة البيانات"})

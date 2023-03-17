@@ -138,7 +138,7 @@ class connect_farm_farmer(models.Model):
     farm=models.ForeignKey(farm,on_delete=models.CASCADE)
     farmer=models.ForeignKey(User,on_delete=models.CASCADE)
     total_cost=models.PositiveIntegerField ()
-    date=models.DateField()
+    #date=models.DateField()
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['farm', 'farmer' ,], name="connect_farm_farmer_uk")

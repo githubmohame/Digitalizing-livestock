@@ -321,7 +321,29 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ), /*
+          ),
+          Container(
+            height: 1,
+            color: Colors.black,
+          ),
+          Container(
+            height: 100,
+            color: index == 13 ? Colors.grey : const Color(0xFF003e29),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              minVerticalPadding: 1,
+              title: const Text('اضافة   مودرين',
+                  style: TextStyle(color: Colors.white)),
+              onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddAdmin(),
+                    ));
+              }),
+            ),
+          ), 
+          /*
           Container(
             height: 1,
             color: Colors.black,
@@ -581,7 +603,7 @@ class ComputerDrawer extends StatelessWidget {
             height: 1,
             color: Colors.black,
             width: 1,
-          ),
+          ),/*
           Container(
             width: 400,
             height: 10,
@@ -601,7 +623,7 @@ class ComputerDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),*/
           Container(
             height: 1,
             color: Colors.black,
@@ -626,7 +648,7 @@ class ComputerDrawer extends StatelessWidget {
               }),
             ),
           ),
-          Container(
+         /* Container(
             height: 1,
             color: Colors.black,
             width: 1,
@@ -648,8 +670,8 @@ class ComputerDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
-          Container(
+          ),*/
+          /*Container(
             height: 1,
             color: Colors.black,
             width: 1,
@@ -671,7 +693,7 @@ class ComputerDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ),
+          ),*/
           Container(
             height: 1,
             color: Colors.black,
@@ -695,7 +717,7 @@ class ComputerDrawer extends StatelessWidget {
               }),
             ),
           ),
-          Container(
+          /*Container(
             height: 1,
             color: Colors.black,
             width: 1,
@@ -737,6 +759,30 @@ class ComputerDrawer extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ConnectSuppliersFarmer(),
+                    ));
+              }),
+            ),
+          ),*/
+          //AddAdmin
+          Container(
+            height: 1,
+            color: Colors.black,
+            width: 1,
+          ),
+          Container(
+            width: 400,
+            height: 10,
+            color: index == 14 ? Colors.grey : const Color(0xFF003e29),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              minVerticalPadding: 1,
+              title: const Text('اضافة مودرين',
+                  style: TextStyle(color: Colors.white)),
+              onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddAdmin(),
                     ));
               }),
             ),

@@ -21,7 +21,7 @@ class _LogINState extends State<LogIN> {
   CustomePasswordUpdateTextField customePasswordUpdateTextField =
       CustomePasswordUpdateTextField();
   @override
-  void initState()   {
+  void initState() {
     super.initState();
     /*_controller.text = await CustomeSecureStorage.getssn();
     customePasswordUpdateTextField.controller.text =
@@ -29,7 +29,7 @@ class _LogINState extends State<LogIN> {
   }
 
   final _formKey = GlobalKey<FormState>();
-
+  Widget text = Container();
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -109,6 +109,7 @@ class _LogINState extends State<LogIN> {
                               const SizedBox(
                                 height: 20,
                               ),
+                              text,
                               Container(
                                 height: 50,
                                 child: TextButton(
@@ -134,6 +135,16 @@ class _LogINState extends State<LogIN> {
                                             MaterialPageRoute(
                                               builder: (context) => Farmer(),
                                             ));
+                                      } else {
+                                        text = Text(
+                                          '  كلمة المرور او الرقم القومي عير صحيح',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white),
+                                        );
+                                        setState(() {
+                                          
+                                        });
                                       }
                                     },
                                     style: ButtonStyle(

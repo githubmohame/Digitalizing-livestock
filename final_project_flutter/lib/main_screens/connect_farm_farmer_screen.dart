@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
+import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/validations.dart';
@@ -183,8 +184,19 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                       };
                                       FormData formData =
                                           FormData.fromMap(dic1);
-                                      connect_farm_farmer_api(
+                                      var res= await connect_farm_farmer_api(
                                           formData: formData);
+
+                                           if (res.containsKey('message')) {
+                                            showSnackbardone(
+                                                context: context,
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
+                                          return null;
                                     }
                                   },
                                   child: const Text(
@@ -209,7 +221,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                       overlayColor:
                                           MaterialStateProperty.resolveWith(
                                               (states) => Colors.red)),
-                                  onPressed: () {
+                                  onPressed: () async{
                                     delete = true;
                                     if (list[2].text.isNotEmpty) {
                                       Map<String, dynamic> dic1 = {
@@ -219,8 +231,18 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                       };
                                       FormData formData =
                                           FormData.fromMap(dic1);
-                                      connect_farm_farmer_api(
+                                      var res =await connect_farm_farmer_api(
                                           formData: formData);
+                                         if (res.containsKey('message')) {
+                                            showSnackbardone(
+                                                context: context,
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
+                                          return null;
                                     }
                                     delete = false;
                                   },

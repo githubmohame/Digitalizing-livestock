@@ -19,11 +19,19 @@ urlpatterns = [
         ,path('modified_species',modified_species)
         ,path('modified_platoon', modified_platoon)
         ,path('farmer_api',  farmer_api)
-        ,path('add_farmer_animal_api', add_farm_animal)
+        ,path('add_farme_animal_api', add_farm_animal)
        ,path('location_api',   get_locations)
        ,path('animal_api',  get_animal)
        ,path('change_password_email',   change_password_email)
        ,path('change_password_done',   change_password_done)
        ,path('connect_farm_farmer_api', connect_farm_farmer_api)
       ,path('login_api',  login )
+      ,path('operation_admin_api',  operation_admin_api),
     ]
+'''
+ "fname":  list[0].text,
+                                      'email': list[2].text,
+                                      'phone': list[3].text,
+                                      'ssn':  list[4].text,
+*/
+'''

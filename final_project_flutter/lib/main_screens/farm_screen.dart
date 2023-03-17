@@ -27,7 +27,7 @@ class CustomeDropdownButton extends StatefulWidget {
   String text;
   String id;
   bool expanded = false;
-  List<Map<String, String>> list;
+  List<Map<String, dynamic>> list;
   void Function(String value)? func;
   CustomeDropdownButton({
     Key? key,
@@ -138,8 +138,7 @@ class _FarmScreenState extends State<FarmScreen> {
         value: controller[7].text, errorHeight: errorHeight);
     errorHeight = funcStringValidation(
         value: controller[8].text, errorHeight: errorHeight);
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -532,6 +531,30 @@ class _FarmScreenState extends State<FarmScreen> {
                                   Container(
                                     height: 260,
                                     child: Row(
+                                      /*
+                                      FutureBuilder(
+                                                future: location_api(),
+                                                builder: (context, snap) {
+                                                  if (snap.connectionState ==
+                                                          ConnectionState
+                                                              .done &&
+                                                      snap.data is List<
+                                                          Map<String,
+                                                              dynamic>> &&
+                                                      snap.data!.isNotEmpty) {
+                                                    return BlocProvider(
+                                                      create: (context) =>
+                                                          LocationCubit(
+                                                        city: snap.data![0]
+                                                            ['city'],
+                                                        gavernorate:
+                                                            snap.data![0]
+                                                                ['governorate'],
+                                                        village: snap.data![0]
+                                                            ['village'],
+                                                      ),
+                                      
+                                      */
                                       children: [
                                         Expanded(
                                             child: FutureBuilder(
@@ -557,13 +580,13 @@ class _FarmScreenState extends State<FarmScreen> {
                                                       ),
                                                       child: Builder(
                                                           builder: (context) {
-                                                        
                                                         selectLocation
                                                                     .village ==
                                                                 ''
                                                             ? selectLocation
-                                                                    .village =snap.data![0]
-                                                                ['village']
+                                                                    .village =
+                                                                snap.data![0]
+                                                                    ['village']
                                                             : null;
 
                                                         selectLocation.city =
@@ -612,17 +635,6 @@ class _FarmScreenState extends State<FarmScreen> {
 
                                           if (_formGlobalKey.currentState!
                                               .validate()) {
-                                            showSnackbar(
-                                              context: context,
-                                              row: [
-                                                Icon(Icons.task_alt,
-                                                    color: Colors.green),
-                                                Text('تم',
-                                                    style: TextStyle(
-                                                        color: Colors.green))
-                                              ],
-                                            );
-                                            
                                             var f = dio.MultipartFile.fromBytes(
                                                 await File(
                                                         '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
@@ -711,17 +723,19 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     dic1,
                                                     dio.ListFormat.multi,
                                                     false);
-                                            var res =
+                                            Map<String, dynamic> res =
                                                 await farm_api(form: formData);
+                                            if (res.containsKey('message')) {
+                                              showSnackbardone(
+                                                  context: context,
+                                                  text: res['message']);
+                                            } else {
+                                              showSnackbarerror(
+                                                  context: context,
+                                                  text: res['error']);
+                                            }
                                             return null;
                                           }
-                                          showSnackbar(context: context, row: [
-                                            Icon(Icons.error,
-                                                color: Colors.red),
-                                            Text('مشكلة',
-                                                style: TextStyle(
-                                                    color: Colors.red))
-                                          ]);
                                         },
                                         child: const Text(
                                           "حفظ",
@@ -756,6 +770,15 @@ class _FarmScreenState extends State<FarmScreen> {
                                           });
                                           var res =
                                               await farm_api(form: formData);
+                                          if (res.containsKey('message')) {
+                                            showSnackbardone(
+                                                context: context,
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
                                           return null;
                                         },
                                         child: const Text(
@@ -871,6 +894,16 @@ class _FarmScreenState extends State<FarmScreen> {
                                                   dio.ListFormat.multi, false);
                                           var res =
                                               await farm_api(form: formData);
+
+                                          if (res.containsKey('message')) {
+                                            showSnackbardone(
+                                                context: context,
+                                                text: res['message']);
+                                          } else {
+                                            showSnackbarerror(
+                                                context: context,
+                                                text: res['error']);
+                                          }
                                           return null;
                                         },
                                         child: const Text(
@@ -1015,11 +1048,12 @@ class SelectLocation extends StatelessWidget {
             return FutureBuilder(
                 future: city_api(gavernorate: state.gavernorate),
                 builder: (context, snap) {
+                   print( snap.data.runtimeType);
                   if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, String>> &&
+                      snap.data is List<Map<String, dynamic>> &&
                       snap.data!.isNotEmpty) {
                     city = snap.data!.first['name'] ?? 'اسيوط';
-
+                     
                     return Container(
                       margin: EdgeInsets.all(5),
                       decoration: BoxDecoration(
@@ -1059,10 +1093,12 @@ class SelectLocation extends StatelessWidget {
             return FutureBuilder(
                 future: village_api(city: state.city),
                 builder: (context, snap) {
-                  if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, String>> &&
-                      snap.data!.isNotEmpty)
-                    return Container(
+                   if (snap.connectionState == ConnectionState.done &&
+                      snap.data is List<Map<String, dynamic>> &&
+                      snap.data!.isNotEmpty){
+                        village=snap.data!.first['id']??'' ;
+                       // print(snap.data);
+                        return Container(
                       margin: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           border: Border.all(
@@ -1085,6 +1121,8 @@ class SelectLocation extends StatelessWidget {
                           value: snap.data!.first['id'] ?? '1',
                           text: "القرية او الشارع"),
                     );
+                      }
+                    
                   return Container(
                     height: 0,
                     width: 0,
@@ -1333,7 +1371,9 @@ class _GoogleMapComponentState extends State<GoogleMapComponent> {
         Container(
           height: 300 - 32,
           child: FlutterMap(
-            options: MapOptions(center: LatLng(27,24),zoom: 5,
+            options: MapOptions(
+              center: LatLng(27, 24),
+              zoom: 5,
               onTap: (tapPosition, point) {
                 widget.point = point;
                 widget.file = null;
