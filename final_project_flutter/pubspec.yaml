@@ -29,19 +29,29 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  connectivity_plus: ^3.0.3
+  cron: ^0.5.1
   cupertino_icons: ^1.0.2
   d_chart: ^1.0.1
+  device_info_plus: ^8.1.0
   dio: ^5.0.0
   file_picker: ^5.2.5
   fl_chart: ^0.60.0
   flutter:
     sdk: flutter
+  flutter_background_service: ^2.4.6
   flutter_bloc: ^8.1.2
+  flutter_local_notifications: ^13.0.0
   flutter_map: ^3.1.0
   flutter_secure_storage: ^8.0.0
   geolocator: ^9.0.2
+  local_auth: ^2.1.6
+  permission_handler: ^10.2.0
+  secure_application: ^3.8.0
   syncfusion_flutter_charts: ^20.4.48
   url_launcher: ^6.1.7
+  web_socket_channel: ^2.3.0
+  workmanager: ^0.5.1
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:

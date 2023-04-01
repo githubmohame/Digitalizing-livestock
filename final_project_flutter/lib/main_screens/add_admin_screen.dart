@@ -217,7 +217,7 @@ class AddAdmin extends StatelessWidget {
                                               .password,
                                         };
 
-                                        operation_admin_api(
+                                        admin_api(
                                             formData: FormData.fromMap(dic1));
                                       }
                                     },
@@ -260,9 +260,9 @@ class AddAdmin extends StatelessWidget {
                                   if (list[3].text.isNotEmpty) {
                                     dic1['operation'] = 'delete';
                                     dic1['ssn'] = list[3].text;
-                                    operation_admin_api(
-                                        formData: FormData.fromMap(dic1));
-                                    showSnackbardone(context: context, text: 'done');
+                                    admin_api(formData: FormData.fromMap(dic1));
+                                    showSnackbardone(
+                                        context: context, text: 'done');
                                   }
                                 },
                                 child: const Text(
@@ -291,7 +291,7 @@ class AddAdmin extends StatelessWidget {
                                               .password,
                                         };
 
-                                        operation_admin_api(
+                                        admin_api(
                                             formData: FormData.fromMap(dic1));
                                       }
                                     },

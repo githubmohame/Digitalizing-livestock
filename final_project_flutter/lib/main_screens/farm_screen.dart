@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:file_picker/file_picker.dart';
+import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,8 @@ import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/validations.dart';
+
+enum Farm_type { farm, barn }
 
 class CustomeDropdownButton extends StatefulWidget {
   String value;
@@ -96,12 +99,17 @@ Future<List<Map<String, dynamic>>> f1() {
 
 class FarmScreen extends StatefulWidget {
   FarmScreen({Key? key}) : super(key: key);
-
+  
   @override
   State<FarmScreen> createState() => _FarmScreenState();
 }
 
 class _FarmScreenState extends State<FarmScreen> {
+  @override
+  void initState()  {
+    //await CustomeSecureStorage.remove_all( );
+    super.initState();
+  }
   FarmType farmType = FarmType();
 
   SectionType sectionType = SectionType();
@@ -120,27 +128,31 @@ class _FarmScreenState extends State<FarmScreen> {
   );
   void update_screen() {
     errorHeight = 0;
+    if (_selectFarmType == Farm_type.farm) {
+      errorHeight = funcNumValidation(
+          value: controller[2].text, errorHeight: errorHeight);
+      errorHeight = funcStringValidation(
+          value: controller[4].text, errorHeight: errorHeight);
+      errorHeight = funcStringValidation(
+          value: controller[5].text, errorHeight: errorHeight);
+      errorHeight = funcStringValidation(
+          value: controller[6].text, errorHeight: errorHeight);
+      errorHeight = funcStringValidation(
+          value: controller[7].text, errorHeight: errorHeight);
+      errorHeight = funcStringValidation(
+          value: controller[8].text, errorHeight: errorHeight);
+    }
+    errorHeight =
+        funcNumValidation(value: controller[1].text, errorHeight: errorHeight);
     errorHeight = funcStringValidation(
         value: controller[0].text, errorHeight: errorHeight);
     errorHeight =
-        funcNumValidation(value: controller[1].text, errorHeight: errorHeight);
-    errorHeight =
-        funcNumValidation(value: controller[2].text, errorHeight: errorHeight);
-    errorHeight =
         funcNumValidation(errorHeight: errorHeight, value: controller[3].text);
-    errorHeight = funcStringValidation(
-        value: controller[4].text, errorHeight: errorHeight);
-    errorHeight = funcStringValidation(
-        value: controller[5].text, errorHeight: errorHeight);
-    errorHeight = funcStringValidation(
-        value: controller[6].text, errorHeight: errorHeight);
-    errorHeight = funcStringValidation(
-        value: controller[7].text, errorHeight: errorHeight);
-    errorHeight = funcStringValidation(
-        value: controller[8].text, errorHeight: errorHeight);
+
     setState(() {});
   }
 
+  Farm_type  _selectFarmType=Farm_type.barn;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -161,8 +173,14 @@ class _FarmScreenState extends State<FarmScreen> {
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: Container(
-                height:
-                    1600 + 178 + 150 + 52 + 70 + 50 + 25 + 100 + errorHeight,
+                height: 700 +
+                    496 +
+                    90 +
+                    errorHeight +
+                    (_selectFarmType == Farm_type.farm
+                        ? 584 + 186+880
+                        : 350) //+ 150 + 52 + 70 + 50 + 25 + 100
+                ,
                 child: Container(
                   child: Column(
                     children: [
@@ -176,7 +194,15 @@ class _FarmScreenState extends State<FarmScreen> {
                         color: Color(0xFF357515),
                         child: Container(
                           padding: EdgeInsets.all(20),
-                          height: 1780 + 52 + 30 + 25 + 100 + errorHeight,
+                          height: 700 +
+                              496 +
+                              40 +
+                              18 +
+                              errorHeight +
+                              (_selectFarmType == Farm_type.farm
+                                  ? 584 + 16 + 54
+                                  : 160) //+ 150 + 52 + 70 + 50 + 25 + 100
+                          ,
                           width: 700,
                           child: Form(
                               key: _formGlobalKey,
@@ -205,12 +231,48 @@ class _FarmScreenState extends State<FarmScreen> {
                                         )
                                       : Container(),
                                   Row(
+                                    children: [
+                                      Radio(
+                                        focusColor: Colors.blue,
+                                        activeColor: Colors.blue,
+                                        value: Farm_type.farm,
+                                        groupValue: _selectFarmType,
+                                        onChanged: (value) {
+                                          if(value is Farm_type)
+                                          _selectFarmType = value;
+                                          setState(() {});
+                                        },
+                                      ),
+                                      Text(
+                                        'المزرعة',
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      ),
+                                      Radio(
+                                        focusColor: Colors.blue,
+                                        activeColor: Colors.blue,
+                                        value: Farm_type.barn,
+                                        groupValue: _selectFarmType,
+                                        onChanged: (value) {
+                                           if(value is Farm_type)
+                                          _selectFarmType = value;
+                                          setState(() {});
+                                        },
+                                      ),
+                                      Text(
+                                        'الحظيرة',
+                                        style: TextStyle(
+                                            fontSize: 15, color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         margin: const EdgeInsets.all(10),
                                         child: Text(
-                                          'رقم السجل الضريبي',
+                                          ' ارقم السجل الضريبي او كود المزرعة',
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold),
@@ -268,41 +330,55 @@ class _FarmScreenState extends State<FarmScreen> {
                                     },
                                     keyboardType: TextInputType.number,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Text(
-                                          'المساحة الكلية للمزرعة',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomeTextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))
-                                    ],
-                                    controller: controller[2],
-                                    validator: (value) {
-                                      String s1 = isEmpty(s1: value.toString());
-                                      if (s1.isNotEmpty) {
-                                        return s1;
-                                      }
-                                      s1 += biggerMin(
-                                          s1: value.toString(), min: 0);
-                                      if (s1.isEmpty) {
-                                        return null;
-                                      }
+                                  _selectFarmType == Farm_type.farm
+                                      ? Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Text(
+                                                    'المساحة الكلية للمزرعة',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomeTextField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]'))
+                                              ],
+                                              controller: controller[2],
+                                              validator: (value) {
+                                                if (_selectFarmType ==
+                                                    Farm_type.farm) return null;
+                                                String s1 = isEmpty(
+                                                    s1: value.toString());
+                                                if (s1.isNotEmpty) {
+                                                  return s1;
+                                                }
+                                                s1 += biggerMin(
+                                                    s1: value.toString(),
+                                                    min: 0);
+                                                if (s1.isEmpty) {
+                                                  return null;
+                                                }
 
-                                      return s1;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                  ),
+                                                return s1;
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -339,190 +415,260 @@ class _FarmScreenState extends State<FarmScreen> {
                                     },
                                     keyboardType: TextInputType.text,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Text(
-                                          "اعدد الملاعب",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomeTextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))
-                                    ],
-                                    controller: controller[4],
-                                    validator: (value) {
-                                      String s1 = isEmpty(s1: value.toString());
-                                      if (s1.isNotEmpty) {
-                                        return s1;
-                                      }
+                                  _selectFarmType == Farm_type.farm
+                                      ? Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Text(
+                                                    "اعدد الملاعب",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomeTextField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]'))
+                                              ],
+                                              controller: controller[4],
+                                              validator: (value) {
+                                                if (_selectFarmType ==
+                                                    Farm_type.farm) return null;
+                                                String s1 = isEmpty(
+                                                    s1: value.toString());
+                                                if (s1.isNotEmpty) {
+                                                  return s1;
+                                                }
 
-                                      s1 += biggerMin(
-                                          s1: value.toString(), min: 0);
+                                                s1 += biggerMin(
+                                                    s1: value.toString(),
+                                                    min: 0);
 
-                                      if (s1.isEmpty) {
-                                        return null;
-                                      }
+                                                if (s1.isEmpty) {
+                                                  return null;
+                                                }
 
-                                      return s1;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Text(
-                                          "سعة الملاعب",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomeTextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))
-                                    ],
-                                    controller: controller[5],
-                                    validator: (value) {
-                                      String s1 = isEmpty(s1: value.toString());
-                                      if (s1.isNotEmpty) {
-                                        return s1;
-                                      }
+                                                return s1;
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                                  _selectFarmType == Farm_type.farm
+                                      ? Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Text(
+                                                    "سعة الملاعب",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomeTextField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]'))
+                                              ],
+                                              controller: controller[5],
+                                              validator: (value) {
+                                                if (_selectFarmType ==
+                                                    Farm_type.farm) return null;
+                                                String s1 = isEmpty(
+                                                    s1: value.toString());
+                                                if (s1.isNotEmpty) {
+                                                  return s1;
+                                                }
 
-                                      s1 += biggerMin(
-                                          s1: value.toString(), min: 0);
-                                      if (s1.isEmpty) {
-                                        return null;
-                                      }
+                                                s1 += biggerMin(
+                                                    s1: value.toString(),
+                                                    min: 0);
+                                                if (s1.isEmpty) {
+                                                  return null;
+                                                }
 
-                                      return s1;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Text(
-                                          "اعدد العنابر",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomeTextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))
-                                    ],
-                                    controller: controller[6],
-                                    validator: (value) {
-                                      String s1 = isEmpty(s1: value.toString());
+                                                return s1;
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                                  _selectFarmType == Farm_type.farm
+                                      ? Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Text(
+                                                    "اعدد العنابر",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomeTextField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]'))
+                                              ],
+                                              controller: controller[6],
+                                              validator: (value) {
+                                                if (_selectFarmType ==
+                                                    Farm_type.farm) return null;
+                                                String s1 = isEmpty(
+                                                    s1: value.toString());
 
-                                      if (s1.isNotEmpty) {
-                                        return s1;
-                                      }
+                                                if (s1.isNotEmpty) {
+                                                  return s1;
+                                                }
 
-                                      s1 += biggerMin(
-                                          s1: value.toString(), min: 0);
-                                      if (s1.isEmpty) {
-                                        return null;
-                                      }
+                                                s1 += biggerMin(
+                                                    s1: value.toString(),
+                                                    min: 0);
+                                                if (s1.isEmpty) {
+                                                  return null;
+                                                }
 
-                                      return s1;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Text(
-                                          'عدد عنابر العزل',
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomeTextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))
-                                    ],
-                                    controller: controller[7],
-                                    validator: (value) {
-                                      String s1 = isEmpty(s1: value.toString());
+                                                return s1;
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                                  _selectFarmType == Farm_type.farm
+                                      ? Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Text(
+                                                    'عدد عنابر العزل',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomeTextField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]'))
+                                              ],
+                                              controller: controller[7],
+                                              validator: (value) {
+                                                if (_selectFarmType ==
+                                                    Farm_type.farm) return null;
+                                                String s1 = isEmpty(
+                                                    s1: value.toString());
 
-                                      if (s1.isNotEmpty) {
-                                        return s1;
-                                      }
+                                                if (s1.isNotEmpty) {
+                                                  return s1;
+                                                }
 
-                                      s1 += biggerMin(
-                                          s1: value.toString(), min: 0);
-                                      if (s1.isEmpty) {
-                                        return null;
-                                      }
+                                                s1 += biggerMin(
+                                                    s1: value.toString(),
+                                                    min: 0);
+                                                if (s1.isEmpty) {
+                                                  return null;
+                                                }
 
-                                      return s1;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: Text(
-                                          "ادخل عدد الافدنة الملحقة",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomeTextField(
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.allow(
-                                          RegExp(r'[0-9]'))
-                                    ],
-                                    controller: controller[8],
-                                    validator: (value) {
-                                      String s1 = isEmpty(s1: value.toString());
+                                                return s1;
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                                  _selectFarmType == Farm_type.farm
+                                      ? Column(
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.all(10),
+                                                  child: Text(
+                                                    "ادخل عدد الافدنة الملحقة",
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            CustomeTextField(
+                                              inputFormatters: [
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9]'))
+                                              ],
+                                              controller: controller[8],
+                                              validator: (value) {
+                                                if (_selectFarmType ==
+                                                    Farm_type.farm) return null;
+                                                String s1 = isEmpty(
+                                                    s1: value.toString());
 
-                                      if (s1.isNotEmpty) {
-                                        return s1;
-                                      }
+                                                if (s1.isNotEmpty) {
+                                                  return s1;
+                                                }
 
-                                      s1 += biggerMin(
-                                          s1: value.toString(), min: 0);
-                                      if (s1.isEmpty) {
-                                        return null;
-                                      }
+                                                s1 += biggerMin(
+                                                    s1: value.toString(),
+                                                    min: 0);
+                                                if (s1.isEmpty) {
+                                                  return null;
+                                                }
 
-                                      return s1;
-                                    },
-                                    keyboardType: TextInputType.number,
-                                  ),
+                                                return s1;
+                                              },
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
                                   sectionType,
                                   Container(
                                       height: 400,
@@ -531,79 +677,10 @@ class _FarmScreenState extends State<FarmScreen> {
                                   Container(
                                     height: 260,
                                     child: Row(
-                                      /*
-                                      FutureBuilder(
-                                                future: location_api(),
-                                                builder: (context, snap) {
-                                                  if (snap.connectionState ==
-                                                          ConnectionState
-                                                              .done &&
-                                                      snap.data is List<
-                                                          Map<String,
-                                                              dynamic>> &&
-                                                      snap.data!.isNotEmpty) {
-                                                    return BlocProvider(
-                                                      create: (context) =>
-                                                          LocationCubit(
-                                                        city: snap.data![0]
-                                                            ['city'],
-                                                        gavernorate:
-                                                            snap.data![0]
-                                                                ['governorate'],
-                                                        village: snap.data![0]
-                                                            ['village'],
-                                                      ),
-                                      
-                                      */
                                       children: [
                                         Expanded(
-                                            child: FutureBuilder(
-                                                future: location_api(),
-                                                builder: (context, snap) {
-                                                  if (snap.connectionState ==
-                                                          ConnectionState
-                                                              .done &&
-                                                      snap.data is List<
-                                                          Map<String,
-                                                              dynamic>> &&
-                                                      snap.data!.isNotEmpty) {
-                                                    return BlocProvider(
-                                                      create: (context) =>
-                                                          LocationCubit(
-                                                        city: snap.data![0]
-                                                            ['city'],
-                                                        gavernorate:
-                                                            snap.data![0]
-                                                                ['governorate'],
-                                                        village: snap.data![0]
-                                                            ['village'],
-                                                      ),
-                                                      child: Builder(
-                                                          builder: (context) {
-                                                        selectLocation
-                                                                    .village ==
-                                                                ''
-                                                            ? selectLocation
-                                                                    .village =
-                                                                snap.data![0]
-                                                                    ['village']
-                                                            : null;
-
-                                                        selectLocation.city =
-                                                            selectLocation
-                                                                        .city ==
-                                                                    ''
-                                                                ? snap.data![0]
-                                                                    ['city']
-                                                                : selectLocation
-                                                                    .city;
-                                                        return selectLocation;
-                                                      }),
-                                                    );
-                                                  }
-
-                                                  return Container();
-                                                })),
+                                          child: selectLocation,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -631,6 +708,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.green)),
                                         onPressed: () async {
+                                          await CustomeSecureStorage.remove_all( );
                                           update_screen();
 
                                           if (_formGlobalKey.currentState!
@@ -652,14 +730,22 @@ class _FarmScreenState extends State<FarmScreen> {
                                                       .customeFarmType
                                                       .item_choose)
                                                   : null,
-                                              r'isolated_wards':
-                                                  int.parse(controller[7].text),
-                                              'number_of_arc':
-                                                  int.parse(controller[8].text),
-                                              'number_of_workers':
-                                                  int.parse(controller[1].text),
-                                              'playground':
-                                                  int.parse(controller[4].text),
+                                              r'isolated_wards': int.parse(
+                                                  controller[7].text.isEmpty
+                                                      ? '0'
+                                                      : controller[7].text),
+                                              'number_of_arc': int.parse(
+                                                  controller[8].text.isEmpty
+                                                      ? '0'
+                                                      : controller[8].text),
+                                              'number_of_workers': int.parse(
+                                                  controller[1].text.isEmpty
+                                                      ? '0'
+                                                      : controller[1].text),
+                                              'playground': int.parse(
+                                                  controller[4].text.isEmpty
+                                                      ? '0'
+                                                      : controller[4].text),
                                               'section_type': sectionType
                                                       .customeDropdownButtonSectionType
                                                       .value
@@ -672,21 +758,21 @@ class _FarmScreenState extends State<FarmScreen> {
                                                   controller[6].text.isNotEmpty
                                                       ? int.parse(
                                                           controller[6].text)
-                                                      : null,
+                                                      : 0,
                                               'total_area_of_farm':
                                                   controller[2].text.isNotEmpty
                                                       ? int.parse(
                                                           controller[2].text)
-                                                      : null,
+                                                      : 0,
                                               'farm_name':
                                                   controller[3].text.isNotEmpty
                                                       ? controller[3].text
-                                                      : null,
+                                                      : 0,
                                               'huge_playground':
                                                   controller[5].text.isNotEmpty
                                                       ? int.parse(
                                                           controller[5].text)
-                                                      : null,
+                                                      : 0,
                                               'id': controller[0].text,
                                               "city": this.selectLocation.city,
                                               'village':
@@ -718,6 +804,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             } else {
                                               dic1['geometry'] = null;
                                             }
+                                            print(dic1);
                                             dio.FormData formData =
                                                 dio.FormData.fromMap(
                                                     dic1,
@@ -824,14 +911,22 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     .customeFarmType
                                                     .item_choose)
                                                 : null,
-                                            r'isolated_wards':
-                                                int.parse(controller[7].text),
-                                            'number_of_arc':
-                                                int.parse(controller[8].text),
-                                            'number_of_workers':
-                                                int.parse(controller[1].text),
-                                            'playground':
-                                                int.parse(controller[4].text),
+                                            r'isolated_wards': int.parse(
+                                                controller[7].text.isEmpty
+                                                    ? '0'
+                                                    : controller[7].text),
+                                            'number_of_arc': int.parse(
+                                                controller[8].text.isEmpty
+                                                    ? '0'
+                                                    : controller[8].text),
+                                            'number_of_workers': int.parse(
+                                                controller[1].text.isEmpty
+                                                    ? '0'
+                                                    : controller[1].text),
+                                            'playground': int.parse(
+                                                controller[4].text.isEmpty
+                                                    ? '0'
+                                                    : controller[4].text),
                                             'section_type': sectionType
                                                     .customeDropdownButtonSectionType
                                                     .value
@@ -844,21 +939,21 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     .text
                                                     .isNotEmpty
                                                 ? int.parse(controller[6].text)
-                                                : null,
+                                                : 0,
                                             'total_area_of_farm': controller[2]
                                                     .text
                                                     .isNotEmpty
                                                 ? int.parse(controller[2].text)
-                                                : null,
+                                                : 0,
                                             'farm_name':
                                                 controller[3].text.isNotEmpty
                                                     ? controller[3].text
-                                                    : null,
+                                                    : 0,
                                             'huge_playground': controller[5]
                                                     .text
                                                     .isNotEmpty
                                                 ? int.parse(controller[5].text)
-                                                : null,
+                                                : 0,
                                             'id': controller[0].text,
                                             "city": this.selectLocation.city,
                                             'village':
@@ -1005,133 +1100,155 @@ class SelectLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-            margin: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                border: Border.all(
-              color: Colors.white,
-            )),
-            child: FutureBuilder(
-                future: gavernorate_api(),
-                builder: (context, snap) {
-                  try {
-                    if (snap.connectionState == ConnectionState.done) {
-                      return CustomeDropdownButton(
-                          id: 'id',
-                          func: (String value) {
-                            BlocProvider.of<LocationCubit>(context)
-                                .updateGavernorate(value);
-                          },
-                          list: snap.data ??
-                              const [
-                                {"name": "اسيوط"},
-                                {"name": "القاهرة"},
-                                {"name": "المنةفية"}
-                              ],
-                          expanded: true,
-                          value: snap.data!.first['id'] ?? 'اسيوط',
-                          text: "المحافظة");
-                    }
-                  } catch (e) {}
+    return FutureBuilder(
+        future: location_api(),
+        builder: (context, snap) {
+          if (snap.data is List<Map<String, dynamic>>) {
+            print( snap.data);
+            return BlocProvider(
+              create: (context) => LocationCubit(
+                city: snap.data![0]['city'],
+                gavernorate: snap.data![0]['governorate'],
+                village: snap.data![0]['village'],
+              ),
+              child: Builder(builder: (context) {
+                city = snap.data![0]['city'];
+                village = snap.data![0]['village'];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          color: Colors.white,
+                        )),
+                        child: FutureBuilder(
+                            future: gavernorate_api(),
+                            builder: (context, snap) {
+                              try {
+                                if (snap.connectionState ==
+                                    ConnectionState.done) {
+                                  return CustomeDropdownButton(
+                                      id: 'id',
+                                      func: (String value) {
+                                        BlocProvider.of<LocationCubit>(context)
+                                            .updateGavernorate(value);
+                                      },
+                                      list: snap.data ??
+                                          const [
+                                            {"name": "اسيوط"},
+                                            {"name": "القاهرة"},
+                                            {"name": "المنةفية"}
+                                          ],
+                                      expanded: true,
+                                      value: snap.data!.first['id'] ?? 'اسيوط',
+                                      text: "المحافظة");
+                                }
+                              } catch (e) {}
 
-                  return Container();
-                })),
-        BlocBuilder<LocationCubit, LocationState>(
-          buildWhen: (previous, current) {
-            //
-            return previous.gavernorate != current.gavernorate;
-          },
-          builder: (context, state) {
-            return FutureBuilder(
-                future: city_api(gavernorate: state.gavernorate),
-                builder: (context, snap) {
-                   print( snap.data.runtimeType);
-                  if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, dynamic>> &&
-                      snap.data!.isNotEmpty) {
-                    city = snap.data!.first['name'] ?? 'اسيوط';
-                     
-                    return Container(
-                      margin: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                        color: Colors.white,
-                      )),
-                      child: CustomeDropdownButton(
-                          id: 'id',
-                          func: (String value) {
-                            BlocProvider.of<LocationCubit>(context)
-                                .updateCity(value);
-                            city = value;
-                          },
-                          list: snap.data ??
-                              const [
-                                {"name": "اسيوط"},
-                                {"name": "القاهرة"},
-                                {"name": "المنةفية"}
-                              ],
-                          expanded: true,
-                          value: snap.data!.first['id'] ?? '1',
-                          text: "المركز او المدينة"),
-                    );
-                  }
-                  return Container(
-                    height: 0,
-                    width: 0,
-                  );
-                });
-          },
-        ),
-        BlocBuilder<LocationCubit, LocationState>(
-          buildWhen: (previous, current) {
-            return previous.city != current.city;
-          },
-          builder: (context, state) {
-            return FutureBuilder(
-                future: village_api(city: state.city),
-                builder: (context, snap) {
-                   if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, dynamic>> &&
-                      snap.data!.isNotEmpty){
-                        village=snap.data!.first['id']??'' ;
-                       // print(snap.data);
-                        return Container(
-                      margin: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                        color: Colors.white,
-                      )),
-                      child: CustomeDropdownButton(
-                          id: 'id',
-                          func: (String value) {
-                            BlocProvider.of<LocationCubit>(context)
-                                .updateVillage(value);
-                            village = value;
-                          },
-                          list: snap.data ??
-                              const [
-                                {"name": "اسيوط"},
-                                {"name": "القاهرة"},
-                                {"name": "المنةفية"}
-                              ],
-                          expanded: true,
-                          value: snap.data!.first['id'] ?? '1',
-                          text: "القرية او الشارع"),
-                    );
-                      }
-                    
-                  return Container(
-                    height: 0,
-                    width: 0,
-                  );
-                });
-          },
-        ),
-      ],
-    );
+                              return Container();
+                            })),
+                    BlocBuilder<LocationCubit, LocationState>(
+                      buildWhen: (previous, current) {
+                        //
+                        return previous.gavernorate != current.gavernorate;
+                      },
+                      builder: (context, state) {
+                        return FutureBuilder(
+                            future: city_api(gavernorate: state.gavernorate),
+                            builder: (context, snap) {
+                              print(snap.data.runtimeType);
+                              if (snap.connectionState ==
+                                      ConnectionState.done &&
+                                  snap.data is List<Map<String, dynamic>> &&
+                                  snap.data!.isNotEmpty) {
+                                city = snap.data!.first['name'] ?? 'اسيوط';
+
+                                return Container(
+                                  margin: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                    color: Colors.white,
+                                  )),
+                                  child: CustomeDropdownButton(
+                                      id: 'id',
+                                      func: (String value) {
+                                        BlocProvider.of<LocationCubit>(context)
+                                            .updateCity(value);
+                                        city = value;
+                                      },
+                                      list: snap.data ??
+                                          const [
+                                            {"name": "اسيوط"},
+                                            {"name": "القاهرة"},
+                                            {"name": "المنةفية"}
+                                          ],
+                                      expanded: true,
+                                      value: snap.data!.first['id'] ?? '1',
+                                      text: "المركز او المدينة"),
+                                );
+                              }
+                              return Container(
+                                height: 0,
+                                width: 0,
+                              );
+                            });
+                      },
+                    ),
+                    BlocBuilder<LocationCubit, LocationState>(
+                      buildWhen: (previous, current) {
+                        return previous.city != current.city;
+                      },
+                      builder: (context, state) {
+                        return FutureBuilder(
+                            future: village_api(city: state.city),
+                            builder: (context, snap) {
+                              if (snap.connectionState ==
+                                      ConnectionState.done &&
+                                  snap.data is List<Map<String, dynamic>> &&
+                                  snap.data!.isNotEmpty) {
+                                village = snap.data!.first['id'] ?? '';
+                                // print(snap.data);
+                                return Container(
+                                  margin: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                    color: Colors.white,
+                                  )),
+                                  child: CustomeDropdownButton(
+                                      id: 'id',
+                                      func: (String value) {
+                                        BlocProvider.of<LocationCubit>(context)
+                                            .updateVillage(value);
+                                        village = value;
+                                      },
+                                      list: snap.data ??
+                                          const [
+                                            {"name": "اسيوط"},
+                                            {"name": "القاهرة"},
+                                            {"name": "المنةفية"}
+                                          ],
+                                      expanded: true,
+                                      value: snap.data!.first['id'] ?? '1',
+                                      text: "القرية او الشارع"),
+                                );
+                              }
+
+                              return Container(
+                                height: 0,
+                                width: 0,
+                              );
+                            });
+                      },
+                    ),
+                  ],
+                );
+              }),
+            );
+          }
+          return Container();
+        });
   }
 }
 

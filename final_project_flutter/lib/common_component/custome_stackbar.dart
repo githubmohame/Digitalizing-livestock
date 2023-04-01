@@ -8,7 +8,7 @@ void showSnackbardone(
    scaffoldMessenger.hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.white,
-      duration: Duration(milliseconds: 700),
+      duration: Duration(milliseconds: 1700),
       content: Container(
         child: Row(
           children: [

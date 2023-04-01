@@ -79,6 +79,32 @@ class connectFarmFarmerSeralizer(serializers.ModelSerializer):
 
 
 
+class governorateFarmListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=governorate
+        fields=['name' ]
+        
+class cityFarmListSerializer(serializers.ModelSerializer):
+    governorate=governorateFarmListSerializer()
+    class Meta:
+        model=city
+        fields=['name' ,'governorate',]
 
+class villageFarmListSerializer(serializers.ModelSerializer):
+    city=cityFarmListSerializer()
+    class Meta:
+        model=village
+        fields=['name' ,'city']
+
+class section_typeFarmListSerializer(serializers.ModelSerializer):
+        class Meta:
+            model=section_type
+            fields=['name' ]
+class FarmListSerializer(serializers.ModelSerializer):
+    village=villageFarmListSerializer()
+    section_type=section_typeFarmListSerializer()
+    class Meta:
+            model=farm
+            fields=['farm_name','number_of_workers','village','id','section_type']
 
 

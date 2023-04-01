@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
+import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:flutter/material.dart' hide Stepper, Step, StepperType;
 import 'package:final_project_year/common_component/custome_stepper.dart';
@@ -17,6 +18,7 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   int x = 0;
+  bool error = false;
   CustomePasswordEnterTextField customePasswordEnterTextField =
       CustomePasswordEnterTextField(
     widgetIndex: 9,
@@ -78,12 +80,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         elevation: 0,
                                         onStepContinue: x < 1
                                             ? () {
-                                                setState(() {
-                                                  x += 1;
-                                                });
+                                                if (!error){
+                                                  if(x<1)
+                                                    setState(() {
+                                                    x += 1;
+                                                  });
+                                                }
+                                                  
                                               }
                                             : x == 1
-                                                ? () {}
+                                                ? () {
+                                                    print('kkkki'*78);
+                                                  }
                                                 : null,
                                         onStepCancel: x > 0
                                             ? () {
@@ -92,11 +100,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                               }
                                             : null,
                                         currentStep: x,
-                                        onStepTapped: (value) {
-                                          setState(() {
-                                            x = value;
-                                          });
-                                        },
+                                        onStepTapped: (value) {},
                                         type: StepperType.horizontal,
                                         controlsBuilder: (context, details) {
                                           _controller.clear();
@@ -112,14 +116,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     };
                                                     FormData formData =
                                                         FormData.fromMap(dic1);
-                                                    change_password_email_api(
-                                                        formData: formData);
+                                                    Map b =
+                                                        await change_password_email_api(
+                                                            formData: formData);
+                                                    if (b.containsKey(
+                                                        'message')) {
+                                                      showSnackbardone(
+                                                          context: context,
+                                                          text: b['message']);
+                                                      error = false;
+                                                    } else {
+                                                      showSnackbarerror(
+                                                          context: context,
+                                                          text: b['error']);
+                                                      error = true;
+                                                    }
                                                   }
                                                   if (x == 1) {
-                                                    print(
-                                                        customePasswordEnterTextField
-                                                            .password);
-
                                                     customePasswordEnterTextField
                                                         .f.currentState!
                                                         .validate();

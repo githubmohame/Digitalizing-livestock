@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:final_project_year/apis/apis_functions.dart';
+import 'package:final_project_year/common_component/custome_secure_storage.dart';
 
 void main() async {
   /*dio.Dio dio1 = dio.Dio();
@@ -28,7 +29,5 @@ void main() async {
         listFormat: dio.ListFormat.multi,
       ));
   print(res);*/
-  login_api(formData: dio.FormData.fromMap({
-    "ssn":"3010906121153",'password':'999'
-  }));
+  
 }

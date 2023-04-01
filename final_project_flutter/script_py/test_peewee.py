@@ -1,6 +1,6 @@
 from peewee import *
 
-database = MySQLDatabase('test_db', **{'charset': 'utf8', 'sql_mode': 'PIPES_AS_CONCAT', 'use_unicode': True, 'user': 'root', 'password': 'Mohammmed123#'})
+database = MySQLDatabase('r$d', **{'charset': 'utf8', 'sql_mode': 'PIPES_AS_CONCAT', 'use_unicode': True, 'user': 'root', 'password': 'Mohammmed123#'})
 
 class UnknownField(object):
 	def __init__(self, *_, **__): pass
@@ -24,7 +24,7 @@ class Cities(BaseModel):
 	id = BigAutoField()
 	name = CharField()
 	updated_at = DateTimeField(null=True)
-
+	num_in_gov=IntegerField()
 	class Meta:
 		table_name = 'cities'
 
@@ -108,7 +108,7 @@ class Village(BaseModel):
 	id = BigAutoField()
 	name = CharField()
 	updated_at = DateTimeField(null=True)
-
+	num_in_city=IntegerField()
 	class Meta:
 		table_name = 'villages'
 
@@ -152,3 +152,21 @@ add_Governorate()
 add_city()
 add_Village()
 
+def add_num_in_gov():
+	pass
+	for i  in Governorate.select() :
+		count=1
+		for j in Cities.select().where(Cities.gov_id==i.id):
+			j.num_in_gov=count
+			j.save()
+			count+=1
+add_num_in_gov()
+def add_num_in_cities():
+	pass
+	for i  in Cities.select() :
+		count=1
+		for j in Village.select().where(Village.city_id==i.id):
+			j.num_in_city=count
+			j.save()
+			count+=1
+add_num_in_cities()

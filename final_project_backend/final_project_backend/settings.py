@@ -25,12 +25,13 @@ SECRET_KEY = 'django-insecure-3lirl@%%2#2xv&fy3g5a5sjpzeeh54l94!lgqy(!w5lq_m7x3%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ ]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'digital_livestock',
     'django.contrib.gis',
     'rest_framework',
+    
 ]
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -48,6 +50,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -58,7 +62,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 TEMPLATES_DIR = Path(BASE_DIR,'templates')
-print(TEMPLATES_DIR)
+#print(TEMPLATES_DIR)
 ROOT_URLCONF = 'final_project_backend.urls'
 
 TEMPLATES = [
@@ -76,9 +80,7 @@ TEMPLATES = [
         },
     },
 ]
-
-WSGI_APPLICATION = 'final_project_backend.wsgi.application'
-
+ASGI_APPLICATION = 'core.asgi.application'  # newWSGI_APPLICATION = 'core.wsgi.application'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media_directory')
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -139,7 +141,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
+ASGI_APPLICATION = "final_project_backend.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

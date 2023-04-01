@@ -313,18 +313,28 @@ def farm_api(request :Request):
 		if(farm_type.objects.filter(name__in=dic1.get('farm_type')).count()!=len(dic1.get('farm_type')) or len(dic1.get('farm_type'))==0):
 			print(farm_type.objects.filter(name__in=dic1.get('farm_type')).count()  )
 			return JsonResponse({'error':"the farm 12 should have valid farm type"})
-		print(dic1['total_area_of_farm'])	 
+		print(dic1)
+		print(dic1['total_area_of_farm'])
+		for key,value in dic1.items() :
+			print(key)
+			print(value)
+			if(key in ['id','isolated_wards','number_of_arc','number_of_workers','playground','wards','total_area_of_farm','farm_name','huge_playground']):
+				setattr(farm1,key,value)
+			print('pp'*78)
+		print(farm1.number_of_workers)
+		'''
 		farm1.isolated_wards=dic1['isolated_wards']
 		farm1.number_of_arc=float(dic1['number_of_arc'])
 		farm1.number_of_workers=dic1['number_of_workers']
 		farm1.playground=dic1['playground']
-		farm1.section_type=section_type.objects.get(id= dic1['section_type'])
 		farm1.wards=dic1['wards']
-		farm1.village=village.objects.get(id=dic1['village'])
 		farm1.total_area_of_farm=dic1['total_area_of_farm']
 		farm1.farm_name=dic1['farm_name']
 		farm1.huge_playground=dic1['huge_playground']
 		farm1.id=dic1['id']
+		'''
+		farm1.section_type=section_type.objects.get(id= dic1['section_type'])
+		farm1.village=village.objects.get(id=dic1['village'])
 		print(farm1.id)
 		farm1.save()
 		for i in set(dic1.get('farm_type')):
@@ -563,9 +573,11 @@ def get_animal(request :Request):
 	try:
 		g1=species.objects.all()[0]
 		g1Seralizer= animalSeralizer(instance=g1)
+
 		print(g1Seralizer.data )
 		return response.Response(data=g1Seralizer.data)
-	except:
+	except Exception as e:
+		print(e)
 		g1=species.DoesNotExist()
 		return JsonResponse({"error":None});
 		
@@ -595,6 +607,7 @@ def change_password_email(request :Request):
 	r=redis.Redis()
 	#send_mail('change_password','the code is   '+str(code  ),settings.EMAIL_HOST_USER,[request.data.get('email')],fail_silently=False)
 	r.setex(name=str(code  ),time=5*60,value=request.data.get('email'))
+	print('kkkkii'*78)
 	return JsonResponse({"message":'تم ارسال الرسالة'})
 
 @api_view(['GET','POST'])
@@ -648,7 +661,7 @@ def connect_farm_farmer_api(request :Request):
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
-def operation_admin_api(request :Request):
+def admin_api(request :Request):
 	oper=request.data['operation']
 	print(oper)
 	if(oper=='delete'):
@@ -684,3 +697,11 @@ def operation_admin_api(request :Request):
 			print(dic1)
 			user1=User.objects.create_superuser(**dic1)
 			return JsonResponse({"message":"تم اضافة البيانات"})
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def list_farm_api(request :Request):
+	pass
+	ser1=FarmListSerializer(instance=farm.objects.all(),many=True)
+	return response.Response(ser1.data)
