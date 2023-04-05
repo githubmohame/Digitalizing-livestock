@@ -94,7 +94,7 @@ class MainDrawer extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Farmer(),
+                          builder: (context) => FarmerScreen(),
                         ));
                   },
                 ),
@@ -342,7 +342,7 @@ class MainDrawer extends StatelessWidget {
                     ));
               }),
             ),
-          ), 
+          ),
           /*
           Container(
             height: 1,
@@ -470,7 +470,7 @@ class ComputerDrawer extends StatelessWidget {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => Farmer(),
+                          builder: (context) => FarmerScreen(),
                         ));
                   },
                 ),
@@ -603,7 +603,8 @@ class ComputerDrawer extends StatelessWidget {
             height: 1,
             color: Colors.black,
             width: 1,
-          ),/*
+          ),
+          /*
           Container(
             width: 400,
             height: 10,
@@ -648,7 +649,7 @@ class ComputerDrawer extends StatelessWidget {
               }),
             ),
           ),
-         /* Container(
+          /* Container(
             height: 1,
             color: Colors.black,
             width: 1,

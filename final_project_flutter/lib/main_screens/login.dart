@@ -133,7 +133,8 @@ class _LogINState extends State<LogIN> {
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => Farmer(),
+                                              builder: (context) =>
+                                                  FarmerScreen(),
                                             ));
                                       } else {
                                         text = Text(
@@ -142,9 +143,7 @@ class _LogINState extends State<LogIN> {
                                               fontSize: 20,
                                               color: Colors.white),
                                         );
-                                        setState(() {
-                                          
-                                        });
+                                        setState(() {});
                                       }
                                     },
                                     style: ButtonStyle(

@@ -8,12 +8,12 @@ import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
-import 'package:final_project_year/validations.dart';
+import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Farmer extends StatefulWidget {
-  Farmer(
+class FarmerScreen extends StatefulWidget {
+  FarmerScreen(
       {Key? key,
       String? phone,
       this.edit = true,
@@ -43,10 +43,10 @@ class Farmer extends StatefulWidget {
   bool edit = true;
 
   @override
-  State<Farmer> createState() => _FarmerState();
+  State<FarmerScreen> createState() => _FarmerScreenState();
 }
 
-class _FarmerState extends State<Farmer> {
+class _FarmerScreenState extends State<FarmerScreen> {
   CustomePasswordEnterTextField customePasswordEnterTextField =
       CustomePasswordEnterTextField(widgetIndex: 2);
   GlobalKey<FormState> f = GlobalKey<FormState>();

@@ -297,12 +297,12 @@ class _CustomeDropdownButtomState extends State<CustomeDropdownButtom> {
           ),
         ],
         onChanged: (value) {
-          if (value ==13) {
-             Navigator.push(context, PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return LogIN();
-                  },
-                ));
+          if (value == 13) {
+            Navigator.push(context, PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return LogIN();
+              },
+            ));
           }
           ;
         },
@@ -762,7 +762,8 @@ class CustomeDrawer extends StatefulWidget {
 class _CustomeDrawerState extends State<CustomeDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(height: MediaQuery.of(context).size.height,
+    return Container(
+      height: MediaQuery.of(context).size.height,
       child: SingleChildScrollView(
         child: Card(
           child: Container(
@@ -784,7 +785,8 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                     Text(
                       'DashBoard',
                       style: TextStyle(
-                          color: Color(0xff5d5d5d), fontWeight: FontWeight.bold),
+                          color: Color(0xff5d5d5d),
+                          fontWeight: FontWeight.bold),
                     ),
                     Spacer(),
                   ],
@@ -792,14 +794,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                 Container(
                   height: 30,
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return Farmer();
+                        return FarmerScreen();
                       },
                     ));
-              
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -820,13 +822,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                     ),
                   ),
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return FarmScreen();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -847,13 +850,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                     ),
                   ),
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return ConnectFarmAndFarmerScreen();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -874,13 +878,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                     ),
                   ),
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return AddLocationScreen();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -901,13 +906,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                     ),
                   ),
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return UpdateAnimal();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -928,13 +934,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                     ),
                   ),
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return AddAdmin();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -955,13 +962,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                 Container(
                   height: 30,
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return ChangePasswordScreen();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -985,13 +993,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                 Container(
                   height: 30,
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return ListFarmer();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(
@@ -1015,13 +1024,14 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
                 Container(
                   height: 30,
                 ),
-                GestureDetector(onTap: () {
-                   Navigator.push(context, PageRouteBuilder(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
                         return ListFarmer();
                       },
                     ));
-                },
+                  },
                   child: Container(
                     margin: EdgeInsets.only(left: 30, bottom: 50),
                     child: Row(

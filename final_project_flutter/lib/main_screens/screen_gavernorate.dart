@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:final_project_year/common_component/google_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';

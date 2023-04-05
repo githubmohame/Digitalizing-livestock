@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:cron/cron.dart';
-import 'package:final_project_year/backgroundservice/backgroundservice.dart';
+import 'package:final_project_year/service/background.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
 import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
@@ -20,9 +20,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:secure_application/secure_application.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:workmanager/workmanager.dart';
-
 import 'common_component/custome_secure_storage.dart';
-import 'common_component/notifications.dart';
+import 'service/notifications.dart';
 
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
@@ -30,10 +29,7 @@ void callbackDispatcher() {
     WebSocketChannel websocket = WebSocketChannel.connect(
       Uri.parse('ws://192.168.1.6:8000/server'),
     );
-    websocket.stream.listen((event) {
-      print(event);
-      NotificationService.showNotification(message: event.toString());
-    });
+    websocket.stream.listen((event) {});
 
     return Future.value(true);
   });
@@ -49,25 +45,21 @@ void main() async {
     constraints: Constraints(networkType: NetworkType.connected),
   );*/
   WidgetsFlutterBinding.ensureInitialized();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    }
-  });
-  await initializeService();
 
+  await NotificationServiceCustome.initializeLocalNotifications();
   runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late final NotificationService notificationService;
+  late final NotificationServiceCustome notificationService;
   final LocalAuthentication auth = LocalAuthentication();
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
@@ -91,27 +83,20 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  void _updateConnectionStatus(ConnectivityResult c1) {
-    print('kkkuuuu' * 78);
-    print(c1);
-    NotificationService.showNotification(message: c1.name);
+  /* void _updateConnectionStatus(ConnectivityResult c1) {
+    NotificationServiceCustome.initializeLocalNotifications(message: c1.name);
   }
-
+*/
   @override
   void initState() {
-    notificationService = NotificationService();
-    
-      
-    /* Workmanager workmanager = Workmanager();
-    workmanager.initialize(callbackDispatcher, isInDebugMode: false);
-    workmanager.registerOneOffTask('background', 'background-task');
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus); */
-
+    NotificationServiceCustome.startListeningNotificationEvents();
+    NotificationServiceCustome.displayNotificationRationale();
     super.initState();
   }
 
- 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {}
+
   @override
   Widget build(BuildContext context) {
     /*
@@ -147,13 +132,21 @@ class _MyAppState extends State<MyApp> {
           );
         });*/
     return MaterialApp(
-        home: Scaffold(
-      body: Center(
-          child: TextButton(
-        onPressed: () {},
-        child: Text('jjj'),
-      )),
-    ));
-    ;
+      navigatorKey: MyApp.navigatorKey,
+      initialRoute: '',
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+            builder: (context) => Builder(builder: (context2) {
+                  initializeService();
+                  return Scaffold(
+                    body: Center(
+                        child: TextButton(
+                      onPressed: () {},
+                      child: Text('jjj'),
+                    )),
+                  );
+                }));
+      },
+    );
   }
 }

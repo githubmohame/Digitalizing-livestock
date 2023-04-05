@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:dio/dio.dart' as dio;
 import 'package:file_picker/file_picker.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
+import 'package:final_project_year/common_component/google_map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +22,7 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/validations.dart';
+import 'package:final_project_year/input_validation/validations.dart';
 
 enum Farm_type { farm, barn }
 
@@ -99,17 +100,18 @@ Future<List<Map<String, dynamic>>> f1() {
 
 class FarmScreen extends StatefulWidget {
   FarmScreen({Key? key}) : super(key: key);
-  
+
   @override
   State<FarmScreen> createState() => _FarmScreenState();
 }
 
 class _FarmScreenState extends State<FarmScreen> {
   @override
-  void initState()  {
+  void initState() {
     //await CustomeSecureStorage.remove_all( );
     super.initState();
   }
+
   FarmType farmType = FarmType();
 
   SectionType sectionType = SectionType();
@@ -152,7 +154,7 @@ class _FarmScreenState extends State<FarmScreen> {
     setState(() {});
   }
 
-  Farm_type  _selectFarmType=Farm_type.barn;
+  Farm_type _selectFarmType = Farm_type.barn;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -178,7 +180,7 @@ class _FarmScreenState extends State<FarmScreen> {
                     90 +
                     errorHeight +
                     (_selectFarmType == Farm_type.farm
-                        ? 584 + 186+880
+                        ? 584 + 186 + 880
                         : 350) //+ 150 + 52 + 70 + 50 + 25 + 100
                 ,
                 child: Container(
@@ -238,8 +240,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                         value: Farm_type.farm,
                                         groupValue: _selectFarmType,
                                         onChanged: (value) {
-                                          if(value is Farm_type)
-                                          _selectFarmType = value;
+                                          if (value is Farm_type)
+                                            _selectFarmType = value;
                                           setState(() {});
                                         },
                                       ),
@@ -254,8 +256,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                         value: Farm_type.barn,
                                         groupValue: _selectFarmType,
                                         onChanged: (value) {
-                                           if(value is Farm_type)
-                                          _selectFarmType = value;
+                                          if (value is Farm_type)
+                                            _selectFarmType = value;
                                           setState(() {});
                                         },
                                       ),
@@ -671,7 +673,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       : Container(),
                                   sectionType,
                                   Container(
-                                      height: 400,
+                                      height: 360,
                                       margin: EdgeInsets.all(10),
                                       child: googleMapComponent),
                                   Container(
@@ -708,7 +710,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.green)),
                                         onPressed: () async {
-                                          await CustomeSecureStorage.remove_all( );
+                                          await CustomeSecureStorage
+                                              .remove_all();
                                           update_screen();
 
                                           if (_formGlobalKey.currentState!
@@ -1065,7 +1068,7 @@ class SectionType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
+      height: 80,
       margin: const EdgeInsets.all(10),
       child: FutureBuilder(
           future: section_type_api(),
@@ -1104,7 +1107,7 @@ class SelectLocation extends StatelessWidget {
         future: location_api(),
         builder: (context, snap) {
           if (snap.data is List<Map<String, dynamic>>) {
-            print( snap.data);
+            print(snap.data);
             return BlocProvider(
               create: (context) => LocationCubit(
                 city: snap.data![0]['city'],
@@ -1401,158 +1404,5 @@ class _CustomeButtonState extends State<CustomeButton> {
       },
       child: Text(widget.text, style: const TextStyle(color: Colors.black)),
     );
-  }
-}
-
-class GoogleMapComponent extends StatefulWidget {
-  GoogleMapComponent({super.key});
-  LatLng? point;
-  String? file;
-  @override
-  State<GoogleMapComponent> createState() => _GoogleMapComponentState();
-}
-
-class _GoogleMapComponentState extends State<GoogleMapComponent> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Color(0xFF857e7b))),
-                child: Text(
-                  'ادخال الاحداثيات',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {},
-              ),
-            ),
-            Container(
-              width: 10,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Color(0xFF857e7b))),
-                child: Text(
-                  'اخذ الاحداث اللحالي',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  Position p = await _determinePosition();
-                  widget.point = LatLng(p.latitude, p.longitude);
-                  setState(() {});
-                },
-              ),
-            ),
-            Container(
-              width: 10,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Color(0xFF857e7b))),
-                child: Text(
-                  'تحميل ملف سيغه shape file',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  FilePickerResult? result = await FilePicker.platform
-                      .pickFiles(
-                          allowMultiple: false,
-                          type: FileType.custom,
-                          allowedExtensions: [
-                        'geojson',
-                        'json',
-                        'zip',
-                      ]);
-                  if (result is FilePickerResult) {
-                    PlatformFile r1 = result.files[0];
-                    widget.file = r1.path;
-                    if (widget.file is String) {
-                      widget.point = null;
-                    }
-                    setState(() {});
-                  }
-                },
-              ),
-            )
-          ],
-        ),
-        Container(
-          height: 300 - 32,
-          child: FlutterMap(
-            options: MapOptions(
-              center: LatLng(27, 24),
-              zoom: 5,
-              onTap: (tapPosition, point) {
-                widget.point = point;
-                widget.file = null;
-                setState(() {});
-              },
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-              ),
-              MarkerLayer(
-                markers: widget.point is LatLng
-                    ? [
-                        Marker(
-                            height: 200,
-                            width: 200,
-                            point: widget.point!,
-                            builder: (context) => Icon(Icons.location_on))
-                      ]
-                    : [],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Future<Position> _determinePosition() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    bool serviceEnabled;
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
   }
 }

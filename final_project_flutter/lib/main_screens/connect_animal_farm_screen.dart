@@ -5,7 +5,7 @@ import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/main_screens/Show_info.dart';
-import 'package:final_project_year/validations.dart';
+import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
