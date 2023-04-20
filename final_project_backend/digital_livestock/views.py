@@ -702,6 +702,18 @@ def admin_api(request :Request):
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def list_farm_api(request :Request):
-	pass
-	ser1=FarmListSerializer(instance=farm.objects.all(),many=True)
+	import typesense
+	client = typesense.Client({
+					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
+					'nodes': [{
+							'host': 'localhost',
+							'port': '8108',
+							'protocol': 'http'
+					}],
+					'connection_timeout_seconds': 2
+			})
+	d1=client.collections['farm'].documents.search({"q":request.data['name'],"query_by":"name"})
+	l1=[i['document']['id'] for i in d1['hits']]
+	 
+	ser1=FarmListSerializer(instance=farm.objects.all().filter(id__in= l1),many=True)
 	return response.Response(ser1.data)

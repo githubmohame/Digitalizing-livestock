@@ -90,6 +90,11 @@ class cityFarmListSerializer(serializers.ModelSerializer):
         model=city
         fields=['name' ,'governorate',]
 
+class villageSerializerTest(serializers.ModelSerializer):
+    #city=cityFarmListSerializer()
+    class Meta:
+        model=village
+        fields=['name'  ]
 class villageFarmListSerializer(serializers.ModelSerializer):
     city=cityFarmListSerializer()
     class Meta:

@@ -135,12 +135,12 @@ def test():
 
 def auto_insert():
   
-  '''insert_into_governorate()
+  insert_into_governorate()
   insert_into_city()
-  insert_into_village()'''
-  'insert_section_type()'
-  #remove_newline_governorate_model()
-  "insert_farrm_type(list1=['انتاج طلايع','انتاج البان','انتاج لحوم'])"
+  insert_into_village()
+  insert_section_type()
+  remove_newline_governorate_model()
+  insert_farrm_type(list1=['انتاج طلايع','انتاج البان','انتاج لحوم'])
   insert_platoon_type(list1=['الجمال',"الماعز",'الابقار'])
   insert_species(list1=['الأكتين الشقراء','الآيرشاير','الجيرسي','الهولشتاين','الأنجوس','هيريفورد','شاروليز'],platoon1='الابقار')  
   
