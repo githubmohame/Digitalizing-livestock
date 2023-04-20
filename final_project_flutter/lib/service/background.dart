@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -9,15 +10,14 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 import 'notifications.dart';
 
-
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 
   /// OPTIONAL, using custom notification channel id
-  
- 
+
   await service.configure(
     androidConfiguration: AndroidConfiguration(
+      autoStartOnBoot: true,
       // this will be executed when app is in foreground or background in separated isolate
       onStart: onStart,
 
@@ -59,12 +59,11 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 void onStart(ServiceInstance service) async {
   // Only available for flutter 3.0.0 and later
   DartPluginRegistrant.ensureInitialized();
-  
+
   // For flutter prior to version 3.0.0
   // We have to register the plugin manually
 
   /// OPTIONAL when use custom notification
-   
 
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((event) {
@@ -72,6 +71,7 @@ void onStart(ServiceInstance service) async {
     });
 
     service.on('setAsBackground').listen((event) {
+      print('hhhhhhhj12345' * 5665);
       service.setAsBackgroundService();
     });
   }
@@ -81,11 +81,18 @@ void onStart(ServiceInstance service) async {
   });
 
   // bring to foreground
-  WebSocketChannel websocket = WebSocketChannel.connect(
-    Uri.parse('ws://192.168.1.6:8000/server'),
-  );
-  websocket.stream.listen((event) {
-    print(event);
-    NotificationServiceCustome.createNewNotification(message: event) ;
+  Connectivity().onConnectivityChanged.listen((event) {
+    if (event == ConnectivityResult.none) {
+      print('disconnecting');
+    } else {
+      WebSocketChannel websocket = WebSocketChannel.connect(
+        Uri.parse('ws://192.168.1.6:8000/server'),
+      );
+      websocket.stream.listen((event) {
+        print(event);
+        NotificationServiceCustome.createNewNotification(message: event);
+        NotificationServiceCustome.startListeningNotificationEvents();
+      });
+    }
   });
 }

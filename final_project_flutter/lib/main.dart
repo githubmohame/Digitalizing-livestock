@@ -1,26 +1,16 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:cron/cron.dart';
-import 'package:final_project_year/service/background.dart';
-import 'package:final_project_year/main_screens/Show_info.dart';
-import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
-import 'package:final_project_year/main_screens/home.dart';
-import 'package:final_project_year/main_screens/change_password_screen.dart';
-import 'package:final_project_year/main_screens/list_farm.dart';
-import 'package:final_project_year/main_screens/login.dart';
-import 'package:final_project_year/main_screens/supplier_screeen.dart';
-import 'package:final_project_year/main_screens/workers_screen.dart';
+import 'package:final_project_year/service/background.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:secure_application/secure_application.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:workmanager/workmanager.dart';
-import 'common_component/custome_secure_storage.dart';
 import 'service/notifications.dart';
 
 void callbackDispatcher() {
@@ -45,8 +35,10 @@ void main() async {
     constraints: Constraints(networkType: NetworkType.connected),
   );*/
   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   await NotificationServiceCustome.initializeLocalNotifications();
+
   runApp(const MyApp());
 }
 
@@ -89,8 +81,7 @@ class _MyAppState extends State<MyApp> {
 */
   @override
   void initState() {
-    NotificationServiceCustome.startListeningNotificationEvents();
-    NotificationServiceCustome.displayNotificationRationale();
+    //NotificationServiceCustome.displayNotificationRationale();
     super.initState();
   }
 
@@ -99,6 +90,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      home: FarmerScreen(),
+    );
     /*
     return FutureBuilder(
         future: _authenticateWithBiometrics(),
@@ -131,22 +125,42 @@ class _MyAppState extends State<MyApp> {
             )),
           );
         });*/
-    return MaterialApp(
-      navigatorKey: MyApp.navigatorKey,
-      initialRoute: '',
-      onGenerateRoute: (settings) {
-        return MaterialPageRoute(
-            builder: (context) => Builder(builder: (context2) {
-                  initializeService();
-                  return Scaffold(
-                    body: Center(
-                        child: TextButton(
-                      onPressed: () {},
-                      child: Text('jjj'),
+
+    /*  return FutureBuilder(
+        future: AwesomeNotifications()
+            .getInitialNotificationAction(removeFromActionEvents: true),
+        builder: (context, snap) {
+         if (snap.connectionState == ConnectionState.done) {
+            print(snap.data);
+            print('object' * 90);
+            return MaterialApp(
+              navigatorKey: MyApp.navigatorKey,
+              initialRoute: '',
+              onGenerateRoute: (settings) {
+                return MaterialPageRoute(
+                    builder: (context) => Builder(builder: (context2) {
+                          initializeService();
+                          return Scaffold(
+                            body: Center(
+                                child: TextButton(
+                              onPressed: () {},
+                              child: const Text('jjj'),
+                            )),
+                          );
+                        }));
+              },
+            );
+          }
+          
+          return MaterialApp(
+              theme: ThemeData(useMaterial3: true),
+              home: Scaffold(
+                body: Transform.scale(
+                    scale: 5,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 10,
                     )),
-                  );
-                }));
-      },
-    );
+              ));
+        });*/
   }
 }

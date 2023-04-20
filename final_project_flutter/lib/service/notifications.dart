@@ -59,13 +59,14 @@ class NotificationServiceCustome {
 
     // Get initial notification action is optional
     initialAction = await AwesomeNotifications()
-        .getInitialNotificationAction(removeFromActionEvents: false);
+        .getInitialNotificationAction(removeFromActionEvents: true);
   }
 
   ///  Notifications events are only delivered after call this method
   static Future<void> startListeningNotificationEvents() async {
-    AwesomeNotifications()
-        .setListeners(onActionReceivedMethod: onActionReceivedMethod);
+    AwesomeNotifications().setListeners( 
+        onDismissActionReceivedMethod: onDismissActionReceivedMethod,
+        onActionReceivedMethod: onActionReceivedMethod);
   }
 
   ///  *********************************************
@@ -75,28 +76,40 @@ class NotificationServiceCustome {
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    if (receivedAction.actionType == ActionType.SilentAction ||
-        receivedAction.actionType == ActionType.SilentBackgroundAction) {
-      // For background actions, you must hold the execution until the end
-    } else {
-      print(
-          'Message sent via notification input: "${MyApp.navigatorKey.currentState}"');
-      MyApp.navigatorKey.currentState?.push(MaterialPageRoute(
-        builder: (context) {
-          print('done\t'*90);
-          return FarmScreen();
-        },
-      ));
+        //print('done\t'*546);
+    if (receivedAction.payload!['notificationId'] == '1234567890') {
+      
+      //print(receivedAction.actionType);
     }
+
+     
   }
 
+  @pragma('vm:entry-point')
+  static Future<void> onDismissActionReceivedMethod(
+      ReceivedAction receivedAction) async {
+    MyApp.navigatorKey.currentState?.push(MaterialPageRoute(
+      builder: (context) {
+        return FarmScreen();
+      },
+    ));
+  }
+@pragma('vm:entry-point')
+  static Future<void> onNotificationCreatedMethod(
+      ReceivedAction receivedAction) async {
+    MyApp.navigatorKey.currentState?.push(MaterialPageRoute(
+      builder: (context) {
+        return FarmScreen();
+      },
+    ));
+  }
   ///  *********************************************
   ///     REQUESTING NOTIFICATION PERMISSIONS
   ///  *********************************************
   ///
   static Future<bool> displayNotificationRationale() async {
     bool userAuthorized = false;
-    BuildContext context = MyApp.navigatorKey.currentContext!;
+ BuildContext context = MyApp.navigatorKey.currentContext!;
     await showDialog(
         context: context,
         builder: (BuildContext ctx) {
@@ -149,7 +162,8 @@ class NotificationServiceCustome {
             ],
           );
         });
-    return userAuthorized &&
-        await AwesomeNotifications().requestPermissionToSendNotifications();
+    
+   return userAuthorized &&
+        await AwesomeNotifications().requestPermissionToSendNotifications(); 
   }
 }
