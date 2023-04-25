@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -e
-source "/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/background_venv/bin/activate"
+source "/home/mohamed/IdeaProjects/MainFinalProject/backend_env/bin/activate"
 
-python -u   $1 $2 $3
+python -u  /home/mohamed/IdeaProjects/MainFinalProject/database/farms/bash_script_farm.py  "$1" "$2" "$3"

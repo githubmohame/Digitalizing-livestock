@@ -1,0 +1,2 @@
+select count(f.id),gov.name from digital_livestock_farm f  join digital_livestock_village vill  on(f.village_id=vill.id) join digital_livestock_city city on(city.id=vill.city_id) join
+digital_livestock_governorate gov on (gov.id=city.governorate_id) group by(gov.name);

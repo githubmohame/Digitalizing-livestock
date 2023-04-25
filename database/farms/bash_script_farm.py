@@ -21,6 +21,7 @@ def main():
 					client.collections['farm'].documents[id].update(json.dumps(farm),{'dirty_values': 'coerce_or_reject'})
 			elif(operation=='insert'):
 					#client.collections['farm'].import_(json.dumps(farm))
+					print(sys.argv[3])
 					client.collections['farm'].documents.import_(json.dumps(farm))
 			else:
 					client.collections['farm'].documents[id].delete( )

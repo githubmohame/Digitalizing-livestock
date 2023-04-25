@@ -7,7 +7,8 @@ def main():
 			ssn=sys.argv[1]
 			newname=sys.argv[2]
 			operation=sys.argv[3]
-			farmer= {'ssn': ssn, 'name':newname}
+			print(sys.argv[3])
+			farmer= {'id': ssn, 'name':newname}
 			client = typesense.Client({
 					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
 					'nodes': [{
