@@ -26,6 +26,7 @@ void callbackDispatcher() {
 }
 
 void main() async {
+  SliverOpacity;
   /*Workmanager workmanager = Workmanager();
   workmanager.initialize(callbackDispatcher);
   workmanager.registerPeriodicTask(frequency: Duration(seconds: 3),
@@ -91,6 +92,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: FarmerScreen(),
     );
     /*
@@ -164,3 +166,90 @@ class _MyAppState extends State<MyApp> {
         });*/
   }
 }
+ 
+
+
+
+/*
+import 'package:flutter/material.dart';
+
+class TestPage extends StatefulWidget {
+  @override
+  _TestPageState createState() => _TestPageState();
+}
+
+class _TestPageState extends State<TestPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      /*
+        Using LayoutBuilder to calculate the amount of
+        items to print depending on screen height
+      */
+      home: LayoutBuilder(
+        builder: (context, box) => Scaffold(
+          body: NestedScrollView(
+              controller: _scrollController,
+              headerSliverBuilder: (context, innerScrolled) => [
+                    SliverOverlapAbsorber(
+                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
+                          context),
+                      sliver: SliverAppBar(
+                        forceElevated: innerScrolled,
+                        pinned: true,
+                        title: Text(
+                            "Printing ${(box.maxHeight / 20).floor()} items"),
+                      ),
+                    ),
+                  ],
+              body: ListView.builder(
+                itemCount: 12,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Card(
+                      color: Colors.amber,
+                      child: ListView.builder(
+                        physics: ClampingScrollPhysics(),
+                        itemCount: 100,
+                        shrinkWrap: true,
+                        controller: _scrollController,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.all(120),
+                            height: 123,
+                            color: Colors.black,
+                          );
+                        },
+                      ),
+                    );
+                  } else {
+                    return Container(
+                      height: 1200,
+                        child: CustomScrollView( shrinkWrap: true,
+                          slivers: [
+                            SliverList(delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return Container(color: Colors.green,);
+                              },
+                            ))
+                          ],
+                        ));
+                  }
+                },
+              )),
+        ),
+      ),
+    );
+  }
+}
+
+void main() => runApp(TestPage());
+*/

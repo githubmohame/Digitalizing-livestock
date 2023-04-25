@@ -10,22 +10,31 @@ import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 
-class DashBoardScreen extends StatefulWidget {
-  const DashBoardScreen({super.key});
+/*
 
+
+*/
+
+class DashBoardScreen extends StatefulWidget {
+  DashBoardScreen({super.key});
+  Widget wid = RecentFile();
   @override
   State<DashBoardScreen> createState() => _DashBoardScreenState();
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
+  ScrollController con = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    SliverPadding;
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
     return MaterialApp(
@@ -37,195 +46,230 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             backgroundColor: Color(0xFFf3f3f5),
             body: Row(
               children: [
-                constraint.maxWidth >= 1920.0
-                    ? CustomeDrawer()
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            icon: Icon(
-                              Icons.menu,
-                              color: Colors.green,
-                            ),
-                            onPressed: () {
-                              _scaffoldKey.currentState!.openDrawer();
-                            },
-                          ),
-                        ],
-                      ),
+                constraint.maxWidth >= 1920.0 ? CustomeDrawer() : Container(),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Container(height: 10),
-                        Row(
-                          children: [
-                            Flexible(
-                              flex: 11,
-                              child: Container(
-                                height: 200,
-                                width: double.infinity,
-                                margin: EdgeInsets.only(right: 20),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        height: 100,
-                                        child: SearchTextField(
-                                            width: constraint.maxWidth >= 500
-                                                ? 600 - 200
-                                                : constraint.maxWidth - 200),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 70,
-                                    ),
-                                    CustomeDropdownButtom(value: 12),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          height: 10,
-                        ),
-                        Container(
-                          height: constraint.maxWidth < 1900.0
-                              ? 1700 + 400 + 300
-                              : 700 + 400,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.only(left: 0),
-                                      child: Wrap(
-                                        runAlignment:
-                                            WrapAlignment.spaceBetween,
-                                        spacing: 12,
-                                        runSpacing: 12,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.start,
-                                        children: [
-                                          CardDashBoard(
-                                              icon: Icon(Icons.description,
-                                                  color: Colors.blue),
-                                              color: Colors.blue,
-                                              title: 'مزارع  اللبان'),
-                                          CardDashBoard(
-                                              right: 20,
-                                              icon: Image(
-                                                  image: AssetImage(
-                                                      'assets/icons/driver_google.png')),
-                                              color: Colors.amber,
-                                              title: 'عدد مزارع اللحوم'),
-                                          CardDashBoard(
-                                              right: 20,
-                                              icon: Icon(Icons.cloud,
-                                                  color: Color.fromARGB(
-                                                      255, 188, 76, 76)),
-                                              color: Color.fromARGB(
-                                                  255, 188, 76, 76),
-                                              title: 'عدد المربين'),
-                                          CardDashBoard(
-                                              right: 20,
+                  child: Container(
+                    child: NestedScrollView(
+                        controller: con,
+                        headerSliverBuilder: (context, innerBoxIsScrolled) {
+                          return [
+                            SliverList(
+                              delegate: SliverChildListDelegate([
+                                Row(children: [
+                                  constraint.maxWidth < 1920.0
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconButton(
                                               icon: Icon(
-                                                  Icons.access_time_outlined,
-                                                  color: Colors.blue),
-                                              color: Colors.blue,
-                                              title: 'عدد الاماكن'),
+                                                Icons.menu,
+                                                color: Colors.green,
+                                              ),
+                                              onPressed: () {
+                                                _scaffoldKey.currentState!
+                                                    .openDrawer();
+                                              },
+                                            ),
+                                          ],
+                                        )
+                                      : Container(),
+                                ]),
+                                constraint.maxWidth > 1920.0
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(
+                                              Icons.menu,
+                                              color: Colors.green,
+                                            ),
+                                            onPressed: () {
+                                              _scaffoldKey.currentState!
+                                                  .openDrawer();
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    : Container(),
+                                Container(height: 10),
+                                Wrap(
+                                  children: [
+                                    Container(
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              height: 100,
+                                              child: SearchTextField(
+                                                  width: constraint.maxWidth >=
+                                                          500
+                                                      ? 600 - 200
+                                                      : constraint.maxWidth -
+                                                          200),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 70,
+                                          ),
+                                          CustomeDropdownButtomSignUpDashboard(
+                                              value: 12),
                                         ],
                                       ),
                                     ),
-                                    Container(height: 40),
-                                    Container(height: 30),
-                                    Container(
-                                      height: 350,
-                                      padding: EdgeInsets.all(5),
-                                      child: Container(
-                                        height: 300 - 32,
-                                        child: Stack(
+                                  ],
+                                ),
+                                Container(
+                                  height: 10,
+                                ),
+                                Container(
+                                  height: constraint.maxWidth > 1900.0
+                                      ? 580
+                                      : 670 + 70,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
                                           children: [
-                                            FlutterMap(
-                                              options: MapOptions(),
-                                              children: [
-                                                TileLayer(
-                                                  urlTemplate:
-                                                      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                                  userAgentPackageName:
-                                                      'dev.fleaflet.flutter_map.example',
+                                            Container(
+                                              margin: EdgeInsets.only(left: 0),
+                                              child: Wrap(
+                                                runAlignment:
+                                                    WrapAlignment.spaceBetween,
+                                                spacing: 12,
+                                                runSpacing: 12,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.start,
+                                                children: [
+                                                  CardDashBoard(
+                                                      icon: Icon(
+                                                          Icons.description,
+                                                          color: Colors.blue),
+                                                      color: Colors.blue,
+                                                      title: 'مزارع  اللبان'),
+                                                  CardDashBoard(
+                                                      right: 20,
+                                                      icon: Image(
+                                                          image: AssetImage(
+                                                              'assets/icons/driver_google.png')),
+                                                      color: Colors.amber,
+                                                      title:
+                                                          'عدد مزارع اللحوم'),
+                                                  CardDashBoard(
+                                                      right: 20,
+                                                      icon: Icon(Icons.cloud,
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              188,
+                                                              76,
+                                                              76)),
+                                                      color: Color.fromARGB(
+                                                          255, 188, 76, 76),
+                                                      title: 'عدد المربين'),
+                                                  CardDashBoard(
+                                                      right: 20,
+                                                      icon: Icon(
+                                                          Icons
+                                                              .access_time_outlined,
+                                                          color: Colors.blue),
+                                                      color: Colors.blue,
+                                                      title: 'عدد الاماكن'),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(height: 40),
+                                            Container(height: 30),
+                                            Card(
+                                              child: Container(
+                                                height: 350,
+                                                padding: EdgeInsets.all(10),
+                                                child: Container(
+                                                  height: 300 - 32,
+                                                  child: Stack(
+                                                    children: [
+                                                      FlutterMap(
+                                                        options: MapOptions(),
+                                                        children: [
+                                                          TileLayer(
+                                                            urlTemplate:
+                                                                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                                            userAgentPackageName:
+                                                                'dev.fleaflet.flutter_map.example',
+                                                          ),
+                                                          MarkerLayer(
+                                                            markers: [
+                                                              Marker(
+                                                                  height: 200,
+                                                                  width: 200,
+                                                                  point: LatLng(
+                                                                      60, 60),
+                                                                  builder: (context) =>
+                                                                      Icon(Icons
+                                                                          .location_on))
+                                                            ],
+                                                          ),
+                                                          Wrap(
+                                                            children: [
+                                                              Container(
+                                                                  margin:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              5),
+                                                                  width: 500,
+                                                                  child: SearchTextField(
+                                                                      width:
+                                                                          100)),
+                                                              Container(
+                                                                height: 50,
+                                                                child: TextButton(
+                                                                    style: ButtonStyle(
+                                                                        backgroundColor: MaterialStateProperty.resolveWith((states) =>
+                                                                            Colors
+                                                                                .green)),
+                                                                    onPressed:
+                                                                        () {},
+                                                                    child: Text(
+                                                                        'search',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white))),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                                MarkerLayer(
-                                                  markers: [
-                                                    Marker(
-                                                        height: 200,
-                                                        width: 200,
-                                                        point: LatLng(60, 60),
-                                                        builder: (context) =>
-                                                            Icon(Icons
-                                                                .location_on))
-                                                  ],
-                                                ),
-                                                Wrap(
-                                                  children: [
-                                                    Container(
-                                                        margin:
-                                                            EdgeInsets.all(5),
-                                                        width: 500,
-                                                        child: SearchTextField(
-                                                            width: 100)),
-                                                    Container(
-                                                      height: 50,
-                                                      child: TextButton(
-                                                          style: ButtonStyle(
-                                                              backgroundColor:
-                                                                  MaterialStateProperty.resolveWith(
-                                                                      (states) =>
-                                                                          Colors
-                                                                              .green)),
-                                                          onPressed: () {},
-                                                          child: Text('search',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white))),
-                                                    )
-                                                  ],
-                                                ),
-                                              ],
+                                              ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    if (constraint.maxWidth < 1900.0)
-                                      RecentFile()
-                                    else
                                       Container(
-                                          height: 500,
-                                          child: SingleChildScrollView(
-                                            child: RecentFile(),
-                                          )),
-                                    constraint.maxWidth < 1900.0
-                                        ? StorageDetails(width: null)
-                                        : Container(),
-                                  ],
+                                        width: 10,
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                width: 10,
-                              )
-                            ],
-                          ),
+                                constraint.maxWidth < 1900.0
+                                    ? StorageDetails(width: 300)
+                                    : Container(),
+                                Container(
+                                  height: 30,
+                                ),
+                              ]),
+                            ),
+                             
+                          ];
+                        },
+                        body: RecentFile()
                         ),
-                        Container(
-                          height: 100,
-                        )
-                      ],
-                    ),
                   ),
                 ),
                 constraint.maxWidth >= 1900.0
@@ -238,21 +282,26 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   }
 }
 
-class CustomeDropdownButtom extends StatefulWidget {
-  int value;
-  CustomeDropdownButtom({
+class CustomeDropdownButtomSignUpDashboard extends StatefulWidget {
+  CustomeDropdownButtomSignUpDashboard({
     Key? key,
     required this.value,
   }) : super(key: key);
+
+  int value;
+
   @override
-  State<CustomeDropdownButtom> createState() => _CustomeDropdownButtomState();
+  State<CustomeDropdownButtomSignUpDashboard> createState() =>
+      _CustomeDropdownButtomSignUpDashboardState();
 }
 
-class _CustomeDropdownButtomState extends State<CustomeDropdownButtom> {
+class _CustomeDropdownButtomSignUpDashboardState
+    extends State<CustomeDropdownButtomSignUpDashboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 200,
+      margin: EdgeInsets.all(50),
       padding: EdgeInsets.all(10),
       height: 50,
       decoration: BoxDecoration(
@@ -312,11 +361,13 @@ class _CustomeDropdownButtomState extends State<CustomeDropdownButtom> {
 }
 
 class SearchTextField extends StatefulWidget {
-  double width;
   SearchTextField({
     Key? key,
     required this.width,
   }) : super(key: key);
+
+  double width;
+
   @override
   State<SearchTextField> createState() => _SearchTextFieldState();
 }
@@ -324,8 +375,8 @@ class SearchTextField extends StatefulWidget {
 class _SearchTextFieldState extends State<SearchTextField> {
   @override
   Widget build(BuildContext context) {
-    print('object' + "\t" + "const" + "  " + widget.width.toString());
     return Container(
+      margin: EdgeInsets.only(left: 20),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -352,10 +403,6 @@ class _SearchTextFieldState extends State<SearchTextField> {
 }
 
 class StorageDetailsItem extends StatelessWidget {
-  Widget icon;
-  Widget diescript;
-  double size;
-  Widget text;
   StorageDetailsItem({
     Key? key,
     required this.icon,
@@ -363,6 +410,12 @@ class StorageDetailsItem extends StatelessWidget {
     required this.size,
     required this.text,
   }) : super(key: key);
+
+  Widget diescript;
+  Widget icon;
+  double size;
+  Widget text;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -385,10 +438,12 @@ class CardDashBoard extends StatelessWidget {
       required this.icon,
       required this.color,
       required this.title});
-  double? right;
-  Widget icon;
+
   Color color;
+  Widget icon;
+  double? right;
   String title;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -467,11 +522,13 @@ class CardDashBoard extends StatelessWidget {
 
 class StorageDetails extends StatelessWidget {
   StorageDetails({super.key, this.width});
+
   double? width;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width is double ? 400 : null,
+      width: 300,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       child: Card(
         color: Colors.white,
@@ -484,44 +541,50 @@ class StorageDetails extends StatelessWidget {
                   'System Details',
                   style: TextStyle(color: Colors.black, fontSize: 20),
                 )),
-            Container(
-              height: 70,
-              margin: EdgeInsets.all(90),
-              child: Stack(
-                children: [
-                  Expanded(
-                    child:
-                        PieChart(PieChartData(centerSpaceRadius: 70, sections: [
-                      PieChartSectionData(
-                          showTitle: false,
-                          value: 12,
-                          radius: 12,
-                          color: Color(0xff9e65ff)),
-                      PieChartSectionData(
-                        showTitle: false,
-                        value: 25,
-                        radius: 12,
-                        color: Colors.green,
-                      ),
-                      PieChartSectionData(
-                          showTitle: false,
-                          value: 25,
-                          radius: 12,
-                          color: Color(0xFF222d40)),
-                      PieChartSectionData(
-                          showTitle: false,
-                          value: 25,
-                          radius: 12,
-                          color: Color(0xFFfea43a)),
-                      PieChartSectionData(
-                          showTitle: false,
-                          value: 30,
-                          radius: 12,
-                          color: Colors.blue)
-                    ])),
-                  ),
-                ],
-              ),
+            LayoutBuilder(builder: (context, constraint) {
+              return Container(
+                width: constraint.maxWidth / 3,
+                height: 70,
+                margin: EdgeInsets.all(constraint.maxWidth / 6),
+                child: Stack(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(100),
+                      child: PieChart(PieChartData(
+                          borderData: FlBorderData(
+                            show: true,
+                          ),
+                          centerSpaceRadius: 0,
+                          sections: [
+                            PieChartSectionData(
+                                title: "الماعز",
+                                titleStyle: TextStyle(color: Colors.white),
+                                showTitle: true,
+                                value: 12,
+                                radius: 120,
+                                color: Color(0xff9e65ff)),
+                            PieChartSectionData(
+                                title: "الابقار",
+                                titleStyle: TextStyle(color: Colors.white),
+                                showTitle: true,
+                                value: 25,
+                                radius: 120,
+                                color: Color(0xFFfea43a)),
+                            PieChartSectionData(
+                                title: "الخرفان",
+                                titleStyle: TextStyle(color: Colors.white),
+                                showTitle: true,
+                                value: 30,
+                                radius: 120,
+                                color: Colors.blue)
+                          ])),
+                    ),
+                  ],
+                ),
+              );
+            }),
+            SizedBox(
+              height: 100,
             ),
             StorageDetailsItem(
               text: Text(
@@ -577,33 +640,6 @@ class StorageDetails extends StatelessWidget {
             StorageDetailsItem(
               icon: CircleAvatar(
                 radius: 5,
-                backgroundColor: Color(0xFF222d40),
-              ),
-              diescript: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'الجمال',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF222d40),
-                        fontSize: 15),
-                  ),
-                ],
-              ),
-              size: 145,
-              text: Text(
-                '145 files',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF222d40),
-                    fontSize: 15),
-              ),
-            ),
-            StorageDetailsItem(
-              icon: CircleAvatar(
-                radius: 5,
                 backgroundColor: Colors.blue,
               ),
               diescript: Row(
@@ -635,23 +671,125 @@ class StorageDetails extends StatelessWidget {
   }
 }
 
-class RecentFile extends StatelessWidget {
-  const RecentFile({super.key});
+class RecentFile2 extends SliverChildBuilderDelegate {
+  RecentFile2(
+    super.builder, {
+    super.childCount = 1000000,
+  });
+  static Widget builder2(BuildContext context, int index) {
+    print(index);
+    if (index == 0) {
+      return Card(
+        child: Container(
+            //margin: EdgeInsets.all(30),
+            child: Column(children: [
+          Container(
+            // margin: EdgeInsets.only(right: 30, left: 10),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Text(
+                  'المحافظة',
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                )),
+                Expanded(
+                    child: Text(
+                  'عدد الرؤوس',
+                  style: TextStyle(color: Colors.black, fontSize: 15),
+                )),
+                Container(
+                  width: 80,
+                  child: DropdownButton(
+                    dropdownColor: Colors.grey,
+                    iconEnabledColor: Colors.transparent,
+                    icon: Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black,
+                    ),
+                    focusColor: Colors.transparent,
+                    isExpanded: true,
+                    underline: Container(),
+                    alignment: Alignment.center,
+                    borderRadius: BorderRadius.circular(0),
+                    value: 'الابقار',
+                    items: [
+                      DropdownMenuItem<String>(
+                          alignment: Alignment.center,
+                          value: "الابقار",
+                          child: Text('ابقار')),
+                      DropdownMenuItem<String>(
+                          alignment: Alignment.center,
+                          value: "الاغنام",
+                          child: Text('الاغنام'))
+                    ],
+                    onChanged: (value) {},
+                  ),
+                ),
+              ],
+            ),
+          )
+        ])),
+      );
+    } else {
+      return Card(
+        child: Container(
+            height: 130,
+            //margin: EdgeInsets.all(30),
+            child: Column(children: [
+              Container(
+                margin: EdgeInsets.only(right: 30, left: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Text(
+                      'اسم',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    )),
+                    Expanded(
+                        child: Text(
+                      '33333333',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    )),
+                    Spacer(),
+                  ],
+                ),
+              )
+            ])),
+      );
+    }
+  }
+}
+
+class RecentFile extends StatefulWidget {
+  const RecentFile({
+    super.key,
+  });
 
   @override
+  State<RecentFile> createState() => _RecentFileState();
+}
+
+class _RecentFileState extends State<RecentFile> {
+  String drop = "الابقار";
+  ScrollController con = ScrollController();
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          //set border radius more than 50% of height and width to make circle
-        ),
-        color: Colors.white,
-        child: Container(
-          margin: EdgeInsets.all(30),
-          child: Column(
-            children: [
-              Container(
+    return Card(
+      child: ListView.separated(
+          itemCount: 10200,
+          separatorBuilder: (context, index) {
+            return Container();
+          },
+           cacheExtent: 10,
+          clipBehavior: Clip.none,
+          physics: ClampingScrollPhysics(),
+          reverse: false,
+          padding: EdgeInsets.all(30),
+          itemBuilder: (context, index) {
+            
+            if (index == 0) {
+              return Container(
+                height: 200,
                 margin: EdgeInsets.only(top: 10, left: 10),
                 child: Row(
                   children: [
@@ -668,7 +806,7 @@ class RecentFile extends StatelessWidget {
                     Container(
                       width: 80,
                       child: DropdownButton(
-                        dropdownColor: Colors.grey,
+                        dropdownColor: Color.fromARGB(255, 91, 55, 55),
                         iconEnabledColor: Colors.transparent,
                         icon: Icon(
                           Icons.arrow_drop_down,
@@ -679,7 +817,7 @@ class RecentFile extends StatelessWidget {
                         underline: Container(),
                         alignment: Alignment.center,
                         borderRadius: BorderRadius.circular(0),
-                        value: 'الابقار',
+                        value: drop,
                         items: [
                           DropdownMenuItem<String>(
                               alignment: Alignment.center,
@@ -690,23 +828,56 @@ class RecentFile extends StatelessWidget {
                               value: "الاغنام",
                               child: Text('الاغنام'))
                         ],
-                        onChanged: (value) {},
+                        onChanged: (value) {
+                          setState(() {
+                            drop = value ?? drop;
+                          });
+                        },
                       ),
                     ),
                     Spacer()
                   ],
                 ),
-              ),
-              ...List.generate(30, (index) {
-                if (index % 2 == 0)
-                  return Container(
-                    margin: EdgeInsets.only(top: 10, left: 10),
-                    width: double.infinity,
-                    height: 1,
-                    color: Colors.black.withOpacity(0.4),
-                  );
-                else
-                  return Container(
+              );
+            } else {
+              return Container(
+                margin: EdgeInsets.only(top: 10, left: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.picture_as_pdf,
+                            color: Colors.red,
+                          ),
+                          Container(
+                            width: 5,
+                          ),
+                          Text(
+                            'القاهرة',
+                            style: TextStyle(color: Colors.black, fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                        child: Text(
+                      index.toString(),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    )),
+                    Spacer(),
+                  ],
+                ),
+              );
+            }
+          }),
+    );
+  }
+}
+
+/*
+  Container(
                     margin: EdgeInsets.only(top: 10, left: 10),
                     child: Row(
                       children: [
@@ -749,9 +920,8 @@ class RecentFile extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
+        
+*/
 class CustomeDrawer extends StatefulWidget {
   const CustomeDrawer({super.key});
 
@@ -1063,21 +1233,23 @@ class _CustomeDrawerState extends State<CustomeDrawer> {
 }
 
 class CustomeSearch extends StatefulWidget {
-  double width;
-  String text;
   CustomeSearch({
     Key? key,
     required this.width,
     required this.text,
   }) : super(key: key);
 
+  String text;
+  double width;
+
   @override
   State<CustomeSearch> createState() => _CustomeSearchState();
 }
 
 class _CustomeSearchState extends State<CustomeSearch> {
-  bool visiable = false;
   double height = 100;
+  bool visiable = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(

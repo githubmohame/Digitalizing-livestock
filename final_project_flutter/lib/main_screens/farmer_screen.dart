@@ -91,10 +91,10 @@ class _FarmerScreenState extends State<FarmerScreen> {
                     ))
                 : null,
             body: Container(
-              height: 500 + 156 + errorHeight + 20 + 54 + 60 + 116,
+              height: 500 + 156 +100+ errorHeight + 20 + 54 + 60 + 116,
               child: SingleChildScrollView(
                 child: Container(
-                  height: 500 + 156 + errorHeight + 20 + 54 + 60 + 116,
+                  height: 500 + 156 + 100+errorHeight + 20 + 54 + 60 + 116,
                   child: Column(
                     children: [
                       constraint.maxWidth > 900

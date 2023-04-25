@@ -68,7 +68,7 @@ class MainDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DashBoardScreen(),
+                        builder: (context) =>   DashBoardScreen(),
                       ));
                 }),
               ),
@@ -442,7 +442,7 @@ class ComputerDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DashBoardScreen(),
+                        builder: (context) =>   DashBoardScreen(),
                       ));
                 }),
               ),

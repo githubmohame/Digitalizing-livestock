@@ -175,7 +175,7 @@ class _FarmScreenState extends State<FarmScreen> {
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: Container(
-                height: 700 +
+                height: 800 +
                     496 +
                     90 +
                     errorHeight +
@@ -196,7 +196,7 @@ class _FarmScreenState extends State<FarmScreen> {
                         color: Color(0xFF357515),
                         child: Container(
                           padding: EdgeInsets.all(20),
-                          height: 700 +
+                          height: 800 +
                               496 +
                               40 +
                               18 +
@@ -677,7 +677,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       margin: EdgeInsets.all(10),
                                       child: googleMapComponent),
                                   Container(
-                                    height: 260,
+                                    height: 300,
                                     child: Row(
                                       children: [
                                         Expanded(
@@ -690,9 +690,9 @@ class _FarmScreenState extends State<FarmScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Wrap(
+                                  Wrap(direction: Axis.vertical,
                                     children: [
-                                      OutlinedButton(
+                                      ElevatedButton(
                                         style: ButtonStyle(
                                             fixedSize:
                                                 MaterialStateProperty.all(
@@ -702,7 +702,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                                30))),
+                                                                0))),
                                             backgroundColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.green),
@@ -835,7 +835,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      OutlinedButton(
+                                      ElevatedButton(
                                         style: ButtonStyle(
                                             fixedSize:
                                                 MaterialStateProperty.all(
@@ -845,7 +845,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                                30))),
+                                                                0))),
                                             backgroundColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.red),
@@ -879,7 +879,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       SizedBox(
                                         height: 10,
                                       ),
-                                      OutlinedButton(
+                                      ElevatedButton(
                                         style: ButtonStyle(
                                             fixedSize:
                                                 MaterialStateProperty.all(
@@ -889,7 +889,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     RoundedRectangleBorder(
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                                30))),
+                                                                0))),
                                             backgroundColor:
                                                 MaterialStateProperty.resolveWith(
                                                     (states) => Colors.red),
