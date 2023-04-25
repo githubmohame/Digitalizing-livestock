@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
+from django.db.models import Count, F, Value,Q
 # Create your views here.
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
@@ -717,3 +718,14 @@ def list_farm_api(request :Request):
 	 
 	ser1=FarmListSerializer(instance=farm.objects.all().filter(id__in= l1),many=True)
 	return response.Response(ser1.data)
+
+
+
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def summary_governorate(request :Request):
+	connect_farm_farmer.objects.all().annotate(village_count=Count(F("farm__village__name")),farmer_count=Count(F("farmer__fname")),farm_count_milk=Count(Q(farm__farm_name__gte="")))
+	return JsonResponse({"data":[i for i in farm.objects.all().values("village__city__governorate__name").annotate(g_name=F("village__city__governorate__name"),count=Count("village")).values("g_name","count")]}) 
