@@ -13,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
@@ -123,7 +122,8 @@ class _FarmScreenState extends State<FarmScreen> {
 
   double errorHeight = 0;
 
-  GoogleMapComponent googleMapComponent = GoogleMapComponent();
+  GoogleMapComponentFarmScreen googleMapComponent =
+      GoogleMapComponentFarmScreen();
   SelectLocation selectLocation = SelectLocation(
     city: '',
     village: '',
@@ -155,6 +155,61 @@ class _FarmScreenState extends State<FarmScreen> {
   }
 
   Farm_type _selectFarmType = Farm_type.barn;
+  Future<dynamic> get_location() async {
+    googleMapComponent;
+    if (googleMapComponent.point == null && googleMapComponent.list1.isEmpty) {
+      var f = dio.MultipartFile.fromBytes(
+          await File(googleMapComponent.file.toString()).readAsBytes(),
+          filename: googleMapComponent.file.toString().split(
+              '/')[googleMapComponent.file.toString().split('/').length - 1]);
+
+      return f;
+    } else if (googleMapComponent.point != null) {
+      print(googleMapComponent.point?.latitude);
+      return  json.encode({
+          "point": {
+            "coordinates": [
+              googleMapComponent.point?.latitude,
+              googleMapComponent.point?.longitude
+            ]
+          }
+        });
+       
+    } else if (googleMapComponent.list1.isNotEmpty) {
+      String s1 = """
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {},
+      "geometry": {
+        "coordinates": [[
+          [
+            ${googleMapComponent.list1[0].latitude},${googleMapComponent.list1[0].longitude}
+          ],
+           [
+            ${googleMapComponent.list1[1].latitude},${googleMapComponent.list1[1].longitude}
+          ],
+           [
+            ${googleMapComponent.list1[2].latitude},${googleMapComponent.list1[2].longitude}
+          ],
+           [
+            ${googleMapComponent.list1[3].latitude},${googleMapComponent.list1[3].longitude}
+          ] 
+        ]],
+        "type": "Polygon"
+      }
+    }
+  ]
+}
+""";
+      var f = dio.MultipartFile.fromString(s1, filename: "file1.json");
+      return f;
+    }
+    print("the value null ");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -690,7 +745,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  Wrap(direction: Axis.vertical,
+                                  Wrap(
+                                    direction: Axis.vertical,
                                     children: [
                                       ElevatedButton(
                                         style: ButtonStyle(
@@ -713,14 +769,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                           await CustomeSecureStorage
                                               .remove_all();
                                           update_screen();
-
                                           if (_formGlobalKey.currentState!
                                               .validate()) {
-                                            var f = dio.MultipartFile.fromBytes(
-                                                await File(
-                                                        '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
-                                                    .readAsBytes(),
-                                                filename: 'locations.shp');
                                             dio.Dio dio1 = dio.Dio();
                                             Map<String, dynamic> dic1 = {
                                               'operation': "insert",
@@ -781,37 +831,15 @@ class _FarmScreenState extends State<FarmScreen> {
                                               'village':
                                                   this.selectLocation.village
                                             };
-                                            if (googleMapComponent.point
-                                                is LatLng) {
-                                              dic1['geometry'] = json.encode({
-                                                "Point": {
-                                                  "coordinates": [
-                                                    googleMapComponent
-                                                        .point!.latitude,
-                                                    googleMapComponent
-                                                        .point!.longitude
-                                                  ]
-                                                }
-                                              });
-                                            } else if (googleMapComponent.file
-                                                is String) {
-                                              dic1['geometry'] =
-                                                  dio.MultipartFile.fromBytes(
-                                                      await File(
-                                                              googleMapComponent
-                                                                  .file
-                                                                  .toString())
-                                                          .readAsBytes(),
-                                                      filename:
-                                                          'locations.zip');
-                                            } else {
-                                              dic1['geometry'] = null;
-                                            }
-                                            print(dic1);
+                                            print("belly");
+                                            dic1["geometry"] =
+                                                await get_location();
+                                            print(dic1["geometry"]);
                                             dio.FormData formData =
                                                 dio.FormData.fromMap(
                                                     dic1,
-                                                    dio.ListFormat.multi,
+                                                    dio.ListFormat
+                                                        .multiCompatible,
                                                     false);
                                             Map<String, dynamic> res =
                                                 await farm_api(form: formData);
@@ -962,31 +990,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                             'village':
                                                 this.selectLocation.village
                                           };
-                                          if (googleMapComponent.point
-                                              is LatLng) {
-                                            dic1['geometry'] = json.encode({
-                                              "Point": {
-                                                "coordinates": [
-                                                  googleMapComponent
-                                                      .point!.latitude,
-                                                  googleMapComponent
-                                                      .point!.longitude
-                                                ]
-                                              }
-                                            });
-                                          } else if (googleMapComponent.file
-                                              is String) {
-                                            dic1['geometry'] =
-                                                dio.MultipartFile.fromBytes(
-                                                    await File(
-                                                            googleMapComponent
-                                                                .file
-                                                                .toString())
-                                                        .readAsBytes(),
-                                                    filename: 'locations.zip');
-                                          } else {
-                                            dic1['geometry'] = null;
-                                          }
+                                          dic1["geometry"] =
+                                              await get_location();
                                           dio.FormData formData =
                                               dio.FormData.fromMap(dic1,
                                                   dio.ListFormat.multi, false);
@@ -1107,7 +1112,6 @@ class SelectLocation extends StatelessWidget {
         future: location_api(),
         builder: (context, snap) {
           if (snap.data is List<Map<String, dynamic>>) {
-            print(snap.data);
             return BlocProvider(
               create: (context) => LocationCubit(
                 city: snap.data![0]['city'],
@@ -1161,7 +1165,6 @@ class SelectLocation extends StatelessWidget {
                         return FutureBuilder(
                             future: city_api(gavernorate: state.gavernorate),
                             builder: (context, snap) {
-                              print(snap.data.runtimeType);
                               if (snap.connectionState ==
                                       ConnectionState.done &&
                                   snap.data is List<Map<String, dynamic>> &&
@@ -1212,7 +1215,6 @@ class SelectLocation extends StatelessWidget {
                                   snap.data is List<Map<String, dynamic>> &&
                                   snap.data!.isNotEmpty) {
                                 village = snap.data!.first['id'] ?? '';
-                                // print(snap.data);
                                 return Container(
                                   margin: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
@@ -1318,13 +1320,13 @@ class _CustomeTypeState extends State<CustomeType> {
             height: 50,
             child: BlocBuilder<SelectMuiltTypeCubit, SelectMuiltTypeState>(
               builder: (context, state) {
+                List<int> list = state.list;
+                widget.item_choose = List.generate(list.length, (index) {
+                  return widget.list[list[index]]['name'];
+                });
                 return ListView.builder(
                   itemCount: widget.list.length,
                   itemBuilder: (context, index) {
-                    List<int> list = state.list;
-                    widget.item_choose = List.generate(list.length, (index) {
-                      return widget.list[index]['name'];
-                    });
                     CustomeButton d;
                     if (list.contains(index)) {
                       d = CustomeButton(

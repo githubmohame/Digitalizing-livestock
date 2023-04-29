@@ -21,63 +21,88 @@ from django.contrib.gis.gdal.geometries import Polygon,Point
 import geopandas as gpd
 from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
+	print(str( dic1.keys()))
 	if(dic1.get('geometry')!=None):
+			 
 			try:
 				if(type(dic1.get('geometry'))==str):
-					#print( (dic1.get('geometry')) )
+					#print("kiiiiuu666"*6655)
+					print( (dic1.get('geometry')) )
+     
 					import json
 					from django.contrib.gis.geos import Point
 					from django.contrib.gis.geos import GEOSGeometry
 					data=json.loads(dic1.get('geometry'))
-					print( *(data['Point']['coordinates'] ))
-					print( Point (*(data['Point']['coordinates'])))
-					setattr(obj,'location',GEOSGeometry(str( Point (*(data['Point']['coordinates'])))))
-					print('rrrrr33422222')
+					print(   (data['point']["coordinates"]) ) 
+					print("ggDone")
+					setattr(obj,'location',GEOSGeometry( ( Point (*(data['point']['coordinates'])).geojson)))
+					print("done")
 				else:
 					with open('m',mode='wb' ) as binary_file:
 						binary_file.write(dic1.get('geometry').read())
 					import zipfile
+					
 					try:
 						with zipfile.ZipFile(file='m',mode='r') as zip_ref:
 							zip_ref.extractall('targdir')
 						dsource=DataSource('targdir')
 						for d in dsource:
-							print(d)
 							list1=d.get_geoms()
-							print(len(list1))
+							
 							break
+						
 						muilt_plog= list1[0]
+						
 						if(len(list1)>100):
+								
 								count=100
 						else:
-								count=len(data['features'])
+								count=len(list1)
 						for i in range(1,count):
 							muilt_plog=muilt_plog.union(list1[i])
-						print('end loop')
 						setattr(obj,'location',str(muilt_plog))
 					except:
-						print('gggggggr4554322')
+						
 						import json
 						from django.contrib.gis.geos import GEOSGeometry
 						try:
+							print( str(dic1.get('geometry').read())+";;;;;;;;;;;")
 							with open('m')as f:
-								data=json.loads(f.read())
-						except:
-							
+								data=f.read()
+						except Exception as e:
+							print(e)
+							print("lool")
 							data=json.loads(dic1.get('geometry'))
-						list1=[]
+						polygons=[]
+						print ( (data))
+						data=json.loads(data)
+						
 						if(len(data['features'])>100):
 							count=100
 						else:
 							count=len(data['features'])
+						print("Done123")
 						for ft in range(0,count):
-							geom_str=json.dumps( data['features'][ft])
-							geom=GEOSGeometry(geom_str)
-							list1.append(geom)
+							geom_str=json.dumps( data['features'][ft]["geometry"] )
+							#print(str(geom_str))
+							print(data['features'][0]["geometry"]["coordinates"][0]  )
+							try:
+								geom=GEOSGeometry(str(geom_str))
+							except:
+								print(*data['features'][0]["geometry"]["coordinates"][0][2])
+								print(*data['features'][0]["geometry"]["coordinates"][0][1] )
+								geom=Polygon.from_bbox(data['features'][0]["geometry"]["coordinates"][0][2] +data['features'][0]["geometry"]["coordinates"][0][1] )
+								geom=GEOSGeometry( geom.geojson)
+							polygons.append(geom)
+							print("Done123")
+							print(geom.geojson)
+							muilt_plog = polygons[0]	
+							for poly in polygons:
+								muilt_plog = muilt_plog.union(poly)
 					
-					print(muilt_plog.geom_type)
+					setattr(obj,"location",muilt_plog)
 			except Exception as e:
-				print(e.args)
+				print(e )
 				return JsonResponse({'error':'خطأ في صيغة الملف'})
 class CustomerAccessPermission(permissions.BasePermission):
 
@@ -290,39 +315,29 @@ def test_geson(request :Request):
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def farm_api(request :Request):
-	print('iioo')
 	if(request.data['operation']=='insert'):
 		farm1=farm()
 		dic1=request.data.dict() 
 		except1=set_geometry(obj=farm1,dic1=dic1)
-		print('done')
-		print(except1)
+		print('*'*789)
+		print(farm1.location)
 		if(isinstance(except1,JsonResponse)):
 			
 			return except1
 		farm1.attached_area=dic1['attached_area']
-		print(dic1.get('farm_type')==None)
 		if(dic1.get('farm_type')==None):
 			return JsonResponse({'error':'اختارنوع للمزرعة'})
 
 
 		import json
 		dic1['farm_type']= json.loads(dic1['farm_type'])
-		print(isinstance ( dic1.get('farm_type')    ,type(list())|type( set)|type(tuple) ) )
 		if(not isinstance ( dic1.get('farm_type')    ,type(list())|type( set)|type(tuple) )):
 			return JsonResponse({'error':"the farm  type should be iterable type"})
 		if(farm_type.objects.filter(name__in=dic1.get('farm_type')).count()!=len(dic1.get('farm_type')) or len(dic1.get('farm_type'))==0):
-			print(farm_type.objects.filter(name__in=dic1.get('farm_type')).count()  )
 			return JsonResponse({'error':"the farm 12 should have valid farm type"})
-		print(dic1)
-		print(dic1['total_area_of_farm'])
 		for key,value in dic1.items() :
-			print(key)
-			print(value)
 			if(key in ['id','isolated_wards','number_of_arc','number_of_workers','playground','wards','total_area_of_farm','farm_name','huge_playground']):
 				setattr(farm1,key,value)
-			print('pp'*78)
-		print(farm1.number_of_workers)
 		'''
 		farm1.isolated_wards=dic1['isolated_wards']
 		farm1.number_of_arc=float(dic1['number_of_arc'])
@@ -336,24 +351,25 @@ def farm_api(request :Request):
 		'''
 		farm1.section_type=section_type.objects.get(id= dic1['section_type'])
 		farm1.village=village.objects.get(id=dic1['village'])
-		print(farm1.id)
+		print(farm1.village.name)
 		farm1.save()
+		print(connect_farm_farmtype.objects.all().filter(farm__id=farm1.id).delete())
 		for i in set(dic1.get('farm_type')):
-			con_farmm_farmt1=connect_farm_farmtype()
-			con_farmm_farmt1.farm=farm1
-			con_farmm_farmt1.farm_type=farm_type.objects.get(name=i)
-			con_farmm_farmt1.save()
-
+			try:
+				con_farmm_farmt1=connect_farm_farmtype()
+				con_farmm_farmt1.farm=farm1
+				con_farmm_farmt1.farm_type=farm_type.objects.get(name=i)
+				con_farmm_farmt1.save()
+			except Exception as e:
+				print(e)
 		return JsonResponse({"message":'تم اضافة البيانات'})
 	if(request.data['operation']=='delete'):
 
 			if(request.data.get('id')==None):
 				return JsonResponse({'message':'من فضلك ادخل كود المزرعة', })
 			d1=farm.objects.all().filter(id=request.data.get('id')).delete()
-			print(d1)
 			return JsonResponse({"message":"تم مسح البيانات"})
 	if(request.data['operation']=='update'):
-			print(request.data.get("city"))
 			if(request.data.get('id')==None):
 				return JsonResponse({'error':'من فضلك ادخل كود المزرعة', })
 			try: 
@@ -364,8 +380,7 @@ def farm_api(request :Request):
 			for key  in dic1:
 				if(key=='geometry'):
 					except1=set_geometry(obj=d1,dic1=dic1)
-					print('done')
-					print(except1)
+					
 					if(isinstance(except1,JsonResponse)):
 						return except1
 					continue
@@ -383,11 +398,8 @@ def farm_api(request :Request):
 					d1.save()
 					continue
 				if(key=='village'):
-					print( village.objects.all().filter( id=request.data.get('village')))
 					d1.village=village.objects.all().get( id=request.data.get('village'))
-					print(d1.village.name)
 					continue
-					print(d1.village.name)
 				setattr(d1,key,request.data[key])
 
 			d1.save()
@@ -398,8 +410,6 @@ def farm_api(request :Request):
 @authentication_classes([CustomerBackend])
 def modified_species(request :Request):
 	oper=request.data['operation']
-	print(oper)
-	print('jjuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
 	if(oper=='delete'):
 		try:
 			g1=species.objects.get(id=request.data['species']).delete()
@@ -452,7 +462,6 @@ def modified_platoon(request :Request):
 			return JsonResponse({"error":' اختار النوع'})
 		return  JsonResponse({"message":'تم تعديل البيانات'})
 	if(oper=='insert'):
-		print(request.data['new_name'])
 		g1=platoon()
 		if(request.data['new_name']=='' or request.data['new_name']==None):
 				return JsonResponse({"error":'يجب ادخال الاسم'})
@@ -466,7 +475,6 @@ def modified_platoon(request :Request):
 @authentication_classes([CustomerBackend])
 def farmer_api(request :Request):
 	oper=request.data['operation']
-	print(oper)
 	if(oper=='delete'):
 		import json
 		dic1=request.data.dict()
@@ -474,7 +482,6 @@ def farmer_api(request :Request):
 		user1=User.objects.filter(ssn=dic1['ssn'])
 		if(len(user1)==0):
 			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
-			print(int(i.ssn)==int(m))
 		if(user1[0].is_superuser):
 			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
 		else:
@@ -494,24 +501,18 @@ def farmer_api(request :Request):
 			setattr(user1,key,value)
 		user1.save()
 		return JsonResponse({"message":"تم تعديل البيانات"})
-		print(user1.age)
 	if(oper=='insert'):
 		dic1=request.data.dict()
 		dic1.pop('operation')
-		print(set(dic1) ,set(['ssn','fname','lname','email','password','phone','photo','job','age']))
 		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
-			print(dic1)
 			user1=User.objects.create_user(**dic1)
 	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def add_farm_animal(request :Request):
-	print(request.data)
 	from datetime import datetime
 	if(request.data['operation']=='insert'):
-		print(request.data)
-		print(farm.objects.all().filter( id=request.data.get('farm_id')).count())
 		if(request.data.get('date')!=None):
 			date=datetime.strptime(request.data.get('date'),'%Y-%m-%d %H:%M:%S.%f').date()
 			date=datetime(date.year,date.month,date.day,0,0,0)
@@ -727,5 +728,20 @@ def list_farm_api(request :Request):
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackend])
 def summary_governorate(request :Request):
-	connect_farm_farmer.objects.all().annotate(village_count=Count(F("farm__village__name")),farmer_count=Count(F("farmer__fname")),farm_count_milk=Count(Q(farm__farm_name__gte="")))
-	return JsonResponse({"data":[i for i in farm.objects.all().values("village__city__governorate__name").annotate(g_name=F("village__city__governorate__name"),count=Count("village")).values("g_name","count")]}) 
+	stat1=farm.objects.all().aggregate(village_count=Count("village__city__governorate__name"))
+	stat2={"farm_meat":connect_farm_farmtype.objects.filter(farm_type__name__exact='انتاج لحوم').count()}
+	stat3={"farm_milk":connect_farm_farmtype.objects.filter(farm_type__name__exact='انتاج البان').count()}
+	stat4=User.objects.all().aggregate(farmer_count=Count("ssn",Q(is_superuser=0)))
+	stat4={"farmer_count":connect_farm_farmer.objects.all().aggregate(farmer_count=Count("farmer__ssn"))["farmer_count"]+stat4["farmer_count"]}
+	summary_info={"gov_data":list( connect_farm_farmtype.objects.all().values("farm__village__city__governorate__name").annotate(farm_meat_gov=Count("farm",Q(farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count("farm",Q(farm_type__name__exact='انتاج البان')),g_name=F("farm__village__city__governorate__name"),total_villages=Count("farm__village",distinct=True)).values("g_name","total_villages","farm_meat_gov","farm_milk_gov"))}|stat1|stat2|stat3|stat4
+	return JsonResponse({"data":summary_info})
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackend])
+def get_data_map(request :Request):
+	pass
+	f1=farm.objects.all()
+	return response.Response( LocationSerializer(f1,many=True).data)
+

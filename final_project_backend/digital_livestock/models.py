@@ -118,12 +118,16 @@ class farm(models.Model):
     section_type = models.ForeignKey(section_type, on_delete=models.CASCADE)
     village = models.ForeignKey(village, on_delete=models.CASCADE)
     attached_area = models.PositiveIntegerField(validators=[])
-    location = models.GeometryField(null=True,geography=False )
+    location = models.GeometryField(null=True,geography=True )
     total_area_of_farm=models.PositiveIntegerField(null=True)
 
 class connect_farm_farmtype(models.Model):
-    farm=models.ForeignKey(farm,on_delete=models.CASCADE)
-    farm_type=models.ForeignKey(farm_type,on_delete=models.CASCADE)
+    farm=models.ForeignKey(farm,on_delete=models.CASCADE,null=False)
+    farm_type=models.ForeignKey(farm_type,on_delete=models.CASCADE,null=False)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['farm', 'farm_type' ,], name="connect_farm_farmtype_uk")
+        ]
 class connect_animal_farm(models.Model):
     animal_sub_type = models.ForeignKey(species, on_delete=models.CASCADE)
     farm_id = models.ForeignKey(farm, on_delete=models.CASCADE)

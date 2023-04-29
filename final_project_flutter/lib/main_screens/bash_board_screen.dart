@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:final_project_year/common_component/google_map.dart';
+import 'package:final_project_year/common_component/search_field.dart';
 import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
@@ -23,14 +25,22 @@ import 'package:final_project_year/main_screens/farm_screen.dart';
 */
 
 class DashBoardScreen extends StatefulWidget {
-  DashBoardScreen({super.key});
+  GoogleMapComponentDashBoardScreen con = GoogleMapComponentDashBoardScreen();
+  DashBoardScreen({super.key}) {
+    print("DashBoardScreen constructor");
+  }
   Widget wid = RecentFile();
   @override
-  State<DashBoardScreen> createState() => _DashBoardScreenState();
+  State<DashBoardScreen> createState() {
+   
+    return _DashBoardScreenState(googleMapComponentDashBoardScreen: con);
+  }
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
+  _DashBoardScreenState({required this.googleMapComponentDashBoardScreen});
   ScrollController con = ScrollController();
+  GoogleMapComponentDashBoardScreen googleMapComponentDashBoardScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -184,70 +194,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                             ),
                                             Container(height: 40),
                                             Container(height: 30),
-                                            Card(
-                                              child: Container(
-                                                height: 350,
-                                                padding: EdgeInsets.all(10),
-                                                child: Container(
-                                                  height: 300 - 32,
-                                                  child: Stack(
-                                                    children: [
-                                                      FlutterMap(
-                                                        options: MapOptions(),
-                                                        children: [
-                                                          TileLayer(
-                                                            urlTemplate:
-                                                                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                                            userAgentPackageName:
-                                                                'dev.fleaflet.flutter_map.example',
-                                                          ),
-                                                          MarkerLayer(
-                                                            markers: [
-                                                              Marker(
-                                                                  height: 200,
-                                                                  width: 200,
-                                                                  point: LatLng(
-                                                                      60, 60),
-                                                                  builder: (context) =>
-                                                                      Icon(Icons
-                                                                          .location_on))
-                                                            ],
-                                                          ),
-                                                          Wrap(
-                                                            children: [
-                                                              Container(
-                                                                  margin:
-                                                                      EdgeInsets
-                                                                          .all(
-                                                                              5),
-                                                                  width: 500,
-                                                                  child: SearchTextField(
-                                                                      width:
-                                                                          100)),
-                                                              Container(
-                                                                height: 50,
-                                                                child: TextButton(
-                                                                    style: ButtonStyle(
-                                                                        backgroundColor: MaterialStateProperty.resolveWith((states) =>
-                                                                            Colors
-                                                                                .green)),
-                                                                    onPressed:
-                                                                        () {},
-                                                                    child: Text(
-                                                                        'search',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white))),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                            googleMapComponentDashBoardScreen
                                           ],
                                         ),
                                       ),
@@ -265,11 +212,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                 ),
                               ]),
                             ),
-                             
                           ];
                         },
-                        body: RecentFile()
-                        ),
+                        body: RecentFile()),
                   ),
                 ),
                 constraint.maxWidth >= 1900.0
@@ -355,48 +300,6 @@ class _CustomeDropdownButtomSignUpDashboardState
           }
           ;
         },
-      ),
-    );
-  }
-}
-
-class SearchTextField extends StatefulWidget {
-  SearchTextField({
-    Key? key,
-    required this.width,
-  }) : super(key: key);
-
-  double width;
-
-  @override
-  State<SearchTextField> createState() => _SearchTextFieldState();
-}
-
-class _SearchTextFieldState extends State<SearchTextField> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: 20),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              width: widget.width * (2 / 3),
-              height: 40,
-              color: Colors.white,
-              child: TextField(
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                  decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                      hintStyle: TextStyle(
-                          color: Color.fromARGB(255, 166, 197, 181),
-                          fontSize: 20),
-                      hintText: 'Search',
-                      border: OutlineInputBorder(borderSide: BorderSide.none))),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -491,7 +394,7 @@ class CardDashBoard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
+              /*Container(
                 margin: EdgeInsets.only(left: 0, top: 20),
                 width: 200,
                 child: Row(
@@ -513,7 +416,7 @@ class CardDashBoard extends StatelessWidget {
                             ])),
                   ],
                 ),
-              ),
+              ),*/
             ],
           )),
     );
@@ -677,7 +580,6 @@ class RecentFile2 extends SliverChildBuilderDelegate {
     super.childCount = 1000000,
   });
   static Widget builder2(BuildContext context, int index) {
-    print(index);
     if (index == 0) {
       return Card(
         child: Container(
@@ -761,8 +663,10 @@ class RecentFile2 extends SliverChildBuilderDelegate {
 }
 
 class RecentFile extends StatefulWidget {
-  const RecentFile({
+  List<Map<String, dynamic>> list1 = [];
+  RecentFile({
     super.key,
+    this.list1 = const [],
   });
 
   @override
@@ -770,23 +674,22 @@ class RecentFile extends StatefulWidget {
 }
 
 class _RecentFileState extends State<RecentFile> {
-  String drop = "الابقار";
+  String drop = "farm_meat_gov";
   ScrollController con = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListView.separated(
-          itemCount: 10200,
+          itemCount: widget.list1.length + 1,
           separatorBuilder: (context, index) {
             return Container();
           },
-           cacheExtent: 10,
+          cacheExtent: 10,
           clipBehavior: Clip.none,
           physics: ClampingScrollPhysics(),
           reverse: false,
           padding: EdgeInsets.all(30),
           itemBuilder: (context, index) {
-            
             if (index == 0) {
               return Container(
                 height: 200,
@@ -806,7 +709,7 @@ class _RecentFileState extends State<RecentFile> {
                     Container(
                       width: 80,
                       child: DropdownButton(
-                        dropdownColor: Color.fromARGB(255, 91, 55, 55),
+                        dropdownColor: Colors.white,
                         iconEnabledColor: Colors.transparent,
                         icon: Icon(
                           Icons.arrow_drop_down,
@@ -821,12 +724,16 @@ class _RecentFileState extends State<RecentFile> {
                         items: [
                           DropdownMenuItem<String>(
                               alignment: Alignment.center,
-                              value: "الابقار",
-                              child: Text('ابقار')),
+                              value: "farm_meat_gov",
+                              child: Text('مزارع اللحوم')),
                           DropdownMenuItem<String>(
                               alignment: Alignment.center,
-                              value: "الاغنام",
-                              child: Text('الاغنام'))
+                              value: "farm_milk_gov",
+                              child: Text('مزارع الالبان')),
+                          DropdownMenuItem<String>(
+                              alignment: Alignment.center,
+                              value: "total_villages",
+                              child: Text('عدد القري'))
                         ],
                         onChanged: (value) {
                           setState(() {
@@ -855,7 +762,7 @@ class _RecentFileState extends State<RecentFile> {
                             width: 5,
                           ),
                           Text(
-                            'القاهرة',
+                            widget.list1[index - 1]['g_name'],
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           ),
                         ],
@@ -863,7 +770,7 @@ class _RecentFileState extends State<RecentFile> {
                     ),
                     Expanded(
                         child: Text(
-                      index.toString(),
+                      widget.list1[index - 1][drop],
                       style: TextStyle(color: Colors.black, fontSize: 15),
                     )),
                     Spacer(),

@@ -32,7 +32,8 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
       {"id": "المنةفية"}
     ],
   );
-  GoogleMapComponent googleMapComponent = GoogleMapComponent();
+  GoogleMapComponentFarmScreen googleMapComponent =
+      GoogleMapComponentFarmScreen();
 
   TextEditingController controller = TextEditingController();
 
@@ -395,78 +396,77 @@ class _SelectCityState extends State<SelectCity> {
               snap.data!.isNotEmpty) {
             return BlocProvider(
               create: (context) => LocationCubit(
-                                city: snap.data![0]['city']!,
-                                gavernorate: snap.data![0]['governorate'],
-                                village: snap.data![0]['village']!,
-                              ),
-              child: Builder(
-                builder: (context) {
-                  return Column(
-                    children: [
-                      Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.grey,
-                          )),
-                          child: FutureBuilder(
-                              future: gavernorate_api(),
-                              builder: (context, snap) {
-                                if (snap.connectionState == ConnectionState.done &&
-                                    snap.data is List<Map<String, dynamic>> &&
-                                    snap.data!.isNotEmpty)
-                                  return CustomeDropdownButton(
-                                      id: 'id',
-                                      func: (String value) {
-                                        BlocProvider.of<LocationCubit>(context)
-                                            .updateGavernorate(value);
-                                      },
-                                      list: snap.data ?? [],
-                                      expanded: true,
-                                      value: snap.data![0]['id']!,
-                                      text: widget.titles[0]);
-                                return Container();
-                              })),
-                      Container(
+                city: snap.data![0]['city']!,
+                gavernorate: snap.data![0]['governorate'],
+                village: snap.data![0]['village']!,
+              ),
+              child: Builder(builder: (context) {
+                return Column(
+                  children: [
+                    Container(
                         decoration: BoxDecoration(
                             border: Border.all(
                           color: Colors.grey,
                         )),
-                        child: BlocBuilder<LocationCubit, LocationState>(
-                          buildWhen: (previous, current) {
-                            //
-                            return previous.gavernorate != current.gavernorate;
-                          },
-                          builder: (context, state) {
-                            return FutureBuilder(
-                                future: city_api(gavernorate: state.gavernorate),
-                                builder: (context, snap) {
-                                  if (snap.connectionState ==
-                                          ConnectionState.done &&
-                                      snap.data is List<Map<String, dynamic>> &&
-                                      snap.data!.isNotEmpty) {
-                                    widget.city = snap.data![0]['id']!;
-                                    return CustomeDropdownButton(
-                                        id: 'id',
-                                        func: (String value) {
-                                          BlocProvider.of<LocationCubit>(context)
-                                              .updateCity(value);
-                                          widget.city = value;
-                                        },
-                                        list: snap.data ?? [],
-                                        expanded: true,
-                                        value: snap.data![0]['id']!,
-                                        text: widget.titles[1]);
-                                  }
+                        child: FutureBuilder(
+                            future: gavernorate_api(),
+                            builder: (context, snap) {
+                              if (snap.connectionState ==
+                                      ConnectionState.done &&
+                                  snap.data is List<Map<String, dynamic>> &&
+                                  snap.data!.isNotEmpty)
+                                return CustomeDropdownButton(
+                                    id: 'id',
+                                    func: (String value) {
+                                      BlocProvider.of<LocationCubit>(context)
+                                          .updateGavernorate(value);
+                                    },
+                                    list: snap.data ?? [],
+                                    expanded: true,
+                                    value: snap.data![0]['id']!,
+                                    text: widget.titles[0]);
+                              return Container();
+                            })),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        color: Colors.grey,
+                      )),
+                      child: BlocBuilder<LocationCubit, LocationState>(
+                        buildWhen: (previous, current) {
+                          //
+                          return previous.gavernorate != current.gavernorate;
+                        },
+                        builder: (context, state) {
+                          return FutureBuilder(
+                              future: city_api(gavernorate: state.gavernorate),
+                              builder: (context, snap) {
+                                if (snap.connectionState ==
+                                        ConnectionState.done &&
+                                    snap.data is List<Map<String, dynamic>> &&
+                                    snap.data!.isNotEmpty) {
+                                  widget.city = snap.data![0]['id']!;
+                                  return CustomeDropdownButton(
+                                      id: 'id',
+                                      func: (String value) {
+                                        BlocProvider.of<LocationCubit>(context)
+                                            .updateCity(value);
+                                        widget.city = value;
+                                      },
+                                      list: snap.data ?? [],
+                                      expanded: true,
+                                      value: snap.data![0]['id']!,
+                                      text: widget.titles[1]);
+                                }
 
-                                  return Container();
-                                });
-                          },
-                        ),
+                                return Container();
+                              });
+                        },
                       ),
-                    ],
-                  );
-                }
-              ),
+                    ),
+                  ],
+                );
+              }),
             );
           }
           return Container();
@@ -496,7 +496,8 @@ class _ScreenCityState extends State<ScreenCity> {
       {"id": "المنةفية"}
     ],
   );
-  GoogleMapComponent googleMapComponent = GoogleMapComponent();
+  GoogleMapComponentFarmScreen googleMapComponent =
+      GoogleMapComponentFarmScreen();
 
   TextEditingController controller = TextEditingController();
 
@@ -515,7 +516,7 @@ class _ScreenCityState extends State<ScreenCity> {
               children: [
                 const Text('تعديل في المحافظات',
                     style: TextStyle(color: Colors.white, fontSize: 20)),
-                 selectCity,
+                selectCity,
                 TextField(
                     controller: controller,
                     style: TextStyle(color: Colors.brown),
@@ -570,7 +571,7 @@ class _ScreenCityState extends State<ScreenCity> {
                         var res = await modify_city_api(dic1: dic1);
                         print(res);
                         if (res.containsKey('message')) {
-                           showSnackbardone(
+                          showSnackbardone(
                               context: context, text: res['message']!);
                         } else {
                           print(res.toString() + "iiii777" * 90);
@@ -730,7 +731,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
 
   TextEditingController controller = TextEditingController();
 
-  GoogleMapComponent googleMapComponent = GoogleMapComponent();
+  GoogleMapComponentFarmScreen googleMapComponent =
+      GoogleMapComponentFarmScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -747,7 +749,8 @@ class _ScreenVillageState extends State<ScreenVillage> {
             children: [
               const Text('تعديل في المحافظات',
                   style: TextStyle(color: Colors.white, fontSize: 20)),
-              selectLocation,Container(
+              selectLocation,
+              Container(
                 margin: EdgeInsets.only(left: 10, right: 10),
                 child: TextField(
                     controller: controller,
@@ -851,8 +854,7 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       Map<String, String> map =
                           await modify_village_api(dic1: dic1);
                       print('uuuuuu' * 78);
-                      if (map.containsKey('message')) {
-                      }
+                      if (map.containsKey('message')) {}
                       selectLocation = SelectLocation(village: '', city: "");
                       setState(() {});
                     },
@@ -900,8 +902,7 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       }
                       Map<String, String> map =
                           await modify_village_api(dic1: dic1);
-                      if (map.containsKey('message')) {
-                      }
+                      if (map.containsKey('message')) {}
                       selectLocation = SelectLocation(village: '', city: "");
                       selectLocation = SelectLocation(village: '', city: "");
 

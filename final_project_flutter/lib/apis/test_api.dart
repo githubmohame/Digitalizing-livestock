@@ -1,10 +1,30 @@
 import 'dart:convert';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 
 void main() async {
+  dio.Dio dio1 = dio.Dio();
+  List<Polygon> plogons = [];
+  var res = await dio1.post("http://192.168.1.6:8000/get_data_map");
+  for (Map<String, dynamic> f in res.data) {
+    if (f["location"].runtimeType == List) {
+      for (List f2 in f["location"]["coordinates"]) {
+        for (List f3 in f2) {
+          List<LatLng> points = [];
+          for (List f4 in f3) {
+            points.add(LatLng(f2[0], f2[1]));
+          }
+          plogons.add(Polygon(points: points));
+        }
+      }
+    }
+  }
+  print(plogons);}
+
   /*dio.Dio dio1 = dio.Dio();
   dio.FormData formData = dio.FormData.fromMap({
     'geometry': json.encode({
@@ -29,5 +49,4 @@ void main() async {
         listFormat: dio.ListFormat.multi,
       ));
   print(res);*/
-  
-}
+//}

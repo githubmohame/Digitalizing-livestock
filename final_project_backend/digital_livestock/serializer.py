@@ -112,4 +112,30 @@ class FarmListSerializer(serializers.ModelSerializer):
             model=farm
             fields=['farm_name','number_of_workers','village','id','section_type']
 
-
+class LocationSerializer(serializers.ModelSerializer):
+    location=serializers.SerializerMethodField()
+    center=serializers.SerializerMethodField()
+    class Meta:
+        model=farm
+        fields=["location","center","id","farm_name"]
+    def get_location(self,obj:farm):
+        try:
+                print(obj.id)
+                print(obj.location )
+                print("*"*789)
+        except:
+             pass
+        if(obj.location==None):
+            return None
+        if(obj.location.geom_type=="Point"):
+            return None
+        if(obj.location.geom_type!="MultiPolygon"):
+            return obj.location.geojson
+        return  obj.location.geojson
+    def get_center(self,obj:farm):
+        if(obj.location==None):
+            return None
+        if(obj.location.geom_type=="Point"):
+            return  obj.location.geojson
+        return  obj.location.centroid.geojson
+        

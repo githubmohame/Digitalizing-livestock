@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'package:dio/dio.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
@@ -8,11 +9,15 @@ import 'package:final_project_year/service/background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import 'package:workmanager/workmanager.dart';
 import 'service/notifications.dart';
+import 'package:dio/dio.dart' as dio;
+import 'dart:convert';
 
+import 'package:final_project_year/common_component/custome_secure_storage.dart';
+/*
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
     print('kiii');
@@ -24,7 +29,7 @@ void callbackDispatcher() {
     return Future.value(true);
   });
 }
-
+*/
 void main() async {
   SliverOpacity;
   /*Workmanager workmanager = Workmanager();
@@ -34,7 +39,50 @@ void main() async {
     'iiiiiiii', //This is the value that will be returned in the callbackDispatcher
     initialDelay: Duration(minutes: 5),
     constraints: Constraints(networkType: NetworkType.connected),
-  );*/
+  );*//*
+  dio.Dio dio1 = dio.Dio();
+  List<Polygon> plogons = [];
+  List<Marker> marker = [];
+  Response<List> res = await dio1.post<List>(
+      "http://192.168.1.6:8000/get_data_map",
+      queryParameters: {},
+      options: dio.Options(responseType: ResponseType.json));
+  for (var f in res.data!) {
+    print(f["location"] != null);
+    if (f['center' ]!= null) {
+      Map m = json.decode(f["center"]);
+      marker.add( Marker(
+        point: LatLng(m["coordinates"][0], m["coordinates"][1]),
+        builder: (context) {
+          return ElevatedButton(onPressed: () {}, child: Text(f["farm_name"]));
+        },
+      ));
+    }
+    if (f["location"] != null) {
+      Map m = json.decode(f["location"]);
+      if (m['type'] == 'MultiPolygon') {
+        for (List main1 in m['coordinates']) {
+          for (List plog in main1) {
+            List<LatLng> points = [];
+            for (List p1 in plog) {
+              points.add(LatLng(p1[0], p1[1]));
+            }
+            plogons.add(Polygon(points: points));
+          }
+        }
+      }
+      if (m['type'] == 'Polygon') {
+        for (List main1 in m['coordinates']) {
+          List<LatLng> points = [];
+          for (List p1 in main1) {
+            points.add(LatLng(p1[0], p1[1]));
+          }
+          plogons.add(Polygon(points: points));
+        }
+      }
+    }
+  }
+  print(marker);*/
   WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 

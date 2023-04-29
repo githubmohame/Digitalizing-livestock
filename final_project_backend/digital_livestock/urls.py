@@ -29,4 +29,5 @@ urlpatterns = [
       ,path('login_api',  login )
       ,path('admin_api',  admin_api)
       ,path('list_farm_api',   list_farm_api)
+       ,path('get_data_map',  get_data_map)
     ]
