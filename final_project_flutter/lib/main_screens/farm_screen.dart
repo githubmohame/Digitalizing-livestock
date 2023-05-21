@@ -1,21 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
-import 'package:file_picker/file_picker.dart';
+import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/google_map.dart';
+import 'package:final_project_year/common_component/select_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
 
 import 'package:final_project_year/apis/apis_functions.dart';
-import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_type_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
@@ -25,71 +22,6 @@ import 'package:final_project_year/input_validation/validations.dart';
 
 enum Farm_type { farm, barn }
 
-class CustomeDropdownButton extends StatefulWidget {
-  String value;
-  String text;
-  String id;
-  bool expanded = false;
-  List<Map<String, dynamic>> list;
-  void Function(String value)? func;
-  CustomeDropdownButton({
-    Key? key,
-    required this.id,
-    this.func,
-    required this.value,
-    required this.text,
-    required this.expanded,
-    required this.list,
-  }) : super(key: key);
-
-  @override
-  State<CustomeDropdownButton> createState() => _CustomeDropdownButtonState();
-}
-
-class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: FutureBuilder<List<Map<String, dynamic>>>(
-        builder: (context, snapshot) => Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(widget.text),
-              ],
-            ),
-            DropdownButton<String>(
-              style: TextStyle(color: Colors.brown),
-              isExpanded: widget.expanded,
-              underline: Container(),
-              focusColor: Colors.white,
-              alignment: Alignment.bottomLeft,
-              value: widget.value,
-              items: List.generate(widget.list.length, (index) {
-                return DropdownMenuItem(
-                    value: widget.list[index]["id"],
-                    child: Text(
-                      widget.list[index]["name"].toString(),
-                    ));
-              }),
-              onChanged: (value) {
-                setState(() {
-                  widget.value = value ?? widget.list[0]['name']!;
-
-                  if (widget.func is Function(String value)) {
-                    widget.func!(widget.value);
-                  }
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 Future<List<Map<String, dynamic>>> f1() {
   return Future<List>.delayed(const Duration(seconds: 10)).then((value) => [
@@ -98,7 +30,7 @@ Future<List<Map<String, dynamic>>> f1() {
 }
 
 class FarmScreen extends StatefulWidget {
-  FarmScreen({Key? key}) : super(key: key);
+  const FarmScreen({Key? key}) : super(key: key);
 
   @override
   State<FarmScreen> createState() => _FarmScreenState();
@@ -166,11 +98,12 @@ class _FarmScreenState extends State<FarmScreen> {
       return f;
     } else if (googleMapComponent.point != null) {
       print(googleMapComponent.point?.latitude);
+      print(googleMapComponent.point);
       return  json.encode({
           "point": {
             "coordinates": [
-              googleMapComponent.point?.latitude,
-              googleMapComponent.point?.longitude
+              googleMapComponent.point?.longitude,
+              googleMapComponent.point?.latitude
             ]
           }
         });
@@ -186,16 +119,16 @@ class _FarmScreenState extends State<FarmScreen> {
       "geometry": {
         "coordinates": [[
           [
-            ${googleMapComponent.list1[0].latitude},${googleMapComponent.list1[0].longitude}
+            ${googleMapComponent.list1[0].longitude},${googleMapComponent.list1[0].latitude}
           ],
            [
-            ${googleMapComponent.list1[1].latitude},${googleMapComponent.list1[1].longitude}
+            ${googleMapComponent.list1[1].longitude},${googleMapComponent.list1[1].latitude}
           ],
            [
-            ${googleMapComponent.list1[2].latitude},${googleMapComponent.list1[2].longitude}
+            ${googleMapComponent.list1[2].longitude},${googleMapComponent.list1[2].latitude}
           ],
            [
-            ${googleMapComponent.list1[3].latitude},${googleMapComponent.list1[3].longitude}
+            ${googleMapComponent.list1[3].longitude},${googleMapComponent.list1[3].latitude}
           ] 
         ]],
         "type": "Polygon"
@@ -229,7 +162,7 @@ class _FarmScreenState extends State<FarmScreen> {
             backgroundColor: Colors.red.withOpacity(0),
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 height: 800 +
                     496 +
                     90 +
@@ -242,15 +175,15 @@ class _FarmScreenState extends State<FarmScreen> {
                   child: Column(
                     children: [
                       constraint.maxWidth > 900
-                          ? Container(
+                          ? SizedBox(
                               height: 100, child: ComputerDrawer(index: 0))
                           : Container(),
                       Container(height: 20),
                       Card(
                         elevation: 30,
-                        color: Color(0xFF357515),
+                        color: const Color(0xFF357515),
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           height: 800 +
                               496 +
                               40 +
@@ -277,7 +210,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 color: Colors.transparent,
                                               )),
                                               margin: const EdgeInsets.all(10),
-                                              child: Text(
+                                              child: const Text(
                                                 "اضافة مزرعة",
                                                 style: TextStyle(
                                                     fontSize: 30,
@@ -295,12 +228,13 @@ class _FarmScreenState extends State<FarmScreen> {
                                         value: Farm_type.farm,
                                         groupValue: _selectFarmType,
                                         onChanged: (value) {
-                                          if (value is Farm_type)
+                                          if (value is Farm_type) {
                                             _selectFarmType = value;
+                                          }
                                           setState(() {});
                                         },
                                       ),
-                                      Text(
+                                      const Text(
                                         'المزرعة',
                                         style: TextStyle(
                                             fontSize: 15, color: Colors.white),
@@ -311,12 +245,13 @@ class _FarmScreenState extends State<FarmScreen> {
                                         value: Farm_type.barn,
                                         groupValue: _selectFarmType,
                                         onChanged: (value) {
-                                          if (value is Farm_type)
+                                          if (value is Farm_type) {
                                             _selectFarmType = value;
+                                          }
                                           setState(() {});
                                         },
                                       ),
-                                      Text(
+                                      const Text(
                                         'الحظيرة',
                                         style: TextStyle(
                                             fontSize: 15, color: Colors.white),
@@ -328,7 +263,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                     children: [
                                       Container(
                                         margin: const EdgeInsets.all(10),
-                                        child: Text(
+                                        child: const Text(
                                           ' ارقم السجل الضريبي او كود المزرعة',
                                           style: TextStyle(
                                               fontSize: 15,
@@ -349,6 +284,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       if (s1.isNotEmpty) {
                                         return s1;
                                       }
+                                      return null;
                                     },
                                     keyboardType: TextInputType.number,
                                   ),
@@ -357,7 +293,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                     children: [
                                       Container(
                                         margin: const EdgeInsets.all(10),
-                                        child: Text(
+                                        child: const Text(
                                           'عدد عمال المزرعة',
                                           style: TextStyle(
                                               fontSize: 15,
@@ -397,7 +333,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.all(10),
-                                                  child: Text(
+                                                  child: const Text(
                                                     'المساحة الكلية للمزرعة',
                                                     style: TextStyle(
                                                         fontSize: 15,
@@ -441,7 +377,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                     children: [
                                       Container(
                                         margin: const EdgeInsets.all(10),
-                                        child: Text(
+                                        child: const Text(
                                           'ادخل اسم المزرعة',
                                           style: TextStyle(
                                               fontSize: 15,
@@ -482,7 +418,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.all(10),
-                                                  child: Text(
+                                                  child: const Text(
                                                     "اعدد الملاعب",
                                                     style: TextStyle(
                                                         fontSize: 15,
@@ -533,7 +469,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.all(10),
-                                                  child: Text(
+                                                  child: const Text(
                                                     "سعة الملاعب",
                                                     style: TextStyle(
                                                         fontSize: 15,
@@ -583,7 +519,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.all(10),
-                                                  child: Text(
+                                                  child: const Text(
                                                     "اعدد العنابر",
                                                     style: TextStyle(
                                                         fontSize: 15,
@@ -634,7 +570,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.all(10),
-                                                  child: Text(
+                                                  child: const Text(
                                                     'عدد عنابر العزل',
                                                     style: TextStyle(
                                                         fontSize: 15,
@@ -685,7 +621,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.all(10),
-                                                  child: Text(
+                                                  child: const Text(
                                                     "ادخل عدد الافدنة الملحقة",
                                                     style: TextStyle(
                                                         fontSize: 15,
@@ -729,9 +665,9 @@ class _FarmScreenState extends State<FarmScreen> {
                                   sectionType,
                                   Container(
                                       height: 360,
-                                      margin: EdgeInsets.all(10),
+                                      margin: const EdgeInsets.all(10),
                                       child: googleMapComponent),
-                                  Container(
+                                  SizedBox(
                                     height: 300,
                                     child: Row(
                                       children: [
@@ -827,9 +763,9 @@ class _FarmScreenState extends State<FarmScreen> {
                                                           controller[5].text)
                                                       : 0,
                                               'id': controller[0].text,
-                                              "city": this.selectLocation.city,
+                                              "city": selectLocation.city,
                                               'village':
-                                                  this.selectLocation.village
+                                                  selectLocation.village
                                             };
                                             print("belly");
                                             dic1["geometry"] =
@@ -852,7 +788,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                   context: context,
                                                   text: res['error']);
                                             }
-                                            return null;
+                                            return;
                                           }
                                         },
                                         child: const Text(
@@ -860,7 +796,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       ElevatedButton(
@@ -897,14 +833,14 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;
+                                          return;
                                         },
                                         child: const Text(
                                           "حذف",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       ElevatedButton(
@@ -986,9 +922,9 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 ? int.parse(controller[5].text)
                                                 : 0,
                                             'id': controller[0].text,
-                                            "city": this.selectLocation.city,
+                                            "city": selectLocation.city,
                                             'village':
-                                                this.selectLocation.village
+                                                selectLocation.village
                                           };
                                           dic1["geometry"] =
                                               await get_location();
@@ -1007,7 +943,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;
+                                          return;
                                         },
                                         child: const Text(
                                           "تعديل",
@@ -1020,7 +956,7 @@ class _FarmScreenState extends State<FarmScreen> {
                               )),
                         ),
                       ),
-                      Spacer()
+                      const Spacer()
                     ],
                   ),
                 ),
@@ -1034,7 +970,9 @@ class _FarmScreenState extends State<FarmScreen> {
 }
 
 class FarmType extends StatelessWidget {
-  CustomeType customeFarmType = CustomeType(title: "نوع المزرعة", list: []);
+  CustomeType customeFarmType = CustomeType(title: "نوع المزرعة", list: const []);
+
+  FarmType({super.key});
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -1047,7 +985,7 @@ class FarmType extends StatelessWidget {
               create: (context) => SelectMuiltTypeCubit(list: []),
               child: Container(
                 color: Colors.white,
-                margin: EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 child: customeFarmType,
               ),
             );
@@ -1097,165 +1035,6 @@ class SectionType extends StatelessWidget {
   }
 }
 
-class SelectLocation extends StatelessWidget {
-  String village;
-  String city;
-  SelectLocation({
-    Key? key,
-    required this.village,
-    required this.city,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: location_api(),
-        builder: (context, snap) {
-          if (snap.data is List<Map<String, dynamic>>) {
-            return BlocProvider(
-              create: (context) => LocationCubit(
-                city: snap.data![0]['city'],
-                gavernorate: snap.data![0]['governorate'],
-                village: snap.data![0]['village'],
-              ),
-              child: Builder(builder: (context) {
-                city = snap.data![0]['city'];
-                village = snap.data![0]['village'];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          color: Colors.white,
-                        )),
-                        child: FutureBuilder(
-                            future: gavernorate_api(),
-                            builder: (context, snap) {
-                              try {
-                                if (snap.connectionState ==
-                                    ConnectionState.done) {
-                                  return CustomeDropdownButton(
-                                      id: 'id',
-                                      func: (String value) {
-                                        BlocProvider.of<LocationCubit>(context)
-                                            .updateGavernorate(value);
-                                      },
-                                      list: snap.data ??
-                                          const [
-                                            {"name": "اسيوط"},
-                                            {"name": "القاهرة"},
-                                            {"name": "المنةفية"}
-                                          ],
-                                      expanded: true,
-                                      value: snap.data!.first['id'] ?? 'اسيوط',
-                                      text: "المحافظة");
-                                }
-                              } catch (e) {}
-
-                              return Container();
-                            })),
-                    BlocBuilder<LocationCubit, LocationState>(
-                      buildWhen: (previous, current) {
-                        //
-                        return previous.gavernorate != current.gavernorate;
-                      },
-                      builder: (context, state) {
-                        return FutureBuilder(
-                            future: city_api(gavernorate: state.gavernorate),
-                            builder: (context, snap) {
-                              if (snap.connectionState ==
-                                      ConnectionState.done &&
-                                  snap.data is List<Map<String, dynamic>> &&
-                                  snap.data!.isNotEmpty) {
-                                city = snap.data!.first['name'] ?? 'اسيوط';
-
-                                return Container(
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color: Colors.white,
-                                  )),
-                                  child: CustomeDropdownButton(
-                                      id: 'id',
-                                      func: (String value) {
-                                        BlocProvider.of<LocationCubit>(context)
-                                            .updateCity(value);
-                                        city = value;
-                                      },
-                                      list: snap.data ??
-                                          const [
-                                            {"name": "اسيوط"},
-                                            {"name": "القاهرة"},
-                                            {"name": "المنةفية"}
-                                          ],
-                                      expanded: true,
-                                      value: snap.data!.first['id'] ?? '1',
-                                      text: "المركز او المدينة"),
-                                );
-                              }
-                              return Container(
-                                height: 0,
-                                width: 0,
-                              );
-                            });
-                      },
-                    ),
-                    BlocBuilder<LocationCubit, LocationState>(
-                      buildWhen: (previous, current) {
-                        return previous.city != current.city;
-                      },
-                      builder: (context, state) {
-                        return FutureBuilder(
-                            future: village_api(city: state.city),
-                            builder: (context, snap) {
-                              if (snap.connectionState ==
-                                      ConnectionState.done &&
-                                  snap.data is List<Map<String, dynamic>> &&
-                                  snap.data!.isNotEmpty) {
-                                village = snap.data!.first['id'] ?? '';
-                                return Container(
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                    color: Colors.white,
-                                  )),
-                                  child: CustomeDropdownButton(
-                                      id: 'id',
-                                      func: (String value) {
-                                        BlocProvider.of<LocationCubit>(context)
-                                            .updateVillage(value);
-                                        village = value;
-                                      },
-                                      list: snap.data ??
-                                          const [
-                                            {"name": "اسيوط"},
-                                            {"name": "القاهرة"},
-                                            {"name": "المنةفية"}
-                                          ],
-                                      expanded: true,
-                                      value: snap.data!.first['id'] ?? '1',
-                                      text: "القرية او الشارع"),
-                                );
-                              }
-
-                              return Container(
-                                height: 0,
-                                width: 0,
-                              );
-                            });
-                      },
-                    ),
-                  ],
-                );
-              }),
-            );
-          }
-          return Container();
-        });
-  }
-}
 
 class CustomeType extends StatefulWidget {
   List<Map<String, dynamic>> list;

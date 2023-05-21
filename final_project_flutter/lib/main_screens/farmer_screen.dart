@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
@@ -6,11 +6,8 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/main_screens/Show_info.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FarmerScreen extends StatefulWidget {
   FarmerScreen(
@@ -24,9 +21,9 @@ class FarmerScreen extends StatefulWidget {
       this.village})
       : super(key: key) {
     if (!edit) {
-      list[0].text = "رقم التليفون" + phone.toString();
-      list[1].text = "الرقم القومي:" + ssn.toString();
-      list[2].text = "الاسم:" + name.toString();
+      list[0].text = "رقم التليفون$phone";
+      list[1].text = "الرقم القومي:$ssn";
+      list[2].text = "الاسم:$name";
     }
   }
   String? villlage_code, city, country, village;
@@ -68,7 +65,6 @@ class _FarmerScreenState extends State<FarmerScreen> {
     errorHeight =
         funcNumValidation(value: widget.list[6].text, errorHeight: errorHeight);
     setState(() {
-      print(errorHeight);
     });
   }
 
@@ -90,24 +86,24 @@ class _FarmerScreenState extends State<FarmerScreen> {
                       style: TextStyle(color: Colors.white),
                     ))
                 : null,
-            body: Container(
+            body: SizedBox(
               height: 500 + 156 +100+ errorHeight + 20 + 54 + 60 + 116,
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: 500 + 156 + 100+errorHeight + 20 + 54 + 60 + 116,
                   child: Column(
                     children: [
                       constraint.maxWidth > 900
-                          ? Container(
+                          ? SizedBox(
                               height: 100, child: ComputerDrawer(index: 2))
                           : Container(),
-                      Spacer(flex: 2),
+                      const Spacer(flex: 2),
                       Center(
                         child: Card(
-                          color: Color(0xFF357515),
+                          color: const Color(0xFF357515),
                           elevation: 20,
                           child: Container(
-                            margin: EdgeInsets.all(20),
+                            margin: const EdgeInsets.all(20),
                             width: 600,
                             child: SingleChildScrollView(
                               child: Form(
@@ -120,18 +116,18 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[0],
                                           validator: (value) {
-                                            print('done1');
                                             double d1 = funcStringValidation(
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
                                             if (d1 != 0) {
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               fillColor: Colors.white,
@@ -142,7 +138,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[1],
@@ -151,9 +147,9 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
                                             if (d1 != 0) {
-                                              print('done2');
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               errorStyle:
@@ -166,7 +162,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[2],
@@ -175,9 +171,9 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
                                             if (d1 != 0) {
-                                              print('done3');
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               fillColor: Colors.white,
@@ -188,7 +184,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[3],
@@ -197,9 +193,9 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
                                             if (d1 != 0) {
-                                              print('done4');
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               fillColor: Colors.white,
@@ -210,7 +206,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[4],
@@ -218,10 +214,10 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                             double d1 = funcStringValidation(
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
-                                            print('done5');
                                             if (d1 != 0) {
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               fillColor: Colors.white,
@@ -232,7 +228,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[5],
@@ -240,10 +236,10 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                             double d1 = funcStringValidation(
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
-                                            print('done5');
                                             if (d1 != 0) {
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               fillColor: Colors.white,
@@ -254,7 +250,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                        margin: EdgeInsets.only(top: 10),
+                                        margin: const EdgeInsets.only(top: 10),
                                         child: TextFormField(
                                           enabled: widget.edit,
                                           controller: widget.list[6],
@@ -262,10 +258,10 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                             double d1 = funcNumValidation(
                                                 value: value.toString(),
                                                 errorHeight: 0.0);
-                                            print('done5');
                                             if (d1 != 0) {
                                               return 'the field should have a value';
                                             }
+                                            return null;
                                           },
                                           decoration: const InputDecoration(
                                               fillColor: Colors.white,
@@ -276,7 +272,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         ),
                                       ),
                                       Container(
-                                          margin: EdgeInsets.all(10),
+                                          margin: const EdgeInsets.all(10),
                                           child: customePasswordEnterTextField),
                                       !widget.edit
                                           ? Container()
@@ -317,8 +313,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                     'ssn': widget.list[4].text,
                                                     'job': widget.list[5].text,
                                                     'age': widget.list[6].text,
-                                                    "password": this
-                                                        .customePasswordEnterTextField
+                                                    "password": customePasswordEnterTextField
                                                         .password,
                                                   };
 
@@ -335,7 +330,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;       
+                                          return;       
                                                 }
                                               },
                                               child: const Text(
@@ -344,7 +339,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                     color: Colors.white),
                                               ),
                                             ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       OutlinedButton(
@@ -381,7 +376,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;
+                                          return;
                                           }
                                         },
                                         child: const Text(
@@ -389,7 +384,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                           style: TextStyle(color: Colors.white),
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       OutlinedButton(
@@ -441,8 +436,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 widget.list[6].text.isNotEmpty
                                                     ? widget.list[6].text
                                                     : null,
-                                            "password": this
-                                                .customePasswordEnterTextField
+                                            "password": customePasswordEnterTextField
                                                 .password,
                                           };
                                           if (widget.list[4].text.isNotEmpty) {
@@ -458,7 +452,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;
+                                          return;
                                           }
                                         },
                                         child: const Text(
@@ -472,7 +466,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                           ),
                         ),
                       ),
-                      Spacer(flex: 2),
+                      const Spacer(flex: 2),
                     ],
                   ),
                 ),

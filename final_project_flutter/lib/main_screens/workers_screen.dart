@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_type_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
@@ -6,13 +8,14 @@ import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class Worker_Screen extends StatelessWidget {
   Worker_Screen({Key? key, String? phone, this.edit = true, String? ssn, String? name,this.city,this.country,this.village})
       : super(key: key) {
     if (!edit) {
-      list[0].text = "رقم التليفون" + phone.toString();
-      list[1].text = "الرقم القومي:" + ssn.toString();
-      list[2].text = "الاسم:" + name.toString();
+      list[0].text = "رقم التليفون$phone";
+      list[1].text = "الرقم القومي:$ssn";
+      list[2].text = "الاسم:$name";
     }
   }
   bool edit = true;
@@ -43,15 +46,15 @@ class Worker_Screen extends StatelessWidget {
                   title: const Text("اضافه عمال",style: TextStyle(color: Colors.white),)):null,
               body: Column(
                 children: [
-                  constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:11)):Container(),
-                  Container(width:800,
+                  constraint.maxWidth>900?SizedBox(height: 100, child: ComputerDrawer(index:11)):Container(),
+                  SizedBox(width:800,
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
                           Container(height: constraint.maxHeight/8),
                           Form(
                                child: Card(color: Colors.white.withOpacity(0.5) ,
-                                child: Container(margin:EdgeInsets.all(50) ,
+                                child: Container(margin:const EdgeInsets.all(50) ,
                                   child: Column(
                                                    mainAxisAlignment: MainAxisAlignment.center,     children: [
                                   SizedBox(
@@ -67,7 +70,7 @@ class Worker_Screen extends StatelessWidget {
                                       keyboardType: TextInputType.text,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 50,
                                     child: TextFormField(
                                       enabled: edit,
@@ -80,7 +83,7 @@ class Worker_Screen extends StatelessWidget {
                                       keyboardType: TextInputType.text,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 50,
                                     child: TextFormField(
                                       enabled: edit,
@@ -93,7 +96,7 @@ class Worker_Screen extends StatelessWidget {
                                       keyboardType: TextInputType.phone,
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 50,
                                     child: TextFormField(
                                       enabled: edit,
@@ -129,7 +132,7 @@ class Worker_Screen extends StatelessWidget {
                             style: ButtonStyle(
                                 fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                                 shape: MaterialStateProperty.resolveWith((states) =>
-                                    RoundedRectangleBorder(
+                                    const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.zero)),
                                 backgroundColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.green),
@@ -142,12 +145,12 @@ class Worker_Screen extends StatelessWidget {
                               "حفظ",
                               style: TextStyle(color: Colors.white),
                             ),
-                          ) ,Container(width: 20,height: 20,),
+                          ) ,const SizedBox(width: 20,height: 20,),
                            OutlinedButton(
                         style: ButtonStyle(
                             fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                             shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
+                                const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero)),
                             backgroundColor: MaterialStateProperty.resolveWith(
                                 (states) => Colors.red),

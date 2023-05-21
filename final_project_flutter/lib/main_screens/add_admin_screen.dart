@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
@@ -5,11 +7,11 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:final_project_year/common_component/select_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class AddAdmin extends StatelessWidget {
   AddAdmin({super.key});
   SelectLocation selectLocation = SelectLocation(village: '', city: '');
@@ -42,12 +44,12 @@ class AddAdmin extends StatelessWidget {
             child: Center(
               child: Card(
                 elevation: 20,
-                color: Color(0xFF467061),
+                color: const Color(0xFF467061),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 700,
                       child: Form(
                           key: f,
@@ -62,18 +64,13 @@ class AddAdmin extends StatelessWidget {
                                   controller: list[0],
                                   contextMenuBuilder:
                                       (context, editableTextState) {
-                                    final TextEditingValue value =
-                                        editableTextState.textEditingValue;
-                                    final List<ContextMenuButtonItem>
-                                        buttonItems = editableTextState
-                                            .contextMenuButtonItems;
                                     editableTextState.contextMenuAnchors;
                                     return TextButton(
-                                        onPressed: () {}, child: Text('data'));
+                                        onPressed: () {}, child: const Text('data'));
                                   },
                                   keyboardType: TextInputType.text,
-                                  style: TextStyle(color: Colors.brown),
-                                  decoration: InputDecoration(
+                                  style: const TextStyle(color: Colors.brown),
+                                  decoration: const InputDecoration(
                                       filled: true, //<-- SEE HERE
                                       fillColor: Colors.white,
                                       hintText: "ادخل الاسم",
@@ -96,18 +93,13 @@ class AddAdmin extends StatelessWidget {
                                   controller: list[1],
                                   contextMenuBuilder:
                                       (context, editableTextState) {
-                                    final TextEditingValue value =
-                                        editableTextState.textEditingValue;
-                                    final List<ContextMenuButtonItem>
-                                        buttonItems = editableTextState
-                                            .contextMenuButtonItems;
                                     editableTextState.contextMenuAnchors;
                                     return TextButton(
-                                        onPressed: () {}, child: Text('data'));
+                                        onPressed: () {}, child: const Text('data'));
                                   },
                                   keyboardType: TextInputType.text,
-                                  style: TextStyle(color: Colors.brown),
-                                  decoration: InputDecoration(
+                                  style: const TextStyle(color: Colors.brown),
+                                  decoration: const InputDecoration(
                                       filled: true, //<-- SEE HERE
                                       fillColor: Colors.white,
                                       hintText: "ادخل  email",
@@ -129,8 +121,8 @@ class AddAdmin extends StatelessWidget {
                               TextField(
                                   controller: list[2],
                                   keyboardType: TextInputType.number,
-                                  style: TextStyle(color: Colors.brown),
-                                  decoration: InputDecoration(
+                                  style: const TextStyle(color: Colors.brown),
+                                  decoration: const InputDecoration(
                                       filled: true, //<-- SEE HERE
                                       fillColor: Colors.white,
                                       hintText: "ادخل رقم الهاتف  ",
@@ -152,8 +144,8 @@ class AddAdmin extends StatelessWidget {
                               TextField(
                                   controller: list[3],
                                   keyboardType: TextInputType.number,
-                                  style: TextStyle(color: Colors.brown),
-                                  decoration: InputDecoration(
+                                  style: const TextStyle(color: Colors.brown),
+                                  decoration: const InputDecoration(
                                       filled: true, //<-- SEE HERE
                                       fillColor: Colors.white,
                                       hintText: "ادخل الرقم القومي",
@@ -175,11 +167,11 @@ class AddAdmin extends StatelessWidget {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Container(
+                              SizedBox(
                                 height: 250,
                                 child: Row(
                                   children: [
-                                    /*Expanded(
+                                   Expanded(
                                     child: BlocProvider(
                                   create: (context) => LocationCubit(
                                       city: 'مركز دكرنس',
@@ -193,11 +185,11 @@ class AddAdmin extends StatelessWidget {
                                     selectLocation.city = 'مركز دكرنس';
                                     return selectLocation;
                                   }),
-                                )),*/
+                                )), 
                                   ],
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 50,
                                 width: 200,
                                 child: TextButton(
@@ -212,9 +204,9 @@ class AddAdmin extends StatelessWidget {
                                           'email': list[1].text,
                                           'phone': list[2].text,
                                           'ssn': list[3].text,
-                                          "password": this
-                                              .customePasswordEnterTextField
+                                          "password": customePasswordEnterTextField
                                               .password,
+                                              "location": selectLocation.city,
                                         };
 
                                         admin_api(
@@ -238,7 +230,7 @@ class AddAdmin extends StatelessWidget {
                                     child: const Text('تسجيل المدير',
                                         style: TextStyle(color: Colors.white))),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               OutlinedButton(
@@ -270,7 +262,7 @@ class AddAdmin extends StatelessWidget {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              Container(
+                              SizedBox(
                                 height: 50,
                                 width: 200,
                                 child: TextButton(
@@ -284,11 +276,11 @@ class AddAdmin extends StatelessWidget {
                                           'email': list[1].text.isEmpty
                                               ? null
                                               : list[1].text,
-                                          'phone': list[2].text.isEmpty,
+                                          'phone': list[2].text.isEmpty?null:list[2].text,
                                           'ssn': list[3].text,
-                                          "password": this
-                                              .customePasswordEnterTextField
+                                          "password": customePasswordEnterTextField
                                               .password,
+                                              "location": selectLocation.city,
                                         };
 
                                         admin_api(

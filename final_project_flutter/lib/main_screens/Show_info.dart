@@ -34,25 +34,25 @@ class ShowInfoScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                             Expanded(child: Text('عدد الرؤوس')),
-                            Expanded(child: Text('الفصيلة')),
-                            Expanded(child: Text('التاريخ')),
+                             const Expanded(child: Text('عدد الرؤوس')),
+                            const Expanded(child: Text('الفصيلة')),
+                            const Expanded(child: Text('التاريخ')),
                             Expanded(
                                 child: ElevatedButton(
-                                    onPressed: () {}, child: Text('الخريطة'))),
+                                    onPressed: () {}, child: const Text('الخريطة'))),
                             
                           ],
                         ),
                         Container(height: 1,color: Colors.grey,),
-                        Container(height: 900-20,
+                        SizedBox(height: 900-20,
                               child: ListView.builder(itemCount: 100,
                                 itemBuilder: (context, index) {
-                                 return Container(height: 70,
+                                 return SizedBox(height: 70,
                                     child: Row(
                                       children: [
-                                         Expanded(child: Text('عدد الرؤوس')),
-                                        Expanded(child: Text('الفصيلة')),
-                                        Expanded(child: Text('التاريخ')),
+                                         const Expanded(child: Text('عدد الرؤوس')),
+                                        const Expanded(child: Text('الفصيلة')),
+                                        const Expanded(child: Text('التاريخ')),
                                         Expanded(
                                             child: Container()),
                                       ],
@@ -83,7 +83,7 @@ class CustomeButton extends StatelessWidget {
   Color customeSecondColor;
   int totalAnimal;
   CustomeButton(
-      {required this.ssn,
+      {super.key, required this.ssn,
       required this.customeSecondColor,
       required this.farmCode,
       required this.female,

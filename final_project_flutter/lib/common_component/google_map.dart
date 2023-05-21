@@ -1,10 +1,18 @@
+// ignore_for_file: must_be_immutable, depend_on_referenced_packages
+
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:final_project_year/common_component/search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:vector_map_tiles/vector_map_tiles.dart';
+
+import 'package:final_project_year/apis/apis_functions.dart';
+import 'package:final_project_year/common_component/search_field.dart';
 
 class GoogleMapComponentFarmScreen extends StatefulWidget {
   GoogleMapComponentFarmScreen({super.key});
@@ -25,17 +33,12 @@ class _GoogleMapComponentFarmScreenState
             'https://api.maptiler.com/maps/basic-v2/style.json?key=QYQUEU69gtldW1rv100f',
         apiKey: '',
       ).read();
-  Style? _style;
-  Object? _error;
   void _initStyle() async {
-    try {
-      _style = await _readStyle();
-    } catch (e, stack) {
+    try {} catch (e, stack) {
       // ignore: avoid_print
       print(e);
       // ignore: avoid_print
       print(stack);
-      _error = e;
     }
     setState(() {});
   }
@@ -55,15 +58,14 @@ class _GoogleMapComponentFarmScreenState
           children: [
             ElevatedButton(
               onPressed: () {
-                print("hellow");
                 widget.draw = !widget.draw;
                 widget.draw ? widget.point = null : null;
                 setState(() {});
               },
-              child: Icon(Icons.rectangle_sharp),
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => widget.draw ? Colors.green : Colors.blue)),
+              child: const Icon(Icons.rectangle_sharp),
             ),
             Container(
               width: 10,
@@ -72,7 +74,7 @@ class _GoogleMapComponentFarmScreenState
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.blue)),
-              child: Text(
+              child: const Text(
                 'اخذ الاحداث اللحالي',
                 style: TextStyle(color: Colors.white),
               ),
@@ -90,7 +92,7 @@ class _GoogleMapComponentFarmScreenState
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => Colors.blue)),
-              child: Text(
+              child: const Text(
                 'تحميل ملف سيغه shape file',
                 style: TextStyle(color: Colors.white),
               ),
@@ -116,15 +118,15 @@ class _GoogleMapComponentFarmScreenState
             )
           ],
         ),
-        Container(
-          height: 350 - 18,
+        SizedBox(
+          height: 330 - 18,
           child: FlutterMap(
             options: MapOptions(
-              center: LatLng(31.582677, 25.157003),
+              //bounds: LatLngBounds.fromPoints([]),
+              center: LatLng(31.382677, 23.137003),
               maxZoom: 6,
               onMove: (tapPosition, point) {
-                /*
-                if (!widget.draw) return null;
+                if (!widget.draw) return;
                 widget.list1[2] = point;
                 widget.list1[1] =
                     LatLng(point.latitude, widget.list1[0].longitude);
@@ -138,10 +140,10 @@ class _GoogleMapComponentFarmScreenState
                     borderStrokeWidth: 2,
                     color: Colors.blue.withOpacity(0.2));
                 //widget.draw = false;
-                setState(() {});*/
+                setState(() {});
               },
               onPointerDown: (event, point) {
-                if (!widget.draw) return null;
+                if (!widget.draw) return;
                 widget.list1.clear();
                 widget.list1 = <LatLng>[
                   LatLng(0, 0),
@@ -172,45 +174,20 @@ class _GoogleMapComponentFarmScreenState
               },
               onMapEvent: (p0) {},
               onPointerUp: (event, point) {
-                if (!widget.draw) return null;
-                widget.list1[2] = point;
-                widget.list1[1] =
-                    LatLng(point.latitude, widget.list1[0].longitude);
-                widget.list1[3] =
-                    LatLng(widget.list1[0].latitude, point.longitude);
-                print(widget.list1);
-                widget.plogon = Polygon(
-                    points: widget.list1,
-                    borderColor: Colors.black,
-                    isFilled: true,
-                    borderStrokeWidth: 2,
-                    color: Colors.blue.withOpacity(0.2));
-                //widget.draw = false;
+                widget.draw = false;
                 setState(() {});
               },
             ),
             children: [
-              VectorTileLayer(
-                  theme: _style!.theme,
-                  tileProviders: this._style!.providers,
-                  maximumZoom: 22,
-                  // tileOffset: TileOffset.mapbox,
-                  layerMode: VectorTileLayerMode.raster),
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.app',
+              ),
               widget.point == null && widget.list1.isNotEmpty
                   ? PolygonLayer(polygons: () {
                       return [widget.plogon];
                     }())
                   : Container(),
-              PolygonLayer(
-                polygons: [
-                  Polygon(points: [
-                    LatLng(26.685791, 27.751608),
-                    LatLng(28.850098, 27.751608),
-                    LatLng(28.850098, 29.831114),
-                    LatLng(26.685791, 27.751608),
-                  ])
-                ],
-              ),
               !(widget.point == null)
                   ? MarkerLayer(
                       markers: [
@@ -218,7 +195,7 @@ class _GoogleMapComponentFarmScreenState
                             height: 200,
                             width: 200,
                             point: widget.point!,
-                            builder: (context) => Icon(Icons.location_on))
+                            builder: (context) => const Icon(Icons.location_on))
                       ],
                     )
                   : Container(),
@@ -273,11 +250,25 @@ class _GoogleMapComponentFarmScreenState
   }
 }
 
+extension ComparelatLng on LatLng {
+  bool operator <(LatLng l1) {
+    if (longitude == -1) {
+      return false;
+    }
+    return latitude < l1.latitude || longitude < l1.longitude;
+  }
+
+  bool operator >(LatLng l1) {
+    if (longitude == -1) {
+      return false;
+    }
+    return latitude > l1.latitude || longitude > l1.longitude;
+  }
+}
+
 class GoogleMapComponentDashBoardScreen extends StatefulWidget {
-  GoogleMapComponentDashBoardScreen({super.key});
-  List<LatLng> list1 = [];
-  Polygon plogon = Polygon(points: []);
-  bool draw = false;
+  const GoogleMapComponentDashBoardScreen({super.key});
+
   @override
   State<GoogleMapComponentDashBoardScreen> createState() {
     return _GoogleMapComponentDashBoardScreenState();
@@ -287,53 +278,93 @@ class GoogleMapComponentDashBoardScreen extends StatefulWidget {
 class _GoogleMapComponentDashBoardScreenState
     extends State<GoogleMapComponentDashBoardScreen> {
   MapController mapController = MapController();
+  LatLng biggest = LatLng(-1, -1), smallest = LatLng(-1, -1);
 
   @override
   void initState() {
     super.initState();
   }
 
+  LatLng handleLocation({required LatLng latLng, required double value}) {
+    print("${(latLng.latitude + 90 + value) % 180} before ");
+    print("${(latLng.latitude + 180 + value) % 360} before");
+    double vlat = ((latLng.latitude + 90 + value) % 180) - 90;
+    double vlng = ((latLng.longitude + 180 + value) % 360) - 180;
+    return LatLng(vlat, vlng);
+  }
+
+  List<Marker> list1 = [];
+  List<Polygon> plogon = [];
+  bool draw = false;
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
-        height: 350,
+      child: SizedBox(
+        height: 330,
         child: FlutterMap(
           mapController: mapController,
-          options: MapOptions(),
+          options: MapOptions(
+            interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+            center: LatLng(30, 30),
+            onPositionChanged: (position, hasGesture) async {
+              if ((position.zoom ?? 0) >= 5) {
+                if (biggest < (position.bounds?.northEast)! ||
+                    smallest > (position.bounds?.southWest)! ||
+                    biggest.longitude == -1) {
+                  print("done");
+                  smallest = handleLocation(
+                      latLng: position.bounds!.southWest!, value: -5);
+
+                  biggest = handleLocation(
+                      latLng: position.bounds!.northEast!, value: 5);
+
+                  Map<String, dynamic> map1 = await get_data_map(
+                      formData: FormData.fromMap({
+                    "smallest":
+                        json.encode([smallest.latitude, smallest.longitude]),
+                    "biggest":
+                        json.encode([biggest.latitude, biggest.longitude])
+                  }));
+
+                  plogon = map1["ploygons"];
+                  list1 = map1["markers"];
+                  print(list1);
+                  setState(() {});
+                }
+              } else {
+                plogon.clear();
+                list1.clear();
+              } /*else if (plogon.isNotEmpty) {
+                plogon.clear();
+                list1.clear();
+              }*/
+            },
+          ),
           children: [
             TileLayer(
               urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
               userAgentPackageName: 'dev.fleaflet.flutter_map.example',
             ),
-            PolygonLayer(polygons: () {
-              return [widget.plogon];
-            }()),
-            widget.list1.isNotEmpty
+            PolygonLayer(polygons: plogon),
+            list1.isNotEmpty
                 ? MarkerLayer(
-                    markers: [
-                      Marker(
-                          height: 200,
-                          width: 200,
-                          point: widget.list1[0],
-                          builder: (context) => Icon(Icons.location_on))
-                    ],
+                    markers: list1,
                   )
                 : Container(),
             Wrap(
               children: [
                 Container(
-                    margin: EdgeInsets.all(5),
-                    width: 500,
+                    margin: const EdgeInsets.all(3),
+                    width: 300,
                     child: SearchTextField(width: 100)),
-                Container(
-                  height: 50,
+                SizedBox(
+                  height: 30,
                   child: TextButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.green)),
                       onPressed: () {},
-                      child: Text('search',
+                      child: const Text('search',
                           style: TextStyle(color: Colors.white))),
                 )
               ],

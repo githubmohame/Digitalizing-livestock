@@ -16,7 +16,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 20),
+      margin: const EdgeInsets.only(left: 20),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
@@ -25,7 +25,7 @@ class _SearchTextFieldState extends State<SearchTextField> {
               width: widget.width * (2 / 3),
               height: 40,
               color: Colors.white,
-              child: TextField(
+              child: const TextField(
                   style: TextStyle(fontSize: 12, color: Colors.black),
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),

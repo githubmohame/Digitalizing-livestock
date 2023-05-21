@@ -1,22 +1,11 @@
-import 'dart:async';
-import 'package:dio/dio.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:final_project_year/main_screens/farmer_screen.dart';
-import 'package:final_project_year/service/background.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'service/notifications.dart';
-import 'package:dio/dio.dart' as dio;
-import 'dart:convert';
 
-import 'package:final_project_year/common_component/custome_secure_storage.dart';
+import 'package:final_project_year/main_screens/farmer_screen.dart';
+
+import 'service/notifications.dart';
+
 /*
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
@@ -102,27 +91,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final NotificationServiceCustome notificationService;
   final LocalAuthentication auth = LocalAuthentication();
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
-  final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  Future<bool> _authenticateWithBiometrics() async {
-    bool authenticated = false;
-    try {
-      authenticated = await auth.authenticate(
-        localizedReason:
-            'Scan your fingerprint (or face or whatever) to authenticate',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: true,
-        ),
-      );
-      return authenticated;
-    } on PlatformException catch (e) {
-      print(e);
-
-      return false;
-    }
-  }
 
   /* void _updateConnectionStatus(ConnectivityResult c1) {
     NotificationServiceCustome.initializeLocalNotifications(message: c1.name);
@@ -134,7 +102,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {}
 
   @override

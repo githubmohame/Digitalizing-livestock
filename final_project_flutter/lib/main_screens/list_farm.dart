@@ -21,7 +21,7 @@ class _FarmListState extends State<FarmList> {
           child: Scaffold(
               drawer: MainDrawer(index: 8),
               appBar: AppBar(
-                title: Center(
+                title: const Center(
                   child: Text('عرض المربين',style: TextStyle(color: Colors.white),),
                 ),
                 backgroundColor: Colors.transparent,
@@ -31,15 +31,15 @@ class _FarmListState extends State<FarmList> {
                 print(constraint.maxWidth);
                 return Row(children: [
 
-                  constraint.maxWidth >= 1000 ? Spacer() : Container(),
+                  constraint.maxWidth >= 1000 ? const Spacer() : Container(),
                   Expanded(
                     child: Container(
                       width: 400,
-                      color: Color(0xFF357515
+                      color: const Color(0xFF357515
 
 ),
                       child: Card(
-                        color: Color(0xFF357515
+                        color: const Color(0xFF357515
 
 ),
                         elevation: 20,
@@ -69,7 +69,7 @@ class _FarmListState extends State<FarmList> {
                       ),
                     ),
                   ),
-                  constraint.maxWidth >= 1000 ? Spacer() : Container(),
+                  constraint.maxWidth >= 1000 ? const Spacer() : Container(),
                 ]);
               })),
         ));
@@ -93,29 +93,29 @@ class FarmItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card( elevation: 5,
-          surfaceTintColor: Color(0xFF467061),
+          surfaceTintColor: const Color(0xFF467061),
       child: Column(
         children: [
           Row(
-            children: [Text('كود المزرعة'+":"), Text(id)],
+            children: [const Text('كود المزرعة'":"), Text(id)],
           ),
-          SizedBox(height: 5,),
+          const SizedBox(height: 5,),
           Row(
-            children: [Text('اسم المزرعة'+":",style: TextStyle(fontSize: 18,color: Colors.black),), Text(farmName)],
-          ),SizedBox(height: 5,),
+            children: [const Text('اسم المزرعة'":",style: TextStyle(fontSize: 18,color: Colors.black),), Text(farmName)],
+          ),const SizedBox(height: 5,),
           Row(
             children: [
-               Icon(Icons.location_on),
-              Text(village + ">",style: TextStyle(fontSize: 18,color: Colors.black),),
-              Text(city + ">",style: TextStyle(fontSize: 18,color: Colors.black),),
-              Text(governorate,style: TextStyle(fontSize: 18,color: Colors.black),)
+               const Icon(Icons.location_on),
+              Text("$village>",style: const TextStyle(fontSize: 18,color: Colors.black),),
+              Text("$city>",style: const TextStyle(fontSize: 18,color: Colors.black),),
+              Text(governorate,style: const TextStyle(fontSize: 18,color: Colors.black),)
             ],
-          ),SizedBox(height: 5,),
+          ),const SizedBox(height: 5,),
           Row(
-            children: [Text('عدد العمال'+":",style: TextStyle(fontSize: 18,color: Colors.black),), Text(workers.toString(),style: TextStyle(fontSize: 18,color: Colors.black),),],
-          ),SizedBox(height: 5,),
+            children: [const Text('عدد العمال'":",style: TextStyle(fontSize: 18,color: Colors.black),), Text(workers.toString(),style: const TextStyle(fontSize: 18,color: Colors.black),),],
+          ),const SizedBox(height: 5,),
           Row(
-            children: [Text(':نوع القطاع',style: TextStyle(fontSize: 18,color: Colors.black),), Text(sectionType.toString(),style: TextStyle(fontSize: 18,color: Colors.black),)],
+            children: [const Text(':نوع القطاع',style: TextStyle(fontSize: 18,color: Colors.black),), Text(sectionType.toString(),style: const TextStyle(fontSize: 18,color: Colors.black),)],
           ),
         ],
       ),

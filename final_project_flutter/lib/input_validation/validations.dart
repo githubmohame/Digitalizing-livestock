@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 String isEmpty({required String s1}) {
   if (s1.isEmpty) {
@@ -22,7 +21,7 @@ String biggerMin({required String s1, required double min}) {
   if (s2.isEmpty) {
     double num1 = double.parse(s1);
     if (min >= num1) {
-      return 'the number should be >=' + min.toString();
+      return 'the number should be >=$min';
     } else {
       return '';
     }

@@ -1,9 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CustomeSecureStorage {
-  static FlutterSecureStorage flutterSecureStorage = FlutterSecureStorage();
+  static FlutterSecureStorage flutterSecureStorage = const FlutterSecureStorage();
   static void setssn({required String ssn}) {
     flutterSecureStorage.write(key: 'ssn', value: ssn);
   }
@@ -22,9 +21,10 @@ class CustomeSecureStorage {
 static Future<List<Map<String, dynamic>>?> remove_all(
       ) async {
     
-      FlutterSecureStorage storage = FlutterSecureStorage();
+      FlutterSecureStorage storage = const FlutterSecureStorage();
 
       await storage.deleteAll();
+      return null;
 
  
  

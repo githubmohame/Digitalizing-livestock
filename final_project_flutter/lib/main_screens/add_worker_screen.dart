@@ -9,11 +9,9 @@ class AddWorkerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: LayoutBuilder(builder: (context, constraint) {
-        print(constraint.maxWidth < 900);
         return Scaffold(
           drawer: MainDrawer(index: 50),
           appBar: constraint.maxWidth < 900
@@ -23,10 +21,10 @@ class AddWorkerScreen extends StatelessWidget {
               : null,
           body: SingleChildScrollView(
             child: Form(
-                child: Card(color: Color(0xFF357515
+                child: Card(color: const Color(0xFF357515
 
 ),
-                  child: Container(padding: EdgeInsets.all(50),
+                  child: Container(padding: const EdgeInsets.all(50),
                     child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -38,7 +36,9 @@ class AddWorkerScreen extends StatelessWidget {
                       )),
                       padding: const EdgeInsets.all(10),
                       child: TextFormField(
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         decoration: const InputDecoration(
                             border: InputBorder.none, hintText: "رقم التليفون"),
                         keyboardType: TextInputType.phone,
@@ -52,7 +52,9 @@ class AddWorkerScreen extends StatelessWidget {
                       )),
                       padding: const EdgeInsets.all(10),
                       child: TextFormField(
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         decoration: const InputDecoration(
                             border: InputBorder.none, hintText: "السجل التجاري"),
                         keyboardType: TextInputType.text,
@@ -66,7 +68,9 @@ class AddWorkerScreen extends StatelessWidget {
                       )),
                       padding: const EdgeInsets.all(10),
                       child: TextFormField(
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         decoration: const InputDecoration(
                             border: InputBorder.none, hintText: "الاسم"),
                         keyboardType: TextInputType.text,
@@ -74,14 +78,12 @@ class AddWorkerScreen extends StatelessWidget {
                     ),
                     BlocProvider(
                       create: (context) => SelectMuiltTypeCubit(list: []),
-                      child: Container(
-                        child: CustomeType(
-                          title: "ظبيعة العمل",
-                          list: [
-                            {"kill me": 1},
-                            {"go to hell": 0}
-                          ],
-                        ),
+                      child: CustomeType(
+                        title: "ظبيعة العمل",
+                        list: const [
+                          {"kill me": 1},
+                          {"go to hell": 0}
+                        ],
                       ),
                     ),
                     const CustomeCheckBox(),

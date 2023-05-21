@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path 
 from .views import *
 urlpatterns = [
     path('governorate', governorate_api ),
@@ -19,7 +19,6 @@ urlpatterns = [
         ,path('modified_species',modified_species)
         ,path('modified_platoon', modified_platoon)
         ,path('farmer_api',  farmer_api)
-        #admin_api
         ,path('add_farme_animal_api', add_farm_animal)
        ,path('location_api',   get_locations)
        ,path('animal_api',  get_animal)
@@ -28,6 +27,9 @@ urlpatterns = [
        ,path('connect_farm_farmer_api', connect_farm_farmer_api)
       ,path('login_api',  login )
       ,path('admin_api',  admin_api)
-      ,path('list_farm_api',   list_farm_api)
+      ,path('search_farm_api',   search_farm_api)
+      ,path('search_farm_farmer_api', search_farmer_api)
        ,path('get_data_map',  get_data_map)
+        ,path('summary_governorate',  summary_governorate),
+        path('location_statistics',location_statistics),
     ]

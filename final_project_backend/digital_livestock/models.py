@@ -52,7 +52,7 @@ class UserManager(BaseUserManager):
         #other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
         other_fields.setdefault('is_active', True)
-
+        other_fields.setdefault('is_active', False)
         '''
          if other_fields.get('is_staff') is not True:
             raise ValueError(
@@ -93,8 +93,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         RegexValidator(regex='''[a-zA-Zا-ي]''')
     
     ])
+    is_staff=models.BooleanField(default=False)
     is_active=models.BooleanField(default=True)
     age=models.IntegerField(null=True,)
+    location=models.ForeignKey(city,null=True,on_delete=models.SET_NULL)
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -106,7 +108,7 @@ class section_type(models.Model):
 
 
 class farm(models.Model):
-    number_of_arc = models.PositiveIntegerField(null=True)
+    #number_of_acres = models.PositiveIntegerField(null=True)
     farm_name = models.CharField(max_length=30,null=True)
     id = models.CharField(primary_key=True, max_length=40  )
     number_of_workers = models.PositiveIntegerField(null=False)
@@ -120,7 +122,7 @@ class farm(models.Model):
     attached_area = models.PositiveIntegerField(validators=[])
     location = models.GeometryField(null=True,geography=True )
     total_area_of_farm=models.PositiveIntegerField(null=True)
-
+    
 class connect_farm_farmtype(models.Model):
     farm=models.ForeignKey(farm,on_delete=models.CASCADE,null=False)
     farm_type=models.ForeignKey(farm_type,on_delete=models.CASCADE,null=False)

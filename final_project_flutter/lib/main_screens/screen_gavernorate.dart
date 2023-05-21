@@ -1,11 +1,12 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:final_project_year/common_component/custome_secure_storage.dart';
+import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/google_map.dart';
+import 'package:final_project_year/common_component/select_location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
@@ -14,10 +15,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
 
 class ScreenGavernorate extends StatefulWidget {
-  ScreenGavernorate({Key? key}) : super(key: key);
+  const ScreenGavernorate({Key? key}) : super(key: key);
 
   @override
   State<ScreenGavernorate> createState() => _ScreenGavernorateState();
@@ -41,10 +41,10 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Center(
-        child: Container(
+        child: SizedBox(
           width: 500,
           child: Card(
-            color: Color(0xFF357515),
+            color: const Color(0xFF357515),
             elevation: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,8 +98,8 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                 ),
                 TextField(
                     controller: controller,
-                    style: TextStyle(color: Colors.brown),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.brown),
+                    decoration: const InputDecoration(
                         hintText: "تعديل الاسم",
                         fillColor: Colors.white,
                         filled: true,
@@ -133,7 +133,6 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                           overlayColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.red)),
                       onPressed: () async {
-                        print(selectGavernorate.gavernorate + "ooo" * 56);
                         Map<String, dynamic> dic1 = {
                           'operation': 'delete',
                           'gavernorate':
@@ -354,7 +353,6 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
                       BlocProvider.of<LocationCubit>(context)
                           .updateGavernorate(value);
                       widget.gavernorate = value;
-                      print(widget.gavernorate);
                     },
                     list: snap.data!,
                     expanded: true,
@@ -414,7 +412,7 @@ class _SelectCityState extends State<SelectCity> {
                               if (snap.connectionState ==
                                       ConnectionState.done &&
                                   snap.data is List<Map<String, dynamic>> &&
-                                  snap.data!.isNotEmpty)
+                                  snap.data!.isNotEmpty) {
                                 return CustomeDropdownButton(
                                     id: 'id',
                                     func: (String value) {
@@ -425,6 +423,7 @@ class _SelectCityState extends State<SelectCity> {
                                     expanded: true,
                                     value: snap.data![0]['id']!,
                                     text: widget.titles[0]);
+                              }
                               return Container();
                             })),
                     Container(
@@ -477,7 +476,7 @@ class _SelectCityState extends State<SelectCity> {
 }
 
 class ScreenCity extends StatefulWidget {
-  ScreenCity({Key? key}) : super(key: key);
+  const ScreenCity({Key? key}) : super(key: key);
 
   @override
   State<ScreenCity> createState() => _ScreenCityState();
@@ -504,11 +503,11 @@ class _ScreenCityState extends State<ScreenCity> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: 500,
         child: SingleChildScrollView(
           child: Card(
-            color: Color(0xFF357515),
+            color: const Color(0xFF357515),
             elevation: 20,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -519,8 +518,8 @@ class _ScreenCityState extends State<ScreenCity> {
                 selectCity,
                 TextField(
                     controller: controller,
-                    style: TextStyle(color: Colors.brown),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.brown),
+                    decoration: const InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
                       hintText: "تعديل الاسم",
@@ -569,12 +568,10 @@ class _ScreenCityState extends State<ScreenCity> {
                           dic1['geometry'] = null;
                         }
                         var res = await modify_city_api(dic1: dic1);
-                        print(res);
                         if (res.containsKey('message')) {
                           showSnackbardone(
                               context: context, text: res['message']!);
                         } else {
-                          print(res.toString() + "iiii777" * 90);
                           showSnackbarerror(
                               context: context, text: res['error']!);
                         }
@@ -630,7 +627,6 @@ class _ScreenCityState extends State<ScreenCity> {
                             {"id": "المنةفية"}
                           ],
                         );
-                        print('delete');
                         setState(() {});
                         if (res.containsKey('message')) {
                           showSnackbardone(
@@ -720,7 +716,7 @@ class _ScreenCityState extends State<ScreenCity> {
 }
 
 class ScreenVillage extends StatefulWidget {
-  ScreenVillage({Key? key}) : super(key: key);
+  const ScreenVillage({Key? key}) : super(key: key);
 
   @override
   State<ScreenVillage> createState() => _ScreenVillageState();
@@ -736,12 +732,12 @@ class _ScreenVillageState extends State<ScreenVillage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 500,
       width: 500,
       child: SingleChildScrollView(
         child: Card(
-          color: Color(0xFF357515),
+          color: const Color(0xFF357515),
           elevation: 20,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -751,11 +747,11 @@ class _ScreenVillageState extends State<ScreenVillage> {
                   style: TextStyle(color: Colors.white, fontSize: 20)),
               selectLocation,
               Container(
-                margin: EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 10, right: 10),
                 child: TextField(
                     controller: controller,
-                    style: TextStyle(color: Colors.brown),
-                    decoration: InputDecoration(
+                    style: const TextStyle(color: Colors.brown),
+                    decoration: const InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
                         hintText: "تعديل الاسم",
@@ -790,7 +786,6 @@ class _ScreenVillageState extends State<ScreenVillage> {
                         overlayColor: MaterialStateProperty.resolveWith(
                             (states) => Colors.red)),
                     onPressed: () async {
-                      print(selectLocation.village);
                       Map<String, dynamic> dic1 = {
                         'operation': 'delete',
                         'city': selectLocation.city,
@@ -801,9 +796,7 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       Map<String, String> map =
                           await modify_village_api(dic1: dic1);
 
-                      print('delete');
                       if (map.containsKey('message')) {
-                        print('DELL KILL MESSAGE');
                       }
                       selectLocation = SelectLocation(village: '', city: "");
                       //selectLocation = SelectLocation(village: '', city: "");
@@ -853,7 +846,6 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       }
                       Map<String, String> map =
                           await modify_village_api(dic1: dic1);
-                      print('uuuuuu' * 78);
                       if (map.containsKey('message')) {}
                       selectLocation = SelectLocation(village: '', city: "");
                       setState(() {});
@@ -924,14 +916,14 @@ class _ScreenVillageState extends State<ScreenVillage> {
 }
 
 class AddLocationScreen extends StatefulWidget {
-  AddLocationScreen({Key? key}) : super(key: key);
+  const AddLocationScreen({Key? key}) : super(key: key);
 
   @override
   State<AddLocationScreen> createState() => _AddLocationScreenState();
 }
 
 class _AddLocationScreenState extends State<AddLocationScreen> {
-  List<Widget> list = [ScreenGavernorate(), ScreenCity(), ScreenVillage()];
+  List<Widget> list = [const ScreenGavernorate(), const ScreenCity(), const ScreenVillage()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -942,7 +934,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
           return Scaffold(
             bottomNavigationBar: BottomNavigationBar(
                 backgroundColor:
-                    Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
+                    const Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
                 currentIndex: index,
                 unselectedFontSize: 15,
                 showUnselectedLabels: true,
@@ -987,11 +979,11 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
             body: Column(
               children: [
                 constraint.maxWidth > 900
-                    ? Container(height: 100, child: ComputerDrawer(index: 6))
+                    ? SizedBox(height: 100, child: ComputerDrawer(index: 6))
                     : Container(),
-                Spacer(),
+                const Spacer(),
                 list[index],
-                Spacer(),
+                const Spacer(),
               ],
             ),
           );

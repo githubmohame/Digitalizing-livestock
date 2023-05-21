@@ -9,9 +9,9 @@ class Supplier extends StatelessWidget {
   Supplier({Key? key, String? phone, this.edit = true, String? ssn, String? name,this.city,this.country,this.village})
       : super(key: key) {
     if (!edit) {
-      list[0].text = "رقم التليفون" + phone.toString();
-      list[1].text = "الرقم القومي:" + ssn.toString();
-      list[2].text = "الاسم:" + name.toString();
+      list[0].text = "رقم التليفون$phone";
+      list[1].text = "الرقم القومي:$ssn";
+      list[2].text = "الاسم:$name";
     }
   }
   bool edit = true;
@@ -35,9 +35,9 @@ class Supplier extends StatelessWidget {
                     icon: const Icon(Icons.arrow_back)):null,
               backgroundColor: Colors.transparent, title: const Text("اضافه موردين",style: TextStyle(color: Colors.white),)),
           body: Center(
-            child: Card(color: Color(0xFF467061),elevation: 20,
+            child: Card(color: const Color(0xFF467061),elevation: 20,
               child: SingleChildScrollView( 
-                child: Container(padding: EdgeInsets.all(20),width: 700,color: Colors.white.withOpacity(0.5),
+                child: Container(padding: const EdgeInsets.all(20),width: 700,color: Colors.white.withOpacity(0.5),
                   child: Form(
                       child: Column(
                     children: [

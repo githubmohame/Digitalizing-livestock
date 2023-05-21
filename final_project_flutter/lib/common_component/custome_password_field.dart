@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/material.dart';
 
 class CustomePasswordEnterTextField extends StatefulWidget {
@@ -17,7 +17,7 @@ class CustomePasswordEnterTextField extends StatefulWidget {
 class _CustomePasswordEnterTextFieldState
     extends State<CustomePasswordEnterTextField> {
   bool showPassword = false;
-  List<TextEditingController> _list1 = [
+  final List<TextEditingController> _list1 = [
     TextEditingController(),
     TextEditingController(),
   ];
@@ -35,7 +35,7 @@ class _CustomePasswordEnterTextFieldState
               controller: _list1[0],
               obscureText: !showPassword,
               obscuringCharacter: '*',
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                   fillColor: Colors.white,
@@ -43,7 +43,7 @@ class _CustomePasswordEnterTextFieldState
                   filled: true,
                   hintText: " ادخل الرقم السري"),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextFormField(
               controller: _list1[1],
               obscureText: !showPassword,
@@ -53,9 +53,10 @@ class _CustomePasswordEnterTextFieldState
                   return 'the password and confirmation not equal or the pasword is  empty';
                 }
                 widget.password = _list1[0].text;
+                return null;
               },
               obscuringCharacter: '*',
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                   fillColor: Colors.white,
@@ -66,14 +67,14 @@ class _CustomePasswordEnterTextFieldState
             Row(
               children: [
                 Checkbox(
-                    side: BorderSide(color: Colors.white),
+                    side: const BorderSide(color: Colors.white),
                     value: showPassword,
                     onChanged: (value) {
                       setState(() {
                         showPassword = value ?? false;
                       });
                     }),
-                Text('اظهار كلمة المرور',
+                const Text('اظهار كلمة المرور',
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.w100))
               ],
@@ -107,7 +108,7 @@ class _CustomePasswordUpdateTextFieldState
           TextField(controller: widget.controller,
             obscureText: !showPassword,
             obscuringCharacter: '*',
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
                 fillColor: Colors.white,
                 focusColor: Colors.white,
                 enabledBorder: OutlineInputBorder(
@@ -132,14 +133,14 @@ class _CustomePasswordUpdateTextFieldState
           Row(
             children: [
               Checkbox(
-                  side: BorderSide(color: Colors.black),
+                  side: const BorderSide(color: Colors.black),
                   value: showPassword,
                   onChanged: (value) {
                     setState(() {
                       showPassword = value ?? false;
                     });
                   }),
-              Text('اظهار كلمة المرور',
+              const Text('اظهار كلمة المرور',
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w100))
             ],

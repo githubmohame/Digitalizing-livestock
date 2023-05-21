@@ -3,10 +3,8 @@ import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConnectFarmAndFarmerScreen extends StatelessWidget {
   ConnectFarmAndFarmerScreen({Key? key}) : super(key: key);
@@ -19,7 +17,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
   bool delete = false;
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return LayoutBuilder(builder: (context, constraint) {
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -41,18 +39,18 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 constraint.maxWidth > 900
-                    ? Container(height: 100, child: ComputerDrawer(index: 3))
+                    ? SizedBox(height: 100, child: ComputerDrawer(index: 3))
                     : Container(),
-                Spacer(),
+                const Spacer(),
                 Card(
-                  color: Color(0xFF357515),
+                  color: const Color(0xFF357515),
                   elevation: 20,
                   child: Container(
                     height: 500,
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     width: 600,
                     child: Form(
-                        key: _formKey,
+                        key: formKey,
                         child: Column(
                           children: [
                             Container(
@@ -68,8 +66,8 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(),
+                              margin: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
                                 controller: list[0],
@@ -109,8 +107,8 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                               ),
                             ),*/
                             Container(
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(),
+                              margin: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
                                 controller: list[1],
@@ -136,8 +134,8 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(),
+                              margin: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(),
                               padding: const EdgeInsets.all(10),
                               child: TextFormField(
                                 controller: list[2],
@@ -166,7 +164,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                       fixedSize: MaterialStateProperty.all(
                                           const Size(200, 50)),
                                       shape: MaterialStateProperty.resolveWith(
-                                          (states) => RoundedRectangleBorder(
+                                          (states) => const RoundedRectangleBorder(
                                               borderRadius: BorderRadius.zero)),
                                       backgroundColor:
                                           MaterialStateProperty.resolveWith(
@@ -175,7 +173,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                           MaterialStateProperty.resolveWith(
                                               (states) => Colors.green)),
                                   onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
+                                    if (formKey.currentState!.validate()) {
                                       Map<String, dynamic> dic1 = {
                                         'operation': "insert",
                                         "farmer_id": list[2].text,
@@ -196,7 +194,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;
+                                          return;
                                     }
                                   },
                                   child: const Text(
@@ -204,7 +202,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
-                                Container(
+                                const SizedBox(
                                   width: 20,
                                   height: 20,
                                 ),
@@ -213,7 +211,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                       fixedSize: MaterialStateProperty.all(
                                           const Size(200, 50)),
                                       shape: MaterialStateProperty.resolveWith(
-                                          (states) => RoundedRectangleBorder(
+                                          (states) => const RoundedRectangleBorder(
                                               borderRadius: BorderRadius.zero)),
                                       backgroundColor:
                                           MaterialStateProperty.resolveWith(
@@ -242,7 +240,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                                 context: context,
                                                 text: res['error']);
                                           }
-                                          return null;
+                                          return;
                                     }
                                     delete = false;
                                   },
@@ -257,7 +255,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                         )),
                   ),
                 ),
-                Spacer()
+                const Spacer()
               ],
             ),
           ),

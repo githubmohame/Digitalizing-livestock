@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:final_project_year/main.dart';
@@ -90,7 +89,7 @@ class NotificationServiceCustome {
       ReceivedAction receivedAction) async {
     MyApp.navigatorKey.currentState?.push(MaterialPageRoute(
       builder: (context) {
-        return FarmScreen();
+        return const FarmScreen();
       },
     ));
   }
@@ -99,7 +98,7 @@ class NotificationServiceCustome {
       ReceivedAction receivedAction) async {
     MyApp.navigatorKey.currentState?.push(MaterialPageRoute(
       builder: (context) {
-        return FarmScreen();
+        return const FarmScreen();
       },
     ));
   }

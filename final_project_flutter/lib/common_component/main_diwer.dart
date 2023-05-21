@@ -1,22 +1,16 @@
 import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
-import 'package:final_project_year/main_screens/chart_screen.dart';
 import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
-import 'package:final_project_year/main_screens/connect_suppliers_farm.dart';
-import 'package:final_project_year/main_screens/connect_workers_farm.dart';
 import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
-import 'package:final_project_year/main_screens/supplier_screeen.dart';
-import 'package:final_project_year/main_screens/workers_screen.dart';
 import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
-import 'package:final_project_year/main_screens/home.dart';
 
 class MainDrawer extends StatelessWidget {
   int index;
@@ -43,7 +37,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FarmScreen(),
+                      builder: (context) => const FarmScreen(),
                     ));
               }),
             ),
@@ -142,7 +136,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LogIN(),
+                      builder: (context) => const LogIN(),
                     ));
               }),
             ),
@@ -186,7 +180,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddLocationScreen(),
+                      builder: (context) => const AddLocationScreen(),
                     ));
               }),
             ),
@@ -208,7 +202,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UpdateAnimal(),
+                      builder: (context) => const UpdateAnimal(),
                     ));
               }),
             ),
@@ -420,7 +414,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FarmScreen(),
+                      builder: (context) => const FarmScreen(),
                     ));
               }),
             ),
@@ -522,7 +516,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LogIN(),
+                      builder: (context) => const LogIN(),
                     ));
               }),
             ),
@@ -570,7 +564,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddLocationScreen(),
+                      builder: (context) => const AddLocationScreen(),
                     ));
               }),
             ),
@@ -594,7 +588,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => UpdateAnimal(),
+                      builder: (context) => const UpdateAnimal(),
                     ));
               }),
             ),

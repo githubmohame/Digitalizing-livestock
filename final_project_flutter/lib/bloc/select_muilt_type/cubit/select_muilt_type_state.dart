@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 part of 'select_muilt_type_cubit.dart';
 
 @immutable
@@ -9,7 +11,5 @@ abstract class SelectMuiltTypeState {
 }
 
 class SelectMuiltTypeInitial extends SelectMuiltTypeState {
-  SelectMuiltTypeInitial({required  List<int> list}):super(list: list){
-
-  }
+  SelectMuiltTypeInitial({required  List<int> list}):super(list: list);
 }

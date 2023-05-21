@@ -1,6 +1,5 @@
 part of 'connect_farmer_farm_cubit.dart';
 
-@immutable
 abstract class ConnectFarmerFarmState {
   int ssn;
   String farmCode;

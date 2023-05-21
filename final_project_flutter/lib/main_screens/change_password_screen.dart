@@ -4,10 +4,8 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:flutter/material.dart' hide Stepper, Step, StepperType;
 import 'package:final_project_year/common_component/custome_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -23,7 +21,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       CustomePasswordEnterTextField(
     widgetIndex: 9,
   );
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BackgroundScreen(
@@ -50,13 +48,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             body: Column(
               children: [
                 constraint.maxWidth > 900
-                    ? Container(height: 100, child: ComputerDrawer(index: 10))
+                    ? SizedBox(height: 100, child: ComputerDrawer(index: 10))
                     : Container(),
-                Spacer(),
+                const Spacer(),
                 Card(
-                  color: Color(0xFF357515),
+                  color: const Color(0xFF357515),
                   elevation: 20,
-                  child: Container(
+                  child: SizedBox(
                     width: 600,
                     child: SingleChildScrollView(
                       child: SafeArea(
@@ -73,7 +71,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     colorScheme: const ColorScheme.light(),
                                     canvasColor: Colors.transparent,
                                   ),
-                                  child: Container(
+                                  child: SizedBox(
                                     height: 400,
                                     child: CustomeStepper(
                                         margin: const EdgeInsets.all(5),
@@ -81,10 +79,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         onStepContinue: x < 1
                                             ? () {
                                                 if (!error){
-                                                  if(x<1)
+                                                  if(x<1) {
                                                     setState(() {
                                                     x += 1;
                                                   });
+                                                  }
                                                 }
                                                   
                                               }
@@ -153,11 +152,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                   print('kkkjjjj7688');
                                                   details.onStepContinue!();
                                                 },
-                                                child: Text(
-                                                  x == 1 ? 'حفظ' : 'استكمال',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
                                                 style: ButtonStyle(
                                                     backgroundColor:
                                                         MaterialStateProperty
@@ -166,25 +160,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                   if (details.onStepContinue ==
                                                       null) {
                                                     return Colors.brown;
-                                                  } else if (x == 2)
+                                                  } else if (x == 2) {
                                                     return Colors.green;
-                                                  else {
+                                                  } else {
                                                     return Colors
                                                         .brown.shade300;
                                                   }
                                                 })),
+                                                child: Text(
+                                                  x == 1 ? 'حفظ' : 'استكمال',
+                                                  style: const TextStyle(
+                                                      color: Colors.white),
+                                                ),
                                               ),
                                               x == 0
                                                   ? Container()
                                                   : TextButton(
                                                       onPressed:
                                                           details.onStepCancel,
-                                                      child: const Text(
-                                                        'تراجع',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
                                                       style: ButtonStyle(
                                                         backgroundColor: MaterialStateProperty
                                                             .resolveWith((states) =>
@@ -195,6 +188,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                                     : Colors
                                                                         .brown
                                                                         .shade300),
+                                                      ),
+                                                      child: const Text(
+                                                        'تراجع',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
                                                       ))
                                             ],
                                           ));
@@ -215,7 +214,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                           TextInputType
                                                               .emailAddress,
                                                       decoration:
-                                                          InputDecoration(
+                                                          const InputDecoration(
                                                               focusColor:
                                                                   Colors.white,
                                                               enabledBorder:
@@ -256,7 +255,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
+                                                    const Text(
                                                         "لقد قمنا بارسال كود لك على البريد الالكتروني من فضلك ادخل الكود",
                                                         style: TextStyle(
                                                             color:
@@ -267,7 +266,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     TextField(
                                                       controller: _controller,
                                                       decoration:
-                                                          InputDecoration(
+                                                          const InputDecoration(
                                                               fillColor: Colors
                                                                   .white,
                                                               focusColor:
@@ -311,7 +310,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     ),
                   ),
                 ),
-                Spacer()
+                const Spacer()
               ],
             ),
           );

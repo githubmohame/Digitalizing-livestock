@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 // TODO(dragostis): Missing functionality:
 //   * mobile horizontal mode with adding/removing steps
@@ -106,10 +105,7 @@ class CustomeStepper extends StatefulWidget {
     this.controlsBuilder,
     this.elevation,
     this.margin,
-  })  : assert(steps != null),
-        assert(type != null),
-        assert(currentStep != null),
-        assert(0 <= currentStep && currentStep < steps.length);
+  })  : assert(0 <= currentStep && currentStep < steps.length);
 
   /// The steps of the stepper whose titles, subtitles, icons always get shown.
   ///
@@ -277,7 +273,6 @@ class _CustomeStepperState extends State<CustomeStepper>
     final StepState state =
         oldState ? _oldStates[index]! : widget.steps[index].state;
     final bool isDarkActive = _isDark() && widget.steps[index].isActive;
-    assert(state != null);
     switch (state) {
       case StepState.indexed:
       case StepState.disabled:
@@ -455,8 +450,7 @@ class _CustomeStepperState extends State<CustomeStepper>
               child: TextButton(
                 onPressed: widget.onStepCancel,
                 style: TextButton.styleFrom(
-                  primary: cancelColor,
-                  padding: buttonPadding,
+                  foregroundColor: cancelColor, padding: buttonPadding,
                   shape: buttonShape,
                 ),
                 child: Text(localizations.cancelButtonLabel),
@@ -472,18 +466,17 @@ class _CustomeStepperState extends State<CustomeStepper>
     final ThemeData themeData = Theme.of(context);
     final TextTheme textTheme = themeData.textTheme;
 
-    assert(widget.steps[index].state != null);
     switch (widget.steps[index].state) {
       case StepState.indexed:
       case StepState.editing:
       case StepState.complete:
-        return  TextStyle(color: Colors.white);
+        return  const TextStyle(color: Colors.white);
       case StepState.disabled:
-        return textTheme.bodyText1!.copyWith(
+        return textTheme.bodyLarge!.copyWith(
           color: _isDark() ? _kDisabledDark : _kDisabledLight,
         );
       case StepState.error:
-        return textTheme.bodyText1!.copyWith(
+        return textTheme.bodyLarge!.copyWith(
           color: _isDark() ? _kErrorDark : _kErrorLight,
         );
     }
@@ -493,18 +486,17 @@ class _CustomeStepperState extends State<CustomeStepper>
     final ThemeData themeData = Theme.of(context);
     final TextTheme textTheme = themeData.textTheme;
 
-    assert(widget.steps[index].state != null);
     switch (widget.steps[index].state) {
       case StepState.indexed:
       case StepState.editing:
       case StepState.complete:
-        return textTheme.caption!;
+        return textTheme.bodySmall!;
       case StepState.disabled:
-        return textTheme.caption!.copyWith(
+        return textTheme.bodySmall!.copyWith(
           color: _isDark() ? _kDisabledDark : _kDisabledLight,
         );
       case StepState.error:
-        return textTheme.caption!.copyWith(
+        return textTheme.bodySmall!.copyWith(
           color: _isDark() ? _kErrorDark : _kErrorLight,
         );
     }
@@ -514,18 +506,17 @@ class _CustomeStepperState extends State<CustomeStepper>
     final ThemeData themeData = Theme.of(context);
     final TextTheme textTheme = themeData.textTheme;
 
-    assert(widget.steps[index].state != null);
     switch (widget.steps[index].state) {
       case StepState.indexed:
       case StepState.editing:
       case StepState.complete:
-        return textTheme.bodyText1!;
+        return textTheme.bodyLarge!;
       case StepState.disabled:
-        return textTheme.bodyText1!.copyWith(
+        return textTheme.bodyLarge!.copyWith(
           color: _isDark() ? _kDisabledDark : _kDisabledLight,
         );
       case StepState.error:
-        return textTheme.bodyText1!.copyWith(
+        return textTheme.bodyLarge!.copyWith(
           color: _isDark() ? _kErrorDark : _kErrorLight,
         );
     }
@@ -777,7 +768,6 @@ class _CustomeStepperState extends State<CustomeStepper>
       }
       return true;
     }());
-    assert(widget.type != null);
     switch (widget.type) {
       case StepperType.vertical:
         return _buildVertical();

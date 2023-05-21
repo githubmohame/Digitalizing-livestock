@@ -1,17 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
-import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
-import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../common_component/custome_dropdownbutton.dart';
+
 class AddAnimalScreen extends StatefulWidget {
-  AddAnimalScreen({Key? key}) : super(key: key);
+  const AddAnimalScreen({Key? key}) : super(key: key);
 
   @override
   State<AddAnimalScreen> createState() => _AddAnimalScreenState();
@@ -20,7 +21,7 @@ class AddAnimalScreen extends StatefulWidget {
 class _AddAnimalScreenState extends State<AddAnimalScreen> {
   SelectPlotoon selectPlotoon = SelectPlotoon(
     title: 'النوع',
-    list: [
+    list: const [
       {"id": "ابقار"},
     ],
   );
@@ -36,25 +37,23 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
         children: [
           const Text('تعديل في النوع',
               style: TextStyle(color: Colors.white, fontSize: 20)),
-          Container(
-            child: FutureBuilder(
-                future: animal_api(),
-                builder: (context, snap) {
-                  if (snap.data != null && snap.data!.length > 0) {
-                    return BlocProvider(
-                      create: (context) => AnimalCubit(
-                          platoon: snap.data![0]['platoon'],
-                          species: snap.data![0]['species']),
-                      child: selectPlotoon,
-                    );
-                  }
-                  return Container();
-                }),
-          ),
+          FutureBuilder(
+              future: animal_api(),
+              builder: (context, snap) {
+                if (snap.data != null && snap.data!.isNotEmpty) {
+                  return BlocProvider(
+                    create: (context) => AnimalCubit(
+                        platoon: snap.data![0]['platoon'],
+                        species: snap.data![0]['species']),
+                    child: selectPlotoon,
+                  );
+                }
+                return Container();
+              }),
           TextField(
               controller: controller,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black),
+              decoration: const InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
                   hintText: "تعديل الاسم",
@@ -75,7 +74,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                 style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
+                        const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero)),
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green),
@@ -88,7 +87,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                       new_name: controller.text);
                   selectPlotoon = SelectPlotoon(
                     title: 'النوع',
-                    list: [
+                    list: const [
                       {"id": "ابقار"},
                     ],
                   );
@@ -99,7 +98,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Container(
+              const SizedBox(
                 width: 20,
                 height: 20,
               ),
@@ -107,7 +106,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                 style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
+                        const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero)),
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red),
@@ -121,7 +120,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                   setState(() {});
                   selectPlotoon = SelectPlotoon(
                     title: 'النوع',
-                    list: [
+                    list: const [
                       {"id": "ابقار"},
                     ],
                   );
@@ -131,7 +130,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Container(
+              const SizedBox(
                 width: 20,
                 height: 20,
               ),
@@ -139,7 +138,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                 style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
+                        const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero)),
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red),
@@ -152,7 +151,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                       new_name: controller.text);
                   selectPlotoon = SelectPlotoon(
                     title: 'النوع',
-                    list: [
+                    list: const [
                       {"id": "ابقار"},
                     ],
                   );
@@ -172,7 +171,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
 }
 
 class ScreenAddAnimalSubtype extends StatefulWidget {
-  ScreenAddAnimalSubtype({Key? key}) : super(key: key);
+  const ScreenAddAnimalSubtype({Key? key}) : super(key: key);
 
   @override
   State<ScreenAddAnimalSubtype> createState() => _ScreenAddAnimalSubtypeState();
@@ -180,8 +179,8 @@ class ScreenAddAnimalSubtype extends StatefulWidget {
 
 class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
   SelectSpecies selectSpecies = SelectSpecies(
-    titles: ['النوع', 'الفصيلة'],
-    list: [
+    titles: const ['النوع', 'الفصيلة'],
+    list: const [
       {"id": "برازلي"},
     ],
     list2: const [
@@ -193,7 +192,6 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
 
   @override
   Widget build(BuildContext context) {
-    print('iiii12iu');
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,12 +203,8 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
             child: FutureBuilder(
                 future: animal_api(),
                 builder: (context, snap) {
-                  print(snap.data);
-                  if (snap.data != null && snap.data!.length > 0) {
-                    print('kkkiiiuuuuttt43' * 100);
-                    print(snap.data![0]['id']);
+                  if (snap.data != null && snap.data!.isNotEmpty) {
                     selectSpecies.species = snap.data![0]['id'];
-                    print('iiiiuuuuuuuuuu');
                     return BlocProvider(
                       create: (context) => AnimalCubit(
                           platoon: snap.data![0]['platoon'],
@@ -223,8 +217,8 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
           ),
           TextField(
               controller: controller,
-              style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.black),
+              decoration: const InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
                   hintText: "تعديل الاسم",
@@ -245,16 +239,13 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                 style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
+                        const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero)),
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green),
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green)),
                 onPressed: () async {
-                  print(selectSpecies.species.toString() +
-                      '\tloooooooooooooooo\t' +
-                      selectSpecies.platoon.toString());
                   var res = await modify_species_api(
                       new_name: controller.text,
                       operation: 'update',
@@ -265,8 +256,8 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                     showSnackbarerror(context: context, text: res['error']!);
                   }
                   selectSpecies = SelectSpecies(
-                    titles: ['النوع', 'الفصيلة'],
-                    list: [
+                    titles: const ['النوع', 'الفصيلة'],
+                    list: const [
                       {"id": "برازلي"},
                     ],
                     list2: const [
@@ -280,7 +271,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Container(
+              const SizedBox(
                 width: 20,
                 height: 20,
               ),
@@ -288,28 +279,25 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                 style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
+                        const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero)),
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red),
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () async {
-                  print(selectSpecies.species);
                   var res = await modify_species_api(
                       new_name: controller.text,
                       operation: 'delete',
                       species: selectSpecies.species.toString());
                   if (res.containsKey('message')) {
-                    print('gggggtttttttttttttttttttttttttttttttttttttt\t' +
-                        res['message']);
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
                     showSnackbarerror(context: context, text: res['error']!);
                   }
                   selectSpecies = SelectSpecies(
-                    titles: ['النوع', 'الفصيلة'],
-                    list: [
+                    titles: const ['النوع', 'الفصيلة'],
+                    list: const [
                       {"id": "برازلي"},
                     ],
                     list2: const [
@@ -323,7 +311,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Container(
+              const SizedBox(
                 width: 20,
                 height: 20,
               ),
@@ -331,16 +319,13 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                 style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                     shape: MaterialStateProperty.resolveWith((states) =>
-                        RoundedRectangleBorder(
+                        const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero)),
                     backgroundColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red),
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () async {
-                  print(selectSpecies.species.toString() +
-                      '\tloooooooooooooooo\t' +
-                      selectSpecies.platoon.toString());
                   var res = await modify_species_api(
                       platoon: selectSpecies.platoon,
                       new_name: controller.text,
@@ -352,8 +337,8 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                     showSnackbarerror(context: context, text: res['error']!);
                   }
                   selectSpecies = SelectSpecies(
-                    titles: ['النوع', 'الفصيلة'],
-                    list: [
+                    titles: const ['النوع', 'الفصيلة'],
+                    list: const [
                       {"id": "برازلي"},
                     ],
                     list2: const [
@@ -376,14 +361,14 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
 }
 
 class UpdateAnimal extends StatefulWidget {
-  UpdateAnimal({Key? key}) : super(key: key);
+  const UpdateAnimal({Key? key}) : super(key: key);
 
   @override
   State<UpdateAnimal> createState() => _UpdateAnimalState();
 }
 
 class _UpdateAnimalState extends State<UpdateAnimal> {
-  List<Widget> list = [AddAnimalScreen(), ScreenAddAnimalSubtype()];
+  List<Widget> list = [const AddAnimalScreen(), const ScreenAddAnimalSubtype()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -394,7 +379,7 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
           return Scaffold(
               bottomNavigationBar: BottomNavigationBar(
                   backgroundColor:
-                      Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
+                      const Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
                   unselectedItemColor: Colors.white,
                   currentIndex: index,
                   onTap: (value) {
@@ -427,17 +412,17 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
               body: Column(
                 children: [
                   constraint.maxWidth > 900
-                      ? Container(height: 100, child: ComputerDrawer(index: 7))
+                      ? SizedBox(height: 100, child: ComputerDrawer(index: 7))
                       : Container(),
-                  Spacer(),
+                  const Spacer(),
                   Card(
                       elevation: 20,
-                      color: Color(0xFF357515),
-                      child: Container(
-                        child: list[index],
+                      color: const Color(0xFF357515),
+                      child: SizedBox(
                         width: 600,
+                        child: list[index],
                       )),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ));
         }),
@@ -515,7 +500,6 @@ class SelectSpecies extends StatefulWidget {
 class _SelectSpeciesState extends State<SelectSpecies> {
   @override
   Widget build(BuildContext context) {
-    print('llll');
     return Column(
       children: [
         Container(
@@ -526,7 +510,6 @@ class _SelectSpeciesState extends State<SelectSpecies> {
             child: FutureBuilder(
                 future: platoon_type_api(),
                 builder: (context, snap) {
-                  print(snap.data);
                   if (snap.connectionState == ConnectionState.done &&
                       snap.data is List<Map<String, String>> &&
                       snap.data!.isNotEmpty) {
@@ -534,7 +517,6 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                     return CustomeDropdownButton(
                         id: 'id',
                         func: (String value) {
-                          print(value);
                           BlocProvider.of<AnimalCubit>(context)
                               .updatePlatoon(platoon: value);
                           widget.platoon = value;
@@ -560,11 +542,9 @@ class _SelectSpeciesState extends State<SelectSpecies> {
               return FutureBuilder(
                   future: animal_species_api(platoon: state.platoon),
                   builder: (context, snap) {
-                    print('hhhhyyyyyyyyyyyyyyyy');
                     if (snap.connectionState == ConnectionState.done &&
                         snap.data is List<Map<String, String>> &&
                         snap.data!.isNotEmpty) {
-                      print(snap.data);
                       widget.species = snap.data![0]['id']!;
                       return CustomeDropdownButton(
                           id: 'id',

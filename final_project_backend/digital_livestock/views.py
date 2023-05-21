@@ -3,6 +3,7 @@ from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count, F, Value,Q
 # Create your views here.
+from django.contrib.auth.models import AnonymousUser
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -19,6 +20,7 @@ from .serializer import *
 from rest_framework.authentication import BaseAuthentication
 from django.contrib.gis.gdal.geometries import Polygon,Point
 import geopandas as gpd
+import json
 from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
 	print(str( dic1.keys()))
@@ -28,14 +30,14 @@ def set_geometry(obj:models.Model,dic1:dict[str,]):
 				if(type(dic1.get('geometry'))==str):
 					#print("kiiiiuu666"*6655)
 					print( (dic1.get('geometry')) )
-     
+	 
 					import json
 					from django.contrib.gis.geos import Point
 					from django.contrib.gis.geos import GEOSGeometry
 					data=json.loads(dic1.get('geometry'))
-					print(   (data['point']["coordinates"]) ) 
+					print(   "the coordinate is",(data['point']["coordinates"]) ) 
 					print("ggDone")
-					setattr(obj,'location',GEOSGeometry( ( Point (*(data['point']['coordinates'])).geojson)))
+					setattr(obj,'location',GEOSGeometry( ( str(Point (*(data['point']['coordinates']))))))
 					print("done")
 				else:
 					with open('m',mode='wb' ) as binary_file:
@@ -91,11 +93,11 @@ def set_geometry(obj:models.Model,dic1:dict[str,]):
 							except:
 								print(*data['features'][0]["geometry"]["coordinates"][0][2])
 								print(*data['features'][0]["geometry"]["coordinates"][0][1] )
-								geom=Polygon.from_bbox(data['features'][0]["geometry"]["coordinates"][0][2] +data['features'][0]["geometry"]["coordinates"][0][1] )
+								geom=Polygon.from_bbox(data['features'][0]["geometry"]["coordinates"][0][0] +data['features'][0]["geometry"]["coordinates"][0][2] )
 								geom=GEOSGeometry( geom.geojson)
 							polygons.append(geom)
 							print("Done123")
-							print(geom.geojson)
+							print(str(geom.geojson))
 							muilt_plog = polygons[0]	
 							for poly in polygons:
 								muilt_plog = muilt_plog.union(poly)
@@ -112,12 +114,12 @@ class CustomerAccessPermission(permissions.BasePermission):
 		return True
 class CustomerBackend(BaseAuthentication):
 	def authenticate(self, request, **kwargs):
-		print(User.objects.all( )[0])
-		return (User.objects.all( )[0],None)
+		#print(User.objects.all( )[0])
+		return  (AnonymousUser(),None)
 class OncePerDayUserThrottle(UserRateThrottle):
 	rate = '1/day'
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def governorate_api(request :Request):
 	print((request.data))
@@ -125,14 +127,14 @@ def governorate_api(request :Request):
 	print(ser1)
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def city_api(request :Request):
 	ser1=citySerializer( instance= city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])) ,many=True)
 	print(city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])))
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def village_api(request :Request):
 	 
@@ -141,7 +143,7 @@ def village_api(request :Request):
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def animal_plotoon_api(request :Request):
 	ser1=platoonSerializer( instance= platoon.objects.all()  ,many=True)
@@ -156,19 +158,19 @@ def animal_species_api(request :Request):
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def section_type_api(request :Request):
 	ser1=section_typeSerializer( instance= section_type.objects.all()  ,many=True)
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def farm_type_api(request :Request):
 	ser1=farm_typeSerializer( instance= farm_type.objects.all()  ,many=True)
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def login(request :Request):
 	user1=User.objects.all().filter(ssn=request.data['ssn']).filter(is_superuser=True )
@@ -184,7 +186,7 @@ def login(request :Request):
 '''
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def check_email_password(request :Request):
 	print( type(request.data ))
@@ -194,7 +196,7 @@ def check_email_password(request :Request):
 '''
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def create_farmer(request :Request):
 	request.data
@@ -208,7 +210,7 @@ def create_farmer(request :Request):
 
 '''
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def create_farm(request :Request):
 	query_dict=request.data.dict()
@@ -221,7 +223,7 @@ def create_farm(request :Request):
 	print(f1.errors)
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def modified_gavernorate(request :Request):
 	oper=request.data['operation']
@@ -248,7 +250,7 @@ def modified_gavernorate(request :Request):
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def modified_city(request :Request):
 	oper=request.data['operation']
@@ -275,7 +277,7 @@ def modified_city(request :Request):
 	return  response.Response(data=g1.data)
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def modified_village(request :Request):
 	oper=request.data['operation']
@@ -302,7 +304,7 @@ def modified_village(request :Request):
 	return  response.Response(data=g1.data)
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def test_geson(request :Request):
 	print(request.data.get('filter') )
@@ -312,7 +314,7 @@ def test_geson(request :Request):
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def farm_api(request :Request):
 	if(request.data['operation']=='insert'):
@@ -406,7 +408,7 @@ def farm_api(request :Request):
 
 			return  JsonResponse({"message":"تم تعديل البينات"})
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def modified_species(request :Request):
 	oper=request.data['operation']
@@ -440,7 +442,7 @@ def modified_species(request :Request):
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def modified_platoon(request :Request):
 	oper=request.data['operation']
@@ -471,7 +473,7 @@ def modified_platoon(request :Request):
 	 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def farmer_api(request :Request):
 	oper=request.data['operation']
@@ -508,7 +510,7 @@ def farmer_api(request :Request):
 			user1=User.objects.create_user(**dic1)
 	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def add_farm_animal(request :Request):
 	from datetime import datetime
@@ -559,7 +561,7 @@ def add_farm_animal(request :Request):
 			return JsonResponse({"message":'تم مسح البيانات'})
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def get_locations(request :Request):
 	pass
@@ -569,7 +571,7 @@ def get_locations(request :Request):
 	return response.Response(data=g1Seralizer.data)
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def get_animal(request :Request):
 	try:
@@ -661,7 +663,7 @@ def connect_farm_farmer_api(request :Request):
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def admin_api(request :Request):
 	oper=request.data['operation']
@@ -685,6 +687,8 @@ def admin_api(request :Request):
 	
 		user1:User=User.objects.get(ssn=int(request.data['ssn']))
 		for key,value in dic1.items() :
+			if(key =='location'):
+				user1.location = city.objects.get(id=int(request.data['location']))
 			if(value ==None  and  key not in ['ssn','fnane','lname','email','password','phone','photo']):
 				continue
 			setattr(user1,key,value)
@@ -701,9 +705,9 @@ def admin_api(request :Request):
 			return JsonResponse({"message":"تم اضافة البيانات"})
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
-def list_farm_api(request :Request):
+def search_farm_api(request :Request):
 	import typesense
 	client = typesense.Client({
 					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
@@ -721,11 +725,27 @@ def list_farm_api(request :Request):
 	return response.Response(ser1.data)
 
 
+def search_farmer_api(request :Request):
+	import typesense
+	client = typesense.Client({
+					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
+					'nodes': [{
+							'host': 'localhost',
+							'port': '8108',
+							'protocol': 'http'
+					}],
+					'connection_timeout_seconds': 2
+			})
+	d1=client.collections['farmer'].documents.search({"q":request.data['name'],"query_by":"name"})
+	l1=[i['document']['id'] for i in d1['hits']]
+	 
+	ser1=FarmListSerializer(instance=farm.objects.all().filter(id__in= l1),many=True)
+	return response.Response(ser1.data)
 
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def summary_governorate(request :Request):
 	stat1=farm.objects.all().aggregate(village_count=Count("village__city__governorate__name"))
@@ -733,15 +753,36 @@ def summary_governorate(request :Request):
 	stat3={"farm_milk":connect_farm_farmtype.objects.filter(farm_type__name__exact='انتاج البان').count()}
 	stat4=User.objects.all().aggregate(farmer_count=Count("ssn",Q(is_superuser=0)))
 	stat4={"farmer_count":connect_farm_farmer.objects.all().aggregate(farmer_count=Count("farmer__ssn"))["farmer_count"]+stat4["farmer_count"]}
-	summary_info={"gov_data":list( connect_farm_farmtype.objects.all().values("farm__village__city__governorate__name").annotate(farm_meat_gov=Count("farm",Q(farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count("farm",Q(farm_type__name__exact='انتاج البان')),g_name=F("farm__village__city__governorate__name"),total_villages=Count("farm__village",distinct=True)).values("g_name","total_villages","farm_meat_gov","farm_milk_gov"))}|stat1|stat2|stat3|stat4
-	return JsonResponse({"data":summary_info})
+	stat5={"total_cows":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الابقار').count()}
+	stat6={"total_sheep":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الماعز').count()}
+	stat7={"total_beauty":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الجمال').count()}
+	#
+	stattest=governorate.objects.all().annotate(g_name=F('name'),farm_meat_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('city__village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
+	print(stattest) 
+	summary_info={"gov_data":list(  stattest )}|stat1|stat2|stat3|stat4|stat5|stat6|stat7
+	return JsonResponse({"data":summary_info}) 
 
 
 @api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
+@permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def get_data_map(request :Request):
-	pass
-	f1=farm.objects.all()
+	import json
+	l1  =json.loads(request.data["smallest"])+ json.loads(request.data["biggest"])
+	f1=farm.objects.all().filter(location__intersects=str(Polygon.from_bbox( l1)))
+	print("the count = ",f1.count())
 	return response.Response( LocationSerializer(f1,many=True).data)
-
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def location_statistics(request):
+	if(request.data.get("type")=="gov"):
+		stattest=governorate.objects.all().annotate(g_name=F('name'),farm_meat_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('city__village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
+	 
+		return response.Response(stattest)
+	elif(request.data.get("type")=="city"):
+		stattest=city.objects.all().filter(governorate__id=request.data.get("id")).annotate(g_name=F('name'),farm_meat_gov=Count('village__farm__connect_farm_farmtype__farm__id',Q(village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('village__farm__connect_farm_farmtype__farm__id',Q(village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
+	else:
+		stattest=village.objects.all().filter(city__id=request.data.get("id")).annotate(g_name=F('name'),farm_meat_gov=Count('farm__connect_farm_farmtype__farm__id',Q(farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('farm__connect_farm_farmtype__farm__id',Q(farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
+	 
+	return JsonResponse( {"gov_data":list(stattest)},safe=True )

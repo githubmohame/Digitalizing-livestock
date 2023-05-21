@@ -1,6 +1,7 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:bloc/bloc.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
-import 'package:meta/meta.dart';
 
 part 'animal_state.dart';
 

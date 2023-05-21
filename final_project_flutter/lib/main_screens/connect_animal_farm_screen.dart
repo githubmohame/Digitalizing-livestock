@@ -1,16 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
-import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
+import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/main_screens/Show_info.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/main_screens/farm_screen.dart';
 
 class ConnectAnimalFarm extends StatelessWidget {
   ConnectAnimalFarm({Key? key}) : super(key: key);
@@ -30,7 +28,7 @@ class ConnectAnimalFarm extends StatelessWidget {
   bool isCheck = false;
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
@@ -46,13 +44,13 @@ class ConnectAnimalFarm extends StatelessWidget {
               )),
           body: Center(
             child: Card(
-              color: Color(0xFF357515),
+              color: const Color(0xFF357515),
               child: Container(
-                padding: EdgeInsets.all(50),
+                padding: const EdgeInsets.all(50),
                 width: 700,
                 child: SingleChildScrollView(
                   child: Form(
-                      key: _formKey,
+                      key: formKey,
                       child: Column(
                         children: [
                           TextFormField(
@@ -105,7 +103,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                 future: animal_api(),
                                 builder: (context, snap) {
                                   if (snap.data != null &&
-                                      snap.data!.length > 0) {
+                                      snap.data!.isNotEmpty) {
                                     print(snap.data);
                                     animalType = SelectAnimalType(
                                       platoon: snap.data![0]['platoon'],
@@ -155,7 +153,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                         lastDate: DateTime(2050)) ??
                                     DateTime.now();
                               },
-                              child: Text('choose date')),
+                              child: const Text('choose date')),
                           Container(
                             height: 10,
                           ),
@@ -166,7 +164,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                     fixedSize: MaterialStateProperty.all(
                                         const Size(200, 50)),
                                     shape: MaterialStateProperty.resolveWith(
-                                        (states) => RoundedRectangleBorder(
+                                        (states) => const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.zero)),
                                     backgroundColor:
                                         MaterialStateProperty.resolveWith(
@@ -175,14 +173,14 @@ class ConnectAnimalFarm extends StatelessWidget {
                                         MaterialStateProperty.resolveWith(
                                             (states) => Colors.green)),
                                 onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
+                                  if (formKey.currentState!.validate()) {
                                     int k = 0;
                                     print(customeCheckbox.value);
                                     if (customeCheckbox.value) {
                                       k = 1;
                                     }
                                     print(k);
-                                    if (_formKey.currentState!.validate()) {
+                                    if (formKey.currentState!.validate()) {
                                       Map<String, dynamic> dic1 = {
                                         'operation': "insert",
                                         'species': animalType.platoon,
@@ -205,7 +203,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                             context: context,
                                             text: res['error']);
                                       }
-                                      return null;
+                                      return;
                                     }
                                   }
                                 },
@@ -214,7 +212,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              Container(
+                              const SizedBox(
                                 width: 20,
                                 height: 20,
                               ),
@@ -223,7 +221,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                     fixedSize: MaterialStateProperty.all(
                                         const Size(200, 50)),
                                     shape: MaterialStateProperty.resolveWith(
-                                        (states) => RoundedRectangleBorder(
+                                        (states) => const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.zero)),
                                     backgroundColor:
                                         MaterialStateProperty.resolveWith(
@@ -238,7 +236,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                     k = 1;
                                   }
                                   delete = true;
-                                  if (_formKey.currentState!.validate()) {
+                                  if (formKey.currentState!.validate()) {
                                     Map<String, dynamic> dic1 = {
                                       'operation': "delete",
                                       'species': animalType.platoon,
@@ -260,7 +258,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                       showSnackbarerror(
                                           context: context, text: res['error']);
                                     }
-                                    return null;
+                                    return;
                                   }
                                   delete = false;
                                 },
@@ -426,7 +424,7 @@ class _CustomeCheckboxState extends State<CustomeCheckbox> {
         ),
         Text(
           widget.text,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         )
       ],
     );

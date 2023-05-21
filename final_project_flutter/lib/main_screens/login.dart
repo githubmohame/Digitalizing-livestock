@@ -3,20 +3,19 @@ import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:flutter/material.dart';
 
 import 'farmer_screen.dart';
 
 class LogIN extends StatefulWidget {
-  LogIN({Key? key}) : super(key: key);
+  const LogIN({Key? key}) : super(key: key);
 
   @override
   State<LogIN> createState() => _LogINState();
 }
 
 class _LogINState extends State<LogIN> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   CustomePasswordUpdateTextField customePasswordUpdateTextField =
       CustomePasswordUpdateTextField();
@@ -53,16 +52,16 @@ class _LogINState extends State<LogIN> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //constraint.maxWidth>900?Container(height: 100, child: ComputerDrawer(index:4)):Container(),
-                Spacer(),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Card(
-                        color: Color(0xFF357515),
+                        color: const Color(0xFF357515),
                         elevation: 20,
                         child: Container(
-                          margin: EdgeInsets.all(20),
+                          margin: const EdgeInsets.all(20),
                           child: Form(
                               child: Column(
                             children: [
@@ -75,8 +74,8 @@ class _LogINState extends State<LogIN> {
                                     return TextField(
                                         controller: _controller,
                                         keyboardType: TextInputType.number,
-                                        style: TextStyle(color: Colors.brown),
-                                        decoration: InputDecoration(
+                                        style: const TextStyle(color: Colors.brown),
+                                        decoration: const InputDecoration(
                                             filled: true,
                                             fillColor: Colors.white,
                                             hintText: "ادخل الرقم القومي",
@@ -110,7 +109,7 @@ class _LogINState extends State<LogIN> {
                                 height: 20,
                               ),
                               text,
-                              Container(
+                              SizedBox(
                                 height: 50,
                                 child: TextButton(
                                     onPressed: () async {
@@ -137,7 +136,7 @@ class _LogINState extends State<LogIN> {
                                                   FarmerScreen(),
                                             ));
                                       } else {
-                                        text = Text(
+                                        text = const Text(
                                           '  كلمة المرور او الرقم القومي عير صحيح',
                                           style: TextStyle(
                                               fontSize: 20,
@@ -148,9 +147,9 @@ class _LogINState extends State<LogIN> {
                                     },
                                     style: ButtonStyle(
                                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
+                                            const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.zero,
-                                                side: const BorderSide(
+                                                side: BorderSide(
                                                     color:
                                                         Colors.transparent))),
                                         backgroundColor:
@@ -170,7 +169,7 @@ class _LogINState extends State<LogIN> {
                     ),
                   ],
                 ),
-                Spacer()
+                const Spacer()
               ],
             ),
           );

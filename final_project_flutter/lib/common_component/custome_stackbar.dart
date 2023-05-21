@@ -8,15 +8,15 @@ void showSnackbardone(
    scaffoldMessenger.hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.white,
-      duration: Duration(milliseconds: 1700),
-      content: Container(
+      duration: const Duration(milliseconds: 1700),
+      content: SizedBox(
+        height: 20,
         child: Row(
           children: [
-            Icon(Icons.task_alt, color: Colors.green),
-            Text(text, style: TextStyle(color: Colors.green))
+            const Icon(Icons.task_alt, color: Colors.green),
+            Text(text, style: const TextStyle(color: Colors.green))
           ],
         ),
-        height: 20,
       )));
 }
 
@@ -25,14 +25,14 @@ void showSnackbarerror({required BuildContext context, required String text}) {
   scaffoldMessenger.hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.white,
-      duration: Duration(milliseconds: 700),
-      content: Container(
+      duration: const Duration(milliseconds: 700),
+      content: SizedBox(
+        height: 20,
         child: Row(
           children: [
-            Icon(Icons.error, color: Colors.red),
-            Text(text, style: TextStyle(color: Colors.red))
+            const Icon(Icons.error, color: Colors.red),
+            Text(text, style: const TextStyle(color: Colors.red))
           ],
         ),
-        height: 20,
       )));
 }

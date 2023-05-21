@@ -11,7 +11,7 @@ class BackgroundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(decoration: BoxDecoration( //color: Color(0xFF003e29),
+    return Container(decoration: const BoxDecoration( //color: Color(0xFF003e29),
                   image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))
                 ),child:    child,);
   }

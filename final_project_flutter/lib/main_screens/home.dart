@@ -3,27 +3,21 @@ import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';
-import 'package:final_project_year/main_screens/add_supplier_screen.dart';
-import 'package:final_project_year/main_screens/add_worker_screen.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
-import 'package:final_project_year/main_screens/chart_screen.dart';
 import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
-import 'package:final_project_year/main_screens/connect_suppliers_farm.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
-import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 import 'package:flutter/material.dart';
 
 import 'bash_board_screen.dart';
-import 'connect_workers_farm.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
@@ -34,12 +28,11 @@ class HomeScreen extends StatelessWidget {
                   appBar: constraint.maxWidth < 900
                       ? AppBar(
                           elevation: 0,
-                          title: Container(
-                              child: const Text("مرحبا بك",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold))),
+                          title: const Text("مرحبا بك",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold)),
                           leading: Container(
                               margin: const EdgeInsets.only(top: 0),
                               child: IconButton(
@@ -49,16 +42,16 @@ class HomeScreen extends StatelessWidget {
                                   size: 30,
                                 ),
                                 onPressed: () {
-                                  _scaffoldKey.currentState!.openDrawer();
+                                  scaffoldKey.currentState!.openDrawer();
                                 },
                               )),
                           backgroundColor: Colors.transparent)
                       : null,
                   backgroundColor: Colors.transparent,
-                  key: _scaffoldKey,
+                  key: scaffoldKey,
                   drawer: MainDrawer(index: 1),
                   body: SingleChildScrollView(
-                    child: Container(
+                    child: SizedBox(
                       height: 1894,
                       child: Column(
                         children: [
@@ -66,9 +59,9 @@ class HomeScreen extends StatelessWidget {
                           SafeArea(
                               child: Center(
                             child: Container(
-                              margin: EdgeInsets.all(20),
+                              margin: const EdgeInsets.all(20),
                               width: 600,
-                              color: Color(0xFF357515),
+                              color: const Color(0xFF357515),
                               child: Card(
                                 elevation: 20,
                                 color: Colors.transparent,
@@ -250,7 +243,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          UpdateAnimal(),
+                                                          const UpdateAnimal(),
                                                     ));
                                               }),
                                               child: Card(
@@ -339,7 +332,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          FarmScreen(),
+                                                          const FarmScreen(),
                                                     ));
                                               }),
                                               child: Card(
@@ -381,7 +374,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          AddLocationScreen(),
+                                                          const AddLocationScreen(),
                                                     ));
                                               }),
                                               child: Card(
@@ -418,7 +411,7 @@ class HomeScreen extends StatelessWidget {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    Row(
+                                    const Row(
                                       children: [],
                                     ),
                                     Row(
@@ -436,8 +429,8 @@ class HomeScreen extends StatelessWidget {
                                                           AddAdmin(),
                                                     ));
                                               }),
-                                              child: Card(
-                                                color: const Color(0xfffc5c4be),
+                                              child: const Card(
+                                                color: Color(0xfffc5c4be),
                                                 elevation: 10,
                                                 child: SizedBox(
                                                     width: 150,
@@ -447,11 +440,11 @@ class HomeScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        const Icon(Icons.person,
+                                                        Icon(Icons.person,
                                                             size: 80,
                                                             color:
                                                                 Colors.brown),
-                                                        const Text(
+                                                        Text(
                                                             "تسجيل المدرين"),
                                                       ],
                                                     )),
@@ -469,11 +462,11 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          LogIN(),
+                                                          const LogIN(),
                                                     ));
                                               }),
-                                              child: Card(
-                                                color: const Color(0xfffc5c4be),
+                                              child: const Card(
+                                                color: Color(0xfffc5c4be),
                                                 elevation: 10,
                                                 child: SizedBox(
                                                     width: 150,
@@ -483,11 +476,11 @@ class HomeScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        const Icon(Icons.person,
+                                                        Icon(Icons.person,
                                                             size: 80,
                                                             color:
                                                                 Colors.brown),
-                                                        const Text(
+                                                        Text(
                                                           "تسجيل الدخول",
                                                           style: TextStyle(
                                                               color: Color(
@@ -545,8 +538,8 @@ class HomeScreen extends StatelessWidget {
                                                           ConnectFarmAndFarmerScreen(),
                                                     ));
                                               }),
-                                              child: Card(
-                                                color: const Color(0xfffc5c4be),
+                                              child: const Card(
+                                                color: Color(0xfffc5c4be),
                                                 elevation: 10,
                                                 child: SizedBox(
                                                     width: 150,
@@ -556,11 +549,11 @@ class HomeScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        const Icon(Icons.person,
+                                                        Icon(Icons.person,
                                                             size: 80,
                                                             color:
                                                                 Colors.brown),
-                                                        const Text(
+                                                        Text(
                                                             "ربط المزرعة بالمربين"),
                                                       ],
                                                     )),
@@ -582,11 +575,11 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ChangePasswordScreen(),
+                                                          const ChangePasswordScreen(),
                                                     ));
                                               }),
-                                              child: Card(
-                                                color: const Color(0xfffc5c4be),
+                                              child: const Card(
+                                                color: Color(0xfffc5c4be),
                                                 elevation: 10,
                                                 child: SizedBox(
                                                     width: 150,
@@ -596,11 +589,11 @@ class HomeScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        const Icon(Icons.person,
+                                                        Icon(Icons.person,
                                                             size: 80,
                                                             color:
                                                                 Colors.brown),
-                                                        const Text(
+                                                        Text(
                                                             "تغير كلمة المرور"),
                                                       ],
                                                     )),
@@ -653,8 +646,8 @@ class HomeScreen extends StatelessWidget {
                                                           ConnectAnimalFarm(),
                                                     ));
                                               }),
-                                              child: Card(
-                                                color: const Color(0xfffc5c4be),
+                                              child: const Card(
+                                                color: Color(0xfffc5c4be),
                                                 elevation: 10,
                                                 child: SizedBox(
                                                     width: 150,
@@ -664,11 +657,11 @@ class HomeScreen extends StatelessWidget {
                                                           MainAxisAlignment
                                                               .center,
                                                       children: [
-                                                        const Icon(Icons.person,
+                                                        Icon(Icons.person,
                                                             size: 80,
                                                             color:
                                                                 Colors.brown),
-                                                        const Text(
+                                                        Text(
                                                             "اضافة حيوانات للمزرعة"),
                                                       ],
                                                     )),

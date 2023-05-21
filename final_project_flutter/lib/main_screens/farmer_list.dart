@@ -1,19 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:flutter/material.dart';
+
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
-import 'package:final_project_year/main_screens/farmer_screen.dart';
-import 'package:flutter/material.dart';
 
 class ItemList extends StatelessWidget {
   String name;
   ItemList({
     Key? key,
     required this.name,
-  }) : super();
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return const Card(
       borderOnForeground: true,
       color: Color(0xFF467061),
       child: Card(
@@ -30,13 +31,13 @@ class ItemList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('الاسم:' + 'محمد ايمن',
+                  Text('الاسم:' 'محمد ايمن',
                       style: TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
-                    'عدد المزارع:' + 890.toString(),
+                    'عدد المزارع:${890}',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text('رقم التليقون:' + 8799.toString())
+                  Text('رقم التليقون:${8799}')
                 ],
               ),
             ],
@@ -56,7 +57,7 @@ class ListFarmer extends StatelessWidget {
           child: Scaffold(
               drawer: MainDrawer(index: 5),
               appBar: AppBar(
-                title: Center(
+                title: const Center(
                   child: Text('عرض المربين',style: TextStyle(color: Colors.white),),
                 ),
                 backgroundColor: Colors.transparent,
@@ -66,15 +67,15 @@ class ListFarmer extends StatelessWidget {
                 print(constraint.maxWidth);
                 return Row(children: [
 
-                  constraint.maxWidth >= 1000 ? Spacer() : Container(),
+                  constraint.maxWidth >= 1000 ? const Spacer() : Container(),
                   Expanded(
                     child: Container(
                       width: 400,
-                      color: Color(0xFF357515
+                      color: const Color(0xFF357515
 
 ),
                       child: Card(
-                        color: Color(0xFF357515
+                        color: const Color(0xFF357515
 
 ),
                         elevation: 20,
@@ -95,7 +96,7 @@ class ListFarmer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  constraint.maxWidth >= 1000 ? Spacer() : Container(),
+                  constraint.maxWidth >= 1000 ? const Spacer() : Container(),
                 ]);
               })),
         ));

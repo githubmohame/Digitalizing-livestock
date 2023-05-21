@@ -15,39 +15,45 @@ class ConnectSuppliersFarmer extends StatelessWidget {
           appBar:
               AppBar(elevation: 0,backgroundColor: Colors.transparent, title: const Text("ربط الموردين بالمزرعة",style: TextStyle(color: Colors.white),)),
           body: Center(
-            child: Card(color: Color(0xFF467061),elevation: 20,
-              child: Container(padding: EdgeInsets.all(50),width: 700,
+            child: Card(color: const Color(0xFF467061),elevation: 20,
+              child: Container(padding: const EdgeInsets.all(50),width: 700,
                 child: SingleChildScrollView(
                   child: Form(
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         decoration:
                             const InputDecoration(fillColor: Colors.white,filled: true,border: InputBorder.none, hintText: "الرقم القومي للمورد"),
                         keyboardType: TextInputType.text,
                       ),Container(height: 10,),
                       TextFormField(
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         decoration:
                             const InputDecoration(fillColor: Colors.white,filled: true,border: InputBorder.none, hintText: "اسم المزرعة"),
                         keyboardType: TextInputType.text,
                       ),Container(height: 10,),
                       TextFormField(
-                        validator: (value) {},
+                        validator: (value) {
+                          return null;
+                        },
                         decoration:
                             const InputDecoration(fillColor: Colors.white,filled: true,border: InputBorder.none, hintText: "السجل التجاري"),
                         keyboardType: TextInputType.text,
                       ),Container(height: 10,),
                       Row(
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           OutlinedButton(
                             style: ButtonStyle(
                                 fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                                 shape: MaterialStateProperty.resolveWith((states) =>
-                                    RoundedRectangleBorder(
+                                    const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.zero)),
                                 backgroundColor: MaterialStateProperty.resolveWith(
                                     (states) => Colors.green),
@@ -60,12 +66,12 @@ class ConnectSuppliersFarmer extends StatelessWidget {
                               "حفظ",
                               style: TextStyle(color: Colors.white),
                             ),
-                          ),Spacer(),
+                          ),const Spacer(),
                            OutlinedButton(
                         style: ButtonStyle(
                             fixedSize: MaterialStateProperty.all(const Size(200, 50)),
                             shape: MaterialStateProperty.resolveWith((states) =>
-                                RoundedRectangleBorder(
+                                const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero)),
                             backgroundColor: MaterialStateProperty.resolveWith(
                                 (states) => Colors.red),
@@ -77,7 +83,7 @@ class ConnectSuppliersFarmer extends StatelessWidget {
                           "حذف",
                           style: TextStyle(color: Colors.white),
                         ),
-                      ),Spacer()
+                      ),const Spacer()
                         ],
                       ),
                       

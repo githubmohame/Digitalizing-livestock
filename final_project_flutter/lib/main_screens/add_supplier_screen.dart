@@ -76,7 +76,7 @@ class AddSupplierScreen extends StatelessWidget {
                     create: (context) => SelectMuiltTypeCubit(list: []),
                     child: Container(
                       child: CustomeType(title:  "اسم المنتج",
-                        list: [
+                        list: const [
                           {"kill me": 1},
                           {"go to hell": 0}
                         ],

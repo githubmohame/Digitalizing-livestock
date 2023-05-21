@@ -119,12 +119,6 @@ class LocationSerializer(serializers.ModelSerializer):
         model=farm
         fields=["location","center","id","farm_name"]
     def get_location(self,obj:farm):
-        try:
-                print(obj.id)
-                print(obj.location )
-                print("*"*789)
-        except:
-             pass
         if(obj.location==None):
             return None
         if(obj.location.geom_type=="Point"):
@@ -136,6 +130,7 @@ class LocationSerializer(serializers.ModelSerializer):
         if(obj.location==None):
             return None
         if(obj.location.geom_type=="Point"):
+            print(obj.location.geojson)
             return  obj.location.geojson
-        return  obj.location.centroid.geojson
+        return  obj.location.point_on_surface.geojson
         
