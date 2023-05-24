@@ -1,9 +1,9 @@
 part of 'choice_cubit.dart';
 
 class LocationState {
-  String gavernorate;
-  String city;
-  String village;
+  int gavernorate;
+  int city;
+  int village;
   LocationState({
     required this.gavernorate,
     required this.city,

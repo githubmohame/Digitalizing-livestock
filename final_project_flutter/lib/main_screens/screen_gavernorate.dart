@@ -319,12 +319,12 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
 }
 
 class SelectGavernorate extends StatefulWidget {
-  String gavernorate;
+  int gavernorate;
   String title;
   List<Map<String, String>> list;
   SelectGavernorate({
     Key? key,
-    this.gavernorate = '',
+    this.gavernorate = -1,
     required this.title,
     required this.list,
   }) : super(key: key);
@@ -349,7 +349,7 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
                 //print(widget.gavernorate);
                 return CustomeDropdownButton(
                     id: 'id',
-                    func: (String value) {
+                    func: (int value) {
                       BlocProvider.of<LocationCubit>(context)
                           .updateGavernorate(value);
                       widget.gavernorate = value;
@@ -369,7 +369,7 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
 class SelectCity extends StatefulWidget {
   List<Map<String, String>> list;
   List<Map<String, String>> list2;
-  String? city;
+  int? city;
   List<String> titles;
   SelectCity({
     Key? key,
@@ -415,7 +415,7 @@ class _SelectCityState extends State<SelectCity> {
                                   snap.data!.isNotEmpty) {
                                 return CustomeDropdownButton(
                                     id: 'id',
-                                    func: (String value) {
+                                    func: (int value) {
                                       BlocProvider.of<LocationCubit>(context)
                                           .updateGavernorate(value);
                                     },
@@ -447,7 +447,7 @@ class _SelectCityState extends State<SelectCity> {
                                   widget.city = snap.data![0]['id']!;
                                   return CustomeDropdownButton(
                                       id: 'id',
-                                      func: (String value) {
+                                      func: (int value) {
                                         BlocProvider.of<LocationCubit>(context)
                                             .updateCity(value);
                                         widget.city = value;
@@ -723,7 +723,7 @@ class ScreenVillage extends StatefulWidget {
 }
 
 class _ScreenVillageState extends State<ScreenVillage> {
-  SelectLocation selectLocation = SelectLocation(village: '', city: "");
+  SelectLocation selectLocation = SelectLocation(village: -1, city:-1);
 
   TextEditingController controller = TextEditingController();
 
@@ -793,13 +793,13 @@ class _ScreenVillageState extends State<ScreenVillage> {
                         'new_name': controller.text
                       };
 
-                      Map<String, String> map =
+                      Map<String, dynamic> map =
                           await modify_village_api(dic1: dic1);
 
                       if (map.containsKey('message')) {
                       }
-                      selectLocation = SelectLocation(village: '', city: "");
-                      //selectLocation = SelectLocation(village: '', city: "");
+                      selectLocation = SelectLocation(village: -1, city:-1);
+                      //selectLocation = SelectLocation(village: -1, city: "");
                       setState(() {});
                     },
                     child: const Text(
@@ -844,10 +844,10 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       } else {
                         dic1['geometry'] = null;
                       }
-                      Map<String, String> map =
+                      Map<String, dynamic> map =
                           await modify_village_api(dic1: dic1);
                       if (map.containsKey('message')) {}
-                      selectLocation = SelectLocation(village: '', city: "");
+                      selectLocation = SelectLocation(village: -1, city: -1);
                       setState(() {});
                     },
                     child: const Text(
@@ -892,11 +892,11 @@ class _ScreenVillageState extends State<ScreenVillage> {
                       } else {
                         dic1['geometry'] = null;
                       }
-                      Map<String, String> map =
+                      Map<String, dynamic> map =
                           await modify_village_api(dic1: dic1);
                       if (map.containsKey('message')) {}
-                      selectLocation = SelectLocation(village: '', city: "");
-                      selectLocation = SelectLocation(village: '', city: "");
+                      selectLocation = SelectLocation(village: -1, city:-1);
+                      selectLocation = SelectLocation(village: -1, city: -1);
 
                       setState(() {});
                     },

@@ -11,7 +11,7 @@ urlpatterns = [
       ,path('platoon',animal_plotoon_api)
        ,path('check_password',login)
       ,path('create_farmer', create_farmer)
-       ,path('create_farm', create_farm)
+       #,path('create_farm', create_farm)
        ,path('modify_gavernorate',  modified_gavernorate)
        ,path('modify_city',  modified_city)
        ,path('modify_village',  modified_village)
@@ -32,4 +32,6 @@ urlpatterns = [
        ,path('get_data_map',  get_data_map)
         ,path('summary_governorate',  summary_governorate),
         path('location_statistics',location_statistics),
+         path('farm_info_list',farm_info_list),
+           path('farm_info',farm_info),
     ]

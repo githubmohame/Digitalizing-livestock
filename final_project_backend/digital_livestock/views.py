@@ -3,6 +3,7 @@ from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count, F, Value,Q
 # Create your views here.
+from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import AnonymousUser
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
@@ -21,6 +22,7 @@ from rest_framework.authentication import BaseAuthentication
 from django.contrib.gis.gdal.geometries import Polygon,Point
 import geopandas as gpd
 import json
+from rest_framework.pagination import PageNumberPagination
 from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
 	print(str( dic1.keys()))
@@ -130,16 +132,23 @@ def governorate_api(request :Request):
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def city_api(request :Request):
-	ser1=citySerializer( instance= city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])) ,many=True)
-	print(city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])))
-	return response.Response(ser1.data)
+	print("&"*789)
+	print(request.data['filter'])
+	if(request.data['filter']!=-1):
+		ser1=citySerializer( instance= city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])) ,many=True)
+		print(city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])))
+		return response.Response(ser1.data)
+	else:
+		return response.Response({"data":[]})
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def village_api(request :Request):
-	 
-	ser1=villageSerializer( instance= village.objects.all().filter(city=city.objects.get(id=request.data['filter'])) ,many=True)
-	return response.Response(ser1.data)
+	if(request.data['filter']!="__"):
+		ser1=villageSerializer( instance= village.objects.all().filter(city=city.objects.get(id=request.data['filter'])) ,many=True)
+		return response.Response(ser1.data)
+	else:
+		return response.Response({"data":[]})
 
 
 @api_view(['GET','POST'])
@@ -209,6 +218,7 @@ def create_farmer(request :Request):
 	return  response.Response(data=f1.data)
 
 '''
+"""
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
@@ -221,6 +231,10 @@ def create_farm(request :Request):
 	f1=FarmSerializer(data=query_dict)
 	print(f1.is_valid())
 	print(f1.errors)
+
+
+
+"""
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
@@ -321,8 +335,8 @@ def farm_api(request :Request):
 		farm1=farm()
 		dic1=request.data.dict() 
 		except1=set_geometry(obj=farm1,dic1=dic1)
-		print('*'*789)
-		print(farm1.location)
+		#print('*'*789)
+		#print(farm1.location)
 		if(isinstance(except1,JsonResponse)):
 			
 			return except1
@@ -337,9 +351,17 @@ def farm_api(request :Request):
 			return JsonResponse({'error':"the farm  type should be iterable type"})
 		if(farm_type.objects.filter(name__in=dic1.get('farm_type')).count()!=len(dic1.get('farm_type')) or len(dic1.get('farm_type'))==0):
 			return JsonResponse({'error':"the farm 12 should have valid farm type"})
+		farm1.village=village.objects.get(id=dic1['village'])
 		for key,value in dic1.items() :
-			if(key in ['id','isolated_wards','number_of_arc','number_of_workers','playground','wards','total_area_of_farm','farm_name','huge_playground']):
+			if(key in [ "id",'isolated_wards','number_of_arc','number_of_workers','playground','wards','total_area_of_farm','farm_name','huge_playground']):
 				setattr(farm1,key,value)
+		if(farm1.id==None):
+			pass
+			v1=""
+			v1+=str(farm1.village.id)
+			v1+=str(farm1.village.city.id)
+			v1+=str(farm1.village.city.governorate.id)
+			
 		'''
 		farm1.isolated_wards=dic1['isolated_wards']
 		farm1.number_of_arc=float(dic1['number_of_arc'])
@@ -352,7 +374,8 @@ def farm_api(request :Request):
 		farm1.id=dic1['id']
 		'''
 		farm1.section_type=section_type.objects.get(id= dic1['section_type'])
-		farm1.village=village.objects.get(id=dic1['village'])
+		
+		
 		print(farm1.village.name)
 		farm1.save()
 		print(connect_farm_farmtype.objects.all().filter(farm__id=farm1.id).delete())
@@ -380,7 +403,10 @@ def farm_api(request :Request):
 				return JsonResponse({'error':'الكود غير صحيح', })
 			dic1=request.data.dict()
 			for key  in dic1:
-				if(key=='geometry'):
+				
+				if(key=='geometry' and dic1[key]!=""):
+					print("u"*567)
+					print(dic1 )
 					except1=set_geometry(obj=d1,dic1=dic1)
 					
 					if(isinstance(except1,JsonResponse)):
@@ -776,13 +802,38 @@ def get_data_map(request :Request):
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def location_statistics(request):
+	print("*"*789+str(request.data.keys()));
 	if(request.data.get("type")=="gov"):
 		stattest=governorate.objects.all().annotate(g_name=F('name'),farm_meat_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('city__village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
-	 
-		return response.Response(stattest)
+		print(stattest)
 	elif(request.data.get("type")=="city"):
 		stattest=city.objects.all().filter(governorate__id=request.data.get("id")).annotate(g_name=F('name'),farm_meat_gov=Count('village__farm__connect_farm_farmtype__farm__id',Q(village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('village__farm__connect_farm_farmtype__farm__id',Q(village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
 	else:
 		stattest=village.objects.all().filter(city__id=request.data.get("id")).annotate(g_name=F('name'),farm_meat_gov=Count('farm__connect_farm_farmtype__farm__id',Q(farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('farm__connect_farm_farmtype__farm__id',Q(farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
-	 
+	 #print()
 	return JsonResponse( {"gov_data":list(stattest)},safe=True )
+
+
+class CustomePagenation(PageNumberPagination):
+	page_size=10
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def farm_info_list(request):
+	pagination=CustomePagenation()
+	qs=connect_animal_farm.objects.all().filter(farm_id=request.data.get('farm_id') )
+	p1=pagination.paginate_queryset(qs,request)
+	ser1=connectFarmAnimalSeralizer(instance=p1,many=True)
+	return JsonResponse( {"next":pagination.get_next_link(),"data": ser1.data})
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def farm_info(request):
+	qs=farm.objects.all().get(id=request.data.get('id'))
+	print("&"*987)
+	ser1=FarmInfoShowSerializer( instance= qs )
+	print(ser1.data)
+	return response.Response( ser1.data )

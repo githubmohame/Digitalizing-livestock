@@ -7,52 +7,51 @@ part 'choice_state.dart';
 
 class LocationCubit extends Cubit<LocationState> {
   LocationCubit(
-      {required String gavernorate,
-      required String city,
-      required String village})
+      {required int gavernorate,
+      required int city,
+      required int village})
       : super(LocationState(
             city: city, gavernorate: gavernorate, village: village));
   void updateGavernorate(
-    String gavernorate,
+    int gavernorate,
   ) async {
     if (state.gavernorate != gavernorate) {
       List<Map<String, dynamic>> l1 = await city_api(gavernorate: gavernorate);
       if (l1.isNotEmpty) {
         List<Map<String, dynamic>> l2 = await village_api(city: l1[0]['id']!);
+         
         emit(LocationState(
-            city: l1[0]['id']!,
+            city: l1.isNotEmpty?l1[0]['id']!:-1,
             gavernorate: gavernorate,
-            village: l2[0]['id']!));
-        return  ;
+            village: l2.isNotEmpty?l2[0]['id']!:-1));
+        return;
       }
 
-      emit(LocationState(city: '_', gavernorate: gavernorate, village: '_'));
+      emit(LocationState(city:-1, gavernorate: gavernorate, village:-1));
     }
   }
 
   void updateCity(
-    String city,
+    int city,
   ) async {
     if (state.city != city) {
       List<Map<String, dynamic>> l2 = await village_api(city: city);
       if (l2.isNotEmpty) {
-        print("en"*67);
+        print("en" * 67);
         emit(LocationState(
-            city: city,
-            gavernorate: state.gavernorate,
-            village: l2[0]['id']!));
+            city: city, gavernorate: state.gavernorate, village: l2[0]['id']!));
         return;
       }
-      print("out"*67);
+      print("out" * 67);
       emit(LocationState(
-          city: city, gavernorate: state.gavernorate, village:  "_"));
+          city: city, gavernorate: state.gavernorate, village: -1));
     }
   }
 
   void updateVillage(
-    String village,
+    int village,
   ) {
     emit(LocationState(
-        city: state.city, gavernorate: state.gavernorate, village: "_"));
+        city: state.city, gavernorate: state.gavernorate, village: village));
   }
 }

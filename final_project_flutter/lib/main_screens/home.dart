@@ -444,8 +444,7 @@ class HomeScreen extends StatelessWidget {
                                                             size: 80,
                                                             color:
                                                                 Colors.brown),
-                                                        Text(
-                                                            "تسجيل المدرين"),
+                                                        Text("تسجيل المدرين"),
                                                       ],
                                                     )),
                                               ),

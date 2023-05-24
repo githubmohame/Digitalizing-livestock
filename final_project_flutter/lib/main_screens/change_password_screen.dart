@@ -63,7 +63,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: 360,
+                              height:260,
                               color: Colors.transparent,
                               child: Theme(
                                   data: ThemeData(
@@ -72,8 +72,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     canvasColor: Colors.transparent,
                                   ),
                                   child: SizedBox(
-                                    height: 400,
-                                    child: CustomeStepper(
+                                     child: CustomeStepper(
                                         margin: const EdgeInsets.all(5),
                                         elevation: 0,
                                         onStepContinue: x < 1
@@ -104,7 +103,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                         controlsBuilder: (context, details) {
                                           _controller.clear();
                                           return Container(
-                                              child: Row(
+                                              child: Wrap(
                                             children: [
                                               TextButton(
                                                 onPressed: () async {

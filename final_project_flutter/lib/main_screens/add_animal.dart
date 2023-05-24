@@ -22,7 +22,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
   SelectPlotoon selectPlotoon = SelectPlotoon(
     title: 'النوع',
     list: const [
-      {"id": "ابقار"},
+      {"id": -1},
     ],
   );
 
@@ -249,7 +249,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                   var res = await modify_species_api(
                       new_name: controller.text,
                       operation: 'update',
-                      species: selectSpecies.species.toString());
+                      species: selectSpecies.species ??-1);
                   if (res.containsKey('message')) {
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
@@ -289,7 +289,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                   var res = await modify_species_api(
                       new_name: controller.text,
                       operation: 'delete',
-                      species: selectSpecies.species.toString());
+                      species: selectSpecies.species ??-1);
                   if (res.containsKey('message')) {
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
@@ -330,7 +330,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                       platoon: selectSpecies.platoon,
                       new_name: controller.text,
                       operation: 'insert',
-                      species: selectSpecies.species.toString());
+                      species: selectSpecies.species??-1 );
                   if (res.containsKey('message')) {
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
@@ -432,9 +432,9 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
 }
 
 class SelectPlotoon extends StatefulWidget {
-  String? village;
+  int? village;
   String title;
-  List<Map<String, String>> list;
+  List<Map<String, dynamic>> list;
   SelectPlotoon({
     Key? key,
     this.village,
@@ -455,12 +455,12 @@ class _SelectAnimalState extends State<SelectPlotoon> {
             future: platoon_type_api(),
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.done &&
-                  snap.data is List<Map<String, String>> &&
+                  snap.data is List<Map<String, dynamic>> &&
                   snap.data!.isNotEmpty) {
                 widget.village = snap.data![0]['id']!;
                 return CustomeDropdownButton(
                     id: 'id',
-                    func: (String value) {
+                    func: (int value) {
                       BlocProvider.of<AnimalCubit>(context)
                           .updatePlatoon(platoon: value);
                       widget.village = value;
@@ -481,8 +481,8 @@ class _SelectAnimalState extends State<SelectPlotoon> {
 class SelectSpecies extends StatefulWidget {
   List<Map<String, String>> list;
   List<Map<String, String>> list2;
-  String? species;
-  String? platoon;
+  int? species;
+  int? platoon;
   List<String> titles;
   SelectSpecies({
     Key? key,
@@ -511,12 +511,12 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                 future: platoon_type_api(),
                 builder: (context, snap) {
                   if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, String>> &&
+                      snap.data is List<Map<String, dynamic>> &&
                       snap.data!.isNotEmpty) {
                     widget.platoon = snap.data![0]['id']!;
                     return CustomeDropdownButton(
                         id: 'id',
-                        func: (String value) {
+                        func: (int value) {
                           BlocProvider.of<AnimalCubit>(context)
                               .updatePlatoon(platoon: value);
                           widget.platoon = value;
@@ -543,12 +543,12 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                   future: animal_species_api(platoon: state.platoon),
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.done &&
-                        snap.data is List<Map<String, String>> &&
+                        snap.data is List<Map<String, dynamic>> &&
                         snap.data!.isNotEmpty) {
                       widget.species = snap.data![0]['id']!;
                       return CustomeDropdownButton(
                           id: 'id',
-                          func: (String value) {
+                          func: (int value) {
                             //BlocProvider.of<LocationCubit>(context)
                             //  .updateCity(value);
                             widget.species = value;

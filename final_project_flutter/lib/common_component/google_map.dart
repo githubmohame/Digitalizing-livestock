@@ -51,10 +51,10 @@ class _GoogleMapComponentFarmScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Wrap(direction: Axis.horizontal ,runAlignment: WrapAlignment.spaceBetween,crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(direction: Axis.horizontal ,runAlignment: WrapAlignment.spaceBetween,crossAxisAlignment: WrapCrossAlignment.center,spacing: 12,runSpacing: 12,alignment: WrapAlignment.center,
+           
           children: [
             ElevatedButton(
               onPressed: () {

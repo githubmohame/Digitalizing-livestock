@@ -1,4 +1,5 @@
-
+import 'package:final_project_year/main_screens/bash_board_screen.dart';
+import 'package:final_project_year/main_screens/show_farm_info.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -28,7 +29,7 @@ void main() async {
     'iiiiiiii', //This is the value that will be returned in the callbackDispatcher
     initialDelay: Duration(minutes: 5),
     constraints: Constraints(networkType: NetworkType.connected),
-  );*//*
+  );*/ /*
   dio.Dio dio1 = dio.Dio();
   List<Polygon> plogons = [];
   List<Marker> marker = [];
@@ -108,7 +109,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FarmerScreen(),
+      home: FarmInfoScreen(),
     );
     /*
     return FutureBuilder(

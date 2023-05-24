@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomeDropdownButton extends StatefulWidget {
-  String value;
+  int value;
   String text;
   String id;
   Color? color;
   Color? textColor;
   bool expanded = false;
   List<Map<String, dynamic>> list;
-  void Function(String value)? func;
+  void Function(int value)? func;
   CustomeDropdownButton({
     Key? key,
-    required this.id,this.textColor,
+    required this.id,
+    this.textColor,
     this.func,
     required this.value,
     this.color,
@@ -30,51 +31,46 @@ class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
     return Container(
       color: widget.color ?? Colors.white,
       child: FutureBuilder<List<Map<String, dynamic>>>(
-        builder: (context, snapshot) => Column(
+        builder: (context, snapshot) => Wrap(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  widget.text,
-                  style: TextStyle(color: widget.textColor),
-                ),
-              ],
+            Text(
+              widget.text,
+              style: TextStyle(color: widget.textColor),
             ),
-            Row( 
-              children: [
-                Expanded(
-                  child: DropdownButton<String>(dropdownColor: widget.color,
-                    style:   TextStyle(color: Colors.brown,fontSize: 15,fontWeight: FontWeight.bold),
-                    isExpanded: widget.expanded,
-                    underline: Container(),
-                    focusColor: widget.color ?? Colors.white,
-                    
-                    alignment: Alignment.bottomLeft,
-                    value: widget.value,
-                    items: List.generate(widget.list.length, (index) {
-                      return DropdownMenuItem(
-                          value: widget.list[index]["id"],
-                          child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.list[index]["name"].toString(),style: TextStyle(color: widget.textColor),
-                              ),
-                            ],
-                          ));
-                    }),
-                    onChanged: (value) {
-                      setState(() {
-                        widget.value = value ?? widget.list[0]['name']!;
-                
-                        if (widget.func is Function(String value)) {
-                          widget.func!(widget.value);
-                        }
-                      });
-                    },
-                  ),
-                ),
-              ],
+            DropdownButton<int>(
+              dropdownColor: widget.color,
+              style: const TextStyle(
+                  color: Colors.brown,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              isExpanded: widget.expanded,
+              underline: Container(),
+              focusColor: widget.color ?? Colors.white,
+              alignment: Alignment.bottomLeft,
+              value: widget.value,
+              items: List.generate(widget.list.length, (index) {
+                return DropdownMenuItem(
+                    value: widget.list[index]["id"],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.list[index]["name"].toString(),
+                          style: TextStyle(color: widget.textColor),
+                        ),
+                      ],
+                    ));
+              }),
+              onChanged: (value) {
+                setState(() {
+                  //print(widget.list[0]['name']!);
+                  widget.value = value ?? widget.list[0]['id']!;
+
+                  if (widget.func is Function(int value)) {
+                    widget.func!(widget.value);
+                  }
+                });
+              },
             ),
           ],
         ),

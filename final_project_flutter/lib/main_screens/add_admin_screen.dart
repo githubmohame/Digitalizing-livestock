@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: must_be_immutable
 class AddAdmin extends StatelessWidget {
   AddAdmin({super.key});
-  SelectLocation selectLocation = SelectLocation(village: '', city: '');
+  SelectLocation selectLocation = SelectLocation(village: -1, city: -1);
   CustomePasswordEnterTextField customePasswordEnterTextField =
       CustomePasswordEnterTextField(widgetIndex: 90);
   GlobalKey<FormState> f = GlobalKey<FormState>();
@@ -174,15 +174,15 @@ class AddAdmin extends StatelessWidget {
                                    Expanded(
                                     child: BlocProvider(
                                   create: (context) => LocationCubit(
-                                      city: 'مركز دكرنس',
-                                      gavernorate: 'الدقهلية',
-                                      village: 'الجزيره'),
+                                      city:  -1,
+                                      gavernorate: -1,
+                                      village: -1),
                                   child: Builder(builder: (context) {
                                     selectLocation.village =
-                                        selectLocation == ''
-                                            ? 'الجزيره'
+                                        selectLocation == -1
+                                            ?0
                                             : selectLocation.village;
-                                    selectLocation.city = 'مركز دكرنس';
+                                    selectLocation.city = -1;
                                     return selectLocation;
                                   }),
                                 )), 

@@ -134,3 +134,30 @@ class LocationSerializer(serializers.ModelSerializer):
             return  obj.location.geojson
         return  obj.location.point_on_surface.geojson
         
+        
+class connectFarmAnimalSeralizer(serializers.ModelSerializer):
+    animal_sub_type=speciesSerializer()
+    class Meta:
+            model=connect_animal_farm
+            exclude=["id" ]
+
+class cityFarmInfoSerializerTest(serializers.ModelSerializer):
+    governorate=governorateFarmListSerializer()
+    class Meta:
+        model=city
+        fields=['name' ,"governorate" ]
+
+class villageFarmInfoSerializerTest(serializers.ModelSerializer):
+    city=cityFarmInfoSerializerTest()
+    class Meta:
+        model=village
+        fields=['name' ,"city" ]
+class FarmInfoShowSerializer(serializers.ModelSerializer):
+    section_type=section_typeFarmListSerializer()
+    village=villageFarmInfoSerializerTest() 
+    class Meta:
+            model=farm
+            exclude=["id" ]
+    location=serializers.SerializerMethodField()
+    def get_location(self,obj:farm):
+        return obj.location.geojson

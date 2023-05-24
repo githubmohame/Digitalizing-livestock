@@ -2,8 +2,8 @@
 part of 'animal_cubit.dart';
 
 class AnimalInitial {
-  String platoon;
-  String species;
+  int platoon;
+  int species;
   AnimalInitial({
     required this.platoon,
     required this.species,

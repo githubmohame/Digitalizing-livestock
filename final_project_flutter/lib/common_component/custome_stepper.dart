@@ -314,7 +314,7 @@ class _CustomeStepperState extends State<CustomeStepper>
 
   Widget _buildCircle(int index, bool oldState) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      //margin: const EdgeInsets.only(left: 8.0,right: 8 ),
       width: _kStepSize,
       height: _kStepSize,
       child: AnimatedContainer(
@@ -673,41 +673,22 @@ class _CustomeStepperState extends State<CustomeStepper>
                 }
               : null,
           canRequestFocus: widget.steps[i].state != StepState.disabled,
-          child: Row(
+          child: Wrap(crossAxisAlignment: WrapCrossAlignment.start,runAlignment: WrapAlignment.start,verticalDirection: VerticalDirection.down,alignment: WrapAlignment.start,
             children: <Widget>[
-              SizedBox(
-                height: _isLabel() ? 104.0 : 72.0,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    if (widget.steps[i].label != null)
-                      const SizedBox(
-                        height: 24.0,
-                      ),
-                    Center(child: _buildIcon(i)),
-                    if (widget.steps[i].label != null)
-                      SizedBox(
-                        height: 24.0,
-                        child: _buildLabelText(i),
-                      ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsetsDirectional.only(start: 12.0),
+                
+                  Container(margin: EdgeInsets.all(12),child: _buildIcon(i)),
+                   
+              Container( 
+               margin: EdgeInsets.all(12),
                 child: _buildHeaderText(i),
               ),
+                
+                  
             ],
           ),
         ),
-        if (!_isLast(i))
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              height: 1.0,
-              color: Colors.grey,
-            ),
-          ),
+        if(widget.steps.last!=widget.steps[i])
+      Container(color:Colors.grey,height: 3,margin: EdgeInsets.only(top: 18) ,width: 150,)
       ],
     ];
 
@@ -722,32 +703,32 @@ class _CustomeStepperState extends State<CustomeStepper>
       );
     }
 
-    return Column(
+    return Wrap(alignment: WrapAlignment.start,
       children: <Widget>[
+        Container(height: 10,),
         Material(
           elevation: widget.elevation ?? 2,
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
+            child: Wrap(
               children: children,
             ),
           ),
         ),
-        Expanded(
-          child: Column(
-            //physics: widget.physics,
-            //padding: const EdgeInsets.all(24.0),
-            children: <Widget>[
-              AnimatedSize(
-                curve: Curves.fastOutSlowIn,
-                duration: kThemeAnimationDuration,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: stepPanels),
-              ),
-              _buildVerticalControls(widget.currentStep),
-            ],
-          ),
+        Container(height: 10,),
+        Wrap(runAlignment: WrapAlignment.spaceAround,alignment: WrapAlignment.spaceAround,runSpacing: 12,spacing: 12,
+          //physics: widget.physics,
+          //padding: const EdgeInsets.all(24.0),
+          children: <Widget>[
+            AnimatedSize(
+              curve: Curves.fastOutSlowIn,
+              duration: kThemeAnimationDuration,
+              child: Wrap(
+                  //crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: stepPanels),
+            ),
+            _buildVerticalControls(widget.currentStep),
+          ],
         ),
       ],
     );

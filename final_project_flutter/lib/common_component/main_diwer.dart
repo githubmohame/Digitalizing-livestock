@@ -62,7 +62,7 @@ class MainDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>   DashBoardScreen(),
+                        builder: (context) => DashBoardScreen(),
                       ));
                 }),
               ),
@@ -436,7 +436,7 @@ class ComputerDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>   DashBoardScreen(),
+                        builder: (context) => DashBoardScreen(),
                       ));
                 }),
               ),
@@ -783,6 +783,316 @@ class ComputerDrawer extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CustomeDrawerView2 extends StatefulWidget {
+  const CustomeDrawerView2({super.key});
+
+  @override
+  State<CustomeDrawerView2> createState() => _CustomeDrawerView2State();
+}
+
+class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height,
+      child: SingleChildScrollView(
+        child: Card(
+          color: Colors.white,
+          child: SizedBox(
+            width: 300,
+            child: Column(
+              children: [
+                Container(
+                  height: 50,
+                ),
+                const Row(
+                  children: [
+                    Spacer(),
+                    Icon(
+                      Icons.play_arrow_rounded,
+                      weight: 12,
+                      size: 70,
+                      color: Color(0XFF48ad69),
+                    ),
+                    Text(
+                      'DashBoard',
+                      style: TextStyle(
+                          color: Color(0xff5d5d5d),
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                Container(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return FarmerScreen();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.qr_code_2_outlined,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'اضافة مربين',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const FarmScreen();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.notifications_outlined,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'اضافة مزرعة',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return ConnectFarmAndFarmerScreen();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.store_outlined,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'ربط المزرعه بالمربين',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const AddLocationScreen();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.settings,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'تعديل مكان',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const UpdateAnimal();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.settings,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'تعديل حيوان',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return AddAdmin();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        Image.asset('assets/icons/pie-chart.png'),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'اضافة مودرين',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const ChangePasswordScreen();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.qr_code_2_outlined,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'تغير كلمة المرور',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const ListFarmer();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.qr_code_2_outlined,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'عرض مربين',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 30,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(context, PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const ListFarmer();
+                      },
+                    ));
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 30, bottom: 50),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.qr_code_2_outlined,
+                          color: Color(0xFF5f6271),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        const Text(
+                          'عرض المزرعة',
+                          style: TextStyle(color: Color(0xff6f766f)),
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

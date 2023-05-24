@@ -15,12 +15,12 @@ from django.contrib.gis.db.backends import  spatialite
 
 class platoon(models.Model):
     name = models.CharField(max_length=20)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True , editable=False)
 
 
 class species(models.Model):
     name = models.CharField(max_length=20)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True , editable=False)
     platoon = models.ForeignKey(platoon, on_delete=models.CASCADE)
 
     # country=models.CharField(max_length=20,null=True)
@@ -32,17 +32,17 @@ class species(models.Model):
 
 class governorate(models.Model):
     name = models.CharField(max_length=50)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True , editable=False)
     #location = models.GeometryField(null=True)
 class city(models.Model):
     name = models.CharField(max_length=50)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True , editable=False)
     governorate = models.ForeignKey(governorate, on_delete=models.CASCADE)
     location = models.GeometryField(geography=True,null=True)
 
 class village(models.Model):
     name = models.CharField(max_length=50)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True , editable=False)
     city = models.ForeignKey(city, on_delete=models.CASCADE)
     location = models.GeometryField(geography=True,null=True)
 
@@ -99,12 +99,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     location=models.ForeignKey(city,null=True,on_delete=models.SET_NULL)
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True,  editable=False)
 
 
 class section_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True , editable=False)
 
 
 class farm(models.Model):

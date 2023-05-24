@@ -22,7 +22,6 @@ import 'package:final_project_year/input_validation/validations.dart';
 
 enum Farm_type { farm, barn }
 
-
 Future<List<Map<String, dynamic>>> f1() {
   return Future<List>.delayed(const Duration(seconds: 10)).then((value) => [
         {"kill": 'see'}
@@ -57,8 +56,8 @@ class _FarmScreenState extends State<FarmScreen> {
   GoogleMapComponentFarmScreen googleMapComponent =
       GoogleMapComponentFarmScreen();
   SelectLocation selectLocation = SelectLocation(
-    city: '',
-    village: '',
+    city: -1,
+    village: -1,
   );
   void update_screen() {
     errorHeight = 0;
@@ -89,7 +88,9 @@ class _FarmScreenState extends State<FarmScreen> {
   Farm_type _selectFarmType = Farm_type.barn;
   Future<dynamic> get_location() async {
     googleMapComponent;
-    if (googleMapComponent.point == null && googleMapComponent.list1.isEmpty) {
+    if (googleMapComponent.point == null &&
+        googleMapComponent.list1.isEmpty &&
+        googleMapComponent.file != null) {
       var f = dio.MultipartFile.fromBytes(
           await File(googleMapComponent.file.toString()).readAsBytes(),
           filename: googleMapComponent.file.toString().split(
@@ -99,15 +100,14 @@ class _FarmScreenState extends State<FarmScreen> {
     } else if (googleMapComponent.point != null) {
       print(googleMapComponent.point?.latitude);
       print(googleMapComponent.point);
-      return  json.encode({
-          "point": {
-            "coordinates": [
-              googleMapComponent.point?.longitude,
-              googleMapComponent.point?.latitude
-            ]
-          }
-        });
-       
+      return json.encode({
+        "point": {
+          "coordinates": [
+            googleMapComponent.point?.longitude,
+            googleMapComponent.point?.latitude
+          ]
+        }
+      });
     } else if (googleMapComponent.list1.isNotEmpty) {
       String s1 = """
 {
@@ -141,6 +141,7 @@ class _FarmScreenState extends State<FarmScreen> {
       return f;
     }
     print("the value null ");
+    return null;
   }
 
   @override
@@ -199,9 +200,10 @@ class _FarmScreenState extends State<FarmScreen> {
                               child: Column(
                                 children: [
                                   constraint.maxWidth > 900
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                      ? Wrap(
+                                          alignment: WrapAlignment.start,
+                                          // mainAxisAlignment:
+                                          // MainAxisAlignment.center,
                                           children: [
                                             Container(
                                               height: 50,
@@ -220,57 +222,73 @@ class _FarmScreenState extends State<FarmScreen> {
                                           ],
                                         )
                                       : Container(),
-                                  Row(
-                                    children: [
-                                      Radio(
-                                        focusColor: Colors.blue,
-                                        activeColor: Colors.blue,
-                                        value: Farm_type.farm,
-                                        groupValue: _selectFarmType,
-                                        onChanged: (value) {
-                                          if (value is Farm_type) {
-                                            _selectFarmType = value;
-                                          }
-                                          setState(() {});
-                                        },
-                                      ),
-                                      const Text(
-                                        'المزرعة',
-                                        style: TextStyle(
-                                            fontSize: 15, color: Colors.white),
-                                      ),
-                                      Radio(
-                                        focusColor: Colors.blue,
-                                        activeColor: Colors.blue,
-                                        value: Farm_type.barn,
-                                        groupValue: _selectFarmType,
-                                        onChanged: (value) {
-                                          if (value is Farm_type) {
-                                            _selectFarmType = value;
-                                          }
-                                          setState(() {});
-                                        },
-                                      ),
-                                      const Text(
-                                        'الحظيرة',
-                                        style: TextStyle(
-                                            fontSize: 15, color: Colors.white),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        margin: const EdgeInsets.all(10),
-                                        child: const Text(
-                                          ' ارقم السجل الضريبي او كود المزرعة',
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Wrap(
+                                      alignment: WrapAlignment.start,
+                                      crossAxisAlignment: WrapCrossAlignment
+                                          .start, //direction: Axis.vertical,
+                                      children: [
+                                        Radio(
+                                          focusColor: Colors.blue,
+                                          activeColor: Colors.blue,
+                                          value: Farm_type.farm,
+                                          groupValue: _selectFarmType,
+                                          onChanged: (value) {
+                                            if (value is Farm_type) {
+                                              _selectFarmType = value;
+                                            }
+                                            setState(() {});
+                                          },
+                                        ),
+                                        const Text(
+                                          'المزرعة',
                                           style: TextStyle(
                                               fontSize: 15,
-                                              fontWeight: FontWeight.bold),
+                                              color: Colors.white),
                                         ),
-                                      ),
-                                    ],
+                                        Radio(
+                                          focusColor: Colors.blue,
+                                          activeColor: Colors.blue,
+                                          value: Farm_type.barn,
+                                          groupValue: _selectFarmType,
+                                          onChanged: (value) {
+                                            if (value is Farm_type) {
+                                              _selectFarmType = value;
+                                            }
+                                            setState(() {});
+                                          },
+                                        ),
+                                        const Text(
+                                          'الحظيرة',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Wrap(
+                                      textDirection: TextDirection.rtl,
+                                      alignment: WrapAlignment.end,
+                                      runAlignment: WrapAlignment.spaceBetween,
+                                      crossAxisAlignment: WrapCrossAlignment
+                                          .end, //direction: Axis.vertical,
+                                      //mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.all(10),
+                                          child: const Text(
+                                            ' ارقم السجل الضريبي او كود المزرعة',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   CustomeTextField(
                                     inputFormatters: [
@@ -707,7 +725,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                           update_screen();
                                           if (_formGlobalKey.currentState!
                                               .validate()) {
-                                            dio.Dio dio1 = dio.Dio();
                                             Map<String, dynamic> dic1 = {
                                               'operation': "insert",
                                               'attached_area': 12,
@@ -737,7 +754,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                       : controller[4].text),
                                               'section_type': sectionType
                                                       .customeDropdownButtonSectionType
-                                                      .value
+                                                      .list
                                                       .isNotEmpty
                                                   ? sectionType
                                                       .customeDropdownButtonSectionType
@@ -764,8 +781,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                       : 0,
                                               'id': controller[0].text,
                                               "city": selectLocation.city,
-                                              'village':
-                                                  selectLocation.village
+                                              'village': selectLocation.village
                                             };
                                             print("belly");
                                             dic1["geometry"] =
@@ -866,7 +882,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                                       '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
                                                   .readAsBytes(),
                                               filename: 'locations.shp');
-                                          dio.Dio dio1 = dio.Dio();
                                           Map<String, dynamic> dic1 = {
                                             'operation': "update",
                                             'attached_area': 12,
@@ -896,7 +911,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                     : controller[4].text),
                                             'section_type': sectionType
                                                     .customeDropdownButtonSectionType
-                                                    .value
+                                                    .list
                                                     .isNotEmpty
                                                 ? sectionType
                                                     .customeDropdownButtonSectionType
@@ -923,8 +938,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 : 0,
                                             'id': controller[0].text,
                                             "city": selectLocation.city,
-                                            'village':
-                                                selectLocation.village
+                                            'village': selectLocation.village
                                           };
                                           dic1["geometry"] =
                                               await get_location();
@@ -970,7 +984,8 @@ class _FarmScreenState extends State<FarmScreen> {
 }
 
 class FarmType extends StatelessWidget {
-  CustomeType customeFarmType = CustomeType(title: "نوع المزرعة", list: const []);
+  CustomeType customeFarmType =
+      CustomeType(title: "نوع المزرعة", list: const []);
 
   FarmType({super.key});
   @override
@@ -1006,7 +1021,7 @@ class SectionType extends StatelessWidget {
     ],
     expanded: true,
     text: "نوع القطاع",
-    value: '1',
+    value: -1,
   );
   @override
   Widget build(BuildContext context) {
@@ -1017,6 +1032,7 @@ class SectionType extends StatelessWidget {
           future: section_type_api(),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done) {
+              print(snap.data);
               customeDropdownButtonSectionType = CustomeDropdownButton(
                   id: 'id',
                   list: snap.data ??
@@ -1026,7 +1042,7 @@ class SectionType extends StatelessWidget {
                       ],
                   expanded: true,
                   text: "نوع القطاع",
-                  value: snap.data![0]['id'].toString());
+                  value: snap.data![0]['id']);
               return customeDropdownButtonSectionType;
             }
             return Container();
@@ -1034,7 +1050,6 @@ class SectionType extends StatelessWidget {
     );
   }
 }
-
 
 class CustomeType extends StatefulWidget {
   List<Map<String, dynamic>> list;
