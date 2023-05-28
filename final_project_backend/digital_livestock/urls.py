@@ -34,4 +34,5 @@ urlpatterns = [
         path('location_statistics',location_statistics),
          path('farm_info_list',farm_info_list),
            path('farm_info',farm_info),
+            path('animal_farm_api',get_animal_farm),
     ]

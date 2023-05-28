@@ -750,7 +750,9 @@ def search_farm_api(request :Request):
 	ser1=FarmListSerializer(instance=farm.objects.all().filter(id__in= l1),many=True)
 	return response.Response(ser1.data)
 
-
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
 def search_farmer_api(request :Request):
 	import typesense
 	client = typesense.Client({
@@ -837,3 +839,34 @@ def farm_info(request):
 	ser1=FarmInfoShowSerializer( instance= qs )
 	print(ser1.data)
 	return response.Response( ser1.data )
+
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def farm_platoon(request):
+	l1=list(connect_animal_farm.objects.all().filter(farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon__name","animal_sub_type__platoon__id").annotate(id=F("animal_sub_type__platoon"),name=F("animal_sub_type__platoon__name")).values("name","id").distinct())
+	return JsonResponse({"data":l1})
+
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def farm_species(request):
+	l1=list(connect_animal_farm.objects.all().filter(animal_sub_type__platoon__id=request.data.get("filter"),farm_id=request.data.get("farm_id")).values("animal_sub_type__name","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),name=F("animal_sub_type__name")).values("name","id").distinct())
+	return JsonResponse({"data":l1})
+ 
+ 
+@api_view(['GET','POST'])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def get_animal_farm(request :Request):
+	try:
+		l1=list(connect_animal_farm.objects.all().filter( farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),platoon=F("animal_sub_type__platoon")).values("name","id").distinct())
+		return JsonResponse({"id":l1[0]["id"],"platoon":l1[1]["platoon"]})
+	except Exception as e:
+		print(e)
+		g1=species.DoesNotExist()
+		return JsonResponse({"error":None});
+		
+
+ 

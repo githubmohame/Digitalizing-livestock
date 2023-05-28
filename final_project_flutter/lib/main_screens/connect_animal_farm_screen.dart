@@ -4,6 +4,7 @@ import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dar
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
+import 'package:final_project_year/common_component/select_animal.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +24,7 @@ class ConnectAnimalFarm extends StatelessWidget {
     text: "انثي",
   );
   DateTime date = DateTime.now();
-  SelectAnimalType animalType = SelectAnimalType();
+  SelectAnimalType animalType = SelectAnimalType(platoonApi: platoon_type_api,speciesApi:animal_species_api ,);
   bool delete = false;
   bool isCheck = false;
   @override
@@ -108,7 +109,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                       if (snap.data != null &&
                                           snap.data!.isNotEmpty) {
                                         print(snap.data);
-                                        animalType = SelectAnimalType(
+                                         animalType = SelectAnimalType(platoonApi: platoon_type_api,speciesApi:animal_species_api ,
                                           platoon: snap.data![0]['platoon'],
                                         );
 
@@ -292,99 +293,6 @@ class ConnectAnimalFarm extends StatelessWidget {
   }
 }
 
-class SelectAnimalType extends StatefulWidget {
-  SelectAnimalType({Key? key, this.platoon}) : super(key: key);
-  int? platoon;
-
-  @override
-  State<SelectAnimalType> createState() => _SelectAnimalTypeState();
-}
-
-class _SelectAnimalTypeState extends State<SelectAnimalType> {
-  @override
-  void initState() {}
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-            decoration: BoxDecoration(
-                border: Border.all(
-              color: Colors.grey,
-            )),
-            child: FutureBuilder(
-                future: platoon_type_api(),
-                builder: (context, snap) {
-                 // print(snap.data is List<Map<String, dynamic>>);
-                  if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, dynamic>> &&
-                      snap.data!.isNotEmpty) {
-                    return BlocBuilder<AnimalCubit, AnimalInitial>(
-                      builder: (context, state) {
-                        widget.platoon = state.platoon;
-                       // print(widget.platoon);
-                        return CustomeDropdownButton(
-                            id: 'id',
-                            func: (int value) {
-                              BlocProvider.of<AnimalCubit>(context)
-                                  .updatePlatoon(platoon: value);
-                            },
-                            list: snap.data ??
-                                [
-                                  {"id": '1', "name": "ابقار"},
-                                ],
-                            expanded: true,
-                            value: widget.platoon ?? -1,
-                            text: "نوع الحيوان");
-                      },
-                    );
-                  }
-
-                  return Container();
-                })),
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: Colors.grey,
-          )),
-          child: BlocBuilder<AnimalCubit, AnimalInitial>(
-            buildWhen: (previous, current) {
-              //
-              return previous.platoon != current.platoon;
-            },
-            builder: (context, state) {
-              return FutureBuilder(
-                  future: animal_species_api(platoon: state.platoon),
-                  builder: (context, snap) {
-                    if (snap.connectionState == ConnectionState.done &&
-                        snap.data is List<Map<String, dynamic>> &&
-                        snap.data!.isNotEmpty) {
-                     // print('llllllllllllllllllllllllllllllllllll' * 78);
-                      widget.platoon = snap.data![0]['id'];
-                      return CustomeDropdownButton(
-                          id: 'id',
-                          func: (int value) {
-                            widget.platoon = value;
-                          },
-                          list: snap.data ??
-                              [
-                                {"id": '1', "name": "البراازلي"},
-                              ],
-                          expanded: true,
-                          value: snap.data![0]['id'] ?? '1',
-                          text: "فصيله الحيوان");
-                    }
-
-                    return Container();
-                  });
-            },
-          ),
-        )
-      ],
-    );
-  }
-}
 
 //class CustomeContainer extends Container {}
 

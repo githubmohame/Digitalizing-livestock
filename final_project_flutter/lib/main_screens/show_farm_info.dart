@@ -20,13 +20,11 @@ class FarmInfoScreen extends StatefulWidget {
   GoogleMapComponentDashBoardScreen con =
       const GoogleMapComponentDashBoardScreen();
   ScrollController con2 = ScrollController();
-  FarmInfoScreen({super.key});
-  late Widget wid;
+  FarmInfoScreen({super.key}) {}
+  Widget wid = StatisticFarm();
+
   @override
   State<FarmInfoScreen> createState() {
-     wid = StatisticFarm(
-      con: con2,
-    );
     return _FarmInfoScreenState(googleMapComponentDashBoardScreen: con);
   }
 }
@@ -35,6 +33,10 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
   _FarmInfoScreenState({required this.googleMapComponentDashBoardScreen});
 
   GoogleMapComponentDashBoardScreen googleMapComponentDashBoardScreen;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data != null) {
-                 return LayoutBuilder(builder: (context, constraint) {
+                return LayoutBuilder(builder: (context, constraint) {
                   return Scaffold(
                     key: scaffoldKey,
                     drawer: constraint.maxWidth < 1900.0
@@ -64,7 +66,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                           behavior: ScrollConfiguration.of(context)
                               .copyWith(scrollbars: false),
                           child: NestedScrollView(
-                              controller: widget.con2,
+                              //controller: widget.con2,
                               headerSliverBuilder:
                                   (context, innerBoxIsScrolled) {
                                 return [
@@ -382,9 +384,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                   ),
                                 ];
                               },
-                              body: StatisticFarm(
-                                con: widget.con2,
-                              )),
+                              body: widget.wid),
                         )),
                         constraint.maxWidth >= 1900.0
                             ? TotalStatisticsPieChart(width: 400, statistic: [])
@@ -417,11 +417,11 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
 
 class StatisticFarm extends StatefulWidget {
   List<Map<String, dynamic>> list1 = [];
-  ScrollController con;
+  ScrollController con = ScrollController();
   double f = 0;
+  String url = "";
   StatisticFarm({
     Key? key,
-    required this.con,
   }) : super(key: key);
   @override
   State<StatisticFarm> createState() => _StatisticFarmState();
@@ -433,7 +433,20 @@ class _StatisticFarmState extends State<StatisticFarm> {
   int k = 0;
   @override
   void initState() {
-     mock();
+    print("Inilizing");
+    farm_info_list(formData: FormData.fromMap({"farm_id": 123})).then((value) {
+      if (value is (String, List<Map<String, dynamic>>)) {
+        var (m, l) = value;
+        widget.list1 = l;
+        widget.url = m;
+        print("gggggg");
+        setState(() {});
+      }
+    });
+    widget.con.addListener(() {
+      print("Inilizing");
+      if (widget.con.position.minScrollExtent == widget.con.offset) {}
+    });
     super.initState();
   }
 
@@ -446,18 +459,19 @@ class _StatisticFarmState extends State<StatisticFarm> {
 
   @override
   Widget build(BuildContext context) {
+    print("the value is "+widget.list1.length.toString());
     return Container(
         color: Colors.grey,
         child: ListView.builder(
-            itemCount: k + 2,
-            shrinkWrap: false,
+           // controller: widget.con,
+            itemCount: widget.list1.length +2,
             clipBehavior: Clip.antiAlias,
             padding: const EdgeInsets.all(30),
             itemBuilder: (context, index) {
               if (index == 0) {
                 return Container(
                   child: Wrap(
-                    alignment: WrapAlignment.spaceBetween,
+                    alignment: WrapAlignment.spaceEvenly,
                     children: [
                       Text(
                         'الفصيلة',
@@ -479,34 +493,55 @@ class _StatisticFarmState extends State<StatisticFarm> {
                   ),
                 );
               } else {
-                return Card(
-                  child: Container(
-                    margin: const EdgeInsets.only(top: 10, left: 10),
-                    child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        Text(
-                          "mjjkk",
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 15),
-                        ),
-                        Text(index.toString()),
-                        Text(
-                          "gg" * 10,
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 15),
-                        ),
-                        Checkbox(
-                          value: true,
-                          onChanged: (value) {
-                            mock();
-                          },
-                        )
-                      ],
+                if (index - 1 < widget.list1.length) {
+                  return Card(
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 10, left: 10),
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceEvenly,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            widget.list1[index - 1]["animal_sub_type"]
+                                .toString(),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 15),
+                          ),
+                          Text(
+                            widget.list1[index - 1]["animal_number"].toString(),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 15),
+                          ),
+                          Text(
+                            widget.list1[index - 1]["date"].toString(),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 15),
+                          ),
+                          Checkbox(
+                            value: widget.list1[index - 1]["is_male"],
+                            onChanged: (value) {
+                              //mock();
+                              setState(() {});
+                            },
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (widget.url != "null") {
+                  farm_info_list(
+                          url: widget.url,
+                          formData: FormData.fromMap({"farm_id": 123}))
+                      .then((value) {
+                    if (value is (String, List<Map<String, dynamic>>)) {
+                      var (m, l) = value;
+                      widget.list1.addAll(l);
+                      widget.url = m;
+                       setState(() {});
+                    }
+                  });
+                  return CircularProgressIndicator();
+                }
               }
             }));
   }

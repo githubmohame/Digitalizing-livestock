@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:vector_map_tiles/vector_map_tiles.dart';
 
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/search_field.dart';
@@ -28,11 +27,6 @@ class GoogleMapComponentFarmScreen extends StatefulWidget {
 
 class _GoogleMapComponentFarmScreenState
     extends State<GoogleMapComponentFarmScreen> {
-  Future<Style> _readStyle() => StyleReader(
-        uri:
-            'https://api.maptiler.com/maps/basic-v2/style.json?key=QYQUEU69gtldW1rv100f',
-        apiKey: '',
-      ).read();
   void _initStyle() async {
     try {} catch (e, stack) {
       // ignore: avoid_print
@@ -51,10 +45,18 @@ class _GoogleMapComponentFarmScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(direction: Axis.horizontal ,runAlignment: WrapAlignment.spaceBetween,crossAxisAlignment: WrapCrossAlignment.center,
+    return Wrap(
+      direction: Axis.horizontal,
+      runAlignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Wrap(direction: Axis.horizontal ,runAlignment: WrapAlignment.spaceBetween,crossAxisAlignment: WrapCrossAlignment.center,spacing: 12,runSpacing: 12,alignment: WrapAlignment.center,
-           
+        Wrap(
+          direction: Axis.horizontal,
+          runAlignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 12,
+          runSpacing: 12,
+          alignment: WrapAlignment.center,
           children: [
             ElevatedButton(
               onPressed: () {
@@ -126,6 +128,7 @@ class _GoogleMapComponentFarmScreenState
               center: LatLng(31.382677, 23.137003),
               maxZoom: 6,
               onMove: (tapPosition, point) {
+                print("move:");
                 if (!widget.draw) return;
                 widget.list1[2] = point;
                 widget.list1[1] =
@@ -154,7 +157,7 @@ class _GoogleMapComponentFarmScreenState
                 widget.list1[0] = point;
               },
               onLongPress: (tapPosition, point) {},
-              absorbPanEventsOnScrollables: false,
+              //absorbPanEventsOnScrollables: false,
               onPointerHover: (event, point) {},
               enableScrollWheel: true,
               interactiveFlags: widget.draw
@@ -303,7 +306,7 @@ class _GoogleMapComponentDashBoardScreenState
         height: 330,
         child: FlutterMap(
           mapController: mapController,
-          options: MapOptions(
+          options: MapOptions( zoom:2 ,
             interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
             center: LatLng(30, 30),
             onPositionChanged: (position, hasGesture) async {

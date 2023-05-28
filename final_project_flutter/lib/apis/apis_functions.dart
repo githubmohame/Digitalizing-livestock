@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
+import 'package:final_project_year/common_component/button_show_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -474,14 +475,13 @@ Future<Map<String, dynamic>> get_data_map(
     for (var f in res.data!) {
       if (f['center'] != null) {
         Map m = json.decode(f["center"]);
-        markers.add(Marker(
+        markers.add(Marker(  
           rotate: true,
           anchorPos: AnchorPos.exactly(Anchor(0, 0)),
           rotateAlignment: Alignment.center,
-          width: 50,
-          point: LatLng(m["coordinates"][1], m["coordinates"][0]),
+           point: LatLng(m["coordinates"][1], m["coordinates"][0]),
           builder: (context) {
-            return IconButton(
+            /*return IconButton(
               style: ButtonStyle(
                 fixedSize: MaterialStateProperty.resolveWith(
                     (states) => const Size(3, 3)),
@@ -493,7 +493,8 @@ Future<Map<String, dynamic>> get_data_map(
                 Icons.location_off,
                 color: Colors.white,
               ),
-            );
+            );*/
+            return ShowInfoButtom();
           },
         ));
       }
@@ -558,29 +559,33 @@ Future<Map<String, dynamic>> location_dash_info(
   return {};
 }
 
-Future<List<Map<String, dynamic>>> farm_info_list({bool stop = false}) async {
-  if (stop) {
-    return [];
-  }
+Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
+    {required FormData formData, String? url}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
-    var res = await dio1.post('http://127.0.0.1:8000/farm_info_list',
+    var res = await dio1.post(url ?? 'http://127.0.0.1:8000/farm_info_list',
         queryParameters: <String, dynamic>{},
+        data: formData,
         options: dio.Options(
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
     List<Map<String, dynamic>> l1 = [];
-    Map<String, dynamic> map = <String, dynamic>{};
-    map['governorate'] = res.data['city']['governorate_id'];
 
-    map['city'] = res.data['city']['id'];
-    map['village'] = res.data['id'];
-    l1.add(map);
-    return l1;
-  } catch (e) {}
-  return [];
+    for (var i in res.data["data"]) {
+      Map<String, dynamic> map = <String, dynamic>{};
+      map["animal_sub_type"] = i["animal_sub_type"]["name"];
+      map["animal_number"] = i['animal_number'];
+      map["is_male"] = i['is_male'];
+      map['date'] = i['date'];
+      l1.add(map);
+    }
+    return (res.data["next"].toString(), l1);
+  } catch (e) {
+    print(e);
+  }
+  return null;
 }
 
 Future<Map<String, dynamic>> farmInfo({required dio.FormData formData}) async {
@@ -595,30 +600,76 @@ Future<Map<String, dynamic>> farmInfo({required dio.FormData formData}) async {
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
-    print(res.data!);
     return res.data!;
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
   return {};
 }
 
-/*
+Future<List<Map<String, dynamic>>> platoon_type_farm_api(
+    {required int farm_id}) async {
+  try {
+    dio.Dio dio1 = dio.Dio();
+    var res = await dio1.get('http://127.0.0.1:8000/platoon',
+        data: {"farm_id"},
+        options: dio.Options(responseType: dio.ResponseType.json));
 
-connect_farm_farmer
+    List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
+      Map<String, dynamic> map = <String, dynamic>{};
+      map['name'] = res.data[index]['name'];
+      map['id'] = res.data[index]['id'];
+      return map;
+    });
 
-*/
+    return l1;
+  } catch (e) {}
+  return [];
+}
 
-/*
+Future<List<Map<String, dynamic>>> animal_species_farm_api(
+    {required int platoon, required int farm_id}) async {
+  try {
+    dio.Dio dio1 = dio.Dio();
+    dio.FormData formData = dio.FormData.fromMap({'filter': platoon});
+    var res = await dio1.post('http://127.0.0.1:8000/species',
+        data: formData,
+        queryParameters: <String, dynamic>{},
+        options: dio.Options(responseType: dio.ResponseType.json));
+    List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
+      Map<String, dynamic> map = <String, dynamic>{};
+      map['name'] = res.data[index]['name'];
+      map['id'] = res.data[index]['id'];
+      return map;
+    });
 
-@api_view(['GET','POST'])
-@permission_classes([permissions.IsAuthenticated])
-@authentication_classes([CustomerBackend])
-def get_locations(request :Request):
-	pass
-	g1=village.objects.all()[0]
-	g1Seralizer= locatinSeralizer(instance=g1)
-	print(g1Seralizer.data )
-	return response.Response(data=g1Seralizer.data)
+    return l1;
+  } catch (e) {}
+  return [];
+}
 
-*/
+Future<List<Map<String, dynamic>>> animal_farm_api() async {
+  try {
+    dio.Dio dio1 = dio.Dio();
+
+    var res = await dio1.post('http://127.0.0.1:8000/animal_farm_api',
+        queryParameters: <String, dynamic>{},
+        options: dio.Options(
+          responseType: dio.ResponseType.json,
+          listFormat: dio.ListFormat.multi,
+        ));
+    if (res.data is Map) {
+      List<Map<String, dynamic>> l1 = [];
+      Map<String, dynamic> map = <String, dynamic>{};
+      map['id'] = res.data['id'];
+      map['platoon'] = res.data['platoon'];
+      l1.add(map);
+      return l1;
+    }
+    List<Map<String, dynamic>> l1 = [];
+    Map<String, dynamic> map = <String, String>{};
+    map['species'] = res.data['id'];
+    map['platoon'] = res.data['platoon'];
+    l1.add(map);
+    return l1;
+  } catch (e) {}
+  return [];
+}
