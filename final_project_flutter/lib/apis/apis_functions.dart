@@ -475,11 +475,11 @@ Future<Map<String, dynamic>> get_data_map(
     for (var f in res.data!) {
       if (f['center'] != null) {
         Map m = json.decode(f["center"]);
-        markers.add(Marker(  
+        markers.add(Marker(
           rotate: true,
           anchorPos: AnchorPos.exactly(Anchor(0, 0)),
           rotateAlignment: Alignment.center,
-           point: LatLng(m["coordinates"][1], m["coordinates"][0]),
+          point: LatLng(m["coordinates"][1], m["coordinates"][0]),
           builder: (context) {
             /*return IconButton(
               style: ButtonStyle(
@@ -549,11 +549,11 @@ Future<Map<String, dynamic>> location_dash_info(
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
-    //print("*"*789);
-    print(res.data);
+    print("*" * 789);
 
     return res.data!;
   } catch (e) {
+    print("llol434" * 789);
     print(e);
   }
   return {};
@@ -672,4 +672,42 @@ Future<List<Map<String, dynamic>>> animal_farm_api() async {
     return l1;
   } catch (e) {}
   return [];
+}
+
+Future<List<LatLng>?> add_farm_map_bounder_api() async {
+  try {
+    dio.Dio dio1 = dio.Dio();
+    List<LatLng> l1 = [];
+    var res = await dio1.get('http://127.0.0.1:8000/farm_map_bounder_api',
+        queryParameters: <String, dynamic>{},
+        options: dio.Options(
+          responseType: dio.ResponseType.json,
+          listFormat: dio.ListFormat.multi,
+        ));
+    if (res.data is Map) {
+      print(res.data["map"].length);
+      for (List l in res.data["map"]) {
+        try {
+          for (List ln in l) {
+            print(ln);
+            try {
+              for (List ln2 in ln) {
+                print(ln2);
+                l1.add(LatLng(ln2[0], ln2[1]));
+              }
+            } catch (e) {
+              l1.add(LatLng(ln[1], ln[0]));
+            }
+          }
+        } catch (e) {
+          l1.add(LatLng(l[1], l[0]));
+        }
+      }
+
+      return l1;
+    }
+  } catch (e) {
+    print(e);
+  }
+  return null;
 }

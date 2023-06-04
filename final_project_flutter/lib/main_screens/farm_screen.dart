@@ -19,6 +19,8 @@ import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/input_validation/validations.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
 enum Farm_type { farm, barn }
 
@@ -39,6 +41,15 @@ class _FarmScreenState extends State<FarmScreen> {
   @override
   void initState() {
     //await CustomeSecureStorage.remove_all( );
+    add_farm_map_bounder_api().then((value) {
+      if (value is List<LatLng>) {
+                                              googleMapComponent =
+                                                  GoogleMapComponentFarmScreen(
+                                                l1: LatLngBounds.fromPoints(
+                                                    value!),
+                                              );
+                                            }
+    });
     super.initState();
   }
 
@@ -47,7 +58,7 @@ class _FarmScreenState extends State<FarmScreen> {
   SectionType sectionType = SectionType();
 
   List<TextEditingController> controller =
-      List.generate(9, (index) => TextEditingController());
+      List.generate(10, (index) => TextEditingController());
 
   final _formGlobalKey = GlobalKey<FormState>();
 
@@ -75,6 +86,8 @@ class _FarmScreenState extends State<FarmScreen> {
       errorHeight = funcStringValidation(
           value: controller[8].text, errorHeight: errorHeight);
     }
+    errorHeight =
+        funcNumValidation(value: controller[9].text, errorHeight: errorHeight);
     errorHeight =
         funcNumValidation(value: controller[1].text, errorHeight: errorHeight);
     errorHeight = funcStringValidation(
@@ -165,11 +178,12 @@ class _FarmScreenState extends State<FarmScreen> {
             body: SingleChildScrollView(
               child: SizedBox(
                 height: 800 +
+                    74 +
                     496 +
                     90 +
                     errorHeight +
                     (_selectFarmType == Farm_type.farm
-                        ? 584 + 186 + 880
+                        ? 584 + 186 + 880 + 74
                         : 350) //+ 150 + 52 + 70 + 50 + 25 + 100
                 ,
                 child: Container(
@@ -185,14 +199,14 @@ class _FarmScreenState extends State<FarmScreen> {
                         color: const Color(0xFF357515),
                         child: Container(
                           padding: const EdgeInsets.all(20),
-                          height: 800 +
+                          height: 800 +40+
                               496 +
                               40 +
                               18 +
                               errorHeight +
                               (_selectFarmType == Farm_type.farm
-                                  ? 584 + 16 + 54
-                                  : 160) //+ 150 + 52 + 70 + 50 + 25 + 100
+                                  ? 584 + 16 + 54+90
+                                  : 14 +40+ 160) //+ 150 + 52 + 70 + 50 + 25 + 100
                           ,
                           width: 700,
                           child: Form(
@@ -312,7 +326,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       Container(
                                         margin: const EdgeInsets.all(10),
                                         child: const Text(
-                                          'عدد عمال المزرعة',
+                                          'عدد عمال المزرعة الداخلين',
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold),
@@ -326,6 +340,41 @@ class _FarmScreenState extends State<FarmScreen> {
                                           RegExp(r'[0-9]'))
                                     ],
                                     controller: controller[1],
+                                    validator: (value) {
+                                      String s1 = isEmpty(s1: value.toString());
+                                      if (s1.isNotEmpty) {
+                                        return s1;
+                                      }
+                                      s1 += biggerMin(
+                                          s1: value.toString(), min: 0);
+                                      if (s1.isEmpty) {
+                                        return null;
+                                      }
+
+                                      return s1;
+                                    },
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.all(10),
+                                        child: const Text(
+                                          'عدد عمال المزرعة الخارجين',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  CustomeTextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]'))
+                                    ],
+                                    controller: controller[9],
                                     validator: (value) {
                                       String s1 = isEmpty(s1: value.toString());
                                       if (s1.isNotEmpty) {
@@ -744,10 +793,16 @@ class _FarmScreenState extends State<FarmScreen> {
                                                   controller[8].text.isEmpty
                                                       ? '0'
                                                       : controller[8].text),
-                                              'number_of_workers': int.parse(
-                                                  controller[1].text.isEmpty
-                                                      ? '0'
-                                                      : controller[1].text),
+                                              'number_of_workers_inner':
+                                                  int.parse(
+                                                      controller[1].text.isEmpty
+                                                          ? '0'
+                                                          : controller[1].text),
+                                              'number_of_workers_outer':
+                                                  int.parse(
+                                                      controller[9].text.isEmpty
+                                                          ? '0'
+                                                          : controller[9].text),
                                               'playground': int.parse(
                                                   controller[4].text.isEmpty
                                                       ? '0'

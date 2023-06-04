@@ -33,7 +33,7 @@ class species(models.Model):
 class governorate(models.Model):
     name = models.CharField(max_length=50)
     id = models.AutoField(primary_key=True , editable=False)
-    #location = models.GeometryField(null=True)
+    location = models.GeometryField(null=True)
 class city(models.Model):
     name = models.CharField(max_length=50)
     id = models.AutoField(primary_key=True , editable=False)
@@ -82,7 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         RegexValidator(regex='''[0-9]{12,12}''')
     ])
     photo = models.ImageField(upload_to='personal_images')
-    village = models.ForeignKey(village, null=True, on_delete=models.CASCADE)
+    #village = models.ForeignKey(village, null=True, on_delete=models.CASCADE)
     objects = UserManager()
     email=models.EmailField(null=True)
     lname = models.CharField(null=True,max_length=30, blank=False, validators=[
@@ -96,7 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff=models.BooleanField(default=False)
     is_active=models.BooleanField(default=True)
     age=models.IntegerField(null=True,)
-    location=models.ForeignKey(city,null=True,on_delete=models.SET_NULL)
+    location=models.ForeignKey(governorate,null=True,on_delete=models.SET_NULL)
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
     id = models.AutoField(primary_key=True,  editable=False)
@@ -111,7 +111,8 @@ class farm(models.Model):
     #number_of_acres = models.PositiveIntegerField(null=True)
     farm_name = models.CharField(max_length=30,null=True)
     id = models.CharField(primary_key=True, max_length=40  )
-    number_of_workers = models.PositiveIntegerField(null=False)
+    number_of_workers_inner = models.PositiveIntegerField(null= False,default=0)
+    number_of_workers_outer = models.PositiveIntegerField(null=False)
     playground = models.PositiveIntegerField(null=False)
     huge_playground=models.PositiveIntegerField(null=True)
     wards = models.PositiveIntegerField(null=False)
@@ -124,12 +125,13 @@ class farm(models.Model):
     total_area_of_farm=models.PositiveIntegerField(null=True)
     
 class connect_farm_farmtype(models.Model):
-    farm=models.ForeignKey(farm,on_delete=models.CASCADE,null=False)
-    farm_type=models.ForeignKey(farm_type,on_delete=models.CASCADE,null=False)
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['farm', 'farm_type' ,], name="connect_farm_farmtype_uk")
         ]
+    farm=models.ForeignKey(farm,on_delete=models.CASCADE,null=False)
+    farm_type=models.ForeignKey(farm_type,on_delete=models.CASCADE,null=False)
+    
 class connect_animal_farm(models.Model):
     animal_sub_type = models.ForeignKey(species, on_delete=models.CASCADE)
     farm_id = models.ForeignKey(farm, on_delete=models.CASCADE)
@@ -141,11 +143,14 @@ class connect_animal_farm(models.Model):
 
 
 class connect_farm_farmer(models.Model):
-    farm=models.ForeignKey(farm,on_delete=models.CASCADE)
-    farmer=models.ForeignKey(User,on_delete=models.CASCADE)
-    total_cost=models.PositiveIntegerField ()
-    #date=models.DateField()
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['farm', 'farmer' ,], name="connect_farm_farmer_uk")
         ]
+    farm=models.ForeignKey(farm,on_delete=models.CASCADE,)
+    farmer=models.ForeignKey(User,on_delete=models.CASCADE)
+    total_cost=models.PositiveIntegerField ()
+    #date=models.DateField()
+    
+
+

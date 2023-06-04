@@ -160,7 +160,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                             color: Colors.blue,
                                                             title:
                                                                 'مزارع  اللبان'),
-                                                                
                                                         CardDashBoard(
                                                             value: snap
                                                                 .data!['data'][
@@ -281,7 +280,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 }
 
 class StatisticFarm extends StatefulWidget {
-  List<Map<String, dynamic>> list1 = [];
+  Map<String, dynamic> list1 = {};
   LocationCubit locationCubit = LocationCubit(
     city: -1,
     gavernorate: -1,
@@ -290,7 +289,7 @@ class StatisticFarm extends StatefulWidget {
   SelectLocationDashBoard selectLocationDashBoard = SelectLocationDashBoard();
   StatisticFarm({
     super.key,
-    this.list1 = const [],
+    this.list1 = const {},
   });
 
   @override
@@ -298,7 +297,8 @@ class StatisticFarm extends StatefulWidget {
 }
 
 class _StatisticFarmState extends State<StatisticFarm> {
-  String drop = "farm_meat_gov";
+  String drop = "";
+  List<DropdownMenuItem<String>> droplist = [];
   ScrollController con = ScrollController();
   bool ini = false;
   @override
@@ -307,10 +307,11 @@ class _StatisticFarmState extends State<StatisticFarm> {
     return FutureBuilder(
         future: location_api(stop: ini),
         builder: (context, snap) {
-          // print(snap.data);
+          
           if (snap.connectionState == ConnectionState.done &&
               snap.data != null &&
               (snap.data!.isNotEmpty || ini)) {
+                 ini=true;
             widget.locationCubit = LocationCubit(
                 gavernorate: !ini
                     ? snap.data![0]['governorate']
@@ -336,7 +337,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                   reverse: false,
                   padding: const EdgeInsets.all(30),
                   itemBuilder: (context, index) {
-                    // print(widget.list1.length);
+                    List<String> u = widget.list1.keys.toList();
                     if (index == 0) {
                       return Builder(builder: (context) {
                         return widget.selectLocationDashBoard;
@@ -351,101 +352,181 @@ class _StatisticFarmState extends State<StatisticFarm> {
                           bloc: widget.locationCubit,
                           listener: (context, state) async {
                             print(state.city);
-                            print("*" * 789);
                             if (state.gavernorate == -1) {
-                              List<dynamic> u = ((await location_dash_info(
-                                  formData: FormData.fromMap(
-                                      {"type": "gov"}))))["gov_data"];
-                              widget.list1 = [];
+                              Map<String, dynamic> map =
+                                  ((await location_dash_info(
+                                      formData:
+                                          FormData.fromMap({"type": "gov"}))));
+                              print(map);
+                              List<dynamic> u = map["gov_data"];
+                              widget.list1 = {};
                               for (var i in u) {
-                                widget.list1.add(i);
+                                if (widget.list1.containsKey(i["g_name"])) {
+                                  widget.list1[i["g_name"]].addAll(
+                                      {i["farm_type_name"]: i["count"]});
+                                } else {
+                                  widget.list1[i["g_name"]] = {
+                                    i["farm_type_name"]: i["count"]
+                                  };
+                                }
                               }
+                              print(map["farm_type"]);
+                              u = map["farm_type"];
+                              print("hell" * 897);
+                              //print(widget.list1);
+                              droplist = [];
+
+                              for (var i in u) {
+                                if (i["type"] != null) {
+                                  droplist.add(DropdownMenuItem<String>(
+                                    value: i["type"],
+                                    child: Text(i["type"]),
+                                  ));
+                                }
+                              }
+                              if (droplist.isNotEmpty) {
+                                drop = droplist[0].value.toString();
+                              }
+                              print("done" * 778);
+                              print(droplist);
                               setState(() {});
                             } else if (state.city == -1) {
-                              List<dynamic> u = (await location_dash_info(
-                                  formData: FormData.fromMap({
-                                "id": state.gavernorate,
-                                "type": "city"
-                              })))["gov_data"];
-                              widget.list1 = [];
+                              Map<String, dynamic> map =
+                                  ((await location_dash_info(
+                                      formData: FormData.fromMap({
+                                "type": "city",
+                                "id": state.gavernorate
+                              }))));
+                            List<dynamic> u = map["gov_data"];
+                              widget.list1 = {};
                               for (var i in u) {
-                                widget.list1.add(i);
+                                if (widget.list1.containsKey(i["g_name"])) {
+                                  widget.list1[i["g_name"]].addAll(
+                                      {i["farm_type_name"]: i["count"]});
+                                } else {
+                                  widget.list1[i["g_name"]] = {
+                                    i["farm_type_name"]: i["count"]
+                                  };
+                                }
                               }
+                              print(map["farm_type"]);
+                              u = map["farm_type"];
+                              print("hell" * 897);
+                              //print(widget.list1);
+                              droplist = [];
+
+                              for (var i in u) {
+                                if (i["type"] != null) {
+                                  droplist.add(DropdownMenuItem<String>(
+                                    value: i["type"],
+                                    child: Text(i["type"]),
+                                  ));
+                                }
+                              }
+                              if (droplist.isNotEmpty) {
+                                drop = droplist[0].value.toString();
+                              }
+                              print("done" * 778);
+                              print(droplist);
                               setState(() {});
-                            } else {
+                            } 
+                            else {
                               // print(state.city);
-                              List<dynamic> u = ((await location_dash_info(
-                                  formData: FormData.fromMap({
+                              Map<String, dynamic> map =
+                                  ((await location_dash_info(
+                                      formData: FormData.fromMap({
                                 "type": "village",
                                 "id": state.city
-                              })))["gov_data"]);
-                              //print(widget.list1);
-                              widget.list1 = [];
+                              }))));
+                             List<dynamic> u = map["gov_data"];
+                              widget.list1 = {};
                               for (var i in u) {
-                                widget.list1.add(i);
+                                if (widget.list1.containsKey(i["g_name"])) {
+                                  widget.list1[i["g_name"]].addAll(
+                                      {i["farm_type_name"]: i["count"]});
+                                } else {
+                                  widget.list1[i["g_name"]] = {
+                                    i["farm_type_name"]: i["count"]
+                                  };
+                                }
                               }
+                              print(map["farm_type"]);
+                              u = map["farm_type"];
+                              print("hell" * 897);
+                              //print(widget.list1);
+                              droplist = [];
+
+                              for (var i in u) {
+                                if (i["type"] != null) {
+                                  droplist.add(DropdownMenuItem<String>(
+                                    value: i["type"],
+                                    child: Text(i["type"]),
+                                  ));
+                                }
+                              }
+                              if (droplist.isNotEmpty) {
+                                drop = droplist[0].value.toString();
+                              }
+                              print("done" * 778);
+                              print(droplist);
                               setState(() {});
                             }
                           },
-                          child: Container(
-                            child: Wrap(
-                              alignment: WrapAlignment.spaceBetween,
-                              children: [
-                                const Expanded(
-                                    child: Text(
-                                  'المحافظة',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 15),
-                                )),
-                                const Expanded(
-                                    child: Text(
-                                  'عدد الرؤوس',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 15),
-                                )),
-                                SizedBox(
-                                  width: 80,
-                                  child: DropdownButton(
-                                    dropdownColor: Colors.white,
-                                    iconEnabledColor: Colors.transparent,
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.black,
+                          child: Builder(builder: (context) {
+                            if (droplist.isNotEmpty) {
+                              print(droplist);
+                              print(droplist[1].value);
+                              return Container(
+                                child: Wrap(
+                                  alignment: WrapAlignment.spaceAround,
+                                  children: [
+                                    const Expanded(
+                                        child: Text(
+                                      'المحافظة',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 15),
+                                    )),
+                                    const Expanded(
+                                        child: Text(
+                                      'عدد الرؤوس',
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 15),
+                                    )),
+                                    SizedBox(
+                                      height: 60,
+                                      width: 200,
+                                      child: DropdownButton(
+                                        dropdownColor: Colors.white,
+                                        iconEnabledColor: Colors.transparent,
+                                        icon: const Icon(
+                                          Icons.arrow_drop_down,
+                                          color: Colors.black,
+                                        ),
+                                        focusColor: Colors.transparent,
+                                        isExpanded: true,
+                                        underline: Container(),
+                                        alignment: Alignment.center,
+                                        borderRadius: BorderRadius.circular(0),
+                                        value: drop,
+                                        items: droplist,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            drop = value ?? drop;
+                                          });
+                                        },
+                                      ),
                                     ),
-                                    focusColor: Colors.transparent,
-                                    isExpanded: true,
-                                    underline: Container(),
-                                    alignment: Alignment.center,
-                                    borderRadius: BorderRadius.circular(0),
-                                    value: drop,
-                                    items: const [
-                                      DropdownMenuItem<String>(
-                                          alignment: Alignment.center,
-                                          value: "farm_meat_gov",
-                                          child: Text('مزارع اللحوم')),
-                                      DropdownMenuItem<String>(
-                                          alignment: Alignment.center,
-                                          value: "farm_milk_gov",
-                                          child: Text('مزارع الالبان')),
-                                      DropdownMenuItem<String>(
-                                          alignment: Alignment.center,
-                                          value: "total_villages",
-                                          child: Text('عدد القري'))
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        drop = value ?? drop;
-                                      });
-                                    },
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }),
                         );
                       });
                     } else {
-                      print(index);
+                      print(widget.list1.keys);
                       return Card(
                         child: Container(
                           margin: const EdgeInsets.only(top: 10, left: 10),
@@ -454,7 +535,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                             crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
                               Text(
-                                widget.list1[index - 2]['g_name'],
+                                u[index - 2],
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 15),
                               ),
@@ -462,7 +543,13 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    widget.list1[index - 2][drop].toString(),
+                                    () {
+                                      if (widget.list1[u[index - 2]]
+                                          .containsKey(drop)) {
+                                        return widget.list1[u[index - 2]][drop].toString() ;
+                                      }
+                                      return "0";
+                                     }(),
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 15),
                                   ),

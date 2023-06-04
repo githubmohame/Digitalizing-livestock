@@ -134,7 +134,8 @@ def governorate_api(request :Request):
 def city_api(request :Request):
 	print("&"*789)
 	print(request.data['filter'])
-	if(request.data['filter']!=-1):
+	if(request.data['filter']!="-1"):
+		print("llo"*678)
 		ser1=citySerializer( instance= city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])) ,many=True)
 		print(city.objects.all().filter(governorate=governorate.objects.get(id=request.data['filter'])))
 		return response.Response(ser1.data)
@@ -144,7 +145,7 @@ def city_api(request :Request):
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def village_api(request :Request):
-	if(request.data['filter']!="__"):
+	if(request.data['filter']!="-1"):
 		ser1=villageSerializer( instance= village.objects.all().filter(city=city.objects.get(id=request.data['filter'])) ,many=True)
 		return response.Response(ser1.data)
 	else:
@@ -353,7 +354,7 @@ def farm_api(request :Request):
 			return JsonResponse({'error':"the farm 12 should have valid farm type"})
 		farm1.village=village.objects.get(id=dic1['village'])
 		for key,value in dic1.items() :
-			if(key in [ "id",'isolated_wards','number_of_arc','number_of_workers','playground','wards','total_area_of_farm','farm_name','huge_playground']):
+			if(key in [ "id",'isolated_wards','number_of_arc','number_of_workers_outer','number_of_workers_inner','playground','wards','total_area_of_farm','farm_name','huge_playground']):
 				setattr(farm1,key,value)
 		if(farm1.id==None):
 			pass
@@ -804,16 +805,21 @@ def get_data_map(request :Request):
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def location_statistics(request):
-	print("*"*789+str(request.data.keys()));
+	
 	if(request.data.get("type")=="gov"):
-		stattest=governorate.objects.all().annotate(g_name=F('name'),farm_meat_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('city__village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
-		print(stattest)
+	
+		stattest=governorate.objects.all().values("name","city__village__farm__connect_farm_farmtype__farm_type__name").annotate(g_name=F("name"),count=Count('city__village__farm__connect_farm_farmtype__farm__id'),farm_type_name=F("city__village__farm__connect_farm_farmtype__farm_type__name")).values("g_name","farm_type_name","count")
+		farm_type_query =governorate.objects.all().annotate(type=F("city__village__farm__connect_farm_farmtype__farm_type__name")).values(  "type").distinct()	
+		print(stattest.count())
+		print(farm_type_query.count())
 	elif(request.data.get("type")=="city"):
-		stattest=city.objects.all().filter(governorate__id=request.data.get("id")).annotate(g_name=F('name'),farm_meat_gov=Count('village__farm__connect_farm_farmtype__farm__id',Q(village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('village__farm__connect_farm_farmtype__farm__id',Q(village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
+		stattest=city.objects.all().filter(governorate__id=request.data.get("id")).values("name","village__farm__connect_farm_farmtype__farm_type__name").annotate(g_name=F("name"),count=Count('village__farm__connect_farm_farmtype__farm__id'),farm_type_name=F("village__farm__connect_farm_farmtype__farm_type__name")).values("g_name","farm_type_name","count")
+		farm_type_query =city.objects.all().filter(governorate__id=request.data.get("id")).annotate(type=F("village__farm__connect_farm_farmtype__farm_type__name")).values("village__farm__connect_farm_farmtype__farm_type__name")
 	else:
-		stattest=village.objects.all().filter(city__id=request.data.get("id")).annotate(g_name=F('name'),farm_meat_gov=Count('farm__connect_farm_farmtype__farm__id',Q(farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('farm__connect_farm_farmtype__farm__id',Q(farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
-	 #print()
-	return JsonResponse( {"gov_data":list(stattest)},safe=True )
+		stattest=village.objects.all().filter(city__id=request.data.get("id")).annotate(g_name=F("name"),count=Count('farm__connect_farm_farmtype__farm__id'),farm_type_name=F("farm__connect_farm_farmtype__farm_type__name")).values("g_name","farm_type_name","count")
+		farm_type_query =village.objects.all().filter(city__id=request.data.get("id")).annotate(type=F("farm__connect_farm_farmtype__farm_type__name")).values( "type")
+	print(stattest)
+	return JsonResponse( {"gov_data":list(stattest),"farm_type":list(farm_type_query)},safe=True )
 
 
 class CustomePagenation(PageNumberPagination):
@@ -868,5 +874,11 @@ def get_animal_farm(request :Request):
 		g1=species.DoesNotExist()
 		return JsonResponse({"error":None});
 		
-
- 
+@api_view(['GET' ])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def farm_map_bounder_api(request :Request):
+	request.data
+	u= governorate.objects.all().filter(name='بنى سويف')[0].location.boundary.coords 
+	print((u))
+	return  JsonResponse({"map": u})

@@ -14,9 +14,10 @@ import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/search_field.dart';
 
 class GoogleMapComponentFarmScreen extends StatefulWidget {
-  GoogleMapComponentFarmScreen({super.key});
+  GoogleMapComponentFarmScreen({super.key, this.l1});
   LatLng? point;
   String? file;
+  LatLngBounds? l1;
   List<LatLng> list1 = [];
   Polygon plogon = Polygon(points: []);
   bool draw = false;
@@ -123,10 +124,16 @@ class _GoogleMapComponentFarmScreenState
         SizedBox(
           height: 330 - 18,
           child: FlutterMap(
+            mapController: MapController(),
             options: MapOptions(
-              //bounds: LatLngBounds.fromPoints([]),
-              center: LatLng(31.382677, 23.137003),
-              maxZoom: 6,
+              zoom: 12,
+              boundsOptions: FitBoundsOptions(
+                  forceIntegerZoomLevel: false, maxZoom: 12, inside: false),
+              screenSize: Size(120, 330 - 18),
+              pinchZoomWinGestures:
+                  MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
+              maxBounds:widget.l1 ,
+              //center: widget.l1!.first,
               onMove: (tapPosition, point) {
                 print("move:");
                 if (!widget.draw) return;
@@ -159,18 +166,23 @@ class _GoogleMapComponentFarmScreenState
               onLongPress: (tapPosition, point) {},
               //absorbPanEventsOnScrollables: false,
               onPointerHover: (event, point) {},
-              enableScrollWheel: true,
               interactiveFlags: widget.draw
-                  ? InteractiveFlag.pinchZoom |
-                      InteractiveFlag.none |
-                      //InteractiveFlag.pinchMove |
-                      InteractiveFlag.flingAnimation // |
+                  ? InteractiveFlag.pinchZoom &
+                      InteractiveFlag.none &
+                      //InteractiveFlag.pinchMove &
+                      InteractiveFlag.flingAnimation // &
                   // InteractiveFlag.pinchMove
-                  : InteractiveFlag.all & ~InteractiveFlag.rotate,
+                  : InteractiveFlag
+                      .all //|InteractiveFlag.doubleTapZoom|InteractiveFlag.pinchZoom|InteractiveFlag.pinchMove
+              ,
               onPointerCancel: (event, point) {},
               onPositionChanged: (position, hasGesture) {},
               onTap: (tapPosition, point) {
-                print(point);
+                print(widget.l1 );
+                if (widget.l1 is LatLngBounds) {
+                  print(widget.l1!.contains(point));
+                }
+
                 widget.point = point;
                 widget.list1 = [];
                 setState(() {});
@@ -306,8 +318,8 @@ class _GoogleMapComponentDashBoardScreenState
         height: 330,
         child: FlutterMap(
           mapController: mapController,
-          options: MapOptions( zoom:2 ,
-            interactiveFlags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+          options: MapOptions(
+            interactiveFlags: InteractiveFlag.all,
             center: LatLng(30, 30),
             onPositionChanged: (position, hasGesture) async {
               if ((position.zoom ?? 0) >= 5) {
@@ -316,10 +328,10 @@ class _GoogleMapComponentDashBoardScreenState
                     biggest.longitude == -1) {
                   print("done");
                   smallest = handleLocation(
-                      latLng: position.bounds!.southWest!, value: -5);
+                      latLng: position.bounds!.southWest, value: -5);
 
                   biggest = handleLocation(
-                      latLng: position.bounds!.northEast!, value: 5);
+                      latLng: position.bounds!.northEast, value: 5);
 
                   Map<String, dynamic> map1 = await get_data_map(
                       formData: FormData.fromMap({

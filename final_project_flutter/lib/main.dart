@@ -1,4 +1,5 @@
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
+import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/show_farm_info.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
@@ -109,7 +110,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FarmInfoScreen(),
+      home: FarmScreen(),
     );
     /*
     return FutureBuilder(
