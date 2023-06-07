@@ -63,7 +63,6 @@ class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
               }),
               onChanged: (value) {
                 setState(() {
-                  //print(widget.list[0]['name']!);
                   widget.value = value ?? widget.list[0]['id']!;
 
                   if (widget.func is Function(int value)) {

@@ -94,7 +94,6 @@ class CustomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(female);
     return TextButton(
       onPressed: () {},
       style: ButtonStyle(

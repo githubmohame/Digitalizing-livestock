@@ -73,8 +73,7 @@ class _FarmScreenState extends State<FarmScreen> {
   void update_screen() {
     errorHeight = 0;
     if (_selectFarmType == Farm_type.farm) {
-      errorHeight = funcNumValidation(
-          value: controller[2].text, errorHeight: errorHeight);
+      
       errorHeight = funcStringValidation(
           value: controller[4].text, errorHeight: errorHeight);
       errorHeight = funcStringValidation(
@@ -86,6 +85,8 @@ class _FarmScreenState extends State<FarmScreen> {
       errorHeight = funcStringValidation(
           value: controller[8].text, errorHeight: errorHeight);
     }
+    errorHeight = funcNumValidation(
+          value: controller[2].text, errorHeight: errorHeight);
     errorHeight =
         funcNumValidation(value: controller[9].text, errorHeight: errorHeight);
     errorHeight =
@@ -177,14 +178,14 @@ class _FarmScreenState extends State<FarmScreen> {
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: SizedBox(
-                height: 800 +
+                height: 800 +14+
                     74 +
                     496 +
                     90 +
                     errorHeight +
                     (_selectFarmType == Farm_type.farm
-                        ? 584 + 186 + 880 + 74
-                        : 350) //+ 150 + 52 + 70 + 50 + 25 + 100
+                        ? 584 + 186 +  37
+                        : 350+14) //+ 150 + 52 + 70 + 50 + 25 + 100
                 ,
                 child: Container(
                   child: Column(
@@ -205,8 +206,8 @@ class _FarmScreenState extends State<FarmScreen> {
                               18 +
                               errorHeight +
                               (_selectFarmType == Farm_type.farm
-                                  ? 584 + 16 + 54+90
-                                  : 14 +40+ 160) //+ 150 + 52 + 70 + 50 + 25 + 100
+                                  ? 584 + 16 + 54+90+14
+                                  : 14 +40+ 160+14) //+ 150 + 52 + 70 + 50 + 25 + 100
                           ,
                           width: 700,
                           child: Form(
@@ -390,8 +391,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                     },
                                     keyboardType: TextInputType.number,
                                   ),
-                                  _selectFarmType == Farm_type.farm
-                                      ? Column(
+                                    Column(
                                           children: [
                                             Row(
                                               mainAxisAlignment:
@@ -438,7 +438,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             ),
                                           ],
                                         )
-                                      : Container(),
+                                       ,
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [

@@ -130,92 +130,90 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                         ),
                                         Wrap(
                                           children: [
-                                            Expanded(
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            left: 0),
-                                                    child: Wrap(
-                                                      runAlignment:
-                                                          WrapAlignment
-                                                              .spaceBetween,
-                                                      spacing: 12,
-                                                      runSpacing: 12,
-                                                      crossAxisAlignment:
-                                                          WrapCrossAlignment
-                                                              .start,
-                                                      children: [
-                                                        CardDashBoard(
-                                                            value: snap
-                                                                .data!['data'][
-                                                                    'farm_milk']
-                                                                .toString(),
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .description,
-                                                                color: Colors
-                                                                    .blue),
-                                                            color: Colors.blue,
-                                                            title:
-                                                                'مزارع  اللبان'),
-                                                        CardDashBoard(
-                                                            value: snap
-                                                                .data!['data'][
-                                                                    'farm_meat']
-                                                                .toString(),
-                                                            right: 20,
-                                                            icon: const Image(
-                                                                image: AssetImage(
-                                                                    'assets/icons/driver_google.png')),
-                                                            color: Colors.amber,
-                                                            title:
-                                                                'عدد مزارع اللحوم'),
-                                                        CardDashBoard(
-                                                            value: snap
-                                                                .data!['data'][
-                                                                    'farmer_count']
-                                                                .toString(),
-                                                            right: 20,
-                                                            icon: const Icon(
-                                                                Icons.cloud,
-                                                                color: Color
-                                                                    .fromARGB(
-                                                                        255,
-                                                                        188,
-                                                                        76,
-                                                                        76)),
-                                                            color: const Color
-                                                                    .fromARGB(
-                                                                255,
-                                                                188,
-                                                                76,
-                                                                76),
-                                                            title:
-                                                                'عدد المربين'),
-                                                        CardDashBoard(
-                                                            value: snap
-                                                                .data!['data'][
-                                                                    'village_count']
-                                                                .toString(),
-                                                            right: 20,
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .access_time_outlined,
-                                                                color: Colors
-                                                                    .blue),
-                                                            color: Colors.blue,
-                                                            title:
-                                                                'عدد الاماكن'),
-                                                      ],
-                                                    ),
+                                            Column(
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.only(
+                                                          left: 0),
+                                                  child: Wrap(
+                                                    runAlignment:
+                                                        WrapAlignment
+                                                            .spaceBetween,
+                                                    spacing: 12,
+                                                    runSpacing: 12,
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .start,
+                                                    children: [
+                                                      CardDashBoard(
+                                                          value: snap
+                                                              .data!['data'][
+                                                                  'farm_milk']
+                                                              .toString(),
+                                                          icon: const Icon(
+                                                              Icons
+                                                                  .description,
+                                                              color: Colors
+                                                                  .blue),
+                                                          color: Colors.blue,
+                                                          title:
+                                                              'مزارع  اللبان'),
+                                                      CardDashBoard(
+                                                          value: snap
+                                                              .data!['data'][
+                                                                  'farm_meat']
+                                                              .toString(),
+                                                          right: 20,
+                                                          icon: const Image(
+                                                              image: AssetImage(
+                                                                  'assets/icons/driver_google.png')),
+                                                          color: Colors.amber,
+                                                          title:
+                                                              'عدد مزارع اللحوم'),
+                                                      CardDashBoard(
+                                                          value: snap
+                                                              .data!['data'][
+                                                                  'farmer_count']
+                                                              .toString(),
+                                                          right: 20,
+                                                          icon: const Icon(
+                                                              Icons.cloud,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      188,
+                                                                      76,
+                                                                      76)),
+                                                          color: const Color
+                                                                  .fromARGB(
+                                                              255,
+                                                              188,
+                                                              76,
+                                                              76),
+                                                          title:
+                                                              'عدد المربين'),
+                                                      CardDashBoard(
+                                                          value: snap
+                                                              .data!['data'][
+                                                                  'village_count']
+                                                              .toString(),
+                                                          right: 20,
+                                                          icon: const Icon(
+                                                              Icons
+                                                                  .access_time_outlined,
+                                                              color: Colors
+                                                                  .blue),
+                                                          color: Colors.blue,
+                                                          title:
+                                                              'عدد الاماكن'),
+                                                    ],
                                                   ),
-                                                  Container(height: 40),
-                                                  Container(height: 30),
-                                                  googleMapComponentDashBoardScreen
-                                                ],
-                                              ),
+                                                ),
+                                                Container(height: 40),
+                                                Container(height: 30),
+                                                googleMapComponentDashBoardScreen
+                                              ],
                                             ),
                                             Container(
                                               width: 10,
@@ -307,11 +305,10 @@ class _StatisticFarmState extends State<StatisticFarm> {
     return FutureBuilder(
         future: location_api(stop: ini),
         builder: (context, snap) {
-          
           if (snap.connectionState == ConnectionState.done &&
               snap.data != null &&
               (snap.data!.isNotEmpty || ini)) {
-                 ini=true;
+            ini = true;
             widget.locationCubit = LocationCubit(
                 gavernorate: !ini
                     ? snap.data![0]['governorate']
@@ -322,8 +319,9 @@ class _StatisticFarmState extends State<StatisticFarm> {
                 village: !ini
                     ? snap.data![0]['village']
                     : widget.locationCubit.state.village);
+
             print(widget.locationCubit.state.city);
-            ini = true;
+            
             return BlocProvider(
               create: (context) => widget.locationCubit,
               child: ListView.separated(
@@ -349,10 +347,12 @@ class _StatisticFarmState extends State<StatisticFarm> {
                           listenWhen: (previous, current) {
                             return true;
                           },
-                          bloc: widget.locationCubit,
+                          
                           listener: (context, state) async {
-                            print(state.city);
+                             print("Enter the contenntal");
                             if (state.gavernorate == -1) {
+                              
+                             
                               Map<String, dynamic> map =
                                   ((await location_dash_info(
                                       formData:
@@ -397,7 +397,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                 "type": "city",
                                 "id": state.gavernorate
                               }))));
-                            List<dynamic> u = map["gov_data"];
+                              List<dynamic> u = map["gov_data"];
                               widget.list1 = {};
                               for (var i in u) {
                                 if (widget.list1.containsKey(i["g_name"])) {
@@ -429,8 +429,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                               print("done" * 778);
                               print(droplist);
                               setState(() {});
-                            } 
-                            else {
+                            } else {
                               // print(state.city);
                               Map<String, dynamic> map =
                                   ((await location_dash_info(
@@ -438,7 +437,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                 "type": "village",
                                 "id": state.city
                               }))));
-                             List<dynamic> u = map["gov_data"];
+                              List<dynamic> u = map["gov_data"];
                               widget.list1 = {};
                               for (var i in u) {
                                 if (widget.list1.containsKey(i["g_name"])) {
@@ -473,86 +472,83 @@ class _StatisticFarmState extends State<StatisticFarm> {
                             }
                           },
                           child: Builder(builder: (context) {
-                            if (droplist.isNotEmpty) {
-                              print(droplist);
-                              print(droplist[1].value);
-                              return Container(
-                                child: Wrap(
-                                  alignment: WrapAlignment.spaceAround,
-                                  children: [
-                                    const Expanded(
-                                        child: Text(
-                                      'المحافظة',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 15),
-                                    )),
-                                    const Expanded(
-                                        child: Text(
-                                      'عدد الرؤوس',
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 15),
-                                    )),
-                                    SizedBox(
-                                      height: 60,
-                                      width: 200,
-                                      child: DropdownButton(
-                                        dropdownColor: Colors.white,
-                                        iconEnabledColor: Colors.transparent,
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.black,
+                            return Container(
+                              child: Wrap(
+                                alignment: WrapAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    'المحافظة',
+                                    style: TextStyle(
+                                    color: Colors.black, fontSize: 15),
+                                  ),
+                                  Text(
+                                    'عدد المزارع',
+                                    style: TextStyle(
+                                    color: Colors.black, fontSize: 15),
+                                  ),
+                                  Builder(builder: (context) {
+                                    if (droplist.isNotEmpty) {
+                                      return SizedBox(
+                                        height: 60,
+                                        width: 200,
+                                        child: DropdownButton(
+                                          dropdownColor: Colors.white,
+                                          iconEnabledColor: Colors.transparent,
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black,
+                                          ),
+                                          focusColor: Colors.transparent,
+                                          isExpanded: true,
+                                          underline: Container(),
+                                          alignment: Alignment.center,
+                                          borderRadius:
+                                              BorderRadius.circular(0),
+                                          value: drop,
+                                          items: droplist,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              drop = value ?? drop;
+                                            });
+                                          },
                                         ),
-                                        focusColor: Colors.transparent,
-                                        isExpanded: true,
-                                        underline: Container(),
-                                        alignment: Alignment.center,
-                                        borderRadius: BorderRadius.circular(0),
-                                        value: drop,
-                                        items: droplist,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            drop = value ?? drop;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Container();
-                            }
+                                      );
+                                    }
+                                    return Container();
+                                  }),
+                                ],
+                              ),
+                            );
                           }),
                         );
                       });
                     } else {
                       print(widget.list1.keys);
                       return Card(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10, left: 10),
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceBetween,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            children: [
+                        child: Container(height:150 ,
+                           child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment:MainAxisAlignment.spaceAround ,
+                              children: [
                               Text(
                                 u[index - 2],
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 15),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     () {
                                       if (widget.list1[u[index - 2]]
                                           .containsKey(drop)) {
-                                        return widget.list1[u[index - 2]][drop].toString() ;
+                                        return widget.list1[u[index - 2]][drop]
+                                            .toString();
                                       }
                                       return "0";
-                                     }(),
+                                    }(),
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 15),
                                   ),
+                                  Container(width:10),
                                 ],
                               )
                             ],

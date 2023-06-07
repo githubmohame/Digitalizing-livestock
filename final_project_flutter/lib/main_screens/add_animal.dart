@@ -249,7 +249,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                   var res = await modify_species_api(
                       new_name: controller.text,
                       operation: 'update',
-                      species: selectSpecies.species ??-1);
+                      species: selectSpecies.species ?? -1);
                   if (res.containsKey('message')) {
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
@@ -289,7 +289,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                   var res = await modify_species_api(
                       new_name: controller.text,
                       operation: 'delete',
-                      species: selectSpecies.species ??-1);
+                      species: selectSpecies.species ?? -1);
                   if (res.containsKey('message')) {
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
@@ -330,7 +330,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                       platoon: selectSpecies.platoon,
                       new_name: controller.text,
                       operation: 'insert',
-                      species: selectSpecies.species??-1 );
+                      species: selectSpecies.species ?? -1);
                   if (res.containsKey('message')) {
                     showSnackbardone(context: context, text: res['message']!);
                   } else {
@@ -460,14 +460,18 @@ class _SelectAnimalState extends State<SelectPlotoon> {
                 widget.village = snap.data![0]['id']!;
                 return CustomeDropdownButton(
                     id: 'id',
-                    func: (int value) {
-                      BlocProvider.of<AnimalCubit>(context)
-                          .updatePlatoon(platoon: value);
+                    func: (int value) async {
+                      List<Map<String, dynamic>> l2 =
+                          await animal_species_api(platoon: value);
+
+                      BlocProvider.of<AnimalCubit>(context).updatePlatoon(
+                          platoon: value,
+                          species: l2.isNotEmpty ? l2[0]['id'] ?? -1 : -1);
                       widget.village = value;
                     },
                     list: snap.data!,
                     expanded: true,
-                    value: snap.data![0]['id']!,
+                    value: widget.village!,
                     text: widget.title);
               }
 
@@ -507,27 +511,34 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                 border: Border.all(
               color: Colors.grey,
             )),
-            child: FutureBuilder(
-                future: platoon_type_api(),
-                builder: (context, snap) {
-                  if (snap.connectionState == ConnectionState.done &&
-                      snap.data is List<Map<String, dynamic>> &&
-                      snap.data!.isNotEmpty) {
-                    widget.platoon = snap.data![0]['id']!;
-                    return CustomeDropdownButton(
-                        id: 'id',
-                        func: (int value) {
-                          BlocProvider.of<AnimalCubit>(context)
-                              .updatePlatoon(platoon: value);
-                          widget.platoon = value;
-                        },
-                        list: snap.data ?? [],
-                        expanded: true,
-                        value: snap.data![0]['id']!,
-                        text: widget.titles[0]);
-                  }
-                  return Container();
-                })),
+            child: BlocBuilder< AnimalCubit, AnimalInitial>(
+              builder: (context, state) {
+                return FutureBuilder(
+                            future: platoon_type_api(),
+                            builder: (context, snap) {
+                              if (snap.connectionState == ConnectionState.done &&
+                                  snap.data is List<Map<String, dynamic>> &&
+                                  snap.data!.isNotEmpty) {
+                                widget.platoon =state.platoon ;
+                                 return CustomeDropdownButton(
+                                    id: 'id',
+                                    func: (int value) async {
+                                      List<Map<String, dynamic>> l2 =
+                                          await animal_species_api(platoon: value);
+                                      BlocProvider.of<AnimalCubit>(context).updatePlatoon(
+                                          platoon: value,
+                                          species: l2.isNotEmpty ? l2[0]['id'] ?? -1 : -1);
+                                      widget.platoon = value;
+                                    },
+                                    list: snap.data ?? [],
+                                    expanded: true,
+                                    value: state.platoon,
+                                    text: widget.titles[0]);
+                              }
+                              return Container();
+                            });
+              },
+            )),
         Container(
           decoration: BoxDecoration(
               border: Border.all(
@@ -539,28 +550,28 @@ class _SelectSpeciesState extends State<SelectSpecies> {
               return previous.species != current.species;
             },
             builder: (context, state) {
-              return FutureBuilder(
-                  future: animal_species_api(platoon: state.platoon),
-                  builder: (context, snap) {
-                    if (snap.connectionState == ConnectionState.done &&
-                        snap.data is List<Map<String, dynamic>> &&
-                        snap.data!.isNotEmpty) {
-                      widget.species = snap.data![0]['id']!;
-                      return CustomeDropdownButton(
-                          id: 'id',
-                          func: (int value) {
-                            //BlocProvider.of<LocationCubit>(context)
-                            //  .updateCity(value);
-                            widget.species = value;
-                          },
-                          list: snap.data ?? [],
-                          expanded: true,
-                          value: snap.data![0]['id']!,
-                          text: widget.titles[1]);
-                    }
-                    widget.species = null;
-                    return Container();
-                  });
+                return FutureBuilder(
+                    future: animal_species_api(platoon: state.platoon),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.done &&
+                          snap.data is List<Map<String, dynamic>> &&
+                          snap.data!.isNotEmpty) {
+                        widget.species = snap.data![0]['id']!;
+                        return CustomeDropdownButton(
+                            id: 'id',
+                            func: (int value) {
+                              //BlocProvider.of<LocationCubit>(context)
+                              //  .updateCity(value);
+                              widget.species = value;
+                            },
+                            list: snap.data ?? [],
+                            expanded: true,
+                            value: snap.data![0]['id']!,
+                            text: widget.titles[1]);
+                      }
+                      widget.species = null;
+                      return Container();
+                    });
             },
           ),
         ),

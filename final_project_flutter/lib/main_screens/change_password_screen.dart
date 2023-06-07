@@ -88,7 +88,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                               }
                                             : x == 1
                                                 ? () {
-                                                    print('kkkki'*78);
                                                   }
                                                 : null,
                                         onStepCancel: x > 0
@@ -146,9 +145,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
                                                     await change_password_email_done_api(
                                                         formData: formData);
-                                                    print('uuuu567hyyy');
                                                   }
-                                                  print('kkkjjjj7688');
                                                   details.onStepContinue!();
                                                 },
                                                 style: ButtonStyle(

@@ -101,7 +101,7 @@ class SelectLocation extends StatelessWidget {
                                             {"name": "المنةفية"}
                                           ],
                                       expanded: true,
-                                      value: snap.data!.first['id'] ?? -1,
+                                      value:  state.city?? -1,
                                       text: "المركز او المدينة"),
                                 );
                               }
@@ -145,7 +145,7 @@ class SelectLocation extends StatelessWidget {
                                             {"name": "المنةفية"}
                                           ],
                                       expanded: true,
-                                      value: snap.data!.first['id'] ?? -1,
+                                      value:  state.village ?? -1,
                                       text: "القرية او الشارع"),
                                 );
                               }
@@ -275,53 +275,7 @@ class SelectLocationDashBoard extends StatelessWidget {
                       });
                 },
               ),
-              /*BlocBuilder<LocationCubit, LocationState>(
-                buildWhen: (previous, current) {
-                  //print(current.city);
-                  return previous.city != current.city;
-                },
-                builder: (context, state) {
-                  return FutureBuilder(
-                      future: village_api(city: state.city),
-                      builder: (context, snap) {
-                        if (snap.connectionState == ConnectionState.done &&
-                            snap.data is List<Map<String, dynamic>> &&
-                            snap.data!.isNotEmpty) {
-                          village = snap.data!.first['id'] ?? -1;
-                          return Container(
-                            margin: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                              color: Colors.white,
-                            )),
-                            child: CustomeDropdownButton(
-                                color: const Color(0xffc79154),
-                                textColor: Colors.white,
-                                id: 'id',
-                                func: (int value) {
-                                  BlocProvider.of<LocationCubit>(context)
-                                      .updateVillage(value);
-                                  village = value;
-                                },
-                                list: snap.data ??
-                                    const [
-                                      {"name": "اسيوط"},
-                                      {"name": "القاهرة"},
-                                      {"name": "المنةفية"}
-                                    ],
-                                expanded: false,
-                                value: state.village,
-                                text: "القرية او الشارع"),
-                          );
-                        }
-
-                        return const SizedBox(
-                          height: 0,
-                          width: 0,
-                        );
-                      });
-                },
-              ),*/
+              
             ],
           );
         }),

@@ -64,7 +64,6 @@ class ListFarmer extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               body: LayoutBuilder(builder: (context, constraint) {
-                print(constraint.maxWidth);
                 return Row(children: [
 
                   constraint.maxWidth >= 1000 ? const Spacer() : Container(),

@@ -1,3 +1,5 @@
+import 'package:final_project_year/apis/apis_functions.dart';
+import 'package:final_project_year/common_component/select_animal.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:final_project_year/main_screens/show_farm_info.dart';
@@ -110,7 +112,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FarmScreen(),
+      home:  FarmInfoScreen(farmId:123),
     );
     /*
     return FutureBuilder(

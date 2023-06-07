@@ -20,7 +20,6 @@ Future gavernorate_api() async {
       map['id'] = res.data[index]['id'];
       return map;
     });
-    print(l1);
     return l1;
   } catch (e) {
     print(e);
@@ -494,7 +493,15 @@ Future<Map<String, dynamic>> get_data_map(
                 color: Colors.white,
               ),
             );*/
-            return ShowInfoButtom();
+            return ShowInfoButtom(
+              id: f["id"],
+              name: f["farm_name"],
+              number_of_workers_inner: f["number_of_workers_inner"],
+              number_of_workers_outer: f["number_of_workers_outer"],
+              section_type: f["section_type"]["name"],
+              total_area_of_farm: f["total_area_of_farm"],
+              total_cost_farm: f["total_cost_farm"],
+            );
           },
         ));
       }
@@ -529,7 +536,6 @@ Future<Map<String, dynamic>> get_data_map(
         }
       }
     }
-    //print(markers);
     return {"ploygons": plogons, "markers": markers};
   } catch (e) {}
   return {};
@@ -549,22 +555,20 @@ Future<Map<String, dynamic>> location_dash_info(
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
-    print("*" * 789);
 
     return res.data!;
-  } catch (e) {
-    print("llol434" * 789);
-    print(e);
-  }
+  } catch (e) {}
   return {};
 }
 
 Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
-    {required FormData formData, String? url}) async {
+    {required FormData formData, required String url}) async {
   try {
     dio.Dio dio1 = dio.Dio();
-
-    var res = await dio1.post(url ?? 'http://127.0.0.1:8000/farm_info_list',
+    print(formData.fields);
+    print(url);
+    var res = await dio1.post(
+        url.isEmpty ? 'http://127.0.0.1:8000/farm_info_list' : url,
         queryParameters: <String, dynamic>{},
         data: formData,
         options: dio.Options(
@@ -572,8 +576,7 @@ Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
           listFormat: dio.ListFormat.multi,
         ));
     List<Map<String, dynamic>> l1 = [];
-
-    for (var i in res.data["data"]) {
+     for (var i in res.data["data"]) {
       Map<String, dynamic> map = <String, dynamic>{};
       map["animal_sub_type"] = i["animal_sub_type"]["name"];
       map["animal_number"] = i['animal_number'];
@@ -609,19 +612,20 @@ Future<List<Map<String, dynamic>>> platoon_type_farm_api(
     {required int farm_id}) async {
   try {
     dio.Dio dio1 = dio.Dio();
-    var res = await dio1.get('http://127.0.0.1:8000/platoon',
-        data: {"farm_id"},
+    var res = await dio1.post('http://127.0.0.1:8000/farm_platoon_api',
+        data: {"farm_id": farm_id},
         options: dio.Options(responseType: dio.ResponseType.json));
-
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
-      map['name'] = res.data[index]['name'];
-      map['id'] = res.data[index]['id'];
+      map['name'] = res.data["data"][index]['name'];
+      map['id'] = res.data["data"][index]['id'];
       return map;
     });
 
     return l1;
-  } catch (e) {}
+  } catch (e) {
+    print(e);
+  }
   return [];
 }
 
@@ -629,30 +633,35 @@ Future<List<Map<String, dynamic>>> animal_species_farm_api(
     {required int platoon, required int farm_id}) async {
   try {
     dio.Dio dio1 = dio.Dio();
-    dio.FormData formData = dio.FormData.fromMap({'filter': platoon});
-    var res = await dio1.post('http://127.0.0.1:8000/species',
+    dio.FormData formData =
+        dio.FormData.fromMap({'filter': platoon, "farm_id": farm_id});
+    var res = await dio1.post('http://127.0.0.1:8000/farm_species_api',
         data: formData,
         queryParameters: <String, dynamic>{},
         options: dio.Options(responseType: dio.ResponseType.json));
-    List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
+    List<Map<String, dynamic>> l1 =
+        List.generate(res.data["data"].length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
-      map['name'] = res.data[index]['name'];
-      map['id'] = res.data[index]['id'];
+      map['name'] = res.data["data"][index]['name'];
+      map['id'] = res.data["data"][index]['id'];
+
       return map;
     });
-
     return l1;
   } catch (e) {}
   return [];
 }
 
-Future<List<Map<String, dynamic>>> animal_farm_api() async {
+Future<List<Map<String, dynamic>>> animal_farm_api(
+    {required int farmId}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     var res = await dio1.post('http://127.0.0.1:8000/animal_farm_api',
+        data: FormData.fromMap({"farm_id": farmId}),
         queryParameters: <String, dynamic>{},
         options: dio.Options(
+          contentType: "application/json",
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
@@ -685,14 +694,11 @@ Future<List<LatLng>?> add_farm_map_bounder_api() async {
           listFormat: dio.ListFormat.multi,
         ));
     if (res.data is Map) {
-      print(res.data["map"].length);
       for (List l in res.data["map"]) {
         try {
           for (List ln in l) {
-            print(ln);
             try {
               for (List ln2 in ln) {
-                print(ln2);
                 l1.add(LatLng(ln2[0], ln2[1]));
               }
             } catch (e) {
@@ -706,8 +712,6 @@ Future<List<LatLng>?> add_farm_map_bounder_api() async {
 
       return l1;
     }
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
   return null;
 }

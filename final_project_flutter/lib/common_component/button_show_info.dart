@@ -1,9 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShowInfoButtom extends StatefulWidget {
-  const ShowInfoButtom({super.key});
-
+  String name;
+  String id;
+  num total_cost_farm, total_area_of_farm;
+  String section_type;
+  num number_of_workers_inner,number_of_workers_outer;
+    ShowInfoButtom({
+    Key? key,
+    required this.name,required this.total_cost_farm,
+    required this.id,
+    required this.total_area_of_farm,
+    required this.section_type,required this.number_of_workers_outer,
+    required this.number_of_workers_inner 
+  }) : super(key: key);
   @override
   State<ShowInfoButtom> createState() => _ShowInfoButtomState();
 }
@@ -12,43 +24,100 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
   bool is_visb = false;
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(child: Icon(Icons.location_on),
+    return PopupMenuButton(
+      child: Icon(Icons.location_on),
       itemBuilder: (context) {
-        return <PopupMenuEntry>[PopupMenuItem(child: Container( child: SingleChildScrollView(scrollDirection: Axis.vertical,child: Wrap(
-          children: [
-            Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("ابو محمد",style: TextStyle(color: Colors.red),),Text(":الاسم",style: TextStyle(color: Colors.blue),)
-              ],
+        return <PopupMenuEntry>[
+          PopupMenuItem(
+            child: Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Wrap(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.name,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          ":الاسم",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.total_cost_farm.toString(),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          ":التكلفة الكلية",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                           widget.total_area_of_farm.toString(),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          ":المساحة الكلية",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.section_type,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          ":نوع القطاع ",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          widget.number_of_workers_inner.toString(),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          ": عدد  العمالة الدخلية ",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                           widget.number_of_workers_outer.toString(),
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        Text(
+                          ": عدد  العمالة الخارجية ",
+                          style: TextStyle(color: Colors.blue),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-          Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("1234567",style: TextStyle(color: Colors.red),),Text(":التكلفة الكلية",style: TextStyle(color: Colors.blue),)
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("1234صثق",style: TextStyle(color: Colors.red),),Text(":عدد الفدنة",style: TextStyle(color: Colors.blue),)
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("1234صثق",style: TextStyle(color: Colors.red),),Text(":نوع القطاع ",style: TextStyle(color: Colors.blue),)
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("1234صثق",style: TextStyle(color: Colors.red),),Text(": عدد  العمالة الدخلية ",style: TextStyle(color: Colors.blue),)
-              ],
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text("1234صثق",style: TextStyle(color: Colors.red),),Text(": عدد  العمالة الخارجية ",style: TextStyle(color: Colors.blue),)
-              ],
-            ),
-            
-            ],
-        ),),),)];
+          )
+        ];
       },
     );
   }

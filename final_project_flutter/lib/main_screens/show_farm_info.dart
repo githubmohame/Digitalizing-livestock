@@ -1,7 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
+import 'package:final_project_year/common_component/select_animal.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project_year/common_component/card_board.dart';
@@ -9,6 +13,7 @@ import 'package:final_project_year/common_component/google_map.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/common_component/pie_chart.dart';
 import 'package:final_project_year/common_component/signup_dropdown_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../apis/apis_functions.dart';
 
@@ -19,9 +24,12 @@ import '../apis/apis_functions.dart';
 class FarmInfoScreen extends StatefulWidget {
   GoogleMapComponentDashBoardScreen con =
       const GoogleMapComponentDashBoardScreen();
+  int farmId;
   ScrollController con2 = ScrollController();
-  FarmInfoScreen({super.key}) {}
-  Widget wid = StatisticFarm();
+  FarmInfoScreen({super.key, required this.farmId}) {
+    wid = StatisticFarm(farmId: this.farmId);
+  }
+  late Widget wid;
 
   @override
   State<FarmInfoScreen> createState() {
@@ -45,7 +53,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: FutureBuilder(
-            future: farmInfo(formData: FormData.fromMap({"id": 123})),
+            future: farmInfo(formData: FormData.fromMap({"id": widget.farmId})),
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data != null) {
@@ -418,10 +426,16 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
 class StatisticFarm extends StatefulWidget {
   List<Map<String, dynamic>> list1 = [];
   ScrollController con = ScrollController();
+  int farmId;
   double f = 0;
+  AnimalCubit? animalCubit;
+  SelectAnimalTypeFarm? selectAnimal;
   String url = "";
+  DateTime? start_date;
+  DateTime? end_date;
   StatisticFarm({
     Key? key,
+    required this.farmId,
   }) : super(key: key);
   @override
   State<StatisticFarm> createState() => _StatisticFarmState();
@@ -433,18 +447,17 @@ class _StatisticFarmState extends State<StatisticFarm> {
   int k = 0;
   @override
   void initState() {
-    print("Inilizing");
-    farm_info_list(formData: FormData.fromMap({"farm_id": 123})).then((value) {
+    farm_info_list(
+        url: "",
+        formData: FormData.fromMap({"farm_id": widget.farmId})).then((value) {
       if (value is (String, List<Map<String, dynamic>>)) {
         var (m, l) = value;
         widget.list1 = l;
         widget.url = m;
-        print("gggggg");
         setState(() {});
       }
     });
     widget.con.addListener(() {
-      print("Inilizing");
       if (widget.con.position.minScrollExtent == widget.con.offset) {}
     });
     super.initState();
@@ -459,16 +472,204 @@ class _StatisticFarmState extends State<StatisticFarm> {
 
   @override
   Widget build(BuildContext context) {
-    print("the value is "+widget.list1.length.toString());
     return Container(
         color: Colors.grey,
         child: ListView.builder(
-           // controller: widget.con,
-            itemCount: widget.list1.length +2,
+            // controller: widget.con,
+            itemCount: widget.list1.length + 3,
             clipBehavior: Clip.antiAlias,
             padding: const EdgeInsets.all(30),
             itemBuilder: (context, index) {
               if (index == 0) {
+                return FutureBuilder(
+                    future: animal_farm_api(farmId: widget.farmId),
+                    builder: (context, snap) {
+                      if (snap.data != null &&
+                          snap.data!.isNotEmpty &&
+                          snap.data![0]['platoon'] != null) {
+                        return BlocProvider(
+                          create: (context) {
+                            if (widget.animalCubit == null) {
+                              widget.animalCubit = AnimalCubit(
+                                  platoon: -1,
+                                  species:  -1);
+                            }
+                            return widget.animalCubit!;
+                          },
+                          child: Builder(builder: (context) {
+                            if (widget.selectAnimal == null) {
+                              widget.selectAnimal = SelectAnimalTypeFarm(
+                                farmId: widget.farmId,
+                                platoonApi: platoon_type_farm_api,
+                                speciesApi: animal_species_farm_api,
+                              );
+                            }
+
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                    height: 150,
+                                    width: 150,
+                                    child: widget.selectAnimal),
+                                TextButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                      minimumSize: Size(150,
+                                          100), //change size of this beautiful button
+                                      // We can change style of this beautiful elevated button thanks to style prop
+                                      primary: Colors
+                                          .red, // we can set primary color
+                                      onPrimary: Colors
+                                          .white, // change color of child prop
+                                      onSurface: Colors.blue, // surface color
+                                      shadowColor: Colors
+                                          .grey, //shadow prop is a very nice prop for every button or card widgets.
+                                      elevation:
+                                          5, // we can set elevation of this beautiful button
+                                      side: BorderSide(
+                                          color: Colors.redAccent
+                                              .shade400, //change border color
+                                          width: 2, //change border width
+                                          style: BorderStyle
+                                              .solid), // change border side of this beautiful button
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), //change border radius of this beautiful button thanks to BorderRadius.circular function
+                                      ),
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.padded,
+                                    ),
+                                    onPressed: () async {
+                                      widget.start_date = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1990),
+                                          lastDate: DateTime.now());
+                                    },
+                                    child: Text("تاريخ البدأ",
+                                        style: TextStyle(color: Colors.black))),
+                                TextButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                      minimumSize: Size(150,
+                                          100), //change size of this beautiful button
+                                      // We can change style of this beautiful elevated button thanks to style prop
+                                      primary: Colors
+                                          .red, // we can set primary color
+                                      onPrimary: Colors
+                                          .white, // change color of child prop
+                                      onSurface: Colors.blue, // surface color
+                                      shadowColor: Colors
+                                          .grey, //shadow prop is a very nice prop for every button or card widgets.
+                                      elevation:
+                                          5, // we can set elevation of this beautiful button
+                                      side: BorderSide(
+                                          color: Colors.redAccent
+                                              .shade400, //change border color
+                                          width: 2, //change border width
+                                          style: BorderStyle
+                                              .solid), // change border side of this beautiful button
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), //change border radius of this beautiful button thanks to BorderRadius.circular function
+                                      ),
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.padded,
+                                    ),
+                                    onPressed: () async {
+                                      widget.end_date = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1990),
+                                          lastDate: DateTime.now());
+                                    },
+                                    child: Text("تاريخ الانتهاء",
+                                        style: TextStyle(color: Colors.black))),
+                                TextButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                      minimumSize: Size(150,
+                                          100), //change size of this beautiful button
+                                      // We can change style of this beautiful elevated button thanks to style prop
+                                      primary: Colors
+                                          .red, // we can set primary color
+                                      onPrimary: Colors
+                                          .white, // change color of child prop
+                                      onSurface: Colors.blue, // surface color
+                                      shadowColor: Colors
+                                          .grey, //shadow prop is a very nice prop for every button or card widgets.
+                                      elevation:
+                                          5, // we can set elevation of this beautiful button
+                                      side: BorderSide(
+                                          color: Colors.redAccent
+                                              .shade400, //change border color
+                                          width: 2, //change border width
+                                          style: BorderStyle
+                                              .solid), // change border side of this beautiful button
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            30), //change border radius of this beautiful button thanks to BorderRadius.circular function
+                                      ),
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.padded,
+                                    ),
+                                    onPressed: () async {
+                                      Map<String, dynamic> dic1 = {
+                                        "farm_id": widget.farmId,
+                                      };
+                                      if (widget.selectAnimal?.species !=
+                                          null) {
+                                        print(widget.selectAnimal?.species);
+                                        dic1.addAll({
+                                          "start_date": widget.start_date,
+                                          "end_date": widget.end_date,
+                                          "species":
+                                              widget.selectAnimal?.species
+                                        });
+                                      } else if (widget.selectAnimal?.platoon !=
+                                          null) {
+                                        dic1.addAll({
+                                          "start_date": widget.start_date,
+                                          "end_date": widget.end_date,
+                                          "platoon":
+                                              widget.selectAnimal?.platoon,
+                                        });
+                                      }
+                                      widget.list1.clear();
+                                      farm_info_list(
+                                              url: "",
+                                              formData: FormData.fromMap(dic1))
+                                          .then((value) {
+                                        if (value is (
+                                          String,
+                                          List<Map<String, dynamic>>
+                                        )) {
+                                          var (m, l) = value;
+                                          widget.list1.addAll(l);
+                                          widget.url = m;
+                                          print(m);
+                                          setState(() {});
+                                        }
+                                      });
+                                    },
+                                    child: Text("بحث",
+                                        style: TextStyle(color: Colors.black))),
+                              ],
+                            );
+                          }),
+                        );
+                      }
+                      return Container();
+                    });
+              }
+              if (index == 1) {
                 return Container(
                   child: Wrap(
                     alignment: WrapAlignment.spaceEvenly,
@@ -493,8 +694,8 @@ class _StatisticFarmState extends State<StatisticFarm> {
                   ),
                 );
               } else {
-                if (index - 1 < widget.list1.length) {
-                  return Card(
+                if (index - 2 < widget.list1.length) {
+                   return Card(
                     child: Container(
                       margin: const EdgeInsets.only(top: 10, left: 10),
                       child: Wrap(
@@ -502,23 +703,23 @@ class _StatisticFarmState extends State<StatisticFarm> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            widget.list1[index - 1]["animal_sub_type"]
+                            widget.list1[index - 2]["animal_sub_type"]
                                 .toString(),
                             style: const TextStyle(
                                 color: Colors.black, fontSize: 15),
                           ),
                           Text(
-                            widget.list1[index - 1]["animal_number"].toString(),
+                            widget.list1[index - 2]["animal_number"].toString(),
                             style: const TextStyle(
                                 color: Colors.black, fontSize: 15),
                           ),
                           Text(
-                            widget.list1[index - 1]["date"].toString(),
+                            widget.list1[index - 2]["date"].toString(),
                             style: const TextStyle(
                                 color: Colors.black, fontSize: 15),
                           ),
                           Checkbox(
-                            value: widget.list1[index - 1]["is_male"],
+                            value: widget.list1[index - 2]["is_male"],
                             onChanged: (value) {
                               //mock();
                               setState(() {});
@@ -529,15 +730,33 @@ class _StatisticFarmState extends State<StatisticFarm> {
                     ),
                   );
                 } else if (widget.url != "null") {
+                  print("Enter");
+                  Map<String, dynamic> dic1 = {};
+                  if (widget.selectAnimal?.species == null) {
+                    dic1 = {
+                      "farm_id": widget.farmId,
+                      "start_date": widget.start_date,
+                      "end_date": widget.end_date,
+                      "species": widget.selectAnimal?.species
+                    };
+                  } else if (widget.selectAnimal?.platoon == null) {
+                    dic1 = {
+                      "farm_id": widget.farmId,
+                      "start_date": widget.start_date,
+                      "end_date": widget.end_date,
+                      "platoon": widget.selectAnimal?.platoon
+                    };
+                  }
+
                   farm_info_list(
-                          url: widget.url,
-                          formData: FormData.fromMap({"farm_id": 123}))
+                          url: widget.url, formData: FormData.fromMap(dic1))
                       .then((value) {
                     if (value is (String, List<Map<String, dynamic>>)) {
                       var (m, l) = value;
                       widget.list1.addAll(l);
                       widget.url = m;
-                       setState(() {});
+                      print(widget.list1.length);
+                      setState(() {});
                     }
                   });
                   return CircularProgressIndicator();

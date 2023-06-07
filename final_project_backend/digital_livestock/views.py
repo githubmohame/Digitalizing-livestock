@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
-from django.db.models import Count, F, Value,Q
+from django.db.models import Count, F, Value,Q,Sum
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import AnonymousUser
@@ -829,9 +829,22 @@ class CustomePagenation(PageNumberPagination):
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def farm_info_list(request):
+	from datetime import datetime
 	pagination=CustomePagenation()
-	qs=connect_animal_farm.objects.all().filter(farm_id=request.data.get('farm_id') )
+	dic1={}
+	print("&"*789)
+	print(request.data)
+	if(request.data.get("species")!=None and request.data.get("species")!=""):
+		dic1["animal_sub_type"]=request.data.get("species")
+	elif(request.data.get("platoon")!=None and request.data.get("platoon")!=""):
+		dic1["animal_sub_type__platoon"]=request.data.get("platoon") 
+	if(request.data.get("start_date")!=None and request.data.get("start_date")!=""):
+		dic1["date__gte"]=  datetime.strptime(request.data.get("start_date")[:-4],'%Y-%m-%d %H:%M:%S')
+	if(request.data.get("end_date")!=None and request.data.get("end_date")!=""):
+		dic1["date__lte"]=datetime.strptime(request.data.get("end_date")[:-4],'%Y-%m-%d %H:%M:%S')
+	qs=connect_animal_farm.objects.all().filter(farm_id=request.data.get('farm_id') ,**dic1)
 	p1=pagination.paginate_queryset(qs,request)
+	print(pagination.get_next_link());
 	ser1=connectFarmAnimalSeralizer(instance=p1,many=True)
 	return JsonResponse( {"next":pagination.get_next_link(),"data": ser1.data})
 
@@ -850,15 +863,17 @@ def farm_info(request):
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
-def farm_platoon(request):
+def farm_platoon_api(request):
 	l1=list(connect_animal_farm.objects.all().filter(farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon__name","animal_sub_type__platoon__id").annotate(id=F("animal_sub_type__platoon"),name=F("animal_sub_type__platoon__name")).values("name","id").distinct())
 	return JsonResponse({"data":l1})
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
-def farm_species(request):
+def farm_species_api(request):
+ 	
 	l1=list(connect_animal_farm.objects.all().filter(animal_sub_type__platoon__id=request.data.get("filter"),farm_id=request.data.get("farm_id")).values("animal_sub_type__name","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),name=F("animal_sub_type__name")).values("name","id").distinct())
+	print( l1)
 	return JsonResponse({"data":l1})
  
  
@@ -867,8 +882,9 @@ def farm_species(request):
 @authentication_classes([CustomerBackend])
 def get_animal_farm(request :Request):
 	try:
-		l1=list(connect_animal_farm.objects.all().filter( farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),platoon=F("animal_sub_type__platoon")).values("name","id").distinct())
-		return JsonResponse({"id":l1[0]["id"],"platoon":l1[1]["platoon"]})
+		l1=list(connect_animal_farm.objects.all().filter( farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),platoon=F("animal_sub_type__platoon")).values("platoon","id").distinct())
+		print(connect_animal_farm.objects.all().filter( farm_id=request.data.get("farm_id")));
+		return JsonResponse({"id":l1[0]["id"],"platoon":l1[0]["platoon"]})
 	except Exception as e:
 		print(e)
 		g1=species.DoesNotExist()

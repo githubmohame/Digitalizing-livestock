@@ -1,5 +1,7 @@
 from rest_framework  import serializers
 from digital_livestock.models import *
+from django.db.models import  Sum
+
 class governorateSerializer(serializers.ModelSerializer):
     class Meta:
         model=governorate
@@ -115,9 +117,13 @@ class FarmListSerializer(serializers.ModelSerializer):
 class LocationSerializer(serializers.ModelSerializer):
     location=serializers.SerializerMethodField()
     center=serializers.SerializerMethodField()
+    total_cost_farm=serializers.SerializerMethodField()
+    section_type=section_typeFarmListSerializer()
     class Meta:
         model=farm
-        fields=["location","center","id","farm_name"]
+        fields=["location","center","id","farm_name","total_cost_farm",
+                "total_area_of_farm",
+                "section_type","number_of_workers_inner","number_of_workers_outer"]
     def get_location(self,obj:farm):
         if(obj.location==None):
             return None
@@ -133,6 +139,13 @@ class LocationSerializer(serializers.ModelSerializer):
             print(obj.location.geojson)
             return  obj.location.geojson
         return  obj.location.point_on_surface.geojson
+    def get_total_cost_farm(self,obj:farm):
+        pass
+        c1=connect_farm_farmer.objects.all().filter(farm=obj.id).aggregate(c=Sum("total_cost"))["c"]
+        if(c1):
+            return c1
+        else:
+            return 0;
         
         
 class connectFarmAnimalSeralizer(serializers.ModelSerializer):
@@ -154,7 +167,8 @@ class villageFarmInfoSerializerTest(serializers.ModelSerializer):
         fields=['name' ,"city" ]
 class FarmInfoShowSerializer(serializers.ModelSerializer):
     section_type=section_typeFarmListSerializer()
-    village=villageFarmInfoSerializerTest() 
+    village=villageFarmInfoSerializerTest()
+     
     class Meta:
             model=farm
             exclude=["id" ]
