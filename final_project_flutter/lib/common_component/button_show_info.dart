@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ShowInfoButtom extends StatefulWidget {
@@ -25,7 +24,7 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      child: Icon(Icons.location_on),
+      child: const Icon(Icons.location_on),
       itemBuilder: (context) {
         return <PopupMenuEntry>[
           PopupMenuItem(
@@ -39,9 +38,9 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
                       children: [
                         Text(
                           widget.name,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                        Text(
+                        const Text(
                           ":الاسم",
                           style: TextStyle(color: Colors.blue),
                         )
@@ -52,9 +51,9 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
                       children: [
                         Text(
                           widget.total_cost_farm.toString(),
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                        Text(
+                        const Text(
                           ":التكلفة الكلية",
                           style: TextStyle(color: Colors.blue),
                         )
@@ -65,9 +64,9 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
                       children: [
                         Text(
                            widget.total_area_of_farm.toString(),
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                        Text(
+                        const Text(
                           ":المساحة الكلية",
                           style: TextStyle(color: Colors.blue),
                         )
@@ -78,9 +77,9 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
                       children: [
                         Text(
                           widget.section_type,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                        Text(
+                        const Text(
                           ":نوع القطاع ",
                           style: TextStyle(color: Colors.blue),
                         )
@@ -91,9 +90,9 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
                       children: [
                         Text(
                           widget.number_of_workers_inner.toString(),
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                        Text(
+                        const Text(
                           ": عدد  العمالة الدخلية ",
                           style: TextStyle(color: Colors.blue),
                         )
@@ -104,9 +103,9 @@ class _ShowInfoButtomState extends State<ShowInfoButtom> {
                       children: [
                         Text(
                            widget.number_of_workers_outer.toString(),
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(color: Colors.red),
                         ),
-                        Text(
+                        const Text(
                           ": عدد  العمالة الخارجية ",
                           style: TextStyle(color: Colors.blue),
                         )

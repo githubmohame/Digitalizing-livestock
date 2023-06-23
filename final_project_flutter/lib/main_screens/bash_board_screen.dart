@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../apis/apis_functions.dart';
+import '../common_component/show_load_screen.dart';
 
 /*
 
@@ -35,7 +36,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   _DashBoardScreenState({required this.googleMapComponentDashBoardScreen});
   ScrollController con = ScrollController();
   GoogleMapComponentDashBoardScreen googleMapComponentDashBoardScreen;
-
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     SliverPadding;
@@ -256,21 +257,12 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   );
                 });
               } else {
-                return const Column(
-                  children: [
-                    Spacer(),
-                    Row(
-                      children: [
-                        Spacer(),
-                        SizedBox(
-                            height: 40,
-                            width: 100,
-                            child: CircularProgressIndicator.adaptive()),
-                        Spacer()
-                      ],
-                    ),
-                    Spacer(),
-                  ],
+                return Scaffold(key: scaffoldKey,backgroundColor: Colors.transparent,drawer: const CustomeDrawerView2(),appBar: AppBar(backgroundColor: Colors.transparent,elevation: 0, leading: IconButton(onPressed: () {
+                  scaffoldKey.currentState?.openDrawer();
+                },icon: const Icon(Icons.menu,color:Colors.blue),) ),
+                  body: const SafeArea(
+                    child: Center(child: LoadingScreen())
+                  ),
                 );
               }
             }));
@@ -476,12 +468,12 @@ class _StatisticFarmState extends State<StatisticFarm> {
                               child: Wrap(
                                 alignment: WrapAlignment.spaceAround,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'المحافظة',
                                     style: TextStyle(
                                     color: Colors.black, fontSize: 15),
                                   ),
-                                  Text(
+                                  const Text(
                                     'عدد المزارع',
                                     style: TextStyle(
                                     color: Colors.black, fontSize: 15),
@@ -525,7 +517,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                     } else {
                       print(widget.list1.keys);
                       return Card(
-                        child: Container(height:150 ,
+                        child: SizedBox(height:150 ,
                            child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment:MainAxisAlignment.spaceAround ,
                               children: [
                               Text(

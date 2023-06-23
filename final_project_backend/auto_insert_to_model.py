@@ -1,4 +1,6 @@
 from digital_livestock.models import governorate,city,village,section_type,platoon,farm_type,species,farm
+from django.contrib.auth.models import Group ,Permission
+from django.contrib.contenttypes.models import ContentType
 import geopandas as gpd
 from django.contrib.gis.geos import GEOSGeometry
 def insert_into_governorate():
@@ -6,6 +8,7 @@ def insert_into_governorate():
     f1=df.loc[ 0:,['ADM1_AR' ,'geometry']]
     na1=f1.drop_duplicates()
     for j,i in na1.iterrows():
+        #print(i["ADM1_AR"])
         g1=governorate()
         g1.name=i['ADM1_AR']
         g1.location= GEOSGeometry(str(i['geometry']))
@@ -132,7 +135,29 @@ def test():
     print(f1)
 #test()
 #farm.objects.all().delete()
+def create_admin():
+  admin,create=Group.objects.get_or_create(name="admin")
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["village","city","governorate","platoon","species",])
+  p1=Permission.objects.all().filter(content_type_id__in=context_table)
+  for perm in p1:
+    admin.permissions.add(perm)
 
+def create_fockeltpoint():
+  admin,create=Group.objects.get_or_create(name="fockeltpoint")
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["village","city","governorate","platoon","species",])
+  p1=Permission.objects.all().filter(content_type_id__in=context_table,codename__startswith="view")
+  for perm in p1:
+    admin.permissions.add(perm)
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["farm","farmer", ])
+  p1=Permission.objects.all().filter(content_type_id__in=context_table )
+  for perm in p1:
+    admin.permissions.add(perm)
+def create_farmer():
+  admin,create=Group.objects.get_or_create(name="farmer")
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["farm","village", ])
+  p1=Permission.objects.all().filter(content_type_id__in=context_table ,codename__startswith="view")
+  for perm in p1:
+    admin.permissions.add(perm)
 def auto_insert():
   
   insert_into_governorate()
@@ -143,8 +168,9 @@ def auto_insert():
   insert_farrm_type(list1=['انتاج طلايع','انتاج البان','انتاج لحوم'])
   insert_platoon_type(list1=['الجمال',"الماعز",'الابقار'])
   insert_species(list1=['الأكتين الشقراء','الآيرشاير','الجيرسي','الهولشتاين','الأنجوس','هيريفورد','شاروليز'],platoon1='الابقار')  
-  
-  
+  create_farmer()
+  create_fockeltpoint()
+  create_admin()
 auto_insert()
 ''' 
 insert_into_governorate()

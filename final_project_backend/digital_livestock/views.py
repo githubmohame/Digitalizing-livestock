@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count, F, Value,Q,Sum
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser,Group
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -535,6 +535,7 @@ def farmer_api(request :Request):
 		dic1.pop('operation')
 		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
 			user1=User.objects.create_user(**dic1)
+			user1.groups.set([Group.objects.all().get(name="farmer")])
 	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
@@ -725,10 +726,16 @@ def admin_api(request :Request):
 	if(oper=='insert'):
 		dic1=request.data.dict()
 		dic1.pop('operation')
-		print(set(dic1) ,set(['ssn','fname','lname','email','password','phone','photo','job','age']))
-		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
+		#print(set(dic1) ,set(['ssn','fname','lname','email','password','phone','photo','job','age']))
+		g_name=dic1.get("user_type")
+		dic1.pop("user_type")
+		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age', ])):
 			print(dic1)
-			user1=User.objects.create_superuser(**dic1)
+			user1=User.objects.create(**dic1)
+			if(g_name):
+					user1.groups.set([Group.objects.all().get(name=g_name)])
+			else:
+				pass
 			return JsonResponse({"message":"تم اضافة البيانات"})
 
 @api_view(['GET','POST'])

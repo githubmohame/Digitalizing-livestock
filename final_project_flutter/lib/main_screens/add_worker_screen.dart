@@ -1,4 +1,5 @@
 import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_type_cubit.dart';
+import 'package:final_project_year/common_component/custome_check_button.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +87,7 @@ class AddWorkerScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const CustomeCheckBox(),
+                      CustomeCheckBox(text: "ساكن في المزرعة"),
                     OutlinedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.resolveWith(
@@ -110,29 +111,3 @@ class AddWorkerScreen extends StatelessWidget {
   }
 }
 
-class CustomeCheckBox extends StatefulWidget {
-  const CustomeCheckBox({Key? key}) : super(key: key);
-
-  @override
-  State<CustomeCheckBox> createState() => _CustomeCheckBoxState();
-}
-
-class _CustomeCheckBoxState extends State<CustomeCheckBox> {
-  bool value = false;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          value: value,
-          onChanged: (value) {
-            setState(() {
-              this.value = value!;
-            });
-          },
-        ),
-        const Text("ساكن في المزرعة"),
-      ],
-    );
-  }
-}

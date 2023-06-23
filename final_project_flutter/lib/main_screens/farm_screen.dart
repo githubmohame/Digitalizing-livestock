@@ -22,6 +22,8 @@ import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../common_component/show_load_screen.dart';
+
 enum Farm_type { farm, barn }
 
 Future<List<Map<String, dynamic>>> f1() {
@@ -43,12 +45,10 @@ class _FarmScreenState extends State<FarmScreen> {
     //await CustomeSecureStorage.remove_all( );
     add_farm_map_bounder_api().then((value) {
       if (value is List<LatLng>) {
-                                              googleMapComponent =
-                                                  GoogleMapComponentFarmScreen(
-                                                l1: LatLngBounds.fromPoints(
-                                                    value!),
-                                              );
-                                            }
+        googleMapComponent = GoogleMapComponentFarmScreen(
+          l1: LatLngBounds.fromPoints(value),
+        );
+      }
     });
     super.initState();
   }
@@ -73,7 +73,6 @@ class _FarmScreenState extends State<FarmScreen> {
   void update_screen() {
     errorHeight = 0;
     if (_selectFarmType == Farm_type.farm) {
-      
       errorHeight = funcStringValidation(
           value: controller[4].text, errorHeight: errorHeight);
       errorHeight = funcStringValidation(
@@ -85,8 +84,8 @@ class _FarmScreenState extends State<FarmScreen> {
       errorHeight = funcStringValidation(
           value: controller[8].text, errorHeight: errorHeight);
     }
-    errorHeight = funcNumValidation(
-          value: controller[2].text, errorHeight: errorHeight);
+    errorHeight =
+        funcNumValidation(value: controller[2].text, errorHeight: errorHeight);
     errorHeight =
         funcNumValidation(value: controller[9].text, errorHeight: errorHeight);
     errorHeight =
@@ -178,14 +177,16 @@ class _FarmScreenState extends State<FarmScreen> {
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: SizedBox(
-                height: 800 +14+
+                height: 800 +
+                    14 +
                     74 +
                     496 +
                     90 +
+                    100 +
                     errorHeight +
                     (_selectFarmType == Farm_type.farm
-                        ? 584 + 186 +  37
-                        : 350+14) //+ 150 + 52 + 70 + 50 + 25 + 100
+                        ? 584 + 186 + 37
+                        : 350 + 14) //+ 150 + 52 + 70 + 50 + 25 + 100
                 ,
                 child: Container(
                   child: Column(
@@ -200,14 +201,19 @@ class _FarmScreenState extends State<FarmScreen> {
                         color: const Color(0xFF357515),
                         child: Container(
                           padding: const EdgeInsets.all(20),
-                          height: 800 +40+
+                          height: 800 +
+                              40 +
                               496 +
                               40 +
                               18 +
+                              100 +
                               errorHeight +
                               (_selectFarmType == Farm_type.farm
-                                  ? 584 + 16 + 54+90+14
-                                  : 14 +40+ 160+14) //+ 150 + 52 + 70 + 50 + 25 + 100
+                                  ? 584 + 16 + 54 + 90 + 14
+                                  : 14 +
+                                      40 +
+                                      160 +
+                                      14) //+ 150 + 52 + 70 + 50 + 25 + 100
                           ,
                           width: 700,
                           child: Form(
@@ -391,54 +397,50 @@ class _FarmScreenState extends State<FarmScreen> {
                                     },
                                     keyboardType: TextInputType.number,
                                   ),
-                                    Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.all(10),
-                                                  child: const Text(
-                                                    'المساحة الكلية للمزرعة',
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ],
+                                  Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.all(10),
+                                            child: const Text(
+                                              'المساحة الكلية للمزرعة',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
                                             ),
-                                            CustomeTextField(
-                                              inputFormatters: [
-                                                FilteringTextInputFormatter
-                                                    .allow(RegExp(r'[0-9]'))
-                                              ],
-                                              controller: controller[2],
-                                              validator: (value) {
-                                                if (_selectFarmType ==
-                                                    Farm_type.farm) return null;
-                                                String s1 = isEmpty(
-                                                    s1: value.toString());
-                                                if (s1.isNotEmpty) {
-                                                  return s1;
-                                                }
-                                                s1 += biggerMin(
-                                                    s1: value.toString(),
-                                                    min: 0);
-                                                if (s1.isEmpty) {
-                                                  return null;
-                                                }
+                                          ),
+                                        ],
+                                      ),
+                                      CustomeTextField(
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9]'))
+                                        ],
+                                        controller: controller[2],
+                                        validator: (value) {
+                                          if (_selectFarmType == Farm_type.farm) {
+                                            return null;
+                                          }
+                                          String s1 =
+                                              isEmpty(s1: value.toString());
+                                          if (s1.isNotEmpty) {
+                                            return s1;
+                                          }
+                                          s1 += biggerMin(
+                                              s1: value.toString(), min: 0);
+                                          if (s1.isEmpty) {
+                                            return null;
+                                          }
 
-                                                return s1;
-                                              },
-                                              keyboardType:
-                                                  TextInputType.number,
-                                            ),
-                                          ],
-                                        )
-                                       ,
+                                          return s1;
+                                        },
+                                        keyboardType: TextInputType.number,
+                                      ),
+                                    ],
+                                  ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
@@ -735,7 +737,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                       margin: const EdgeInsets.all(10),
                                       child: googleMapComponent),
                                   SizedBox(
-                                    height: 300,
                                     child: Row(
                                       children: [
                                         Expanded(
@@ -1048,7 +1049,9 @@ class FarmType extends StatelessWidget {
     return FutureBuilder(
         future: farm_type_api(),
         builder: (context, snap) {
-          if (snap.connectionState == ConnectionState.done) {
+          if (snap.connectionState == ConnectionState.done &&
+              snap.data is List &&
+              snap.data!.isNotEmpty) {
             customeFarmType =
                 CustomeType(title: "نوع المزرعة", list: snap.data ?? []);
             return BlocProvider(
@@ -1060,7 +1063,7 @@ class FarmType extends StatelessWidget {
               ),
             );
           }
-          return Container();
+          return const LoadingScreen();
         });
   }
 }
@@ -1086,7 +1089,9 @@ class SectionType extends StatelessWidget {
       child: FutureBuilder(
           future: section_type_api(),
           builder: (context, snap) {
-            if (snap.connectionState == ConnectionState.done) {
+            if (snap.connectionState == ConnectionState.done &&
+                snap.data is List &&
+                snap.data!.isNotEmpty) {
               print(snap.data);
               customeDropdownButtonSectionType = CustomeDropdownButton(
                   id: 'id',
@@ -1100,7 +1105,7 @@ class SectionType extends StatelessWidget {
                   value: snap.data![0]['id']);
               return customeDropdownButtonSectionType;
             }
-            return Container();
+            return const LoadingScreen();
           }),
     );
   }
@@ -1166,7 +1171,7 @@ class _CustomeTypeState extends State<CustomeType> {
               right: BorderSide(color: Colors.white),
               left: BorderSide(color: Colors.white),
             )),
-            height: 50,
+            height: 70,
             child: BlocBuilder<SelectMuiltTypeCubit, SelectMuiltTypeState>(
               builder: (context, state) {
                 List<int> list = state.list;
@@ -1242,6 +1247,8 @@ class _CustomeButtonState extends State<CustomeButton> {
   Widget build(BuildContext context) {
     return TextButton(
       style: ButtonStyle(
+          minimumSize:
+              MaterialStateProperty.resolveWith((states) => const Size(100, 100)),
           shape: MaterialStateProperty.resolveWith((states) =>
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0),

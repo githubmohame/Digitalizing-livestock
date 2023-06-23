@@ -127,9 +127,9 @@ class _GoogleMapComponentFarmScreenState
             mapController: MapController(),
             options: MapOptions(
               zoom: 12,
-              boundsOptions: FitBoundsOptions(
+              boundsOptions: const FitBoundsOptions(
                   forceIntegerZoomLevel: false, maxZoom: 12, inside: false),
-              screenSize: Size(120, 330 - 18),
+              screenSize: const Size(120, 330 - 18),
               pinchZoomWinGestures:
                   MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
               maxBounds:widget.l1 ,

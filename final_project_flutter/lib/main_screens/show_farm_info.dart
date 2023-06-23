@@ -1,9 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
 import 'package:final_project_year/common_component/select_animal.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +25,7 @@ class FarmInfoScreen extends StatefulWidget {
   int farmId;
   ScrollController con2 = ScrollController();
   FarmInfoScreen({super.key, required this.farmId}) {
-    wid = StatisticFarm(farmId: this.farmId);
+    wid = StatisticFarm(farmId: farmId);
   }
   late Widget wid;
 
@@ -382,7 +380,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                       constraint.maxWidth < 1900.0
                                           ? TotalStatisticsPieChart(
                                               width: 300,
-                                              statistic: [],
+                                              statistic: const [],
                                             )
                                           : Container(),
                                       Container(
@@ -395,7 +393,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                               body: widget.wid),
                         )),
                         constraint.maxWidth >= 1900.0
-                            ? TotalStatisticsPieChart(width: 400, statistic: [])
+                            ? TotalStatisticsPieChart(width: 400, statistic: const [])
                             : Container(),
                       ],
                     ),
@@ -467,7 +465,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
     setState(() {
       k += 10;
     });
-    return null;
+    return;
   }
 
   @override
@@ -489,42 +487,34 @@ class _StatisticFarmState extends State<StatisticFarm> {
                           snap.data![0]['platoon'] != null) {
                         return BlocProvider(
                           create: (context) {
-                            if (widget.animalCubit == null) {
-                              widget.animalCubit = AnimalCubit(
+                            widget.animalCubit ??= AnimalCubit(
                                   platoon: -1,
                                   species:  -1);
-                            }
                             return widget.animalCubit!;
                           },
                           child: Builder(builder: (context) {
-                            if (widget.selectAnimal == null) {
-                              widget.selectAnimal = SelectAnimalTypeFarm(
+                            widget.selectAnimal ??= SelectAnimalTypeFarm(
                                 farmId: widget.farmId,
                                 platoonApi: platoon_type_farm_api,
                                 speciesApi: animal_species_farm_api,
                               );
-                            }
 
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Container(
+                                SizedBox(
                                     height: 150,
                                     width: 150,
                                     child: widget.selectAnimal),
                                 TextButton(
                                     style: ElevatedButton.styleFrom(
-                                      textStyle: TextStyle(
+                                      foregroundColor: Colors
+                                          .white, textStyle: const TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                      minimumSize: Size(150,
-                                          100), //change size of this beautiful button
-                                      // We can change style of this beautiful elevated button thanks to style prop
-                                      primary: Colors
-                                          .red, // we can set primary color
-                                      onPrimary: Colors
-                                          .white, // change color of child prop
-                                      onSurface: Colors.blue, // surface color
+                                          fontWeight: FontWeight.bold), backgroundColor: Colors
+                                          .red,
+                                      minimumSize: const Size(150,
+                                          100), disabledForegroundColor: Colors.blue.withOpacity(0.38), disabledBackgroundColor: Colors.blue.withOpacity(0.12), // surface color
                                       shadowColor: Colors
                                           .grey, //shadow prop is a very nice prop for every button or card widgets.
                                       elevation:
@@ -549,21 +539,17 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                           firstDate: DateTime(1990),
                                           lastDate: DateTime.now());
                                     },
-                                    child: Text("تاريخ البدأ",
+                                    child: const Text("تاريخ البدأ",
                                         style: TextStyle(color: Colors.black))),
                                 TextButton(
                                     style: ElevatedButton.styleFrom(
-                                      textStyle: TextStyle(
+                                      foregroundColor: Colors
+                                          .white, textStyle: const TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                      minimumSize: Size(150,
-                                          100), //change size of this beautiful button
-                                      // We can change style of this beautiful elevated button thanks to style prop
-                                      primary: Colors
-                                          .red, // we can set primary color
-                                      onPrimary: Colors
-                                          .white, // change color of child prop
-                                      onSurface: Colors.blue, // surface color
+                                          fontWeight: FontWeight.bold), backgroundColor: Colors
+                                          .red,
+                                      minimumSize: const Size(150,
+                                          100), disabledForegroundColor: Colors.blue.withOpacity(0.38), disabledBackgroundColor: Colors.blue.withOpacity(0.12), // surface color
                                       shadowColor: Colors
                                           .grey, //shadow prop is a very nice prop for every button or card widgets.
                                       elevation:
@@ -588,21 +574,17 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                           firstDate: DateTime(1990),
                                           lastDate: DateTime.now());
                                     },
-                                    child: Text("تاريخ الانتهاء",
+                                    child: const Text("تاريخ الانتهاء",
                                         style: TextStyle(color: Colors.black))),
                                 TextButton(
                                     style: ElevatedButton.styleFrom(
-                                      textStyle: TextStyle(
+                                      foregroundColor: Colors
+                                          .white, textStyle: const TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                      minimumSize: Size(150,
-                                          100), //change size of this beautiful button
-                                      // We can change style of this beautiful elevated button thanks to style prop
-                                      primary: Colors
-                                          .red, // we can set primary color
-                                      onPrimary: Colors
-                                          .white, // change color of child prop
-                                      onSurface: Colors.blue, // surface color
+                                          fontWeight: FontWeight.bold), backgroundColor: Colors
+                                          .red,
+                                      minimumSize: const Size(150,
+                                          100), disabledForegroundColor: Colors.blue.withOpacity(0.38), disabledBackgroundColor: Colors.blue.withOpacity(0.12), // surface color
                                       shadowColor: Colors
                                           .grey, //shadow prop is a very nice prop for every button or card widgets.
                                       elevation:
@@ -659,7 +641,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                         }
                                       });
                                     },
-                                    child: Text("بحث",
+                                    child: const Text("بحث",
                                         style: TextStyle(color: Colors.black))),
                               ],
                             );
@@ -671,7 +653,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
               }
               if (index == 1) {
                 return Container(
-                  child: Wrap(
+                  child: const Wrap(
                     alignment: WrapAlignment.spaceEvenly,
                     children: [
                       Text(
@@ -759,9 +741,10 @@ class _StatisticFarmState extends State<StatisticFarm> {
                       setState(() {});
                     }
                   });
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator();
                 }
               }
+              return null;
             }));
   }
 }

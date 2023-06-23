@@ -11,11 +11,11 @@ select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/datab
 end  //; 
 
 
-drop trigger Syncing_typesense_insert_user;
+drop trigger Syncing_typesense_insert;
 
 show triggers;
 
-drop trigger Syncing_typesense_update_user;
+drop trigger Syncing_typesense_update;
 
 
 
@@ -49,22 +49,22 @@ end  //;
 
 delimiter //
 
-create trigger  Syncing_typesense_update_user
+create trigger  Syncing_typesense_update_farmer
 after update on digital_livestock_user for each row
 begin
 declare result text ;
-select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farmer/bash_script_farmer.sh     ','"',new.ssn,'"',' ','"', new.fname,' ',new.lname,'"'  ,' ','update')) into result ;
+select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farm/bash_script_farm.sh   ','"',new.ssn,'"',' ','"', new.fname,' ',new.lname,'"'  ,' ','update')) into result ;
 end   //;
 
 
 
 delimiter //
 
-create trigger  Syncing_typesense_delete_user
+create trigger  Syncing_typesense_delete_farmer
 after delete on digital_livestock_user for each row
 begin
 declare result text ;
-select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farmer/bash_script_farmer.sh    ','"',old.ssn,'"',' ','"', old.fname,' ',old.lname,'"'  ,' ','delete'))  into result ;
+select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farm/bash_script_farm.sh  ','"',old.ssn,'"',' ','"', new.fname,' ',new.lname,'"'  ,' ','delete'))  into result ;
 end  //;
 
 
@@ -72,17 +72,13 @@ end  //;
 
 delimiter //
 
-create trigger  Syncing_typesense_insert_user
+create trigger  Syncing_typesense_insert_farmer
 after insert on digital_livestock_user for each row
 begin
 declare result text ;
-select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farmer/bash_script_farmer.sh  ','"',new.ssn,'"',' ','"', new.fname,' ',new.lname,'"'  ,' ','insert')) into result ;
+select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farm/bash_script_farm.sh  ','"',new.ssn,'"',' ','"', new.fname,' ',new.lname,'"'  ,' ','insert')) into result ;
 
 end  //; 
 
 
-drop trigger Syncing_typesense_insert_user;
-
-
-
-select    ( concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farmer/bash_script_farmer.sh  ','"','788','"',' ','"', 'oooo',' ','999887','"'  ,' ','insert')) 
+drop trigger Syncing_typesense_delete;

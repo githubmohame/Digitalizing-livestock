@@ -313,7 +313,7 @@ class _CustomeStepperState extends State<CustomeStepper>
   }
 
   Widget _buildCircle(int index, bool oldState) {
-    return Container(
+    return SizedBox(
       //margin: const EdgeInsets.only(left: 8.0,right: 8 ),
       width: _kStepSize,
       height: _kStepSize,
@@ -676,10 +676,10 @@ class _CustomeStepperState extends State<CustomeStepper>
           child: Wrap(crossAxisAlignment: WrapCrossAlignment.start,runAlignment: WrapAlignment.start,verticalDirection: VerticalDirection.down,alignment: WrapAlignment.start,
             children: <Widget>[
                 
-                  Container(margin: EdgeInsets.all(12),child: _buildIcon(i)),
+                  Container(margin: const EdgeInsets.all(12),child: _buildIcon(i)),
                    
               Container( 
-               margin: EdgeInsets.all(12),
+               margin: const EdgeInsets.all(12),
                 child: _buildHeaderText(i),
               ),
                 
@@ -688,7 +688,7 @@ class _CustomeStepperState extends State<CustomeStepper>
           ),
         ),
         if(widget.steps.last!=widget.steps[i])
-      Container(color:Colors.grey,height: 3,margin: EdgeInsets.only(top: 18) ,width: 150,)
+      Container(color:Colors.grey,height: 3,margin: const EdgeInsets.only(top: 18) ,width: 150,)
       ],
     ];
 

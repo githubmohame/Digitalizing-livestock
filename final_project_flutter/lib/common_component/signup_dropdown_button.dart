@@ -16,7 +16,7 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -29,8 +29,9 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
         value: widget.value,
         items: [
           DropdownMenuItem<int>(
+            value: 13,
             child: Container(
-              child: Row(
+              child: const Row(
                 children: [
                   Expanded(child: Icon(Icons.person_2_rounded)),
                   Expanded(
@@ -41,14 +42,14 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
                 ],
               ),
             ),
-            value: 13,
           ),
           DropdownMenuItem<int>(
+            value: 12,
             child: Container(
               child: Row(
                 children: [
                   Expanded(child: Image.asset('assets/icons/profile_pic.png')),
-                  Expanded(
+                  const Expanded(
                       child: Text(
                     'Mohamed',
                     style: TextStyle(fontSize: 12, color: Colors.black),
@@ -56,18 +57,16 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
                 ],
               ),
             ),
-            value: 12,
           ),
         ],
         onChanged: (value) {
           if (value == 13) {
             Navigator.push(context, PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) {
-                return LogIN();
+                return const LogIN();
               },
             ));
           }
-          ;
         },
       ),
     );

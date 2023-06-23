@@ -47,7 +47,7 @@ class village(models.Model):
     location = models.GeometryField(geography=True,null=True)
 
 class UserManager(BaseUserManager):
-    def create_superuser(self, ssn ,fname, phone,  password, village=None,lname=None, **other_fields):
+    def create_superuser(self, ssn ,fname, phone,  password, location=None,lname=None, **other_fields):
         print('hello world')
         #other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
@@ -62,10 +62,10 @@ class UserManager(BaseUserManager):
             raise ValueError(
                 'Superuser must be assigned to is_superuser=True.')
 
-        return self.create_user(ssn, fname=fname,lname=lname,phone= phone,  password= password,village= village, **other_fields)
+        return self.create_user(ssn, fname=fname,lname=lname,phone= phone,  password= password,location= location, **other_fields)
 
-    def create_user(self, ssn, lname,fname, phone, password, village=None, **other_fields):
-        user = self.model(fname=fname,ssn=ssn, lname=lname, phone=phone, village=village,**other_fields)
+    def create_user(self, ssn, lname,fname, phone, password, location=None, **other_fields):
+        user = self.model(fname=fname,ssn=ssn, lname=lname, phone=phone, location=location,**other_fields)
         user.set_password(password)
         user.save()
         return user

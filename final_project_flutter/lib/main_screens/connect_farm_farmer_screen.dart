@@ -35,7 +35,7 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                     ))
                 : null,
             body: SingleChildScrollView(
-              child: Container(height:800 ,
+              child: SizedBox(height:800 ,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,

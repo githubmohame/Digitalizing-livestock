@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
-import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/select_animal.dart';
 import 'package:final_project_year/input_validation/validations.dart';
@@ -44,7 +43,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               )),
           body: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               height: 700,
               child: Center(
                 child: Card(
