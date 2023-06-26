@@ -69,7 +69,6 @@ void onStart(ServiceInstance service) async {
     });
 
     service.on('setAsBackground').listen((event) {
-      print('hhhhhhhj12345' * 5665);
       service.setAsBackgroundService();
     });
   }
@@ -81,13 +80,11 @@ void onStart(ServiceInstance service) async {
   // bring to foreground
   Connectivity().onConnectivityChanged.listen((event) {
     if (event == ConnectivityResult.none) {
-      print('disconnecting');
     } else {
       WebSocketChannel websocket = WebSocketChannel.connect(
         Uri.parse('ws://192.168.1.6:8000/server'),
       );
       websocket.stream.listen((event) {
-        print(event);
         NotificationServiceCustome.createNewNotification(message: event);
         NotificationServiceCustome.startListeningNotificationEvents();
       });

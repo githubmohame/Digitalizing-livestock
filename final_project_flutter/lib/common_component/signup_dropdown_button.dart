@@ -28,34 +28,30 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
         underline: Container(),
         value: widget.value,
         items: [
-          DropdownMenuItem<int>(
+          const DropdownMenuItem<int>(
             value: 13,
-            child: Container(
-              child: const Row(
-                children: [
-                  Expanded(child: Icon(Icons.person_2_rounded)),
-                  Expanded(
-                      child: Text(
-                    'SignOut',
-                    style: TextStyle(fontSize: 12, color: Colors.black),
-                  )),
-                ],
-              ),
+            child:   Row(
+              children: [
+                Expanded(child: Icon(Icons.person_2_rounded)),
+                Expanded(
+                    child: Text(
+                  'SignOut',
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                )),
+              ],
             ),
           ),
           DropdownMenuItem<int>(
             value: 12,
-            child: Container(
-              child: Row(
-                children: [
-                  Expanded(child: Image.asset('assets/icons/profile_pic.png')),
-                  const Expanded(
-                      child: Text(
-                    'Mohamed',
-                    style: TextStyle(fontSize: 12, color: Colors.black),
-                  )),
-                ],
-              ),
+            child: Row(
+              children: [
+                Expanded(child: Image.asset('assets/icons/profile_pic.png')),
+                const Expanded(
+                    child: Text(
+                  'Mohamed',
+                  style: TextStyle(fontSize: 12, color: Colors.black),
+                )),
+              ],
             ),
           ),
         ],

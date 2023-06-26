@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+
 import 'package:dio/dio.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
@@ -101,13 +103,11 @@ class ConnectAnimalFarm extends StatelessWidget {
                               Container(
                                 height: 10,
                               ),
-                              Container(
-                                child: FutureBuilder(
+                               FutureBuilder(
                                     future: animal_api(),
                                     builder: (context, snap) {
                                       if (snap.data != null &&
                                           snap.data!.isNotEmpty) {
-                                        print(snap.data);
                                          animalType = SelectAnimalType(platoonApi: platoon_type_api,speciesApi:animal_species_api ,
                                           platoon: snap.data![0]['platoon'],
                                         );
@@ -128,7 +128,6 @@ class ConnectAnimalFarm extends StatelessWidget {
                                       }
                                       return Container();
                                     }),
-                              ),
                               Container(
                                 height: 0,
                               ),

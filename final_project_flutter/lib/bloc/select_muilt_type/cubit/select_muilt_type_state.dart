@@ -2,8 +2,7 @@
 
 part of 'select_muilt_type_cubit.dart';
 
-@immutable
-abstract class SelectMuiltTypeState {
+ abstract class SelectMuiltTypeState {
   List<int> list;
   SelectMuiltTypeState({
     required this.list,

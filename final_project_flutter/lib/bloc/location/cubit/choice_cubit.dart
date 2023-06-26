@@ -37,12 +37,10 @@ class LocationCubit extends Cubit<LocationState> {
     if (state.city != city) {
       List<Map<String, dynamic>> l2 = await village_api(city: city);
       if (l2.isNotEmpty) {
-        print("en" * 67);
         emit(LocationState(
             city: city, gavernorate: state.gavernorate, village: l2[0]['id']!));
         return;
       }
-      print("out" * 67);
       emit(LocationState(
           city: city, gavernorate: state.gavernorate, village: -1));
     }

@@ -112,7 +112,7 @@ class FarmListSerializer(serializers.ModelSerializer):
     section_type=section_typeFarmListSerializer()
     class Meta:
             model=farm
-            fields=['farm_name','number_of_workers','village','id','section_type']
+            fields=['farm_name','number_of_workers_inner',"number_of_workers_outer",'village','id','section_type']
 
 class LocationSerializer(serializers.ModelSerializer):
     location=serializers.SerializerMethodField()
@@ -175,3 +175,14 @@ class FarmInfoShowSerializer(serializers.ModelSerializer):
     location=serializers.SerializerMethodField()
     def get_location(self,obj:farm):
         return obj.location.geojson
+    
+    
+    
+class FarmerShowInfoSerializer(serializers.ModelSerializer):
+    farm_count= serializers.SerializerMethodField()
+    def get_farm_count(self,obj:User):
+        
+        return connect_farm_farmer.objects.all().filter(farmer=obj.ssn).count();
+    class Meta:
+            model=User
+            fields=['fname','lname','phone' ,"farm_count" ]

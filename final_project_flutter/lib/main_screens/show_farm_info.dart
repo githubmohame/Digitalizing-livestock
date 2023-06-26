@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'dart:async';
 
 import 'package:dio/dio.dart';
@@ -30,9 +30,7 @@ class FarmInfoScreen extends StatefulWidget {
   late Widget wid;
 
   @override
-  State<FarmInfoScreen> createState() {
-    return _FarmInfoScreenState(googleMapComponentDashBoardScreen: con);
-  }
+  State<FarmInfoScreen> createState()  =>    _FarmInfoScreenState(googleMapComponentDashBoardScreen: con);
 }
 
 class _FarmInfoScreenState extends State<FarmInfoScreen> {
@@ -429,8 +427,8 @@ class StatisticFarm extends StatefulWidget {
   AnimalCubit? animalCubit;
   SelectAnimalTypeFarm? selectAnimal;
   String url = "";
-  DateTime? start_date;
-  DateTime? end_date;
+  DateTime? startDate;
+  DateTime? endDate;
   StatisticFarm({
     Key? key,
     required this.farmId,
@@ -533,7 +531,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                           MaterialTapTargetSize.padded,
                                     ),
                                     onPressed: () async {
-                                      widget.start_date = await showDatePicker(
+                                      widget.startDate = await showDatePicker(
                                           context: context,
                                           initialDate: DateTime.now(),
                                           firstDate: DateTime(1990),
@@ -568,7 +566,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                           MaterialTapTargetSize.padded,
                                     ),
                                     onPressed: () async {
-                                      widget.end_date = await showDatePicker(
+                                      widget.endDate = await showDatePicker(
                                           context: context,
                                           initialDate: DateTime.now(),
                                           firstDate: DateTime(1990),
@@ -608,18 +606,17 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                       };
                                       if (widget.selectAnimal?.species !=
                                           null) {
-                                        print(widget.selectAnimal?.species);
                                         dic1.addAll({
-                                          "start_date": widget.start_date,
-                                          "end_date": widget.end_date,
+                                          "start_date": widget.startDate,
+                                          "end_date": widget.endDate,
                                           "species":
                                               widget.selectAnimal?.species
                                         });
                                       } else if (widget.selectAnimal?.platoon !=
                                           null) {
                                         dic1.addAll({
-                                          "start_date": widget.start_date,
-                                          "end_date": widget.end_date,
+                                          "start_date": widget.startDate,
+                                          "end_date": widget.endDate,
                                           "platoon":
                                               widget.selectAnimal?.platoon,
                                         });
@@ -636,7 +633,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                           var (m, l) = value;
                                           widget.list1.addAll(l);
                                           widget.url = m;
-                                          print(m);
                                           setState(() {});
                                         }
                                       });
@@ -652,28 +648,26 @@ class _StatisticFarmState extends State<StatisticFarm> {
                     });
               }
               if (index == 1) {
-                return Container(
-                  child: const Wrap(
-                    alignment: WrapAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        'الفصيلة',
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      Text(
-                        'عدد الرؤوس',
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      Text(
-                        'التاريخ',
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      Text(
-                        'انثي',
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                    ],
-                  ),
+                return const Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'الفصيلة',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                    Text(
+                      'عدد الرؤوس',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                    Text(
+                      'التاريخ',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                    Text(
+                      'انثي',
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                  ],
                 );
               } else {
                 if (index - 2 < widget.list1.length) {
@@ -712,20 +706,19 @@ class _StatisticFarmState extends State<StatisticFarm> {
                     ),
                   );
                 } else if (widget.url != "null") {
-                  print("Enter");
                   Map<String, dynamic> dic1 = {};
                   if (widget.selectAnimal?.species == null) {
                     dic1 = {
                       "farm_id": widget.farmId,
-                      "start_date": widget.start_date,
-                      "end_date": widget.end_date,
+                      "start_date": widget.startDate,
+                      "end_date": widget.endDate,
                       "species": widget.selectAnimal?.species
                     };
                   } else if (widget.selectAnimal?.platoon == null) {
                     dic1 = {
                       "farm_id": widget.farmId,
-                      "start_date": widget.start_date,
-                      "end_date": widget.end_date,
+                      "start_date": widget.startDate,
+                      "end_date": widget.endDate,
                       "platoon": widget.selectAnimal?.platoon
                     };
                   }
@@ -737,8 +730,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                       var (m, l) = value;
                       widget.list1.addAll(l);
                       widget.url = m;
-                      print(widget.list1.length);
-                      setState(() {});
+                       setState(() {});
                     }
                   });
                   return const CircularProgressIndicator();

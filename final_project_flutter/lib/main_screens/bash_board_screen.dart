@@ -312,7 +312,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                     ? snap.data![0]['village']
                     : widget.locationCubit.state.village);
 
-            print(widget.locationCubit.state.city);
             
             return BlocProvider(
               create: (context) => widget.locationCubit,
@@ -341,7 +340,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                           },
                           
                           listener: (context, state) async {
-                             print("Enter the contenntal");
                             if (state.gavernorate == -1) {
                               
                              
@@ -349,7 +347,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                   ((await location_dash_info(
                                       formData:
                                           FormData.fromMap({"type": "gov"}))));
-                              print(map);
                               List<dynamic> u = map["gov_data"];
                               widget.list1 = {};
                               for (var i in u) {
@@ -362,9 +359,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                   };
                                 }
                               }
-                              print(map["farm_type"]);
                               u = map["farm_type"];
-                              print("hell" * 897);
                               //print(widget.list1);
                               droplist = [];
 
@@ -379,8 +374,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                               if (droplist.isNotEmpty) {
                                 drop = droplist[0].value.toString();
                               }
-                              print("done" * 778);
-                              print(droplist);
                               setState(() {});
                             } else if (state.city == -1) {
                               Map<String, dynamic> map =
@@ -401,9 +394,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                   };
                                 }
                               }
-                              print(map["farm_type"]);
                               u = map["farm_type"];
-                              print("hell" * 897);
                               //print(widget.list1);
                               droplist = [];
 
@@ -418,8 +409,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                               if (droplist.isNotEmpty) {
                                 drop = droplist[0].value.toString();
                               }
-                              print("done" * 778);
-                              print(droplist);
                               setState(() {});
                             } else {
                               // print(state.city);
@@ -441,9 +430,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                   };
                                 }
                               }
-                              print(map["farm_type"]);
                               u = map["farm_type"];
-                              print("hell" * 897);
                               //print(widget.list1);
                               droplist = [];
 
@@ -458,8 +445,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                               if (droplist.isNotEmpty) {
                                 drop = droplist[0].value.toString();
                               }
-                              print("done" * 778);
-                              print(droplist);
                               setState(() {});
                             }
                           },
@@ -515,7 +500,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                         );
                       });
                     } else {
-                      print(widget.list1.keys);
                       return Card(
                         child: SizedBox(height:150 ,
                            child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment:MainAxisAlignment.spaceAround ,

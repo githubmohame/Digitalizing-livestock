@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
@@ -199,22 +199,20 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
         children: [
           const Text('تعديل في الفصيلة',
               style: TextStyle(color: Colors.white, fontSize: 20)),
-          Container(
-            child: FutureBuilder(
-                future: animal_api(),
-                builder: (context, snap) {
-                  if (snap.data != null && snap.data!.isNotEmpty) {
-                    selectSpecies.species = snap.data![0]['id'];
-                    return BlocProvider(
-                      create: (context) => AnimalCubit(
-                          platoon: snap.data![0]['platoon'],
-                          species: snap.data![0]['id']),
-                      child: selectSpecies,
-                    );
-                  }
-                  return Container();
-                }),
-          ),
+          FutureBuilder(
+              future: animal_api(),
+              builder: (context, snap) {
+                if (snap.data != null && snap.data!.isNotEmpty) {
+                  selectSpecies.species = snap.data![0]['id'];
+                  return BlocProvider(
+                    create: (context) => AnimalCubit(
+                        platoon: snap.data![0]['platoon'],
+                        species: snap.data![0]['id']),
+                    child: selectSpecies,
+                  );
+                }
+                return Container();
+              }),
           TextField(
               controller: controller,
               style: const TextStyle(color: Colors.black),

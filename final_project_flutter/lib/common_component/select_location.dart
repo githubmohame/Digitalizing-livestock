@@ -20,7 +20,6 @@ class SelectLocation extends StatelessWidget {
     return FutureBuilder(
         future: location_api(),
         builder: (context, snapOuter) {
-          print("rebuilding...");
           if (snapOuter.data is List<Map<String, dynamic>> &&
               snapOuter.data!.isNotEmpty) {
             return SizedBox(
@@ -69,7 +68,9 @@ class SelectLocation extends StatelessWidget {
                                             -1,
                                         text: "المحافظة");
                                   }
-                                } catch (e) {}
+                                } catch (e) {
+                                  //
+                                }
 
                                 return Container();
                               })),
@@ -232,7 +233,9 @@ class SelectLocationDashBoard extends StatelessWidget {
                               ),
                             );
                           }
-                        } catch (e) {}
+                        } catch (e) {
+                          //
+                        }
 
                         return Container();
                       })),
@@ -245,7 +248,6 @@ class SelectLocationDashBoard extends StatelessWidget {
                   return FutureBuilder(
                       future: city_api(gavernorate: state.gavernorate),
                       builder: (context, snap) {
-                        print(snap.data);
                         if (snap.connectionState == ConnectionState.done &&
                             snap.data is List<Map<String, dynamic>> &&
                             snap.data!.isNotEmpty) {
@@ -265,7 +267,6 @@ class SelectLocationDashBoard extends StatelessWidget {
                                   BlocProvider.of<LocationCubit>(context)
                                       .updateCity(value);
                                   city = value;
-                                  print("done " * 789);
                                 },
                                 list: snap.data ??
                                     const [

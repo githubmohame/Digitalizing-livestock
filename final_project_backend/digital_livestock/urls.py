@@ -28,7 +28,7 @@ urlpatterns = [
       ,path('login_api',  login )
       ,path('admin_api',  admin_api)
       ,path('search_farm_api',   search_farm_api)
-      ,path('search_farm_farmer_api', search_farmer_api)
+      ,path('search_farmer_api', search_farmer_api)
        ,path('get_data_map',  get_data_map)
         ,path('summary_governorate',  summary_governorate),
         path('location_statistics',location_statistics),

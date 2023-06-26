@@ -252,14 +252,6 @@ class _CustomeStepperState extends State<CustomeStepper>
     return Theme.of(context).brightness == Brightness.dark;
   }
 
-  bool _isLabel() {
-    for (final Step step in widget.steps) {
-      if (step.label != null) {
-        return true;
-      }
-    }
-    return false;
-  }
 
   Widget _buildLine(bool visible) {
     return Container(

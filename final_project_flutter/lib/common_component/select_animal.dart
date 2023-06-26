@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, use_build_context_synchronously, non_constant_identifier_names, must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -115,14 +115,15 @@ class SelectAnimalTypeFarm extends StatefulWidget {
   int? species;
   int farmId;
   Future<List<Map<String, dynamic>>> Function(
-      {required int platoon, required int farm_id}) speciesApi;
-  Future<List<Map<String, dynamic>>> Function({required int farm_id})
+      {required int platoon, required int farmId}) speciesApi;
+  Future<List<Map<String, dynamic>>> Function({required int farmId})
       platoonApi;
 
   SelectAnimalTypeFarm({
     Key? key,
     required this.farmId,
-    this.platoon,this.species,
+    this.platoon,
+    this.species,
     required this.platoonApi,
     required this.speciesApi,
   }) : super(key: key);
@@ -144,7 +145,7 @@ class _SelectAnimalTypeFarmState extends State<SelectAnimalTypeFarm> {
               color: Colors.grey,
             )),
             child: FutureBuilder(
-                future: widget.platoonApi(farm_id: widget.farmId),
+                future: widget.platoonApi(farmId: widget.farmId),
                 builder: (context, snap) {
                   if (snap.connectionState == ConnectionState.done &&
                       snap.data is List<Map<String, dynamic>> &&
@@ -161,7 +162,7 @@ class _SelectAnimalTypeFarmState extends State<SelectAnimalTypeFarm> {
                             func: (int value) async {
                               List<Map<String, dynamic>> l2 =
                                   await animal_species_farm_api(
-                                      platoon: value, farm_id: widget.farmId);
+                                      platoon: value, farmId: widget.farmId);
                               BlocProvider.of<AnimalCubit>(context)
                                   .updatePlatoon(
                                       platoon: value,
@@ -174,7 +175,7 @@ class _SelectAnimalTypeFarmState extends State<SelectAnimalTypeFarm> {
                                   {"id": '1', "name": "ابقار"},
                                 ],
                             expanded: true,
-                            value:  state.platoon ,
+                            value: state.platoon,
                             text: "نوع الحيوان");
                       },
                     );
@@ -193,10 +194,9 @@ class _SelectAnimalTypeFarmState extends State<SelectAnimalTypeFarm> {
               return previous.platoon != current.platoon;
             },
             builder: (context, state) {
-              print(widget.species);
               return FutureBuilder(
                   future: widget.speciesApi(
-                      farm_id: widget.farmId, platoon: state.platoon),
+                      farmId: widget.farmId, platoon: state.platoon),
                   builder: (context, snap) {
                     if (snap.connectionState == ConnectionState.done &&
                         snap.data is List<Map<String, dynamic>> &&
@@ -207,11 +207,9 @@ class _SelectAnimalTypeFarmState extends State<SelectAnimalTypeFarm> {
                           id: 'id',
                           func: (int value) {
                             if (value == -1) {
-                             
                               widget.species = null;
                               return;
                             }
-                             print(value);
                             widget.species = value;
                           },
                           list: snap.data ??
@@ -219,7 +217,7 @@ class _SelectAnimalTypeFarmState extends State<SelectAnimalTypeFarm> {
                                 {"id": '1', "name": "البراازلي"},
                               ],
                           expanded: true,
-                          value:widget.species??-1,
+                          value: widget.species ?? -1,
                           text: "فصيله الحيوان");
                     }
                     widget.species = null;

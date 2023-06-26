@@ -14,7 +14,7 @@ class ShirtWidget extends LeafRenderObjectWidget {
 
   @override
   void updateRenderObject(
-      BuildContext context, covariant _ShirtRenderBox renderObject) {
+      BuildContext context,   _ShirtRenderBox renderObject) {
     renderObject.color = color;
   }
 }

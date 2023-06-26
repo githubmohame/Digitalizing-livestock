@@ -73,29 +73,27 @@ class _ScreenGavernorateState extends State<ScreenGavernorate> {
                     }),
                     
                     */
-                Container(
-                  child: FutureBuilder(
-                      future: location_api(),
-                      builder: (context, snap) {
-                        if (snap.connectionState == ConnectionState.done &&
-                            snap.data is List<Map<String, dynamic>> &&
-                            snap.data!.isNotEmpty) {
-                          return BlocProvider(
-                            create: (context) {
-                              selectGavernorate.gavernorate =
-                                  snap.data![0]['village']!;
-                              return LocationCubit(
-                                city: snap.data![0]['city']!,
-                                gavernorate: snap.data![0]['governorate'],
-                                village: snap.data![0]['village']!,
-                              );
-                            },
-                            child: selectGavernorate,
-                          );
-                        }
-                        return Container();
-                      }),
-                ),
+                FutureBuilder(
+                    future: location_api(),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.done &&
+                          snap.data is List<Map<String, dynamic>> &&
+                          snap.data!.isNotEmpty) {
+                        return BlocProvider(
+                          create: (context) {
+                            selectGavernorate.gavernorate =
+                                snap.data![0]['village']!;
+                            return LocationCubit(
+                              city: snap.data![0]['city']!,
+                              gavernorate: snap.data![0]['governorate'],
+                              village: snap.data![0]['village']!,
+                            );
+                          },
+                          child: selectGavernorate,
+                        );
+                      }
+                      return Container();
+                    }),
                 TextField(
                     controller: controller,
                     style: const TextStyle(color: Colors.brown),

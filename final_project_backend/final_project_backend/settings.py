@@ -32,13 +32,14 @@ ALLOWED_HOSTS = [ '192.168.1.6', '127.0.0.1',"156.197.225.116"]
 
 INSTALLED_APPS = [
     "daphne",
+    'digital_livestock',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'digital_livestock',
+    
     'django.contrib.gis',
     'rest_framework',
     

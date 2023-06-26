@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:final_project_year/apis/apis_functions.dart';
+import 'package:final_project_year/common_component/show_load_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project_year/common_component/background.dart';
@@ -7,14 +9,18 @@ import 'package:final_project_year/main_screens/bash_board_screen.dart';
 
 class ItemList extends StatelessWidget {
   String name;
+  int farm_count;
+  String phone;
   ItemList({
     Key? key,
     required this.name,
+    required this.farm_count,
+    required this.phone,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
+    return Card(
       borderOnForeground: true,
       color: Color(0xFF467061),
       child: Card(
@@ -34,10 +40,10 @@ class ItemList extends StatelessWidget {
                   Text('الاسم:' 'محمد ايمن',
                       style: TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
-                    'عدد المزارع:${890}',
+                    'عدد المزارع:${farm_count}',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text('رقم التليقون:${8799}')
+                  Text('رقم التليقون:${phone}')
                 ],
               ),
             ],
@@ -46,8 +52,24 @@ class ItemList extends StatelessWidget {
   }
 }
 
-class ListFarmer extends StatelessWidget {
-  const ListFarmer({Key? key}) : super(key: key);
+class ListFarmer extends StatefulWidget {
+  ListFarmer({Key? key}) : super(key: key);
+  List<Map<String, dynamic>> l1 = [];
+  String? url = "";
+  @override
+  State<ListFarmer> createState() => _ListFarmerState();
+}
+
+class _ListFarmerState extends State<ListFarmer> {
+  @override
+  void initState() {
+    search_farm_api(farmerName: null).then((value) {
+      widget.l1 = value.$1;
+      widget.url = value.$2;
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,36 +80,52 @@ class ListFarmer extends StatelessWidget {
               drawer: MainDrawer(index: 5),
               appBar: AppBar(
                 title: const Center(
-                  child: Text('عرض المربين',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    'عرض المربين',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 backgroundColor: Colors.transparent,
               ),
               backgroundColor: Colors.transparent,
               body: LayoutBuilder(builder: (context, constraint) {
                 return Row(children: [
-
                   constraint.maxWidth >= 1000 ? const Spacer() : Container(),
-                  Expanded(flex: 5,
+                  Expanded(
+                    flex: 5,
                     child: Container(
                       width: 400,
-                      color: const Color(0xFF357515
-
-),
+                      color: const Color(0xFF357515),
                       child: Card(
-                        color: const Color(0xFF357515
-
-),
+                        color: const Color(0xFF357515),
                         elevation: 20,
                         child: Column(
                           children: [
-                            CustomeSearch(width: double.infinity,text:'ادخل اسم المربي' ),
+                            CustomeSearch(
+                                width: double.infinity,
+                                text: 'ادخل اسم المربي'),
                             Expanded(
                               child: ListView.builder(
-                                  itemCount: 100,
+                                  itemCount: widget.l1.length + 1,
                                   itemBuilder: (context, index) {
-                                    return ItemList(
-                                      name: "محمد ايمن",
-                                    );
+                                    // print(index.toString() +"   hhhhh  "+ widget.l1.length.toString());
+                                    if (index < widget.l1.length) {
+                                      return ItemList(
+                                        farm_count: widget.l1[index]
+                                            ["farm_count"],
+                                        phone: widget.l1[index]["phone"],
+                                        name: widget.l1[index]["name"],
+                                      );
+                                    } else if (widget.url is String) {
+                                      search_farm_api(farmerName: null)
+                                          .then((value) {
+                                        widget.l1 = value.$1;
+                                        widget.url = value.$2;
+                                        setState(() {});
+                                      });
+                                      return const LoadingScreen();
+                                    }
+                                    return Container();
                                   }),
                             ),
                           ],

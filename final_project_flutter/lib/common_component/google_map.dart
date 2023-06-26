@@ -135,7 +135,6 @@ class _GoogleMapComponentFarmScreenState
               maxBounds:widget.l1 ,
               //center: widget.l1!.first,
               onMove: (tapPosition, point) {
-                print("move:");
                 if (!widget.draw) return;
                 widget.list1[2] = point;
                 widget.list1[1] =
@@ -178,9 +177,7 @@ class _GoogleMapComponentFarmScreenState
               onPointerCancel: (event, point) {},
               onPositionChanged: (position, hasGesture) {},
               onTap: (tapPosition, point) {
-                print(widget.l1 );
                 if (widget.l1 is LatLngBounds) {
-                  print(widget.l1!.contains(point));
                 }
 
                 widget.point = point;
@@ -301,8 +298,6 @@ class _GoogleMapComponentDashBoardScreenState
   }
 
   LatLng handleLocation({required LatLng latLng, required double value}) {
-    print("${(latLng.latitude + 90 + value) % 180} before ");
-    print("${(latLng.latitude + 180 + value) % 360} before");
     double vlat = ((latLng.latitude + 90 + value) % 180) - 90;
     double vlng = ((latLng.longitude + 180 + value) % 360) - 180;
     return LatLng(vlat, vlng);
@@ -326,7 +321,6 @@ class _GoogleMapComponentDashBoardScreenState
                 if (biggest < (position.bounds?.northEast)! ||
                     smallest > (position.bounds?.southWest)! ||
                     biggest.longitude == -1) {
-                  print("done");
                   smallest = handleLocation(
                       latLng: position.bounds!.southWest, value: -5);
 
@@ -343,7 +337,6 @@ class _GoogleMapComponentDashBoardScreenState
 
                   plogon = map1["ploygons"];
                   list1 = map1["markers"];
-                  print(list1);
                   setState(() {});
                 }
               } else {

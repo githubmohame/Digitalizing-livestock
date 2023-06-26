@@ -4,6 +4,7 @@ def main():
 			import sys
 			import json
 			import typesense
+			#print(sys.argv)
 			id=sys.argv[1]
 			newname=sys.argv[2]
 			operation=sys.argv[3]
@@ -18,14 +19,16 @@ def main():
 					'connection_timeout_seconds': 2
 			})
 			if(operation=='update'):
-					client.collections['farm'].documents[id].update(json.dumps(farm),{'dirty_values': 'coerce_or_reject'})
+					client.collections['farm'].documents[id].update(  farm )
 			elif(operation=='insert'):
 					#client.collections['farm'].import_(json.dumps(farm))
-					client.collections['farm'].documents.import_(json.dumps(farm))
+					client.collections['farm'].documents.create(json.dumps(farm))
+					#print(90)
 			else:
 					client.collections['farm'].documents[id].delete( )
 	except Exception as e:
-			print(e)
+			#print(9)
+			pass
 
 main()
 

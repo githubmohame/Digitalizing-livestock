@@ -1,0 +1,8 @@
+"concat('Drop Trigger ' , trigger_name ,' ;')"
+"Drop Trigger Syncing_typesense_update_farmer ;"
+"Drop Trigger Syncing_typesense_insert_farmer ;"
+"Drop Trigger Syncing_typesense_insert_farm ;"
+"Drop Trigger Syncing_typesense_update_farm ;"
+"Drop Trigger Syncing_typesense_delete_farm ;"
+"Drop Trigger Syncing_typesense_update_farmer_group ;"
+"Drop Trigger Syncing_typesense_delete_farmer_group ;"

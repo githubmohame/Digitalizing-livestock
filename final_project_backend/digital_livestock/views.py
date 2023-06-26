@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
-from django.db.models import Count, F, Value,Q,Sum
+from django.db.models import Count, F, Q 
+from digital_livestock.pagination import  CustomePagenation
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import AnonymousUser,Group
@@ -22,7 +23,6 @@ from rest_framework.authentication import BaseAuthentication
 from django.contrib.gis.gdal.geometries import Polygon,Point
 import geopandas as gpd
 import json
-from rest_framework.pagination import PageNumberPagination
 from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
 	print(str( dic1.keys()))
@@ -729,7 +729,7 @@ def admin_api(request :Request):
 		#print(set(dic1) ,set(['ssn','fname','lname','email','password','phone','photo','job','age']))
 		g_name=dic1.get("user_type")
 		dic1.pop("user_type")
-		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age', ])):
+		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age',"location" ])):
 			print(dic1)
 			user1=User.objects.create(**dic1)
 			if(g_name):
@@ -752,11 +752,17 @@ def search_farm_api(request :Request):
 					}],
 					'connection_timeout_seconds': 2
 			})
-	d1=client.collections['farm'].documents.search({"q":request.data['name'],"query_by":"name"})
+	q=request.data.get('name')
+	if(q==None):
+		q="*"
+	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name"})
 	l1=[i['document']['id'] for i in d1['hits']]
-	 
-	ser1=FarmListSerializer(instance=farm.objects.all().filter(id__in= l1),many=True)
-	return response.Response(ser1.data)
+	pagination=CustomePagenation()
+	p1=pagination.paginate_queryset(farm.objects.all().filter(id__in= l1),request)
+	next=pagination.get_next_link()
+	ser1=FarmListSerializer(instance=p1,many=True)
+
+	return JsonResponse({"data":ser1.data,"next":next})
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
@@ -772,11 +778,18 @@ def search_farmer_api(request :Request):
 					}],
 					'connection_timeout_seconds': 2
 			})
-	d1=client.collections['farmer'].documents.search({"q":request.data['name'],"query_by":"name"})
+	q=request.data.get('name')
+	if(q==None):
+		q="*"
+	d1=client.collections['farmer'].documents.search({"q":q,"query_by":"name"})
+	
 	l1=[i['document']['id'] for i in d1['hits']]
-	 
-	ser1=FarmListSerializer(instance=farm.objects.all().filter(id__in= l1),many=True)
-	return response.Response(ser1.data)
+	print(l1)
+	pagination=CustomePagenation()
+	p1=pagination.paginate_queryset(User.objects.all().filter(ssn__in= l1,groups__name='farmer'),request)
+	next=pagination.get_next_link()
+	ser1=FarmerShowInfoSerializer(instance=p1,many=True)
+	return JsonResponse({"data":ser1.data,"next":next})
 
 
 
@@ -829,8 +842,7 @@ def location_statistics(request):
 	return JsonResponse( {"gov_data":list(stattest),"farm_type":list(farm_type_query)},safe=True )
 
 
-class CustomePagenation(PageNumberPagination):
-	page_size=10
+
 
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
@@ -905,3 +917,5 @@ def farm_map_bounder_api(request :Request):
 	u= governorate.objects.all().filter(name='بنى سويف')[0].location.boundary.coords 
 	print((u))
 	return  JsonResponse({"map": u})
+
+

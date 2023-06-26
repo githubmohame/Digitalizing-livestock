@@ -30,6 +30,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   awesome_notifications: ^0.7.4+1
+  bloc: ^8.1.2
   connectivity_plus: ^4.0.1
   cupertino_icons: ^1.0.2
   d_chart: ^2.2.11
@@ -45,6 +46,7 @@ dependencies:
   flutter_map: ^4.0.0
   flutter_secure_storage: ^8.0.0
   geolocator: ^9.0.2
+  latlong2: ^0.8.0
   local_auth: ^2.1.6
   permission_handler: ^10.2.0
   secure_application: ^3.8.0

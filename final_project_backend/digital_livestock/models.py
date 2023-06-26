@@ -110,7 +110,7 @@ class section_type(models.Model):
 class farm(models.Model):
     #number_of_acres = models.PositiveIntegerField(null=True)
     farm_name = models.CharField(max_length=30,null=True)
-    id = models.CharField(primary_key=True, max_length=40  )
+    id = models.CharField(primary_key=True ,max_length=40 )
     number_of_workers_inner = models.PositiveIntegerField(null= False,default=0)
     number_of_workers_outer = models.PositiveIntegerField(null=False)
     playground = models.PositiveIntegerField(null=False)

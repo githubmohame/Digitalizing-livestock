@@ -2,7 +2,7 @@ schema = {
 	'name': 'farmer',
 	'fields': [
 		{
-			'name'  :  'ssn',
+			'name'  :  'id',
 			'type'  :  'string'
 		},
 		{

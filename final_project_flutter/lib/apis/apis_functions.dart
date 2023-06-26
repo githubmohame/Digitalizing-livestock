@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, empty_catches
 
 import 'dart:convert';
 
@@ -21,9 +21,7 @@ Future gavernorate_api() async {
       return map;
     });
     return l1;
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
   return [];
 }
 
@@ -42,9 +40,7 @@ Future<List<Map<String, dynamic>>> city_api({required int gavernorate}) async {
       return map;
     });
     return l1;
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
   return [];
 }
 
@@ -260,8 +256,12 @@ Future<Map<String, dynamic>> farmer_api({
               listFormat: dio.ListFormat.multi,
             ));
     return res.data!;
-  } catch (e) {}
-  return {};
+  } catch (e) {
+    //
+  }
+  return {
+    //
+  };
 }
 
 Future<Map<String, dynamic>> add_farmer_animal_api({
@@ -496,11 +496,11 @@ Future<Map<String, dynamic>> get_data_map(
             return ShowInfoButtom(
               id: f["id"],
               name: f["farm_name"],
-              number_of_workers_inner: f["number_of_workers_inner"],
-              number_of_workers_outer: f["number_of_workers_outer"],
-              section_type: f["section_type"]["name"],
-              total_area_of_farm: f["total_area_of_farm"],
-              total_cost_farm: f["total_cost_farm"],
+              numberOfWorkersInner: f["number_of_workers_inner"],
+              numberOfWorkersOuter: f["number_of_workers_outer"],
+              sectionType: f["section_type"]["name"],
+              totalAreaOfFarm: f["total_area_of_farm"],
+              totalCostFarm: f["total_cost_farm"],
             );
           },
         ));
@@ -565,8 +565,6 @@ Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
     {required FormData formData, required String url}) async {
   try {
     dio.Dio dio1 = dio.Dio();
-    print(formData.fields);
-    print(url);
     var res = await dio1.post(
         url.isEmpty ? 'http://127.0.0.1:8000/farm_info_list' : url,
         queryParameters: <String, dynamic>{},
@@ -576,7 +574,7 @@ Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
           listFormat: dio.ListFormat.multi,
         ));
     List<Map<String, dynamic>> l1 = [];
-     for (var i in res.data["data"]) {
+    for (var i in res.data["data"]) {
       Map<String, dynamic> map = <String, dynamic>{};
       map["animal_sub_type"] = i["animal_sub_type"]["name"];
       map["animal_number"] = i['animal_number'];
@@ -585,9 +583,7 @@ Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
       l1.add(map);
     }
     return (res.data["next"].toString(), l1);
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
   return null;
 }
 
@@ -609,11 +605,11 @@ Future<Map<String, dynamic>> farmInfo({required dio.FormData formData}) async {
 }
 
 Future<List<Map<String, dynamic>>> platoon_type_farm_api(
-    {required int farm_id}) async {
+    {required int farmId}) async {
   try {
     dio.Dio dio1 = dio.Dio();
     var res = await dio1.post('http://127.0.0.1:8000/farm_platoon_api',
-        data: {"farm_id": farm_id},
+        data: {"farm_id": farmId},
         options: dio.Options(responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
@@ -623,18 +619,16 @@ Future<List<Map<String, dynamic>>> platoon_type_farm_api(
     });
 
     return l1;
-  } catch (e) {
-    print(e);
-  }
+  } catch (e) {}
   return [];
 }
 
 Future<List<Map<String, dynamic>>> animal_species_farm_api(
-    {required int platoon, required int farm_id}) async {
+    {required int platoon, required int farmId}) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData =
-        dio.FormData.fromMap({'filter': platoon, "farm_id": farm_id});
+        dio.FormData.fromMap({'filter': platoon, "farm_id": farmId});
     var res = await dio1.post('http://127.0.0.1:8000/farm_species_api',
         data: formData,
         queryParameters: <String, dynamic>{},
@@ -709,9 +703,45 @@ Future<List<LatLng>?> add_farm_map_bounder_api() async {
           l1.add(LatLng(l[1], l[0]));
         }
       }
-
+      //print(l1);
       return l1;
     }
-  } catch (e) {}
+  } catch (e) {
+    print(e);
+  }
   return null;
+}
+
+Future<(List<Map<String, dynamic>>, dynamic?)> search_farm_api(
+    {required String? farmerName}) async {
+  try {
+    dio.Dio dio1 = dio.Dio();
+
+    var res = await dio1.post('http://127.0.0.1:8000/search_farmer_api',
+        data: FormData.fromMap({"name": farmerName}),
+        queryParameters: <String, dynamic>{},
+        options: dio.Options(
+          contentType: "application/json",
+          responseType: dio.ResponseType.json,
+          listFormat: dio.ListFormat.multi,
+        ));
+    if (res.data is Map) {
+      List<Map<String, dynamic>> l1 = [];
+      Map<String, dynamic> map = <String, dynamic>{};
+       for (Map<String, dynamic> k in res.data["data"]) {
+        map['name'] = k['fname'] + k['lname'];
+        map['phone'] = k['phone'];
+        print(k);
+        map['farm_count'] = k['farm_count'];
+        l1.add(map);
+      }
+
+      return (l1, res.data["next"] );
+    }
+
+    //return l1;
+  } catch (e) {
+    print(e);
+  }
+  return ([{"":""}], null);
 }
