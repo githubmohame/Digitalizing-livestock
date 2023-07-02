@@ -17,7 +17,7 @@ class CustomePasswordEnterTextField extends StatefulWidget {
 class _CustomePasswordEnterTextFieldState
     extends State<CustomePasswordEnterTextField> {
   bool showPassword = false;
-  final List<TextEditingController> _list1 = [
+  final List<TextEditingController> controller = [
     TextEditingController(),
     TextEditingController(),
   ];
@@ -32,10 +32,11 @@ class _CustomePasswordEnterTextFieldState
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: _list1[0],
+              controller: controller[0],
               obscureText: !showPassword,
               obscuringCharacter: '*',
               decoration: const InputDecoration(
+                  errorStyle: TextStyle(color: Colors.white),
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                   fillColor: Colors.white,
@@ -45,24 +46,25 @@ class _CustomePasswordEnterTextFieldState
             ),
             const SizedBox(height: 10),
             TextFormField(
-              controller: _list1[1],
+              controller: controller[1],
               obscureText: !showPassword,
               validator: (value) {
-                if (_list1[0].text != _list1[1].text ||
-                    _list1[0].text.isEmpty) {
-                  return 'the password and confirmation not equal or the pasword is  empty';
+                if (controller[0].text != controller[1].text ||
+                    controller[0].text.isEmpty) {
+                  return 'يجب ان يتطابف الرمز مع تاكيدة';
                 }
-                widget.password = _list1[0].text;
+                widget.password = controller[0].text;
                 return null;
               },
               obscuringCharacter: '*',
               decoration: const InputDecoration(
+                  errorStyle: TextStyle(color: Colors.white),
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey)),
                   fillColor: Colors.white,
                   focusColor: Colors.brown,
                   filled: true,
-                  hintText: " ادخل الرقم السري"),
+                  hintText: " ادخل تاكيد الرقم السري"),
             ),
             Row(
               children: [
@@ -84,11 +86,19 @@ class _CustomePasswordEnterTextFieldState
       ),
     );
   }
+
+  @override
+  void dispose() {
+    for (TextEditingController f in controller) {
+      f.dispose();
+    }
+    super.dispose();
+  }
 }
 
 class CustomePasswordUpdateTextField extends StatefulWidget {
-    CustomePasswordUpdateTextField({super.key});
-   TextEditingController controller = TextEditingController();
+  CustomePasswordUpdateTextField({super.key});
+  TextEditingController controller = TextEditingController();
   @override
   State<CustomePasswordUpdateTextField> createState() =>
       _CustomePasswordUpdateTextFieldState();
@@ -105,7 +115,8 @@ class _CustomePasswordUpdateTextFieldState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(controller: widget.controller,
+          TextField(
+            controller: widget.controller,
             obscureText: !showPassword,
             obscuringCharacter: '*',
             decoration: const InputDecoration(

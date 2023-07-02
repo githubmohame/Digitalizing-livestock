@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import '../common_component/main_diwer.dart';
 
 class FarmList extends StatefulWidget {
-  const FarmList({super.key});
-
+    FarmList({super.key});
+  
   @override
   State<FarmList> createState() => _FarmListState();
 }
 
 class _FarmListState extends State<FarmList> {
+    TextEditingController controller=TextEditingController();
   @override
   Widget build(BuildContext context) {
    return Directionality(
@@ -45,7 +46,7 @@ class _FarmListState extends State<FarmList> {
                         elevation: 20,
                         child: Column(
                           children: [
-                            CustomeSearch(width: double.infinity,text:'ادخل اسم المربي' ),
+                            CustomeSearch(width: double.infinity,text:'ادخل اسم المربي' ,controller: controller ),
                             Expanded(
                               child: ListView.separated(
         itemBuilder: (context, index) {
@@ -73,6 +74,11 @@ class _FarmListState extends State<FarmList> {
                 ]);
               })),
         ));
+  }
+    @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 

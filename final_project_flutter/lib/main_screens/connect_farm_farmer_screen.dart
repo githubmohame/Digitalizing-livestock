@@ -8,15 +8,30 @@ import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 
-class ConnectFarmAndFarmerScreen extends StatelessWidget {
+class ConnectFarmAndFarmerScreen extends StatefulWidget {
   ConnectFarmAndFarmerScreen({Key? key}) : super(key: key);
-  List<TextEditingController> list = [
+
+  @override
+  State<ConnectFarmAndFarmerScreen> createState() => _ConnectFarmAndFarmerScreenState();
+}
+
+class _ConnectFarmAndFarmerScreenState extends State<ConnectFarmAndFarmerScreen> {
+  List<TextEditingController> controller = [
     TextEditingController(),
     TextEditingController(),
     TextEditingController()
   ];
+
   bool isCheck = false;
+
   bool delete = false;
+      @override
+  void dispose() {
+    for(TextEditingController f in controller){
+      f.dispose();
+    }
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -74,10 +89,10 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                   decoration: const BoxDecoration(),
                                   padding: const EdgeInsets.all(10),
                                   child: TextFormField(
-                                    controller: list[0],
+                                    controller: controller[0],
                                     validator: (value) {
                                       double num = funcStringValidation(
-                                          value: list[0].text, errorHeight: 0.0);
+                                          value: controller[0].text, errorHeight: 0.0);
                                       if (num == 0) {
                                         return null;
                                       }
@@ -115,13 +130,13 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                   decoration: const BoxDecoration(),
                                   padding: const EdgeInsets.all(10),
                                   child: TextFormField(
-                                    controller: list[1],
+                                    controller: controller[1],
                                     validator: (value) {
                                       if (delete) {
                                         return null;
                                       }
                                       double num = funcStringValidation(
-                                          value: list[1].text, errorHeight: 0.0);
+                                          value: controller[1].text, errorHeight: 0.0);
                                       if (num == 0) {
                                         return null;
                                       }
@@ -142,10 +157,10 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                   decoration: const BoxDecoration(),
                                   padding: const EdgeInsets.all(10),
                                   child: TextFormField(
-                                    controller: list[2],
+                                    controller: controller[2],
                                     validator: (value) {
                                       double num = funcNumValidation(
-                                          value: list[2].text, errorHeight: 0.0);
+                                          value: controller[2].text, errorHeight: 0.0);
                                       if (num == 0) {
                                         return null;
                                       }
@@ -180,9 +195,9 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                         if (formKey.currentState!.validate()) {
                                           Map<String, dynamic> dic1 = {
                                             'operation': "insert",
-                                            "farmer_id": list[2].text,
-                                            'farm_id': list[0].text,
-                                            'total_cost': list[1].text
+                                            "farmer_id": controller[2].text,
+                                            'farm_id': controller[0].text,
+                                            'total_cost': controller[1].text
                                           };
                                           FormData formData =
                                               FormData.fromMap(dic1);
@@ -225,11 +240,11 @@ class ConnectFarmAndFarmerScreen extends StatelessWidget {
                                                   (states) => Colors.red)),
                                       onPressed: () async{
                                         delete = true;
-                                        if (list[2].text.isNotEmpty) {
+                                        if (controller[2].text.isNotEmpty) {
                                           Map<String, dynamic> dic1 = {
                                             'operation': "delete",
-                                            "farmer_id": list[2].text,
-                                            'farm_id': list[0].text,
+                                            "farmer_id": controller[2].text,
+                                            'farm_id': controller[0].text,
                                           };
                                           FormData formData =
                                               FormData.fromMap(dic1);

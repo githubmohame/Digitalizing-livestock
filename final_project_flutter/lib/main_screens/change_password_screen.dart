@@ -24,6 +24,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     widgetIndex: 9,
   );
   final TextEditingController _controller = TextEditingController();
+      @override
+  void dispose() {
+     _controller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return BackgroundScreen(

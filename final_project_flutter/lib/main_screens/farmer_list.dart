@@ -37,7 +37,7 @@ class ItemList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('الاسم:' 'محمد ايمن',
+                  Text('الاسم:' + name,
                       style: TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
                     'عدد المزارع:${farm_count}',
@@ -56,17 +56,38 @@ class ListFarmer extends StatefulWidget {
   ListFarmer({Key? key}) : super(key: key);
   List<Map<String, dynamic>> l1 = [];
   String? url = "";
+
   @override
-  State<ListFarmer> createState() => _ListFarmerState();
+  State<ListFarmer> createState() {
+    print("kiiiiii");
+    return _ListFarmerState();
+  }
 }
 
 class _ListFarmerState extends State<ListFarmer> {
+  TextEditingController controller = TextEditingController();
   @override
   void initState() {
-    search_farm_api(farmerName: null).then((value) {
-      widget.l1 = value.$1;
-      widget.url = value.$2;
-      setState(() {});
+    print("hhhyy");
+
+    controller.addListener(
+      () {
+        print("it listener is already");
+        search_farmer_api(farmerName: controller.text.isEmpty?null:controller.text, url: '').then((value) {
+          if (value is (List<Map<String, dynamic>>, dynamic)) {
+            widget.l1 = value.$1;
+            widget.url = value.$2;
+            setState(() {});
+          }
+        });
+      },
+    );
+    search_farmer_api(farmerName: null, url: widget.url).then((value) {
+      if (value is (List<Map<String, dynamic>>, dynamic)) {
+        widget.l1 = value.$1;
+        widget.url = value.$2;
+        setState(() {});
+      }
     });
     super.initState();
   }
@@ -102,6 +123,7 @@ class _ListFarmerState extends State<ListFarmer> {
                         child: Column(
                           children: [
                             CustomeSearch(
+                                controller: controller,
                                 width: double.infinity,
                                 text: 'ادخل اسم المربي'),
                             Expanded(
@@ -110,6 +132,8 @@ class _ListFarmerState extends State<ListFarmer> {
                                   itemBuilder: (context, index) {
                                     // print(index.toString() +"   hhhhh  "+ widget.l1.length.toString());
                                     if (index < widget.l1.length) {
+                                      print(index);
+                                      print(widget.l1);
                                       return ItemList(
                                         farm_count: widget.l1[index]
                                             ["farm_count"],
@@ -117,13 +141,41 @@ class _ListFarmerState extends State<ListFarmer> {
                                         name: widget.l1[index]["name"],
                                       );
                                     } else if (widget.url is String) {
-                                      search_farm_api(farmerName: null)
+                                      search_farmer_api(
+                                              farmerName: controller.text,
+                                              url: widget.url)
                                           .then((value) {
-                                        widget.l1 = value.$1;
-                                        widget.url = value.$2;
-                                        setState(() {});
+                                        if (value is (
+                                          List<Map<String, dynamic>>,
+                                          dynamic
+                                        )) {
+                                          widget.l1 += value.$1;
+                                          widget.url = value.$2;
+                                          setState(() {});
+                                        }
                                       });
                                       return const LoadingScreen();
+                                    }
+                                    if (widget.l1.isEmpty) {
+                                      return Card(
+                                        child: Container(
+                                            height: 100,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text("هذا العميل غير موجود",
+                                                        style: TextStyle(
+                                                            fontSize: 20)),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                      );
                                     }
                                     return Container();
                                   }),
@@ -137,5 +189,11 @@ class _ListFarmerState extends State<ListFarmer> {
                 ]);
               })),
         ));
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

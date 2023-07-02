@@ -97,6 +97,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active=models.BooleanField(default=True)
     age=models.IntegerField(null=True,)
     location=models.ForeignKey(governorate,null=True,on_delete=models.SET_NULL)
+    img=models.ImageField(upload_to="farmer_user",blank=False,)
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
     id = models.AutoField(primary_key=True,  editable=False)

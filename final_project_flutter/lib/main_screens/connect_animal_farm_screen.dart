@@ -12,22 +12,41 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:final_project_year/common_component/main_diwer.dart';
 
-class ConnectAnimalFarm extends StatelessWidget {
+class ConnectAnimalFarm extends StatefulWidget {
   ConnectAnimalFarm({Key? key}) : super(key: key);
-  List<TextEditingController> list = [
+
+  @override
+  State<ConnectAnimalFarm> createState() => _ConnectAnimalFarmState();
+}
+
+class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
+      @override
+  void dispose() {
+    for(TextEditingController f in controller){
+      f.dispose();
+    }
+    super.dispose();
+  }
+  List<TextEditingController> controller = [
     TextEditingController(),
     TextEditingController(),
     TextEditingController(),
     TextEditingController()
   ];
+
   CustomeCheckbox customeCheckbox = CustomeCheckbox(
     value: false,
     text: "انثي",
   );
+
   DateTime date = DateTime.now();
+
   SelectAnimalType animalType = SelectAnimalType(platoonApi: platoon_type_api,speciesApi:animal_species_api ,);
+
   bool delete = false;
+
   bool isCheck = false;
+
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -59,7 +78,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                           child: Column(
                             children: [
                               TextFormField(
-                                controller: list[0],
+                                controller: controller[0],
                                 validator: (value) {
                                   if (funcStringValidation(
                                           value: value.toString(),
@@ -80,7 +99,7 @@ class ConnectAnimalFarm extends StatelessWidget {
                                 height: 10,
                               ),
                               TextFormField(
-                                controller: list[1],
+                                controller: controller[1],
                                 validator: (value) {
                                   if (delete) {
                                     return null;
@@ -189,8 +208,8 @@ class ConnectAnimalFarm extends StatelessWidget {
                                           Map<String, dynamic> dic1 = {
                                             'operation': "insert",
                                             'species': animalType.platoon,
-                                            "farm_id": list[0].text,
-                                            'animal_number': list[1].text,
+                                            "farm_id": controller[0].text,
+                                            'animal_number': controller[1].text,
                                             'date': date,
                                             "is_male": k,
                                           };
@@ -247,8 +266,8 @@ class ConnectAnimalFarm extends StatelessWidget {
                                         Map<String, dynamic> dic1 = {
                                           'operation': "delete",
                                           'species': animalType.platoon,
-                                          "farm_id": list[0].text,
-                                          'animal_number': list[1].text,
+                                          "farm_id": controller[0].text,
+                                          'animal_number': controller[1].text,
                                           'date': date,
                                           "is_male": k,
                                         };

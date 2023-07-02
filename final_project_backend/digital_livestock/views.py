@@ -3,6 +3,9 @@ from digital_livestock.models import *
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Count, F, Q 
 from digital_livestock.pagination import  CustomePagenation
+from django.http import FileResponse
+from googletrans import Translator
+
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import AnonymousUser,Group
@@ -18,6 +21,7 @@ from django.http.response import  JsonResponse
 from rest_framework import response
 from rest_framework.request import Request
 from django.contrib.gis.gdal import DataSource
+from asgiref.sync import async_to_sync
 from .serializer import *
 from rest_framework.authentication import BaseAuthentication
 from django.contrib.gis.gdal.geometries import Polygon,Point
@@ -525,7 +529,7 @@ def farmer_api(request :Request):
 			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
 		user1:User=User.objects.get(ssn=int(request.data['ssn']))
 		for key,value in dic1.items() :
-			if(value ==None  and  key not in ['ssn','fnane','lname','email','password','phone','photo']):
+			if(value ==None  and  key not in ['ssn','fnane','lname','email','password','phone','photo',"img"]):
 				continue
 			setattr(user1,key,value)
 		user1.save()
@@ -533,9 +537,11 @@ def farmer_api(request :Request):
 	if(oper=='insert'):
 		dic1=request.data.dict()
 		dic1.pop('operation')
-		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age'])):
+		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age',"img"])):
 			user1=User.objects.create_user(**dic1)
 			user1.groups.set([Group.objects.all().get(name="farmer")])
+			user1.save()
+			print("done")
 	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
 @permission_classes([permissions.AllowAny])
@@ -742,6 +748,7 @@ def admin_api(request :Request):
 @permission_classes([permissions.AllowAny])
 @authentication_classes([CustomerBackend])
 def search_farm_api(request :Request):
+	import translate
 	import typesense
 	client = typesense.Client({
 					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
@@ -753,9 +760,11 @@ def search_farm_api(request :Request):
 					'connection_timeout_seconds': 2
 			})
 	q=request.data.get('name')
+	t1=async_to_sync(translate.Translator( to_lang="english"))
+	m=async_to_sync(t1.translate )
 	if(q==None):
 		q="*"
-	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name"})
+	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name","sort_by":"_text_match:desc","prioritize_exact_match":False,"pre_segmented_query":True})
 	l1=[i['document']['id'] for i in d1['hits']]
 	pagination=CustomePagenation()
 	p1=pagination.paginate_queryset(farm.objects.all().filter(id__in= l1),request)
@@ -779,12 +788,19 @@ def search_farmer_api(request :Request):
 					'connection_timeout_seconds': 2
 			})
 	q=request.data.get('name')
+	
+	#t1=   Translator( )
+	try:
+		#q= (t1.translate(q,dist="en") ).text
+		print(q)
+	except Exception as e:
+		print(e)
 	if(q==None):
 		q="*"
-	d1=client.collections['farmer'].documents.search({"q":q,"query_by":"name"})
-	
+	d1=client.collections['farmer'].documents.search({"q":q,"query_by":"name","drop_tokens_threshold":1 ,"prioritize_exact_match":False,})
+	print(d1)
 	l1=[i['document']['id'] for i in d1['hits']]
-	print(l1)
+	#print(l1)
 	pagination=CustomePagenation()
 	p1=pagination.paginate_queryset(User.objects.all().filter(ssn__in= l1,groups__name='farmer'),request)
 	next=pagination.get_next_link()
@@ -917,5 +933,14 @@ def farm_map_bounder_api(request :Request):
 	u= governorate.objects.all().filter(name='بنى سويف')[0].location.boundary.coords 
 	print((u))
 	return  JsonResponse({"map": u})
+
+@api_view(['GET' ])
+@permission_classes([permissions.AllowAny])
+@authentication_classes([CustomerBackend])
+def img_farmer_api(request :Request):
+	print(dict(request.headers)) 
+	farm1=User.objects.get(ssn=request.headers["ssn"])
+	return  FileResponse(open(farm1.img.path,"rb"))
+
 
 

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     
     'django.contrib.gis',
     'rest_framework',
-    
+      
 ]
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -110,7 +110,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 
-
+MEDIA_ROOT = 'uploads/'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

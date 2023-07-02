@@ -1,16 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
-import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
-import 'package:final_project_year/main_screens/farmer_list.dart';
-import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
-import 'package:final_project_year/main_screens/screen_gavernorate.dart';
-import 'package:flutter/material.dart';
-
 import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
+import 'package:final_project_year/main_screens/connect_farm_farmer_screen.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
+import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
+import 'package:final_project_year/main_screens/login.dart';
+import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 
 class MainDrawer extends StatelessWidget {
   int index;
@@ -158,7 +159,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>   ListFarmer(),
+                      builder: (context) => ListFarmer(),
                     ));
               }),
             ),
@@ -540,7 +541,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>     ListFarmer(),
+                      builder: (context) => ListFarmer(),
                     ));
               }),
             ),
@@ -1034,7 +1035,7 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
                   onTap: () {
                     Navigator.pushReplacement(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return   ListFarmer();
+                        return ListFarmer();
                       },
                     ));
                   },
@@ -1065,7 +1066,7 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
                   onTap: () {
                     Navigator.pushReplacement(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return   ListFarmer();
+                        return ListFarmer();
                       },
                     ));
                   },
@@ -1095,5 +1096,26 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
         ),
       ),
     );
+  }
+}
+
+abstract class A {
+  int u;
+  A({
+    required this.u,
+  });
+
+  int sq({int u=90});
+}
+
+class B extends A {
+  int u;
+
+  B({required super.u, required int m}) : u = m;
+  
+  @override
+  int sq({int sq1=90,u=89}) {
+    // TODO: implement sq
+    throw UnimplementedError();
   }
 }

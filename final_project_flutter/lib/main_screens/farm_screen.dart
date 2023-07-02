@@ -153,7 +153,13 @@ class _FarmScreenState extends State<FarmScreen> {
     }
     return null;
   }
-
+    @override
+  void dispose() {
+    for(TextEditingController f in controller){
+      f.dispose();
+    }
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -1214,6 +1220,8 @@ class _CustomeTypeState extends State<CustomeType> {
       ],
     );
   }
+   
+
 }
 
 class CustomeButton extends StatefulWidget {

@@ -189,7 +189,11 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
   );
 
   TextEditingController controller = TextEditingController();
-
+      @override
+  void dispose() {
+     controller.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

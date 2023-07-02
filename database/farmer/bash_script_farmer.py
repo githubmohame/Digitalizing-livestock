@@ -1,4 +1,5 @@
 #!/usr/bin/python3.11
+from googletrans import Translator
 def main():
 	try:
 			import sys
@@ -7,6 +8,9 @@ def main():
 			ssn=sys.argv[1]
 			newname=sys.argv[2]
 			operation=sys.argv[3]
+			t1=Translator( )
+			
+			#newname=(t1.translate(newname,dist="en") ).text
 			farmer= {'id': ssn, 'name':newname}
 			client = typesense.Client({
 					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',

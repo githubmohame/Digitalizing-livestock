@@ -38,4 +38,5 @@ urlpatterns = [
             path('farm_map_bounder_api', farm_map_bounder_api),
             path("farm_platoon_api",farm_platoon_api),
             path("farm_species_api",farm_species_api),
+             path("img_farmer_api",img_farmer_api),
     ]

@@ -544,13 +544,13 @@ class _StatisticFarmState extends State<StatisticFarm> {
 class CustomeSearch extends StatefulWidget {
   CustomeSearch({
     Key? key,
-    required this.width,
+    required this.width,required this.controller,
     required this.text,
   }) : super(key: key);
 
   String text;
   double width;
-
+  TextEditingController controller;
   @override
   State<CustomeSearch> createState() => _CustomeSearchState();
 }
@@ -567,7 +567,7 @@ class _CustomeSearchState extends State<CustomeSearch> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
+            TextField(controller: widget.controller,
               onChanged: (value) {
                 if (value.isEmpty && visiable) {
                   setState(() {
@@ -575,7 +575,7 @@ class _CustomeSearchState extends State<CustomeSearch> {
                   });
                 } else if (!visiable) {
                   setState(() {
-                    height = 200;
+                    //height = 200;
                     visiable = true;
                   });
                 }
@@ -587,7 +587,7 @@ class _CustomeSearchState extends State<CustomeSearch> {
                   filled: true,
                   fillColor: Colors.white),
             ),
-            Visibility(
+           /* Visibility(
               visible: visiable,
               child: Expanded(
                   child: Container(
@@ -621,7 +621,7 @@ class _CustomeSearchState extends State<CustomeSearch> {
                           );
                         },
                       ))),
-            ),
+            ),*/
           ],
         ));
   }

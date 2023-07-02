@@ -10,18 +10,34 @@ import 'package:final_project_year/common_component/main_diwer.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class AddAdmin extends StatelessWidget {
+class AddAdmin extends StatefulWidget {
   AddAdmin({super.key});
+
+  @override
+  State<AddAdmin> createState() => _AddAdminState();
+}
+
+class _AddAdminState extends State<AddAdmin> {
    CustomePasswordEnterTextField customePasswordEnterTextField =
       CustomePasswordEnterTextField(widgetIndex: 90);
+
   GlobalKey<FormState> f = GlobalKey<FormState>();
+
   CustomeCheckBox checkUser = CustomeCheckBox(text: "مشرف في العياده الصحية",);
-  List<TextEditingController> list = [
+
+  List<TextEditingController> controller = [
     TextEditingController(),
     TextEditingController(),
     TextEditingController(),
     TextEditingController(),
   ];
+     @override
+  void dispose() {
+    for(TextEditingController f in controller){
+      f.dispose();
+    }
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -58,7 +74,7 @@ class AddAdmin extends StatelessWidget {
                          TextFormField(validator: (value) {
                            return value is String?null:"من فضلك ادخل الحقل";
                          },
-                             controller: list[0],
+                             controller: controller[0],
                              contextMenuBuilder:
                                  (context, editableTextState) {
                                editableTextState.contextMenuAnchors;
@@ -91,7 +107,7 @@ class AddAdmin extends StatelessWidget {
                          TextFormField(validator: (value) {
                             return value is String?null:"من فضلك ادخل الحقل";
                          },
-                             controller: list[1],
+                             controller: controller[1],
                              contextMenuBuilder:
                                  (context, editableTextState) {
                                editableTextState.contextMenuAnchors;
@@ -123,7 +139,7 @@ class AddAdmin extends StatelessWidget {
                          TextFormField(validator: (value) {
                             return value is String?null:"من فضلك ادخل الحقل";
                          },
-                             controller: list[2],
+                             controller: controller[2],
                              keyboardType: TextInputType.number,
                              style: const TextStyle(color: Colors.brown),
                              decoration: const InputDecoration(
@@ -148,7 +164,7 @@ class AddAdmin extends StatelessWidget {
                          TextFormField(validator: (value) {
                             return value is String?null:"من فضلك ادخل الحقل";
                          },
-                             controller: list[3],
+                             controller: controller[3],
                              keyboardType: TextInputType.number,
                              style: const TextStyle(color: Colors.brown),
                              decoration: const InputDecoration(
@@ -187,10 +203,10 @@ class AddAdmin extends StatelessWidget {
                                    Map<String, dynamic> dic1 = {
                                      'operation': "insert",
                                      "user_type": checkUser.value,
-                                     "fname": list[0].text,
-                                     'email': list[1].text,
-                                     'phone': list[2].text,
-                                     'ssn': list[3].text,
+                                     "fname": controller[0].text,
+                                     'email': controller[1].text,
+                                     'phone': controller[2].text,
+                                     'ssn': controller[3].text,
                                      "password":
                                          customePasswordEnterTextField
                                              .password,
@@ -237,9 +253,9 @@ class AddAdmin extends StatelessWidget {
                                        (states) => Colors.red)),
                            onPressed: () {
                              Map<String, dynamic> dic1 = {};
-                             if (list[3].text.isNotEmpty) {
+                             if (controller[3].text.isNotEmpty) {
                                dic1['operation'] = 'delete';
-                               dic1['ssn'] = list[3].text;
+                               dic1['ssn'] = controller[3].text;
                                admin_api(formData: FormData.fromMap(dic1));
                                showSnackbardone(
                                    context: context, text: 'done');
@@ -255,20 +271,20 @@ class AddAdmin extends StatelessWidget {
                            width: 200,
                            child: TextButton(
                                onPressed: () {
-                                 if (list[3].text.isNotEmpty) {
+                                 if (controller[3].text.isNotEmpty) {
                                    Map<String, dynamic> dic1 = {
                                      'operation': "update",
                                         "user_type": checkUser.value,
-                                     "fname": list[0].text.isEmpty
+                                     "fname": controller[0].text.isEmpty
                                          ? null
-                                         : list[0].text,
-                                     'email': list[1].text.isEmpty
+                                         : controller[0].text,
+                                     'email': controller[1].text.isEmpty
                                          ? null
-                                         : list[1].text,
-                                     'phone': list[2].text.isEmpty
+                                         : controller[1].text,
+                                     'phone': controller[2].text.isEmpty
                                          ? null
-                                         : list[2].text,
-                                     'ssn': list[3].text,
+                                         : controller[2].text,
+                                     'ssn': controller[3].text,
                                      "password":
                                          customePasswordEnterTextField
                                              .password,
