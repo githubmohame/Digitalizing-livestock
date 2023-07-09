@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:final_project_year/common_component/create_map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
@@ -132,9 +133,9 @@ class _GoogleMapComponentFarmScreenState
               screenSize: const Size(120, 330 - 18),
               pinchZoomWinGestures:
                   MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
-              maxBounds:widget.l1 ,
+              maxBounds: widget.l1,
               //center: widget.l1!.first,
-              onMove: (tapPosition, point) {
+              onPointerMove: (tapPosition, point) {
                 if (!widget.draw) return;
                 widget.list1[2] = point;
                 widget.list1[1] =
@@ -177,8 +178,7 @@ class _GoogleMapComponentFarmScreenState
               onPointerCancel: (event, point) {},
               onPositionChanged: (position, hasGesture) {},
               onTap: (tapPosition, point) {
-                if (widget.l1 is LatLngBounds) {
-                }
+                if (widget.l1 is LatLngBounds) {}
 
                 widget.point = point;
                 widget.list1 = [];
@@ -288,7 +288,8 @@ class GoogleMapComponentDashBoardScreen extends StatefulWidget {
 }
 
 class _GoogleMapComponentDashBoardScreenState
-    extends State<GoogleMapComponentDashBoardScreen> {
+    extends State<GoogleMapComponentDashBoardScreen>
+    with AutomaticKeepAliveClientMixin {
   MapController mapController = MapController();
   LatLng biggest = LatLng(-1, -1), smallest = LatLng(-1, -1);
 
@@ -317,10 +318,13 @@ class _GoogleMapComponentDashBoardScreenState
             interactiveFlags: InteractiveFlag.all,
             center: LatLng(30, 30),
             onPositionChanged: (position, hasGesture) async {
-              if ((position.zoom ?? 0) >= 5) {
+              print(position.zoom);
+              if ((position.zoom ?? 0) >= 6) {
+                
+
                 if (biggest < (position.bounds?.northEast)! ||
                     smallest > (position.bounds?.southWest)! ||
-                    biggest.longitude == -1) {
+                    biggest.longitude == -360) {
                   smallest = handleLocation(
                       latLng: position.bounds!.southWest, value: -5);
 
@@ -334,7 +338,7 @@ class _GoogleMapComponentDashBoardScreenState
                     "biggest":
                         json.encode([biggest.latitude, biggest.longitude])
                   }));
-
+                   
                   plogon = map1["ploygons"];
                   list1 = map1["markers"];
                   setState(() {});
@@ -342,6 +346,7 @@ class _GoogleMapComponentDashBoardScreenState
               } else {
                 plogon.clear();
                 list1.clear();
+                biggest  =  LatLng(-180,  -360);
               } /*else if (plogon.isNotEmpty) {
                 plogon.clear();
                 list1.clear();
@@ -382,4 +387,70 @@ class _GoogleMapComponentDashBoardScreenState
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+}
+
+
+
+
+class GoogleCompenentFarmInfo extends StatefulWidget {
+  List<Marker> list1 = [];
+  List<Polygon> plogon = [];
+  LatLng? center;
+    GoogleCompenentFarmInfo({super.key,required Map f}){
+      if (f['center'] != null) {
+        
+        list1.add(createMarker(f));
+        center=list1[0].point;
+      }
+      if (f["location"] != null) {
+        createPolygon(plogon, f);
+      }
+    }
+
+  @override
+  State<GoogleCompenentFarmInfo> createState() => _GoogleCompenentFarmInfoState();
+}
+
+class _GoogleCompenentFarmInfoState extends State<GoogleCompenentFarmInfo> with AutomaticKeepAliveClientMixin {
+  
+  bool draw = false;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: SizedBox(
+        height: 330,
+        child: FlutterMap(
+       
+          options: MapOptions(
+            interactiveFlags: InteractiveFlag.all,
+            center:widget.center ,
+            onPositionChanged: (position, hasGesture) async {
+              
+            },
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+              userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+            ),
+            PolygonLayer(polygons: widget.plogon),
+            widget.list1.isNotEmpty
+                ? MarkerLayer(
+                    markers: widget.list1,
+                  )
+                : Container(),
+           
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+   
+  bool get wantKeepAlive => true;
 }

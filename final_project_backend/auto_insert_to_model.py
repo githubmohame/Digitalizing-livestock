@@ -135,6 +135,13 @@ def test():
     print(f1)
 #test()
 #farm.objects.all().delete()
+def create_supervisor():
+  admin,create=Group.objects.get_or_create(name="supervisor")
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock' )
+  p1=Permission.objects.all().filter(content_type_id__in=context_table)
+  for perm in p1:
+    admin.permissions.add(perm)
+
 def create_admin():
   admin,create=Group.objects.get_or_create(name="admin")
   context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["village","city","governorate","platoon","species",])

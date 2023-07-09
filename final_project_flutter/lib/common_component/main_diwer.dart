@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:final_project_year/main_screens/list_farm.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project_year/main_screens/add_admin_screen.dart';
@@ -334,6 +335,27 @@ class MainDrawer extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => AddAdmin(),
+                    ));
+              }),
+            ),
+          ),
+           Container(
+            height: 1,
+            color: Colors.black,
+          ),
+          Container(
+            height: 100,
+            color: index == 13 ? Colors.grey : const Color(0xFF003e29),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              minVerticalPadding: 1,
+              title: const Text('عرض المزارع',
+                  style: TextStyle(color: Colors.white)),
+              onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FarmList(),
                     ));
               }),
             ),
@@ -783,6 +805,31 @@ class ComputerDrawer extends StatelessWidget {
               }),
             ),
           ),
+          Container(
+            height: 1,
+            color: Colors.black,
+            width: 1,
+          ),
+          Container(
+            width: 400,
+            height: 30,
+            color: index == 15 ? Colors.grey : const Color(0xFF003e29),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              minVerticalPadding: 1,
+              title: const Text('عرض المزارع',
+                  style: TextStyle(color: Colors.white)),
+              onTap: (() {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FarmList(),
+                    ));
+              }),
+            ),
+          ),
+          //
+
         ],
       ),
     );

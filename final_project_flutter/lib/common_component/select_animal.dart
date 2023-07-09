@@ -113,10 +113,10 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
 class SelectAnimalTypeFarm extends StatefulWidget {
   int? platoon;
   int? species;
-  int farmId;
+  String farmId;
   Future<List<Map<String, dynamic>>> Function(
-      {required int platoon, required int farmId}) speciesApi;
-  Future<List<Map<String, dynamic>>> Function({required int farmId})
+      {required int platoon, required String farmId}) speciesApi;
+  Future<List<Map<String, dynamic>>> Function({required String farmId})
       platoonApi;
 
   SelectAnimalTypeFarm({

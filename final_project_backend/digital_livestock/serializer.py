@@ -136,7 +136,6 @@ class LocationSerializer(serializers.ModelSerializer):
         if(obj.location==None):
             return None
         if(obj.location.geom_type=="Point"):
-            print(obj.location.geojson)
             return  obj.location.geojson
         return  obj.location.point_on_surface.geojson
     def get_total_cost_farm(self,obj:farm):
@@ -166,23 +165,43 @@ class villageFarmInfoSerializerTest(serializers.ModelSerializer):
         model=village
         fields=['name' ,"city" ]
 class FarmInfoShowSerializer(serializers.ModelSerializer):
+
     section_type=section_typeFarmListSerializer()
     village=villageFarmInfoSerializerTest()
-     
+    location=serializers.SerializerMethodField()
+    total_cost=serializers.SerializerMethodField()
+    center=serializers.SerializerMethodField()
     class Meta:
             model=farm
-            exclude=["id" ]
+            fields = '__all__'
+    def get_location(self,obj:farm):
+        if(obj.location==None):
+            return None
+        if(obj.location.geom_type=="Point"):
+            return None
+        if(obj.location.geom_type!="MultiPolygon"):
+            return obj.location.geojson
+        return  obj.location.geojson
+    def get_center(self,obj:farm):
+        if(obj.location==None):
+            return None
+        if(obj.location.geom_type=="Point"):
+            return  obj.location.geojson
     location=serializers.SerializerMethodField()
     def get_location(self,obj:farm):
         return obj.location.geojson
     
-    
-    
+    def get_total_cost(self,obj:farm):
+        pass
+        return connect_farm_farmer.objects.all().filter(farm=obj.id).aggregate(c=Sum("total_cost"))["c"]
 class FarmerShowInfoSerializer(serializers.ModelSerializer):
     farm_count= serializers.SerializerMethodField()
+    total_cost=serializers.SerializerMethodField()
     def get_farm_count(self,obj:User):
-        
         return connect_farm_farmer.objects.all().filter(farmer=obj.ssn).count();
+    def get_total_cost(self,obj:farm):
+        pass
+        return connect_farm_farmer.objects.all().filter(farmer=obj.ssn).aggregate(c=Sum("total_cost"))["c"]
     class Meta:
             model=User
-            fields=['fname','lname','phone' ,"farm_count" ]
+            fields=['fname','lname','phone',"ssn" ,"farm_count" ,"total_cost","img"]

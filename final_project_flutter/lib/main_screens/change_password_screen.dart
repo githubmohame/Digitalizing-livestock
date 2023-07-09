@@ -79,7 +79,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     canvasColor: Colors.transparent,
                                   ),
                                   child: SizedBox(
-                                     child: CustomeStepper(
+                                     child: Stepper(
                                         margin: const EdgeInsets.all(5),
                                         elevation: 0,
                                         onStepContinue: x < 1
@@ -207,7 +207,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                               title: const Text(
                                                   "ادخل البريد الاليكتروني"),
                                               content: Container(
-                                                height: 60,
+                                                height: 400,
                                                 color: Colors.white,
                                                 child: Column(
                                                   children: [
@@ -252,7 +252,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                               title: const Text(
                                                 'التأكيد',
                                               ),
-                                              content: Container(
+                                              content: Container(height:400,
                                                 color: Colors.transparent,
                                                 child: Column(
                                                   crossAxisAlignment:

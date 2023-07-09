@@ -9,7 +9,7 @@ String isEmpty({required String s1}) {
 
 String isNumeric({required String s1}) {
   try {
-    double num1 = double.parse(s1);
+     double.parse(s1);
     return '';
   } catch (e) {
     return 'the field should   be number';

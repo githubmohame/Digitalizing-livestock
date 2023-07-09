@@ -15,7 +15,7 @@ class CustomeCheckBox extends StatefulWidget {
   }
   Widget wid = Container();
   SelectLocation selectLocation = SelectLocation(village: -1, city: -1);
-  String value = "AdminUser" ;
+  String value = "admin" ;
   String text;
   @override
   State<CustomeCheckBox> createState() => _CustomeCheckBoxState();
@@ -37,7 +37,7 @@ class _CustomeCheckBoxState extends State<CustomeCheckBox> {
           children: [
             Row(children: [
               Radio<String>(
-              value:  "AdminUser",groupValue:  widget.value ,
+              value:  "admin",groupValue:  widget.value ,
               onChanged: (value) {
                 setState(() {
                   widget.value = value!;

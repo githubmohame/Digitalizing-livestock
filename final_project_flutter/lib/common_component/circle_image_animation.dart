@@ -4,8 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class CircleImageAnimation extends StatefulWidget {
-    CircleImageAnimation({super.key});
- File? image  ;
+  CircleImageAnimation({super.key});
+  File? image;
   @override
   State<CircleImageAnimation> createState() => _CircleImageAnimationState();
 }
@@ -13,9 +13,47 @@ class CircleImageAnimation extends StatefulWidget {
 class _CircleImageAnimationState extends State<CircleImageAnimation> {
   double hover = 100;
   bool imageClick = false;
- 
+
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return Align(
+        alignment: Alignment.center,
+        child: widget.image is File
+            ? CircleAvatar(
+                radius: 50,
+                backgroundImage: FileImage(widget.image!),
+                backgroundColor: Colors.blue.shade300,
+              )
+            : GestureDetector(onTap: () async {
+                        imageClick = true;
+                        FilePickerResult? f = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ["png", "jpg", "jpeg"]);
+              
+                        if (f is FilePickerResult) {
+                          widget.image = File(f.files.first.path.toString());
+                        }
+                        imageClick = false;
+                        hover = 100;
+                        setState(() {});
+                      },
+              child: CircleAvatar(radius: 50,
+                child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                        child: Icon (
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      
+                    )),
+                    Text("اختر صورة")
+                  ],
+                ),
+              ),
+            ),
+      );
+    }
     return MouseRegion(
       onEnter: (event) {
         if (imageClick) return;
@@ -28,7 +66,7 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
         setState(() {});
       },
       child: SizedBox(
-        height:100,
+        height: 100,
         width: 100,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(100),
@@ -38,10 +76,16 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
               Align(
                 alignment: Alignment.center,
                 child: widget.image is File
-                    ?  CircleAvatar(radius:100,backgroundImage: FileImage(widget.image!) ,backgroundColor: Colors.blue.shade300,)
-                    : CircleAvatar(radius:100, backgroundColor:Colors.blue.shade300,
-                      backgroundImage: AssetImage("assets/icons/user2.png") ,
-                    ),
+                    ? CircleAvatar(
+                        radius: 100,
+                        backgroundImage: FileImage(widget.image!),
+                        backgroundColor: Colors.blue.shade300,
+                      )
+                    : CircleAvatar(
+                        radius: 100,
+                        backgroundColor: Colors.blue.shade300,
+                        backgroundImage: AssetImage("assets/icons/user2.png"),
+                      ),
               ),
               AnimatedPositioned(
                 curve: Curves.linear,
@@ -54,11 +98,12 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
                       child: IconButton(
                     onPressed: () async {
                       imageClick = true;
-                      FilePickerResult? f = await FilePicker.platform.pickFiles(type: FileType.custom,
+                      FilePickerResult? f = await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
                           allowedExtensions: ["png", "jpg", "jpeg"]);
 
                       if (f is FilePickerResult) {
-                       widget.image=File(f.files.first.path.toString()) ;
+                        widget.image = File(f.files.first.path.toString());
                       }
                       imageClick = false;
                       hover = 100;

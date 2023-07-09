@@ -350,10 +350,9 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                                 await c.image!
                                                                     .readAsBytes(),
                                                                 filename:
-                                                                    "hhyyttt");
+                                                                    controller[4].text );
                                                   }
-                                                  print("&" * 789);
-                                                  var res = await farmer_api(
+                                                   var res = await farmer_api(
                                                       form: FormData.fromMap(
                                                           dic1));
 
@@ -446,6 +445,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                     (states) => Colors.red)),
                                         onPressed: () async {
                                           update_screen();
+                                          //print( controller[0].text.isNotEmpty);
                                           Map<String, dynamic> dic1 = {
                                             'operation': "update",
                                             "fname":
@@ -477,18 +477,19 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 customePasswordEnterTextField
                                                     .password,
                                           };
+                                          print(dic1["fname"]);
                                           if (c.image is File) {
                                             dic1["img"] =
-                                                MultipartFile.fromBytes(
+                                               await  MultipartFile.fromBytes(
                                                     await c.image!
                                                         .readAsBytes(),
-                                                    filename: "fsm1");
+                                                    filename: controller[4].text);
                                           }
 
                                           if (controller[4].text.isNotEmpty) {
                                             dic1['operation'] = 'update';
                                             var res = await farmer_api(
-                                                form: FormData.fromMap(dic1));
+                                                form: FormData.fromMap(dic1,ListFormat.multiCompatible));
                                             if (res.containsKey('message')) {
                                               showSnackbardone(
                                                   context: context,
@@ -500,6 +501,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                             }
                                             return;
                                           }
+
                                         },
                                         child: const Text(
                                           "تعديل",

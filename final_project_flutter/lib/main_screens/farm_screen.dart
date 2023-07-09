@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart' as dio;
+import 'package:dio/dio.dart';
+import 'package:final_project_year/common_component/circle_image_animation.dart';
 import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/google_map.dart';
@@ -40,6 +42,7 @@ class FarmScreen extends StatefulWidget {
 }
 
 class _FarmScreenState extends State<FarmScreen> {
+  CircleImageAnimation c = CircleImageAnimation();
   @override
   void initState() {
     //await CustomeSecureStorage.remove_all( );
@@ -153,13 +156,15 @@ class _FarmScreenState extends State<FarmScreen> {
     }
     return null;
   }
-    @override
+
+  @override
   void dispose() {
-    for(TextEditingController f in controller){
+    for (TextEditingController f in controller) {
       f.dispose();
     }
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -180,7 +185,7 @@ class _FarmScreenState extends State<FarmScreen> {
             drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: SizedBox(
-                height: 800 +
+                height: 900 +
                     14 +
                     74 +
                     496 +
@@ -202,7 +207,7 @@ class _FarmScreenState extends State<FarmScreen> {
                       color: const Color(0xFF357515),
                       child: Container(
                         padding: const EdgeInsets.all(20),
-                        height: 800 +
+                        height: 890 +
                             40 +
                             496 +
                             40 +
@@ -244,12 +249,11 @@ class _FarmScreenState extends State<FarmScreen> {
                                         ],
                                       )
                                     : Container(),
+                                c,
                                 Align(
                                   alignment: Alignment.topRight,
-                                  child: Wrap(
-                                    alignment: WrapAlignment.start,
-                                    crossAxisAlignment: WrapCrossAlignment
-                                        .start, //direction: Axis.vertical,
+                                  child: Row(
+                                       //direction: Axis.vertical,
                                     children: [
                                       Radio(
                                         focusColor: Colors.blue,
@@ -781,7 +785,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                               MaterialStateProperty.resolveWith(
                                                   (states) => Colors.green)),
                                       onPressed: () async {
-                                        await CustomeSecureStorage.remove_all();
+                                       /// await CustomeSecureStorage.remove_all();
                                         updateScreen();
                                         if (_formGlobalKey.currentState!
                                             .validate()) {
@@ -850,12 +854,18 @@ class _FarmScreenState extends State<FarmScreen> {
                                           };
                                           dic1["geometry"] =
                                               await getLocation();
+                                          if (c.image is File) {
+                                            dic1["img"] =
+                                                await MultipartFile.fromFile(
+                                                    c.image!.path,
+                                                    filename:
+                                                         "jjyyttttt");
+                                          }
+                                          print("jjjyyyttte");
                                           dio.FormData formData =
                                               dio.FormData.fromMap(
-                                                  dic1,
-                                                  dio.ListFormat
-                                                      .multiCompatible,
-                                                  false);
+                                            dic1,
+                                          );
                                           Map<String, dynamic> res =
                                               await farm_api(form: formData);
                                           if (res.containsKey('message')) {
@@ -938,12 +948,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                               MaterialStateProperty.resolveWith(
                                                   (states) => Colors.red)),
                                       onPressed: () async {
-                                        var f = dio.MultipartFile.fromBytes(
-                                            await File(
-                                                    '/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/egy_admbnda_adm1_capmas_20170421.zip')
-                                                .readAsBytes(),
-                                            filename: 'locations.shp');
-                                        Map<String, dynamic> dic1 = {
+                                        
+                                         Map<String, dynamic> dic1 = {
                                           'operation': "update",
                                           'attached_area': 12,
                                           r'farm_type': farmType.customeFarmType
@@ -997,9 +1003,17 @@ class _FarmScreenState extends State<FarmScreen> {
                                           'village': selectLocation.village
                                         };
                                         dic1["geometry"] = await getLocation();
+                                        if (c.image is File) {
+                                          dic1["img"] =
+                                              await MultipartFile.fromFile(
+                                                  c.image!.path,
+                                                  filename: 'iiiiu');
+                                        }
+                                        print(dic1["img"]);
                                         dio.FormData formData =
-                                            dio.FormData.fromMap(dic1,
-                                                dio.ListFormat.multi, false);
+                                            dio.FormData.fromMap(
+                                          dic1,
+                                        );
                                         var res =
                                             await farm_api(form: formData);
 
@@ -1220,8 +1234,6 @@ class _CustomeTypeState extends State<CustomeType> {
       ],
     );
   }
-   
-
 }
 
 class CustomeButton extends StatefulWidget {

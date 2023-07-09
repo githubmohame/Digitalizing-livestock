@@ -1,29 +1,63 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
+import 'package:final_project_year/common_component/show_load_screen.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../common_component/main_diwer.dart';
+import 'show_farm_info.dart';
 
 class FarmList extends StatefulWidget {
-    FarmList({super.key});
-  
+  FarmList({super.key});
+  List<Map<String, dynamic>> l1 = [];
+  String? url = "";
   @override
   State<FarmList> createState() => _FarmListState();
 }
 
 class _FarmListState extends State<FarmList> {
-    TextEditingController controller=TextEditingController();
+  TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    controller.addListener(
+      () {
+        print("it listener is already");
+        search_farm_api(
+                farmerName: controller.text.isEmpty ? null : controller.text,
+                url: '')
+            .then((value) {
+          if (value is (List<Map<String, dynamic>>, dynamic)) {
+            widget.l1 = value.$1;
+            widget.url = value.$2;
+            setState(() {});
+          }
+        });
+      },
+    );
+    search_farm_api(farmerName: null, url: widget.url).then((value) {
+      if (value is (List<Map<String, dynamic>>, dynamic)) {
+        widget.l1 = value.$1;
+        widget.url = value.$2;
+        setState(() {});
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-   return Directionality(
+    return Directionality(
         textDirection: TextDirection.rtl,
         child: BackgroundScreen(
           child: Scaffold(
-              drawer: MainDrawer(index: 8),
+              drawer: MainDrawer(index: 15),
               appBar: AppBar(
                 title: const Center(
-                  child: Text('عرض المربين',style: TextStyle(color: Colors.white),),
+                  child: Text(
+                    'عرض المربين',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 backgroundColor: Colors.transparent,
               ),
@@ -31,39 +65,78 @@ class _FarmListState extends State<FarmList> {
               body: LayoutBuilder(builder: (context, constraint) {
                 print(constraint.maxWidth);
                 return Row(children: [
-
                   constraint.maxWidth >= 1000 ? const Spacer() : Container(),
                   Expanded(
                     child: Container(
                       width: 400,
-                      color: const Color(0xFF357515
-
-),
+                      color: const Color(0xFF357515),
                       child: Card(
-                        color: const Color(0xFF357515
-
-),
+                        color: const Color(0xFF357515),
                         elevation: 20,
                         child: Column(
                           children: [
-                            CustomeSearch(width: double.infinity,text:'ادخل اسم المربي' ,controller: controller ),
+                            CustomeSearch(
+                                width: double.infinity,
+                                text: 'ادخل اسم المربي',
+                                controller: controller),
                             Expanded(
-                              child: ListView.separated(
-        itemBuilder: (context, index) {
-          return FarmItem(
-            city: 'ttrrre',
-            governorate: 'rree2234',
-            village: 'rrffgdf',
-            farmName: 'farm34556',
-            id: '3345664',
-            workers: 8,
-            sectionType: 'خاص',
-          );
-        },
-        separatorBuilder: (context, index) {
-          return Container(height: 20,);
-        },
-        itemCount: 100),
+                              child: ListView.builder(
+                                  itemCount: widget.l1.length + 1,
+                                  itemBuilder: (context, index) {
+                                    // print(index.toString() +"   hhhhh  "+ widget.l1.length.toString());
+                                    if (index < widget.l1.length) {
+                                      print(index);
+                                      print(widget.l1);
+                                      return FarmItem(
+                                        city: widget.l1[index]["city"],
+                                        farmName: widget.l1[index]["farm_name"],
+                                        governorate: widget.l1[index]
+                                            ["governorate"],
+                                        id: widget.l1[index]["id"],
+                                        sectionType: widget.l1[index]
+                                            ["section_type"],
+                                        village: widget.l1[index]["village"],
+                                        workers: widget.l1[index]["workers"],
+                                      );
+                                    } else if (widget.url is String) {
+                                      search_farm_api(
+                                              farmerName: controller.text,
+                                              url: widget.url)
+                                          .then((value) {
+                                        if (value is (
+                                          List<Map<String, dynamic>>,
+                                          dynamic
+                                        )) {
+                                          widget.l1 += value.$1;
+                                          widget.url = value.$2;
+                                          setState(() {});
+                                        }
+                                      });
+                                      return const LoadingScreen();
+                                    }
+                                    if (widget.l1.isEmpty) {
+                                      return Card(
+                                        child: Container(
+                                            height: 100,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text("هذا العميل غير موجود",
+                                                        style: TextStyle(
+                                                            fontSize: 20)),
+                                                  ],
+                                                ),
+                                              ],
+                                            )),
+                                      );
+                                    }
+                                    return Container();
+                                  }),
                             ),
                           ],
                         ),
@@ -75,7 +148,8 @@ class _FarmListState extends State<FarmList> {
               })),
         ));
   }
-    @override
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
@@ -84,6 +158,7 @@ class _FarmListState extends State<FarmList> {
 
 class FarmItem extends StatelessWidget {
   String farmName, village, city, governorate, sectionType, id;
+
   int workers;
   FarmItem({
     Key? key,
@@ -98,32 +173,102 @@ class FarmItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card( elevation: 5,
-          surfaceTintColor: const Color(0xFF467061),
-      child: Column(
-        children: [
-          Row(
-            children: [const Text('كود المزرعة'":"), Text(id)],
-          ),
-          const SizedBox(height: 5,),
-          Row(
-            children: [const Text('اسم المزرعة'":",style: TextStyle(fontSize: 18,color: Colors.black),), Text(farmName)],
-          ),const SizedBox(height: 5,),
-          Row(
-            children: [
-               const Icon(Icons.location_on),
-              Text("$village>",style: const TextStyle(fontSize: 18,color: Colors.black),),
-              Text("$city>",style: const TextStyle(fontSize: 18,color: Colors.black),),
-              Text(governorate,style: const TextStyle(fontSize: 18,color: Colors.black),)
-            ],
-          ),const SizedBox(height: 5,),
-          Row(
-            children: [const Text('عدد العمال'":",style: TextStyle(fontSize: 18,color: Colors.black),), Text(workers.toString(),style: const TextStyle(fontSize: 18,color: Colors.black),),],
-          ),const SizedBox(height: 5,),
-          Row(
-            children: [const Text(':نوع القطاع',style: TextStyle(fontSize: 18,color: Colors.black),), Text(sectionType.toString(),style: const TextStyle(fontSize: 18,color: Colors.black),)],
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return FarmInfoScreen(
+              farmId: id,
+            );
+          },
+        ));
+      },
+      child: Card(
+        elevation: 5,
+        surfaceTintColor: Colors.white, // const Color(0xFF467061),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Text(
+                  'كود المزرعة' ":",
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                Text(
+                  id.toString(),
+                  style: TextStyle(fontSize: 20, color: Colors.red),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'اسم المزرعة' ":",
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                Text(farmName,
+                    style: TextStyle(fontSize: 20, color: Colors.red))
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                const Icon(Icons.location_on),
+                Text(
+                  " الموقع: ",
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                ),
+                Text(
+                  "$village-",
+                  style: const TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                Text(
+                  "$city-",
+                  style: const TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                Text(
+                  governorate,
+                  style: const TextStyle(fontSize: 20, color: Colors.blue),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'عدد العمال' ":",
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                Text(
+                  workers.toString(),
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              children: [
+                const Text(
+                  'نوع القطاع: ',
+                  style: TextStyle(fontSize: 20, color: Colors.blue),
+                ),
+                Text(
+                  sectionType.toString(),
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

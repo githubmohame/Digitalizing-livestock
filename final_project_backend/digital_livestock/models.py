@@ -2,8 +2,11 @@
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 import uuid
+from django.db.models.fields.files import ImageFieldFile
 from django.contrib.gis.db import models
+from django.contrib.auth.models import Group
 from django.contrib.gis.db.backends import  spatialite
+from django.forms import FileField
 #from django.db.backends import sqlite3
 #from django.db import models
 # Create your models here.
@@ -40,11 +43,61 @@ class city(models.Model):
     governorate = models.ForeignKey(governorate, on_delete=models.CASCADE)
     location = models.GeometryField(geography=True,null=True)
 
+
+
+
+
+
+
 class village(models.Model):
     name = models.CharField(max_length=50)
     id = models.AutoField(primary_key=True , editable=False)
     city = models.ForeignKey(city, on_delete=models.CASCADE)
     location = models.GeometryField(geography=True,null=True)
+
+
+
+
+
+
+class AdminManager(BaseUserManager):
+     
+    def create_user(self, ssn, lname,fname, phone, password, location=None, **other_fields):
+        
+        user = self.model(fname=fname,ssn=ssn, lname=lname, phone=phone, location=location,**other_fields)
+        user.set_password(password)
+        user.save()
+        user.groups.add(Group.objects.get(name="admin"))
+        return user
+
+    def get_queryset(self):
+        return super().get_queryset().filter( groups__name__in=["admin"])
+
+
+
+
+
+
+
+
+class FarmerManager(BaseUserManager):
+     
+    def create_user(self, ssn, lname,fname, phone, password, location=None, **other_fields):
+        
+        user = self.model(fname=fname,ssn=ssn, lname=lname, phone=phone, location=location,**other_fields)
+        user.set_password(password)
+        user.save()
+        user.groups.add(Group.objects.get(name="farmer"))
+        return user
+
+    def get_queryset(self):
+        return super().get_queryset().filter( groups__name__in=["farmer"])
+
+
+
+
+
+
 
 class UserManager(BaseUserManager):
     def create_superuser(self, ssn ,fname, phone,  password, location=None,lname=None, **other_fields):
@@ -65,13 +118,21 @@ class UserManager(BaseUserManager):
         return self.create_user(ssn, fname=fname,lname=lname,phone= phone,  password= password,location= location, **other_fields)
 
     def create_user(self, ssn, lname,fname, phone, password, location=None, **other_fields):
+        
         user = self.model(fname=fname,ssn=ssn, lname=lname, phone=phone, location=location,**other_fields)
+        print(type (password) )
         user.set_password(password)
         user.save()
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    def __init__(self, *args, **kwargs):
+        super(User, self).__init__(*args, **kwargs)
+        self.old_kwargs=self.__dict__.copy()
+        self.old_kwargs["img"]=ImageFieldFile(instance=self,field=models.ImageField(upload_to="farmer_user",blank=False,null=True,),name=self.img.name)
+        self.old_kwargs["group"]=list(self.groups.all())
+        #print(args)
     ssn = models.CharField(max_length=13, primary_key=True, validators=[RegexValidator(regex='''[1-9]{1,1}[0-9]{12,12}''')])
     USERNAME_FIELD = 'ssn'
     REQUIRED_FIELDS = ['phone', 'fname',]
@@ -81,10 +142,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=12, blank=False, validators=[
         RegexValidator(regex='''[0-9]{12,12}''')
     ])
-    photo = models.ImageField(upload_to='personal_images')
+    #photo = models.ImageField(upload_to='personal_images')
     #village = models.ForeignKey(village, null=True, on_delete=models.CASCADE)
     objects = UserManager()
-    email=models.EmailField(null=True)
+    farmer=FarmerManager()
+    admin=AdminManager()
+    email=models.EmailField(null=True,unique=True,)
     lname = models.CharField(null=True,max_length=30, blank=False, validators=[
         RegexValidator(regex='''[a-zA-Zا-ي]''')
     
@@ -96,8 +159,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff=models.BooleanField(default=False)
     is_active=models.BooleanField(default=True)
     age=models.IntegerField(null=True,)
-    location=models.ForeignKey(governorate,null=True,on_delete=models.SET_NULL)
-    img=models.ImageField(upload_to="farmer_user",blank=False,)
+    location=models.ForeignKey(village,null=True,on_delete=models.SET_NULL)
+    img=models.ImageField( upload_to="farmer_user",blank=True,null=True,)
+
+class totpyUsers(models.Model):
+    insert_time = models.DateTimeField()
+    totp=models.CharField( max_length=32,)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)
     id = models.AutoField(primary_key=True,  editable=False)
@@ -109,7 +177,16 @@ class section_type(models.Model):
 
 
 class farm(models.Model):
-    #number_of_acres = models.PositiveIntegerField(null=True)
+    def __init__(self, *args, **kwargs):
+        super(farm, self).__init__(*args, **kwargs)
+        self.old_kwargs=self.__dict__.copy()
+        self.old_kwargs["img"]=ImageFieldFile(instance=self,field=models.ImageField(upload_to="farm_img",blank=False,null=True,),name=self.img.name)
+    def create(self, **obj_data):
+        # Do some extra stuff here on the submitted data before saving...
+        # For example...
+ 
+        # Now call the super method which does the actual creation
+        return super().create(**obj_data)
     farm_name = models.CharField(max_length=30,null=True)
     id = models.CharField(primary_key=True ,max_length=40 )
     number_of_workers_inner = models.PositiveIntegerField(null= False,default=0)
@@ -124,7 +201,7 @@ class farm(models.Model):
     attached_area = models.PositiveIntegerField(validators=[])
     location = models.GeometryField(null=True,geography=True )
     total_area_of_farm=models.PositiveIntegerField(null=True)
-    
+    img=models.FileField( upload_to="farm_img",blank=True,null=True)
 class connect_farm_farmtype(models.Model):
     class Meta:
         constraints = [

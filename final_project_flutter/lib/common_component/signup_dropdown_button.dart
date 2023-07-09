@@ -1,3 +1,5 @@
+import 'package:final_project_year/apis/apis_functions.dart';
+import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/main_screens/login.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +10,12 @@ class CustomeDropdownButtomSignUp extends StatefulWidget {
     required this.value,
   }) : super(key: key);
   @override
-  State<CustomeDropdownButtomSignUp> createState() => _CustomeDropdownButtomSignUpState();
+  State<CustomeDropdownButtomSignUp> createState() =>
+      _CustomeDropdownButtomSignUpState();
 }
 
-class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignUp> {
+class _CustomeDropdownButtomSignUpState
+    extends State<CustomeDropdownButtomSignUp> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +34,7 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
         items: [
           const DropdownMenuItem<int>(
             value: 13,
-            child:   Row(
+            child: Row(
               children: [
                 Expanded(child: Icon(Icons.person_2_rounded)),
                 Expanded(
@@ -45,7 +49,25 @@ class _CustomeDropdownButtomSignUpState extends State<CustomeDropdownButtomSignU
             value: 12,
             child: Row(
               children: [
-                Expanded(child: Image.asset('assets/icons/profile_pic.png')),
+                FutureBuilder(
+                    future: CustomeSecureStorage.getssn(),
+                    builder: (context, snapout) {
+                      return FutureBuilder(
+                          future:
+                              image_farmer_api(ssn: snapout.data.toString()),
+                          builder: (context, snap) {
+                            if (snap.data is ImageProvider) {
+                              return Expanded(
+                                  child: Image(
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container();
+                                },
+                                image: snap.data!,
+                              ));
+                            }
+                            return Container();
+                          });
+                    }),
                 const Expanded(
                     child: Text(
                   'Mohamed',

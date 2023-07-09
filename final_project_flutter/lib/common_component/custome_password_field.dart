@@ -110,7 +110,7 @@ class _CustomePasswordUpdateTextFieldState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      height: 120,
       color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

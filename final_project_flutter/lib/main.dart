@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 
-
+import 'main_screens/biometric_screen.dart';
+import 'main_screens/login.dart';
 import 'service/notifications.dart';
 
 /*
@@ -105,9 +108,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return   MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  FarmScreen( ),
+      home: Builder(builder: (context) {
+        if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
+          return BimetricScreen();
+        } else {
+          return LogIN();
+        }
+      }),
     );
     /*
     return FutureBuilder(

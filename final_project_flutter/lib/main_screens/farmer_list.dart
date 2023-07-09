@@ -10,10 +10,12 @@ import 'package:final_project_year/main_screens/bash_board_screen.dart';
 class ItemList extends StatelessWidget {
   String name;
   int farm_count;
+  String ssn;
   String phone;
   ItemList({
     Key? key,
     required this.name,
+    required this.ssn,
     required this.farm_count,
     required this.phone,
   }) : super(key: key);
@@ -28,11 +30,16 @@ class ItemList extends StatelessWidget {
           surfaceTintColor: Color(0xFF467061),
           child: Row(
             children: [
-              CircleAvatar(
-                minRadius: 30,
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1664575602554-2087b04935a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'),
-              ),
+              FutureBuilder(
+                  future: image_farmer_api(ssn: ssn),
+                  builder: (context, snap) {
+                    if (snap.data is ImageProvider<Object>)
+                      return CircleAvatar(
+                        minRadius: 30,
+                        backgroundImage: snap.data,
+                      );
+                    return Container();
+                  }),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,7 +80,10 @@ class _ListFarmerState extends State<ListFarmer> {
     controller.addListener(
       () {
         print("it listener is already");
-        search_farmer_api(farmerName: controller.text.isEmpty?null:controller.text, url: '').then((value) {
+        search_farmer_api(
+                farmerName: controller.text.isEmpty ? null : controller.text,
+                url: '')
+            .then((value) {
           if (value is (List<Map<String, dynamic>>, dynamic)) {
             widget.l1 = value.$1;
             widget.url = value.$2;
@@ -135,6 +145,7 @@ class _ListFarmerState extends State<ListFarmer> {
                                       print(index);
                                       print(widget.l1);
                                       return ItemList(
+                                        ssn: widget.l1[index]["ssn"],
                                         farm_count: widget.l1[index]
                                             ["farm_count"],
                                         phone: widget.l1[index]["phone"],

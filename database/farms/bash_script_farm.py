@@ -7,12 +7,10 @@ def main():
 			#print(sys.argv)
 			id=sys.argv[1]
 			newname=sys.argv[2]
-			newname.split(" ")
-			newname="".join(newname)
 			operation=sys.argv[3]
-			t1=Translator( )
+			#t1=Translator( )
 			
-			newname=(t1.translate(newname,dist="en") ).text
+			#newname=(t1.translate(newname,dist="en") ).text
 			farm= {'id': id, 'name':newname}
 			client = typesense.Client({
 					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
@@ -36,7 +34,7 @@ def main():
 			pass
 
 main()
-import sys
+#import sys
 #print(sys.argv[1])
 
 schema = {
@@ -54,4 +52,3 @@ schema = {
 		 
 	] 
 }
- 

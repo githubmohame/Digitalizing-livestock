@@ -18,9 +18,9 @@ urlpatterns = [
         ,path('farm_api', farm_api)
         ,path('modified_species',modified_species)
         ,path('modified_platoon', modified_platoon)
-        ,path('farmer_api',  farmer_api)
+        ,path('farmer_api',  farmer_api,name="farme fff")
         ,path('add_farme_animal_api', add_farm_animal)
-       ,path('location_api',   get_locations)
+       ,path('location_api',   get_locations_api)
        ,path('animal_api',  get_animal)
        ,path('change_password_email',   change_password_email)
        ,path('change_password_done',   change_password_done)
@@ -39,4 +39,6 @@ urlpatterns = [
             path("farm_platoon_api",farm_platoon_api),
             path("farm_species_api",farm_species_api),
              path("img_farmer_api",img_farmer_api),
+              path("change_password_email_template", change_password_email_template),
+                path("test_url/<int:id>", test_url),
     ]

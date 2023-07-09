@@ -74,7 +74,8 @@ class _LogINState extends State<LogIN> {
                                     return TextField(
                                         controller: _controller,
                                         keyboardType: TextInputType.number,
-                                        style: const TextStyle(color: Colors.brown),
+                                        style: const TextStyle(
+                                            color: Colors.brown),
                                         decoration: const InputDecoration(
                                             filled: true,
                                             fillColor: Colors.white,
@@ -110,25 +111,33 @@ class _LogINState extends State<LogIN> {
                               ),
                               text,
                               SizedBox(
-                                height: 50,
+                                height:70,
                                 child: TextButton(
                                     onPressed: () async {
+                                      print(customePasswordUpdateTextField
+                                          .controller.text);
                                       Map<String, dynamic> dic1 = {
                                         "ssn": _controller.text,
                                         "password":
                                             customePasswordUpdateTextField
                                                 .controller.text
                                       };
+                                      print(dic1);
                                       var f = await login_api(
                                           formData: FormData.fromMap(dic1));
                                       print(f['token'].runtimeType);
                                       if (f['token']) {
                                         CustomeSecureStorage.setssn(
                                             ssn: _controller.text);
+
                                         CustomeSecureStorage.setpassword(
                                             password:
                                                 customePasswordUpdateTextField
                                                     .controller.text);
+                                        print(await CustomeSecureStorage
+                                            .getssn());
+                                        print(await CustomeSecureStorage
+                                            .getpassword());
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
