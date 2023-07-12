@@ -16,9 +16,9 @@ class LocationCubit extends Cubit<LocationState> {
     int gavernorate,
   ) async {
     if (state.gavernorate != gavernorate) {
-      List<Map<String, dynamic>> l1 = await city_api(gavernorate: gavernorate);
+      List<Map<String, dynamic>> l1 = await Api.city_api(gavernorate: gavernorate);
       if (l1.isNotEmpty) {
-        List<Map<String, dynamic>> l2 = await village_api(city: l1[0]['id']!);
+        List<Map<String, dynamic>> l2 = await  Api.village_api(city: l1[0]['id']!);
          
         emit(LocationState(
             city: l1.isNotEmpty?l1[0]['id']!:-1,
@@ -35,7 +35,7 @@ class LocationCubit extends Cubit<LocationState> {
     int city,
   ) async {
     if (state.city != city) {
-      List<Map<String, dynamic>> l2 = await village_api(city: city);
+      List<Map<String, dynamic>> l2 = await  Api.village_api(city: city);
       if (l2.isNotEmpty) {
         emit(LocationState(
             city: city, gavernorate: state.gavernorate, village: l2[0]['id']!));

@@ -39,6 +39,7 @@ urlpatterns = [
             path("farm_platoon_api",farm_platoon_api),
             path("farm_species_api",farm_species_api),
              path("img_farmer_api",img_farmer_api),
-              path("change_password_email_template", change_password_email_template),
-                path("test_url/<int:id>", test_url),
+              path("change_password_email_template", send_totpy_email),
+                path("test_url/<str:id>", send_totpy_template),
+                  path("check_totp",check_totp_api),
     ]

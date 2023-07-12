@@ -12,12 +12,12 @@ class BimetricScreen extends StatelessWidget {
       child: Scaffold(backgroundColor: Colors.transparent,
         body: SafeArea(
             child: Center(
-          child: TextButton(
-            child: Text("اضغط علي الزر للتاكد من الشخصية"),
+          child: TextButton(style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.blue),foregroundColor: MaterialStateProperty.resolveWith((states) => Colors.white)),
+            child: const Text("اضغط علي الزر للتاكد من الشخصية"),
             onPressed: ()async {
               
             if( await _checkBiometric()){
-              Navigator.pushReplacement(context,MaterialPageRoute(builder: (BuildContext context) =>LogIN())) ;
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (BuildContext context) =>const LogIN())) ;
             }
     
             },
@@ -47,9 +47,9 @@ class BimetricScreen extends StatelessWidget {
 
     print("following biometrics are available");
     if (availableBiometrics.isNotEmpty) {
-      availableBiometrics.forEach((ab) {
+      for (var ab in availableBiometrics) {
         print("\ttech: $ab");
-      });
+      }
     } else {
       print("no biometrics are available");
     }

@@ -3,11 +3,13 @@ from digital_livestock.models import *
 from django.db.models import Count, F, Q 
 from digital_livestock.pagination import  CustomePagenation
 from django.http import FileResponse
+from digital_livestock.backend import *
+from digital_livestock.permission import *
 from django.utils.html import strip_tags
 # Create your views here.
 from django.template.loader import render_to_string
 from rest_framework.viewsets import ModelViewSet
-from django.contrib.auth.models import AnonymousUser,Group
+from django.contrib.auth.models import  Group
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
@@ -20,10 +22,10 @@ from rest_framework import response
 from rest_framework.request import Request
 from django.contrib.gis.gdal import DataSource
 from .serializer import *
-from rest_framework.authentication import BaseAuthentication
 from django.contrib.gis.gdal.geometries import Polygon,Point
 import geopandas as gpd
 import json
+
 from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
  	if(dic1.get('geometry')!=None):
@@ -93,42 +95,13 @@ def set_geometry(obj:models.Model,dic1:dict[str,]):
 					setattr(obj,"location",muilt_plog)
 			except Exception as e:
 				return JsonResponse({'error':'خطأ في صيغة الملف'})
-class CustomerAccessPermission(permissions.BasePermission):
 
-	def has_permission(self, request, view):
-		if(type(request.user)!=AnonymousUser and request.user.groups.all().filter(name="admin").count()>0 and view.__class__.__name__ in ["modified_gavernorate","modified_city","modified_village","modified_species","modified_platoon" ,"governorate_api","get_locations_api","city_api","village_api","admin_api"]):
-			return True;
-		elif(type(request.user)!=AnonymousUser and request.user.groups.all().filter(name="fockeltpoint").count()>0 and  view.__class__.__name__ in["farm_api","farmer_api","add_farm_animal" , "search_farm_api","search_farmer_api","connect_farm_farmer_api","farm_info_list","farm_info","farm_platoon_api","farm_species_api","get_animal_farm","farm_map_bounder_api","governorate_api","get_locations_api","city_api","village_api","farm_type_api","section_type_api","animal_species_api","animal_plotoon_api","get_animal" ,"img_farmer_api" ,]):
-			#print("jjjhyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-			return True
-		elif(type(request.user)!=AnonymousUser and request.user.groups.all().filter(name="supervisor").count()>0  and view.__class__.__name__ in["governorate_api","city_api","village_api","location_statistics", "summary_governorate"]):
-			return True
-		elif(view.__class__.__name__ =="login"):	
-			return True
-		elif(type(request.user)!=AnonymousUser and view.__class__.__name__ in["change_password","change_password_done","change_password_email"] ):
-			return True
-		elif(type(request.user)!=AnonymousUser and request.user.groups.all().filter(name="farmer").count()>0 and  view.__class__.__name__ in ["farm_info_list","farm_info","farm_platoon_api","farm_species_api","get_animal_farm"]):
-			return True
-		 
-	def has_object_permission(self, request, view, obj):
-		return False
-class CustomerBackend(BaseAuthentication):
-	def authenticate(self, request, **kwargs):
-		try:
-			u1=User.objects.get(ssn=request.headers["ssn"])
-			if(u1.check_password(request.headers["password"])):
-				 
-				return (u1,None)
-			else:
-				return (AnonymousUser(),None)
-		except Exception as e:
-			print(e)
-			return (AnonymousUser(), None)
+
 class OncePerDayUserThrottle(UserRateThrottle):
 	rate = '1/day'
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def governorate_api(request :Request):
 	if(request.user.groups.filter(name="admin").count()  > 0):
 		q=Q()
@@ -139,7 +112,7 @@ def governorate_api(request :Request):
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def city_api(request :Request):
 	if(request.user.groups.all().filter(name="admin")):
 		q=Q()
@@ -152,7 +125,7 @@ def city_api(request :Request):
 		return response.Response({"data":[]})
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def village_api(request :Request):
 	if(request.user.groups.all().filter(name="admin")):
 		q=Q()
@@ -167,14 +140,14 @@ def village_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def animal_plotoon_api(request :Request):
 	ser1=platoonSerializer( instance= platoon.objects.all()  ,many=True)
 	return response.Response(ser1.data)
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def animal_species_api(request :Request):
 	ser1=speciesSerializer( instance= species.objects.all().filter(platoon=platoon.objects.get(id=request.data['filter']))  ,many=True)
 	return response.Response(ser1.data)
@@ -182,21 +155,19 @@ def animal_species_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def section_type_api(request :Request):
 	ser1=section_typeSerializer( instance= section_type.objects.all()  ,many=True)
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_type_api(request :Request):
 	ser1=farm_typeSerializer( instance= farm_type.objects.all()  ,many=True)
 	return response.Response(ser1.data)
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
 def login(request :Request):
-	
 	user1=User.objects.all().filter(ssn=request.data.get('ssn'))
 	print(user1)
 	if(user1.count()>0):
@@ -214,7 +185,7 @@ def login(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def create_farmer(request :Request):
 	request.data
 	u=User.farmer.create_user(fname=request.data['fname'],ssn=request.data['ssn'],lname=request.data['lname'],password=request.data['password'],phone=request.data['phone'])
@@ -223,7 +194,7 @@ def create_farmer(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def modified_gavernorate(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
@@ -246,7 +217,7 @@ def modified_gavernorate(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def modified_city(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
@@ -273,7 +244,7 @@ def modified_city(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def modified_village(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
@@ -299,7 +270,7 @@ def modified_village(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def test_geson(request :Request):
 	f1= GEOSGeometry(str(request.data.get('filter') ))
 	return JsonResponse({"llo":986})
@@ -307,7 +278,7 @@ def test_geson(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_api(request :Request):
 	if(request.data['operation']=='insert'):
 		try:
@@ -399,7 +370,7 @@ def farm_api(request :Request):
 			return  JsonResponse({"message":"تم تعديل البينات"})
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def modified_species(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
@@ -433,7 +404,7 @@ def modified_species(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def modified_platoon(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
@@ -469,7 +440,7 @@ def rename(newname):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 #@rename("tell me")
 def farmer_api(request :Request):
 	oper=request.data['operation']
@@ -524,7 +495,7 @@ def farmer_api(request :Request):
 	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def add_farm_animal(request :Request):
 	from datetime import datetime
 	if(request.data['operation']=='insert'):
@@ -570,7 +541,7 @@ def add_farm_animal(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def get_locations_api(request :Request):
 	if(request.user.groups.all().filter(name="admin")):
 		q=Q()
@@ -583,7 +554,7 @@ def get_locations_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def get_animal(request :Request):
 	try:
 		g1=species.objects.all()[0]
@@ -597,20 +568,20 @@ def get_animal(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def change_password_email(request :Request):
-	if(User.objects.filter(email=request.data['email']).count()==0):
+	if(User.objects.filter(ssn=request.data['ssn']).count()==0):
 		return JsonResponse({"error":"login first"})
+	u1=User.objects.get(ssn=request.data['ssn'])
 	from uuid import uuid4
 	code=uuid4()
 	render(request,template_name='confirm_code.html', context={"code":code})
-	html_content = render_to_string('confirm_code.html', context={"code":code},request=request) 
+	html_content = render_to_string('confirm_code.html', context={"code":code},request=request).strip()
 	subject = 'confirm email address'
 
-	text_content = strip_tags(html_content) # Strip the html tag. So people can see the pure text at least.
-	msg = EmailMultiAlternatives(subject,  text_content,from_email=settings.EMAIL_HOST_USER , to=[request.data.get('email')],reply_to= [request.data.get('email')])
+	msg = EmailMultiAlternatives(subject,  "kkkkkkkk",from_email=settings.EMAIL_HOST_USER , to=[ u1.email],reply_to= [ u1.email])
 	msg.content_subtype = 'html'  # Main content is text/html
-	msg.attach_alternative(text_content, 'text/html')
+	msg.attach_alternative(html_content, 'text/html')
 	print( request.get_host()+"/"+"change_password_email_template/?")
 	msg.mixed_subtype = 'related'
 	 # This is critical, otherwise images will be displayed as attachments!
@@ -618,8 +589,9 @@ def change_password_email(request :Request):
 	import redis
 	r=redis.Redis()
 	#send_mail('change_password','the code is   '+str(code  ),settings.EMAIL_HOST_USER,[request.data.get('email')],fail_silently=False)
-	r.setex(name=str(code  ),time=5*60,value=request.data.get('email'))
+	r.setex(name=str(code  ),time=5*60,value=request.data.get('ssn'))
 	return JsonResponse({"message":'تم ارسال الرسالة'})
+'''
 def change_password_email_template(request :Request):
 	from uuid import uuid4
 	import redis
@@ -628,17 +600,19 @@ def change_password_email_template(request :Request):
 	#send_mail('change_password','the code is   '+str(code  ),settings.EMAIL_HOST_USER,[request.data.get('email')],fail_silently=False)
 	r.setex(name=str(code  ),time=5*60,value=request.data.get('email'))
 	return render('confirm_code.html', context={"code":code},request=request)
+'''
+
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def change_password_done(request :Request):
 	import redis
 	r=redis.Redis()
-	email=r.get(request.data.get('code'))
-	if(isinstance(email,bytes)):
-		email=email.decode()
-	if(email!=None):
-		user=User.objects.get(email=email)
+	ssn=r.get(request.data.get('code'))
+	if(isinstance(ssn,bytes)):
+		ssn=ssn.decode()
+	if(ssn!=None):
+		user=User.objects.get(ssn=ssn)
 		user.set_password(request.data.get('password'))
 		user.save()
 	return JsonResponse({"message":'تم تغير كلمه المرور'})
@@ -649,7 +623,7 @@ def change_password_done(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def connect_farm_farmer_api(request :Request):
 	if(request.data.get('operation')=='insert'):
 		try:
@@ -673,7 +647,7 @@ def connect_farm_farmer_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def admin_api(request :Request):
 	oper=request.data['operation']
 	if(oper=='delete'):
@@ -733,7 +707,7 @@ def admin_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def search_farm_api(request :Request):
 	import translate
 	import typesense
@@ -760,7 +734,7 @@ def search_farm_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def search_farmer_api(request :Request):
 	import typesense
 	client = typesense.Client({
@@ -789,7 +763,7 @@ def search_farmer_api(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def summary_governorate(request :Request):
 	stat1=farm.objects.all().aggregate(village_count=Count("village__city__governorate__name"))
 	stat2={"farm_meat":connect_farm_farmtype.objects.filter(farm_type__name__exact='انتاج لحوم').count()}
@@ -807,7 +781,7 @@ def summary_governorate(request :Request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def get_data_map(request :Request):
 	import json
 	l1  =json.loads(request.data["smallest"])+ json.loads(request.data["biggest"])
@@ -815,7 +789,7 @@ def get_data_map(request :Request):
 	return response.Response( LocationSerializer(f1,many=True).data)
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def location_statistics(request):
 	
 	if(request.data.get("type")=="gov"):
@@ -835,7 +809,7 @@ def location_statistics(request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_info_list(request):
 	from datetime import datetime
 	pagination=CustomePagenation()
@@ -861,7 +835,7 @@ def farm_info_list(request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_info(request):
 	qs=farm.objects.all().get(id=request.data.get('id'))
 	ser1=FarmInfoShowSerializer( instance= qs )
@@ -870,14 +844,14 @@ def farm_info(request):
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_platoon_api(request):
 	l1=list(connect_animal_farm.objects.all().filter(farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon__name","animal_sub_type__platoon__id").annotate(id=F("animal_sub_type__platoon"),name=F("animal_sub_type__platoon__name")).values("name","id").distinct())
 	return JsonResponse({"data":l1})
 
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_species_api(request):
  	
 	l1=list(connect_animal_farm.objects.all().filter(animal_sub_type__platoon__id=request.data.get("filter"),farm_id=request.data.get("farm_id")).values("animal_sub_type__name","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),name=F("animal_sub_type__name")).values("name","id").distinct())
@@ -886,7 +860,7 @@ def farm_species_api(request):
  
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def get_animal_farm(request :Request):
 	try:
 		l1=list(connect_animal_farm.objects.all().filter( farm_id=request.data.get("farm_id")).values("animal_sub_type__platoon","animal_sub_type__id").annotate(id=F("animal_sub_type__id"),platoon=F("animal_sub_type__platoon")).values("platoon","id").distinct())
@@ -897,7 +871,7 @@ def get_animal_farm(request :Request):
 		
 @api_view(['GET' ])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def farm_map_bounder_api(request :Request):
 	request.data
 	u= governorate.objects.all().filter(id=request.user.location.city.governorate.id)[0].location.boundary.coords 
@@ -905,14 +879,63 @@ def farm_map_bounder_api(request :Request):
 
 @api_view(['GET' ])
 @permission_classes([CustomerAccessPermission])
-@authentication_classes([CustomerBackend])
+@authentication_classes([CustomerBackendTotp])
 def img_farmer_api(request :Request):
 	farm1=User.farmer.get(ssn=request.headers["userssn" ])
 	farm.objects.filter
 	return  FileResponse(open(farm1.img.path,"rb"))
 
+@api_view(['GET','POST'])
+@permission_classes([CustomerAccessPermission])
+@authentication_classes([CustomerBackendBasic])
+def send_totpy_email(request :Request):
+	print(request.data)
+	if(User.objects.filter(ssn=request.headers['ssn']).count()==0):
+		return JsonResponse({"error":"login first"})
+	from uuid import uuid4
+	code=uuid4()
+	u1:User=User.objects.get(ssn=request.headers['ssn'])
+	subject = 'confirm email address'
+	code2=request.get_host()+"/"+"test_url/"+str(code)
+	#msg = EmailMultiAlternatives(subject,  "من فضلك اضغط علي الاينك\n"+code2,from_email=settings.EMAIL_HOST_USER , to=[u1.email ],reply_to= [request.data.get('email')])
+	print( "http://"+request.get_host()+"/"+"test_url/"+str(code)  +"\t")
+	try:
+		pyotpv1=totpyUsers.objects.get(user=User.objects.get(ssn=request.headers['ssn'])).totp
+	except Exception as e:
+		import pyotp
+		pyotpv1=pyotp.random_base32()
+		 
+		totpyUsers.objects.create(totp=pyotpv1, user=User.objects.get(ssn=request.headers['ssn']))
+		
+ 	 # This is critical, otherwise images will be displayed as attachments!
+	#msg.send( )
+	import redis
+	print(u1.email)
+	r=redis.Redis()
+	#send_mail('send totpy code','the url for totpy is\n'+"http://"+request.get_host()+"/"+"test_url/"+str(code)  +"\t",settings.EMAIL_HOST_USER,[   u1.email],fail_silently=False)
+	r.setex(name=str(code  ),time=5*60,value= pyotpv1)
+	print(r.get(str(code)))
+	return JsonResponse({"message":'تم ارسال الرسالة'})
 
+def send_totpy_template(request ,id ):
+	import redis
+	r=redis.Redis()
+	totpy=r.get( id)
+	r.delete(id)
+	print( ( id))
+	try:
+		return  render(request=request,template_name="totpy.html",context={"code":totpy.decode()},);
+	except Exception as e:
+		print(e)
+		return    render(request=request,template_name="totpy_error.html",);
 
-def test_url(request ,id ):
-    print( ( id))
-    return JsonResponse({"map": ""});
+#NULL
+@api_view(['GET' , ])
+@permission_classes([ CustomerAccessPermission])
+@authentication_classes([CustomerBackendBasic])
+def check_totp_api(request :Request):
+	try:
+		totpy1=totpyUsers.objects.get(totp=request.headers.get("totp"))
+		return JsonResponse({"find":True})
+	except Exception as e:
+		return JsonResponse({"find":False})

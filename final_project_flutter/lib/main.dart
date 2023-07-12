@@ -1,7 +1,9 @@
 import 'dart:io';
 
-import 'package:final_project_year/main_screens/farm_screen.dart';
+import 'package:final_project_year/common_component/google_map.dart';
+import 'package:final_project_year/common_component/google_map_farm.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:local_auth/local_auth.dart';
 
 import 'main_screens/biometric_screen.dart';
@@ -108,13 +110,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return   MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
         if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
-          return BimetricScreen();
+          return const BimetricScreen();
         } else {
-          return LogIN();
+          return GoogleMapFarmPhone();
         }
       }),
     );

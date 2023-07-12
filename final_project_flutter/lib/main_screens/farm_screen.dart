@@ -7,8 +7,8 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:final_project_year/common_component/circle_image_animation.dart';
 import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
-import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/google_map.dart';
+import 'package:final_project_year/common_component/google_map_farm.dart';
 import 'package:final_project_year/common_component/select_location.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,9 +48,15 @@ class _FarmScreenState extends State<FarmScreen> {
     //await CustomeSecureStorage.remove_all( );
     add_farm_map_bounder_api().then((value) {
       if (value is List<LatLng>) {
-        googleMapComponent = GoogleMapComponentFarmScreen(
-          l1: LatLngBounds.fromPoints(value),
-        );
+        if (Platform.isAndroid || Platform.isIOS) {
+          googleMapComponent = GoogleMapFarmPhone(
+            l1: LatLngBounds.fromPoints(value),
+          );
+        } else {
+          googleMapComponent = GoogleMapComponentDesktopFarmScreen(
+            l1: LatLngBounds.fromPoints(value),
+          );
+        }
       }
     });
     super.initState();
@@ -67,8 +73,7 @@ class _FarmScreenState extends State<FarmScreen> {
 
   double errorHeight = 0;
 
-  GoogleMapComponentFarmScreen googleMapComponent =
-      GoogleMapComponentFarmScreen();
+  GoogleMapFarm googleMapComponent = GoogleMapComponentDesktopFarmScreen();
   SelectLocation selectLocation = SelectLocation(
     city: -1,
     village: -1,
@@ -253,11 +258,11 @@ class _FarmScreenState extends State<FarmScreen> {
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: Row(
-                                       //direction: Axis.vertical,
+                                    //direction: Axis.vertical,
                                     children: [
-                                      Radio(
+                                      Radio( 
                                         focusColor: Colors.blue,
-                                        activeColor: Colors.blue,
+                                        activeColor: Colors.blue,splashRadius: 0,fillColor: MaterialStateProperty.resolveWith((states) => Colors.red),
                                         value: FarmTypeEnum.farm,
                                         groupValue: _selectFarmType,
                                         onChanged: (value) {
@@ -736,15 +741,30 @@ class _FarmScreenState extends State<FarmScreen> {
                                       )
                                     : Container(),
                                 sectionType,
-                                Container(
-                                    height: 360,
+                                Container(width: double.infinity,
+                                    height:Platform.isAndroid ||
+                                                Platform.isIOS? 40 :360,
                                     margin: const EdgeInsets.all(10),
                                     child: FutureBuilder(
                                         future: add_farm_map_bounder_api(),
                                         builder: (context, snap) {
                                           if (snap.data is List) {
+                                            if (Platform.isAndroid ||
+                                                Platform.isIOS) {
+                                              return ElevatedButton(//style: ,
+                                                  onPressed: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return GoogleMapFarmPhone(  l1: LatLngBounds.fromPoints(
+                                                  snap.data!),);
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Text("عرض علي الخؤيطة"));
+                                            }
                                             googleMapComponent =
-                                                GoogleMapComponentFarmScreen(
+                                                GoogleMapComponentDesktopFarmScreen(
                                               l1: LatLngBounds.fromPoints(
                                                   snap.data!),
                                             );
@@ -765,6 +785,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
+                               
                                 Wrap(
                                   direction: Axis.vertical,
                                   children: [
@@ -785,7 +806,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                               MaterialStateProperty.resolveWith(
                                                   (states) => Colors.green)),
                                       onPressed: () async {
-                                       /// await CustomeSecureStorage.remove_all();
+                                        /// await CustomeSecureStorage.remove_all();
                                         updateScreen();
                                         if (_formGlobalKey.currentState!
                                             .validate()) {
@@ -858,8 +879,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             dic1["img"] =
                                                 await MultipartFile.fromFile(
                                                     c.image!.path,
-                                                    filename:
-                                                         "jjyyttttt");
+                                                    filename: "jjyyttttt");
                                           }
                                           print("jjjyyyttte");
                                           dio.FormData formData =
@@ -867,7 +887,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             dic1,
                                           );
                                           Map<String, dynamic> res =
-                                              await farm_api(form: formData);
+                                              await Api.farm_api(form: formData);
                                           if (res.containsKey('message')) {
                                             showSnackbardone(
                                                 context: context,
@@ -911,7 +931,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                           'operation': 'delete'
                                         });
                                         var res =
-                                            await farm_api(form: formData);
+                                            await Api.farm_api(form: formData);
                                         if (res.containsKey('message')) {
                                           showSnackbardone(
                                               context: context,
@@ -948,8 +968,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                               MaterialStateProperty.resolveWith(
                                                   (states) => Colors.red)),
                                       onPressed: () async {
-                                        
-                                         Map<String, dynamic> dic1 = {
+                                        Map<String, dynamic> dic1 = {
                                           'operation': "update",
                                           'attached_area': 12,
                                           r'farm_type': farmType.customeFarmType
@@ -1015,7 +1034,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                           dic1,
                                         );
                                         var res =
-                                            await farm_api(form: formData);
+                                            await Api.farm_api(form: formData);
 
                                         if (res.containsKey('message')) {
                                           showSnackbardone(
@@ -1059,7 +1078,7 @@ class FarmType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: farm_type_api(),
+        future: Api.section_type_api(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.done &&
               snap.data is List &&
@@ -1099,7 +1118,7 @@ class SectionType extends StatelessWidget {
       height: 80,
       margin: const EdgeInsets.all(10),
       child: FutureBuilder(
-          future: section_type_api(),
+          future: Api.section_type_api(),
           builder: (context, snap) {
             if (snap.connectionState == ConnectionState.done &&
                 snap.data is List &&

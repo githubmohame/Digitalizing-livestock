@@ -47,7 +47,7 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
                             id: 'id',
                             func: (int value) async {
                               List<Map<String, dynamic>> l2 =
-                                  await animal_species_api(platoon: value);
+                                  await Api.animal_species_api(platoon: value);
                               BlocProvider.of<AnimalCubit>(context)
                                   .updatePlatoon(
                                       platoon: value,

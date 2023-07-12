@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class AddAdmin extends StatefulWidget {
-  AddAdmin({super.key});
+  const AddAdmin({super.key});
 
   @override
   State<AddAdmin> createState() => _AddAdminState();
@@ -226,7 +226,7 @@ class _AddAdminState extends State<AddAdmin> {
                                               : null,
                                     };
 
-                                    admin_api(formData: FormData.fromMap(dic1));
+                                    Api.admin_api(formData: FormData.fromMap(dic1));
                                   }
                                 },
                                 style: ButtonStyle(
@@ -268,7 +268,7 @@ class _AddAdminState extends State<AddAdmin> {
                                 dic1['operation'] = 'delete';
                                 dic1['ssn'] = controller[3].text;
                                 dic1["user_type"] = checkUser.value;
-                                dic1=await admin_api(formData: FormData.fromMap(dic1));
+                                dic1=await Api.admin_api(formData: FormData.fromMap(dic1));
                                 showSnackbardone(
                                     context: context, text: dic1.toString());
                               }
@@ -305,7 +305,7 @@ class _AddAdminState extends State<AddAdmin> {
                                               : null,
                                     };
 
-                                    admin_api(formData: FormData.fromMap(dic1));
+                                    Api.admin_api(formData: FormData.fromMap(dic1));
                                   }
                                 },
                                 style: ButtonStyle(

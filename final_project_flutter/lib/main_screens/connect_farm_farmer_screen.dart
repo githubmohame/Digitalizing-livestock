@@ -9,7 +9,7 @@ import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 
 class ConnectFarmAndFarmerScreen extends StatefulWidget {
-  ConnectFarmAndFarmerScreen({Key? key}) : super(key: key);
+  const ConnectFarmAndFarmerScreen({Key? key}) : super(key: key);
 
   @override
   State<ConnectFarmAndFarmerScreen> createState() => _ConnectFarmAndFarmerScreenState();
@@ -201,7 +201,7 @@ class _ConnectFarmAndFarmerScreenState extends State<ConnectFarmAndFarmerScreen>
                                           };
                                           FormData formData =
                                               FormData.fromMap(dic1);
-                                          var res= await connect_farm_farmer_api(
+                                          var res= await Api.connect_farm_farmer_api(
                                               formData: formData);
                           
                                                if (res.containsKey('message')) {
@@ -248,7 +248,7 @@ class _ConnectFarmAndFarmerScreenState extends State<ConnectFarmAndFarmerScreen>
                                           };
                                           FormData formData =
                                               FormData.fromMap(dic1);
-                                          var res =await connect_farm_farmer_api(
+                                          var res =await Api.connect_farm_farmer_api(
                                               formData: formData);
                                              if (res.containsKey('message')) {
                                                 showSnackbardone(

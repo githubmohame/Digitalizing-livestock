@@ -38,7 +38,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
           const Text('تعديل في النوع',
               style: TextStyle(color: Colors.white, fontSize: 20)),
           FutureBuilder(
-              future: animal_api(),
+              future: Api.animal_api(),
               builder: (context, snap) {
                 if (snap.data != null && snap.data!.isNotEmpty) {
                   return BlocProvider(
@@ -81,7 +81,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green)),
                 onPressed: () async {
-                  await modify_platoon_api(
+                  await Api.modify_platoon_api(
                       operation: 'update',
                       platoon: selectPlotoon.village.toString(),
                       new_name: controller.text);
@@ -113,7 +113,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () {
-                  modify_platoon_api(
+                  Api.modify_platoon_api(
                       operation: 'delete',
                       platoon: selectPlotoon.village.toString(),
                       new_name: controller.text);
@@ -145,7 +145,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () async {
-                  await modify_platoon_api(
+                  await Api.modify_platoon_api(
                       operation: 'insert',
                       platoon: selectPlotoon.village.toString(),
                       new_name: controller.text);
@@ -204,7 +204,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
           const Text('تعديل في الفصيلة',
               style: TextStyle(color: Colors.white, fontSize: 20)),
           FutureBuilder(
-              future: animal_api(),
+              future: Api.animal_api(),
               builder: (context, snap) {
                 if (snap.data != null && snap.data!.isNotEmpty) {
                   selectSpecies.species = snap.data![0]['id'];
@@ -248,7 +248,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.green)),
                 onPressed: () async {
-                  var res = await modify_species_api(
+                  var res = await Api.modify_species_api(
                       new_name: controller.text,
                       operation: 'update',
                       species: selectSpecies.species ?? -1);
@@ -288,7 +288,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () async {
-                  var res = await modify_species_api(
+                  var res = await  Api.modify_species_api(
                       new_name: controller.text,
                       operation: 'delete',
                       species: selectSpecies.species ?? -1);
@@ -328,7 +328,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
                     overlayColor: MaterialStateProperty.resolveWith(
                         (states) => Colors.red)),
                 onPressed: () async {
-                  var res = await modify_species_api(
+                  var res = await Api.modify_species_api(
                       platoon: selectSpecies.platoon,
                       new_name: controller.text,
                       operation: 'insert',
@@ -411,21 +411,24 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
                       backgroundColor: Colors.transparent)
                   : null,
               drawer: MainDrawer(index: 7),
-              body: Column(
-                children: [
-                  constraint.maxWidth > 900
-                      ? SizedBox(height: 100, child: ComputerDrawer(index: 7))
-                      : Container(),
-                  const Spacer(),
-                  Card(
-                      elevation: 20,
-                      color: const Color(0xFF357515),
-                      child: SizedBox(
-                        width: 600,
-                        child: list[index],
-                      )),
-                  const Spacer(),
-                ],
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    constraint.maxWidth > 900
+                        ? SizedBox(height: 100, child: ComputerDrawer(index: 7))
+                        : Container(),
+                       constraint.maxWidth > 900
+                        ? SizedBox(height: constraint.maxHeight/4, )
+                        : Container(), 
+                     Card(
+                        elevation: 20,
+                        color: const Color(0xFF357515),
+                        child: SizedBox(
+                          width: 600,
+                          child: list[index],
+                        )),
+                   ],
+                ),
               ));
         }),
       ),
@@ -454,7 +457,7 @@ class _SelectAnimalState extends State<SelectPlotoon> {
     return Column(
       children: [
         FutureBuilder(
-            future: platoon_type_api(),
+            future: Api.platoon_type_api(),
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data is List<Map<String, dynamic>> &&
@@ -464,7 +467,7 @@ class _SelectAnimalState extends State<SelectPlotoon> {
                     id: 'id',
                     func: (int value) async {
                       List<Map<String, dynamic>> l2 =
-                          await animal_species_api(platoon: value);
+                          await Api.animal_species_api(platoon: value);
 
                       BlocProvider.of<AnimalCubit>(context).updatePlatoon(
                           platoon: value,
@@ -516,7 +519,7 @@ class _SelectSpeciesState extends State<SelectSpecies> {
             child: BlocBuilder< AnimalCubit, AnimalInitial>(
               builder: (context, state) {
                 return FutureBuilder(
-                            future: platoon_type_api(),
+                            future: Api.platoon_type_api(),
                             builder: (context, snap) {
                               if (snap.connectionState == ConnectionState.done &&
                                   snap.data is List<Map<String, dynamic>> &&
@@ -526,7 +529,7 @@ class _SelectSpeciesState extends State<SelectSpecies> {
                                     id: 'id',
                                     func: (int value) async {
                                       List<Map<String, dynamic>> l2 =
-                                          await animal_species_api(platoon: value);
+                                          await Api.animal_species_api(platoon: value);
                                       BlocProvider.of<AnimalCubit>(context).updatePlatoon(
                                           platoon: value,
                                           species: l2.isNotEmpty ? l2[0]['id'] ?? -1 : -1);
@@ -553,7 +556,7 @@ class _SelectSpeciesState extends State<SelectSpecies> {
             },
             builder: (context, state) {
                 return FutureBuilder(
-                    future: animal_species_api(platoon: state.platoon),
+                    future: Api.animal_species_api(platoon: state.platoon),
                     builder: (context, snap) {
                       if (snap.connectionState == ConnectionState.done &&
                           snap.data is List<Map<String, dynamic>> &&

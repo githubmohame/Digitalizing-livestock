@@ -1,7 +1,8 @@
 #from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
-import uuid
+#import uuid
+import datetime
 from django.db.models.fields.files import ImageFieldFile
 from django.contrib.gis.db import models
 from django.contrib.auth.models import Group
@@ -163,8 +164,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     img=models.ImageField( upload_to="farmer_user",blank=True,null=True,)
 
 class totpyUsers(models.Model):
-    insert_time = models.DateTimeField()
-    totp=models.CharField( max_length=32,)
+    insert_time = models.DateTimeField(default=datetime.date.today)
+    totp=models.CharField( max_length=32,unique=True)
     user=models.ForeignKey(User,on_delete=models.CASCADE)
 class farm_type(models.Model):
     name = models.CharField(max_length=30, blank=False, null=False)

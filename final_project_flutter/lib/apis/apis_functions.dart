@@ -1,25 +1,35 @@
 // ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, empty_catches
 
-import 'dart:convert';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
-import 'package:final_project_year/common_component/button_show_info.dart';
 import 'package:final_project_year/common_component/create_map_component.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:otp/otp.dart';
 
-Future gavernorate_api() async {
+class Api {
+  static String url="http://192.168.1.6:8000/";
+ static Future<Map<String, String>>  createHeader() async {
+  return {
+    "code": await CustomeSecureStorage.gettotp(),
+    //"password": await CustomeSecureStorage.getpassword(),
+    "ssn": await CustomeSecureStorage.getssn(),
+    "totpy": OTP.generateTOTPCodeString(await CustomeSecureStorage.gettotp(),
+        DateTime.now().millisecondsSinceEpoch,
+        algorithm: Algorithm.SHA1, isGoogle: true, interval: 60),
+  };
+}
+static Future gavernorate_api() async {
   try {
     dio.Dio dio1 = dio.Dio();
-    var res = await dio1.get('http://192.168.1.6:8000/governorate',
+    var res = await dio1.get(Api.url+'governorate',
         data: {},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
       map['name'] = res.data[index]['name'];
@@ -32,17 +42,16 @@ Future gavernorate_api() async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> city_api({required int gavernorate}) async {
+static Future<List<Map<String, dynamic>>> city_api({required int gavernorate}) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = dio.FormData.fromMap({'filter': gavernorate});
-    var res = await dio1.post('http://192.168.1.6:8000/city',
+    var res = await dio1.post(Api.url+'city',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
       map['name'] = res.data[index]['name'];
@@ -56,17 +65,16 @@ Future<List<Map<String, dynamic>>> city_api({required int gavernorate}) async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> village_api({required int city}) async {
+static Future<List<Map<String, dynamic>>> village_api({required int city}) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = dio.FormData.fromMap({'filter': city});
-    var res = await dio1.post('http://192.168.1.6:8000/village',
+    var res = await dio1.post(Api.url+'village',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
       map['name'] = res.data[index]['name'];
@@ -78,15 +86,14 @@ Future<List<Map<String, dynamic>>> village_api({required int city}) async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> section_type_api() async {
+static Future<List<Map<String, dynamic>>> section_type_api() async {
   try {
     dio.Dio dio1 = dio.Dio();
-    var res = await dio1.get('http://192.168.1.6:8000/section_type',
+    var res = await dio1.get(Api.url+'section_type',
         data: {},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
       map['name'] = res.data[index]['name'];
@@ -98,15 +105,14 @@ Future<List<Map<String, dynamic>>> section_type_api() async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> farm_type_api() async {
+static Future<List<Map<String, dynamic>>> farm_type_api() async {
   try {
     dio.Dio dio1 = dio.Dio();
-    var res = await dio1.get('http://192.168.1.6:8000/farm_type',
+    var res = await dio1.get(Api.url+'farm_type',
         data: {},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
 
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
@@ -121,15 +127,14 @@ Future<List<Map<String, dynamic>>> farm_type_api() async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> platoon_type_api() async {
+static Future<List<Map<String, dynamic>>> platoon_type_api() async {
   try {
     dio.Dio dio1 = dio.Dio();
-    var res = await dio1.get('http://192.168.1.6:8000/platoon',
+    var res = await dio1.get(Api.url+'platoon',
         data: {},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
 
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
@@ -143,18 +148,17 @@ Future<List<Map<String, dynamic>>> platoon_type_api() async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> animal_species_api(
+static Future<List<Map<String, dynamic>>> animal_species_api(
     {required int platoon}) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = dio.FormData.fromMap({'filter': platoon});
-    var res = await dio1.post('http://192.168.1.6:8000/species',
+    var res = await dio1.post(Api.url+'species',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
       map['name'] = res.data[index]['name'];
@@ -167,61 +171,58 @@ Future<List<Map<String, dynamic>>> animal_species_api(
   return [];
 }
 
-Future<Map<String, dynamic>> modify_gavernorate_api(
+static Future<Map<String, dynamic>> modify_gavernorate_api(
     {required Map<String, dynamic> dic1}) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = dio.FormData.fromMap(dic1);
-    var res = await dio1.post('http://192.168.1.6:8000/modify_gavernorate',
+    var res = await dio1.post(Api.url+'modify_gavernorate',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     return res.data;
   } catch (e) {}
   return {};
 }
 
-Future<Map<String, dynamic>> modify_city_api(
+static Future<Map<String, dynamic>> modify_city_api(
     {required Map<String, dynamic> dic1}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     dio.FormData formData = dio.FormData.fromMap(dic1);
-    var res = await dio1.post('http://192.168.1.6:8000/modify_city',
+    var res = await dio1.post(Api.url+'modify_city',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
-
-    return res.data;
-  } catch (e) {}
-  return {};
-}
-
-Future<Map<String, dynamic>> modify_village_api(
-    {required Map<String, dynamic> dic1}) async {
-  try {
-    dio.Dio dio1 = dio.Dio();
-    dio.FormData formData = dio.FormData.fromMap(dic1);
-    var res = await dio1.post('http://192.168.1.6:8000/modify_village',
-        data: formData,
-        queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
 
     return res.data;
   } catch (e) {}
   return {};
 }
 
-Future<Map<String, dynamic>> modify_platoon_api(
+static Future<Map<String, dynamic>> modify_village_api(
+    {required Map<String, dynamic> dic1}) async {
+  try {
+    dio.Dio dio1 = dio.Dio();
+    dio.FormData formData = dio.FormData.fromMap(dic1);
+    var res = await dio1.post(Api.url+'modify_village',
+        data: formData,
+        queryParameters: <String, dynamic>{},
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
+
+    return res.data;
+  } catch (e) {}
+  return {};
+}
+
+static Future<Map<String, dynamic>> modify_platoon_api(
     {required String operation,
     required String platoon,
     required String new_name}) async {
@@ -229,19 +230,18 @@ Future<Map<String, dynamic>> modify_platoon_api(
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = dio.FormData.fromMap(
         {'operation': operation, 'platoon': platoon, 'new_name': new_name});
-    var res = await dio1.post('http://192.168.1.6:8000/modified_platoon',
+    var res = await dio1.post(Api.url+'modified_platoon',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     return res.data;
   } catch (e) {}
   return {};
 }
 
-Future<Map<String, dynamic>> modify_species_api(
+static Future<Map<String, dynamic>> modify_species_api(
     {required String operation,
     required int species,
     int? platoon,
@@ -254,33 +254,29 @@ Future<Map<String, dynamic>> modify_species_api(
       'new_name': new_name,
       'platoon': platoon
     });
-    var res = await dio1.post('http://192.168.1.6:8000/modified_species',
+    var res = await dio1.post(Api.url+'modified_species',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     return res.data;
   } catch (e) {}
   return {};
 }
 
-Future<Map<String, dynamic>> farm_api({
+static Future<Map<String, dynamic>> farm_api({
   required dio.FormData form,
 }) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = form;
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/farm_api',
+        await dio1.post(Api.url+'farm_api',
             data: formData,
             queryParameters: <String, dynamic>{},
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -290,21 +286,18 @@ Future<Map<String, dynamic>> farm_api({
   return {};
 }
 
-Future<Map<String, dynamic>> farmer_api({
+static Future<Map<String, dynamic>> farmer_api({
   required dio.FormData form,
 }) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = form;
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/farmer_api',
+        await dio1.post(Api.url+'farmer_api',
             data: formData,
             queryParameters: <String, dynamic>{},
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multiCompatible,
             ));
@@ -317,21 +310,18 @@ Future<Map<String, dynamic>> farmer_api({
   };
 }
 
-Future<Map<String, dynamic>> add_farmer_animal_api({
+static Future<Map<String, dynamic>> add_farmer_animal_api({
   required dio.FormData form,
 }) async {
   try {
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData = form;
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/add_farme_animal_api',
+        await dio1.post(Api.url+'add_farme_animal_api',
             data: formData,
             queryParameters: <String, dynamic>{},
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -341,21 +331,20 @@ Future<Map<String, dynamic>> add_farmer_animal_api({
   return {};
 }
 
-Future<List<Map<String, dynamic>>> location_api({bool stop = false}) async {
+
+
+static Future<List<Map<String, dynamic>>> location_api({bool stop = false}) async {
   if (stop) {
     return [];
   }
   try {
-    print(await CustomeSecureStorage.getpassword()+"lkiiiiooo");
+    print("${await CustomeSecureStorage.getpassword()}lkiiiiooo");
     dio.Dio dio1 = dio.Dio();
 
-    var res = await dio1.post('http://192.168.1.6:8000/location_api',
+    var res = await dio1.post(Api.url+'location_api',
         queryParameters: <String, dynamic>{},
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
@@ -374,17 +363,14 @@ Future<List<Map<String, dynamic>>> location_api({bool stop = false}) async {
   return [];
 }
 
-Future<List<Map<String, dynamic>>> animal_api() async {
+static Future<List<Map<String, dynamic>>> animal_api() async {
   try {
     dio.Dio dio1 = dio.Dio();
 
-    var res = await dio1.post('http://192.168.1.6:8000/animal_api',
+    var res = await dio1.post(Api.url+'animal_api',
         queryParameters: <String, dynamic>{},
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
@@ -406,19 +392,16 @@ Future<List<Map<String, dynamic>>> animal_api() async {
   return [];
 }
 
-Future<Map<String, dynamic>> change_password_email_api(
+static Future<Map<String, dynamic>> change_password_email_api(
     {required dio.FormData formData}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
-    var res = await dio1.post('http://192.168.1.6:8000/change_password_email',
+    var res = await dio1.post(Api.url+'change_password_email',
         queryParameters: <String, dynamic>{},
         data: formData,
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
@@ -428,20 +411,17 @@ Future<Map<String, dynamic>> change_password_email_api(
   return {};
 }
 
-Future<Map<String, dynamic>> change_password_email_done_api(
+static Future<Map<String, dynamic>> change_password_email_done_api(
     {required dio.FormData formData}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/change_password_done',
+        await dio1.post(Api.url+'change_password_done',
             queryParameters: <String, dynamic>{},
             data: formData,
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -451,20 +431,17 @@ Future<Map<String, dynamic>> change_password_email_done_api(
   return {};
 }
 
-Future<Map<String, dynamic>> connect_farm_farmer_api(
+static Future<Map<String, dynamic>> connect_farm_farmer_api(
     {required dio.FormData formData}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/connect_farm_farmer_api',
+        await dio1.post(Api.url+'connect_farm_farmer_api',
             queryParameters: <String, dynamic>{},
             data: formData,
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              //headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -474,11 +451,11 @@ Future<Map<String, dynamic>> connect_farm_farmer_api(
   return {};
 }
 
-Future<Map<String, dynamic>> login_api({required dio.FormData formData}) async {
+static Future<Map<String, dynamic>> login_api({required dio.FormData formData}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
-    var res = await dio1.post('http://192.168.1.6:8000/login_api',
+    var res = await dio1.post(Api.url+'login_api',
         queryParameters: <String, dynamic>{},
         data: formData,
         options: dio.Options(
@@ -490,19 +467,16 @@ Future<Map<String, dynamic>> login_api({required dio.FormData formData}) async {
   return {};
 }
 
-Future<Map<String, dynamic>> admin_api({required dio.FormData formData}) async {
+static Future<Map<String, dynamic>> admin_api({required dio.FormData formData}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/admin_api',
+        await dio1.post(Api.url+'admin_api',
             queryParameters: <String, dynamic>{},
             data: formData,
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -511,20 +485,17 @@ Future<Map<String, dynamic>> admin_api({required dio.FormData formData}) async {
   return {};
 }
 
-Future<Map<String, dynamic>> farm_info_api(
+static Future<Map<String, dynamic>> farm_info_api(
     {required dio.FormData formData}) async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/operation_admin_api',
+        await dio1.post(Api.url+'operation_admin_api',
             queryParameters: <String, dynamic>{},
             data: formData,
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -533,18 +504,15 @@ Future<Map<String, dynamic>> farm_info_api(
   return {};
 }
 
-Future<Map<String, dynamic>> dashBoard() async {
+static Future<Map<String, dynamic>> dashBoard() async {
   try {
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/summary_governorate',
+        await dio1.post(Api.url+'summary_governorate',
             queryParameters: <String, dynamic>{},
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -552,6 +520,28 @@ Future<Map<String, dynamic>> dashBoard() async {
   } catch (e) {}
   return {};
 }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Future<Map<String, dynamic>> get_data_map(
     {required dio.FormData formData}) async {
@@ -559,14 +549,12 @@ Future<Map<String, dynamic>> get_data_map(
     dio.Dio dio1 = dio.Dio();
     List<Polygon> plogons = [];
     List<Marker> markers = [];
-    Response<List> res =
-        await dio1.post<List>("http://192.168.1.6:8000/get_data_map",
-            queryParameters: {},
-            data: formData,
-            options: dio.Options(headers: {
-              "password": await CustomeSecureStorage.getpassword(),
-              "ssn": await CustomeSecureStorage.getssn()
-            }, responseType: ResponseType.json));
+    Response<List> res = await dio1.post<List>(
+        "http://192.168.1.6:8000/get_data_map",
+        queryParameters: {},
+        data: formData,
+        options: dio.Options(
+            headers: await Api.createHeader(), responseType: ResponseType.json));
     for (var f in res.data!) {
       if (f['center'] != null) {
         markers.add(createMarker(f));
@@ -586,14 +574,11 @@ Future<Map<String, dynamic>> location_dash_info(
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/location_statistics',
+        await dio1.post(Api.url+'location_statistics',
             queryParameters: <String, dynamic>{},
             data: formData,
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               //contentType: ,
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
@@ -609,14 +594,11 @@ Future<(String, List<Map<String, dynamic>>)?> farm_info_list(
   try {
     dio.Dio dio1 = dio.Dio();
     var res = await dio1.post(
-        url.isEmpty ? 'http://192.168.1.6:8000/farm_info_list' : url,
+        url.isEmpty ? Api.url+'farm_info_list' : url,
         queryParameters: <String, dynamic>{},
         data: formData,
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
@@ -642,14 +624,11 @@ Future<Map<String, dynamic>> farmInfo({required dio.FormData formData}) async {
     dio.Dio dio1 = dio.Dio();
 
     dio.Response<Map<String, dynamic>> res =
-        await dio1.post('http://192.168.1.6:8000/farm_info',
+        await dio1.post(Api.url+'farm_info',
             queryParameters: <String, dynamic>{},
             data: formData,
             options: dio.Options(
-              headers: {
-                "password": await CustomeSecureStorage.getpassword(),
-                "ssn": await CustomeSecureStorage.getssn()
-              },
+              headers: await Api.createHeader(),
               responseType: dio.ResponseType.json,
               listFormat: dio.ListFormat.multi,
             ));
@@ -665,12 +644,11 @@ Future<List<Map<String, dynamic>>> platoon_type_farm_api(
     {required String farmId}) async {
   try {
     dio.Dio dio1 = dio.Dio();
-    var res = await dio1.post('http://192.168.1.6:8000/farm_platoon_api',
+    var res = await dio1.post(Api.url+'farm_platoon_api',
         data: {"farm_id": farmId},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
       map['name'] = res.data["data"][index]['name'];
@@ -689,13 +667,12 @@ Future<List<Map<String, dynamic>>> animal_species_farm_api(
     dio.Dio dio1 = dio.Dio();
     dio.FormData formData =
         dio.FormData.fromMap({'filter': platoon, "farm_id": farmId});
-    var res = await dio1.post('http://192.168.1.6:8000/farm_species_api',
+    var res = await dio1.post(Api.url+'farm_species_api',
         data: formData,
         queryParameters: <String, dynamic>{},
-        options: dio.Options(headers: {
-          "password": await CustomeSecureStorage.getpassword(),
-          "ssn": await CustomeSecureStorage.getssn()
-        }, responseType: dio.ResponseType.json));
+        options: dio.Options(
+            headers: await Api.createHeader(),
+            responseType: dio.ResponseType.json));
     List<Map<String, dynamic>> l1 =
         List.generate(res.data["data"].length, (index) {
       Map<String, dynamic> map = <String, dynamic>{};
@@ -714,14 +691,11 @@ Future<List<Map<String, dynamic>>> animal_farm_api(
   try {
     dio.Dio dio1 = dio.Dio();
 
-    var res = await dio1.post('http://192.168.1.6:8000/animal_farm_api',
+    var res = await dio1.post(Api.url+'animal_farm_api',
         data: FormData.fromMap({"farm_id": farmId}),
         queryParameters: <String, dynamic>{},
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           contentType: "application/json",
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
@@ -748,13 +722,10 @@ Future<List<LatLng>?> add_farm_map_bounder_api() async {
   try {
     dio.Dio dio1 = dio.Dio();
     List<LatLng> l1 = [];
-    var res = await dio1.get('http://192.168.1.6:8000/farm_map_bounder_api',
+    var res = await dio1.get(Api.url+'farm_map_bounder_api',
         queryParameters: <String, dynamic>{},
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
         ));
@@ -791,16 +762,13 @@ Future<(List<Map<String, dynamic>>, dynamic)?> search_farmer_api(
       return null;
     }
     if (url == '') {
-      url = 'http://192.168.1.6:8000/search_farmer_api';
+      url = Api.url+'search_farmer_api';
     }
     var res = await dio1.post(url,
         data: FormData.fromMap({"name": farmerName}),
         queryParameters: <String, dynamic>{},
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           contentType: "application/json",
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
@@ -841,16 +809,13 @@ Future<(List<Map<String, dynamic>>, dynamic)?> search_farm_api(
       return null;
     }
     if (url == '') {
-      url = 'http://192.168.1.6:8000/search_farm_api';
+      url = Api.url+'search_farm_api';
     }
     var res = await dio1.post(url,
         data: FormData.fromMap({"name": farmerName}),
         queryParameters: <String, dynamic>{},
         options: dio.Options(
-          headers: {
-            "password": await CustomeSecureStorage.getpassword(),
-            "ssn": await CustomeSecureStorage.getssn()
-          },
+          headers: await Api.createHeader(),
           contentType: "application/json",
           responseType: dio.ResponseType.json,
           listFormat: dio.ListFormat.multi,
@@ -890,12 +855,44 @@ Future<(List<Map<String, dynamic>>, dynamic)?> search_farm_api(
 
 Future<ImageProvider<Object>> image_farmer_api({required String ssn}) async {
   print(ssn + " ppp" * 66);
+  Map<String, String> u = (await Api.createHeader());
+  Map<String, String> header = <String, String>{"ssn": ssn};
+  header.addAll(u);
   return NetworkImage(
     "http://192.168.1.6:8000/img_farmer_api",
-    headers: {
-      "password": await CustomeSecureStorage.getpassword(),
-      "ssn": await CustomeSecureStorage.getssn(),
-      "userssn": ssn,
-    },
+    headers: header,
   );
+}
+
+Future<bool> check_totp_api() async {
+  Map<String, String> header = <String, String>{
+    "ssn": await CustomeSecureStorage.getssn(),
+    "password": await CustomeSecureStorage.getpassword(),
+    "totp": await CustomeSecureStorage.gettotp(),
+  };
+  Dio dio1 = Dio();
+  var res = await dio1.get("http://192.168.1.6:8000/check_totp",
+      options: dio.Options(
+        headers: header,
+      ));
+  return res.data["find"];
+}
+
+Future<Map<String, dynamic>> send_email_totp() async {
+  try {
+    Map<String, String> header = <String, String>{
+      "ssn": await CustomeSecureStorage.getssn(),
+      "password": await CustomeSecureStorage.getpassword(),
+    };
+    Dio dio1 = Dio();
+    var res = await dio1.post(
+        "http://192.168.1.6:8000/change_password_email_template",
+        options: dio.Options(
+          headers: header,
+        ));
+    return res.data;
+  } catch (e) {
+    print(e);
+    return {"error": "يوجد مشاكل في الخدمة"};
+  }
 }

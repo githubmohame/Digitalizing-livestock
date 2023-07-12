@@ -44,7 +44,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: FutureBuilder(
-            future: dashBoard(),
+            future: Api.dashBoard(),
             builder: (context, snap) {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data != null &&
@@ -295,7 +295,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
   Widget build(BuildContext context) {
     //print(widget.list1);
     return FutureBuilder(
-        future: location_api(stop: ini),
+        future: Api.location_api(stop: ini),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.done &&
               snap.data != null &&

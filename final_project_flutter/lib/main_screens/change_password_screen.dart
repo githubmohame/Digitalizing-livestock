@@ -6,7 +6,6 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
-import 'package:final_project_year/common_component/custome_stepper.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -116,12 +115,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                   if (x == 0) {
                                                     Map<String, dynamic> dic1 =
                                                         {
-                                                      "email": _controller.text
+                                                      "ssn": _controller.text
                                                     };
                                                     FormData formData =
                                                         FormData.fromMap(dic1);
                                                     Map b =
-                                                        await change_password_email_api(
+                                                        await Api.change_password_email_api(
                                                             formData: formData);
                                                     if (b.containsKey(
                                                         'message')) {
@@ -150,7 +149,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                     FormData formData =
                                                         FormData.fromMap(dic1);
 
-                                                    await change_password_email_done_api(
+                                                    await Api.change_password_email_done_api(
                                                         formData: formData);
                                                   }
                                                   details.onStepContinue!();
@@ -205,7 +204,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                           Step(
                                               isActive: x == 0,
                                               title: const Text(
-                                                  "ادخل البريد الاليكتروني"),
+                                                  "ادخل الرقم القومي"),
                                               content: Container(
                                                 height: 400,
                                                 color: Colors.white,
@@ -242,7 +241,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                                     .white,
                                                               )),
                                                               hintText:
-                                                                  "البريد الاليكتروني"),
+                                                                  "الرقم القومي"),
                                                     ),
                                                   ],
                                                 ),

@@ -22,7 +22,7 @@ class FarmerScreen extends StatefulWidget {
       this.city,
       this.country,
       this.village})
-      : super(key: key) {}
+      : super(key: key);
   String? villlage_code, city, country, village;
   double errorHeight = 0;
 
@@ -345,14 +345,14 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                   };
                                                   if (c.image is File) {
                                                     dic1["img"] =
-                                                        await MultipartFile
+                                                        MultipartFile
                                                             .fromBytes(
                                                                 await c.image!
                                                                     .readAsBytes(),
                                                                 filename:
                                                                     controller[4].text );
                                                   }
-                                                   var res = await farmer_api(
+                                                   var res = await Api.farmer_api(
                                                       form: FormData.fromMap(
                                                           dic1));
 
@@ -404,7 +404,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                           if (controller[4].text.isNotEmpty) {
                                             dic1['operation'] = 'delete';
                                             dic1['ssn'] = controller[4].text;
-                                            var res = await farmer_api(
+                                            var res = await Api.farmer_api(
                                                 form: FormData.fromMap(dic1));
                                             if (res.containsKey('message')) {
                                               showSnackbardone(
@@ -480,7 +480,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                           print(dic1["fname"]);
                                           if (c.image is File) {
                                             dic1["img"] =
-                                               await  MultipartFile.fromBytes(
+                                               MultipartFile.fromBytes(
                                                     await c.image!
                                                         .readAsBytes(),
                                                     filename: controller[4].text);
@@ -488,7 +488,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
 
                                           if (controller[4].text.isNotEmpty) {
                                             dic1['operation'] = 'update';
-                                            var res = await farmer_api(
+                                            var res = await Api.farmer_api(
                                                 form: FormData.fromMap(dic1,ListFormat.multiCompatible));
                                             if (res.containsKey('message')) {
                                               showSnackbardone(

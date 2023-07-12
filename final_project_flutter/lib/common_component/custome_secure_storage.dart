@@ -14,7 +14,12 @@ class CustomeSecureStorage {
   static void setpassword({required String password}) {
     flutterSecureStorage.write(key: 'password', value: password);
   }
-
+  static void settotp({required String totp}) {
+    flutterSecureStorage.write(key: 'totp', value: totp);
+  }
+  static Future<String> gettotp( ) async{
+   return await flutterSecureStorage.read(key:"totp" )??"";
+  }
   static Future<String> getpassword() async {
     return await flutterSecureStorage.read(key: 'password') ?? '';
   }

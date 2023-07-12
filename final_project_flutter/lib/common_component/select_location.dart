@@ -18,7 +18,7 @@ class SelectLocation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: location_api(),
+        future: Api.location_api(),
         builder: (context, snapOuter) {
           if (snapOuter.data is List<Map<String, dynamic>> &&
               snapOuter.data!.isNotEmpty) {
@@ -44,7 +44,7 @@ class SelectLocation extends StatelessWidget {
                             color: Colors.white,
                           )),
                           child: FutureBuilder(
-                              future: gavernorate_api(),
+                              future:  Api.gavernorate_api(),
                               builder: (context, snap) {
                                 try {
                                   if (snap.connectionState ==
@@ -81,7 +81,7 @@ class SelectLocation extends StatelessWidget {
                         },
                         builder: (context, state) {
                           return FutureBuilder(
-                              future: city_api(gavernorate: state.gavernorate),
+                              future:  Api.city_api(gavernorate: state.gavernorate),
                               builder: (context, snap) {
                                 if (snap.connectionState ==
                                         ConnectionState.done &&
@@ -127,7 +127,7 @@ class SelectLocation extends StatelessWidget {
                         },
                         builder: (context, state) {
                           return FutureBuilder(
-                              future: village_api(city: state.city),
+                              future:  Api.village_api(city: state.city),
                               builder: (context, snap) {
                                 if (snap.connectionState ==
                                         ConnectionState.done &&
@@ -202,7 +202,7 @@ class SelectLocationDashBoard extends StatelessWidget {
                     color: Colors.white,
                   )),
                   child: FutureBuilder(
-                      future: gavernorate_api(),
+                      future:  Api.gavernorate_api(),
                       builder: (context, snap) {
                         try {
                           if (snap.connectionState == ConnectionState.done) {
@@ -246,7 +246,7 @@ class SelectLocationDashBoard extends StatelessWidget {
                 },
                 builder: (context, state) {
                   return FutureBuilder(
-                      future: city_api(gavernorate: state.gavernorate),
+                      future:  Api.city_api(gavernorate: state.gavernorate),
                       builder: (context, snap) {
                         if (snap.connectionState == ConnectionState.done &&
                             snap.data is List<Map<String, dynamic>> &&

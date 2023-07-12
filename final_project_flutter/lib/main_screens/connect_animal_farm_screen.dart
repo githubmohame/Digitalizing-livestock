@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_project_year/common_component/main_diwer.dart';
 
 class ConnectAnimalFarm extends StatefulWidget {
-  ConnectAnimalFarm({Key? key}) : super(key: key);
+  const ConnectAnimalFarm({Key? key}) : super(key: key);
 
   @override
   State<ConnectAnimalFarm> createState() => _ConnectAnimalFarmState();
@@ -41,7 +41,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
 
   DateTime date = DateTime.now();
 
-  SelectAnimalType animalType = SelectAnimalType(platoonApi: platoon_type_api,speciesApi:animal_species_api ,);
+  SelectAnimalType animalType = SelectAnimalType(platoonApi: Api.platoon_type_api,speciesApi:Api.animal_species_api ,);
 
   bool delete = false;
 
@@ -123,11 +123,11 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                 height: 10,
                               ),
                                FutureBuilder(
-                                    future: animal_api(),
+                                    future: Api.animal_api(),
                                     builder: (context, snap) {
                                       if (snap.data != null &&
                                           snap.data!.isNotEmpty) {
-                                         animalType = SelectAnimalType(platoonApi: platoon_type_api,speciesApi:animal_species_api ,
+                                         animalType = SelectAnimalType(platoonApi: Api.platoon_type_api,speciesApi:Api.animal_species_api ,
                                           platoon: snap.data![0]['platoon'],
                                         );
 
@@ -216,7 +216,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                          // print(animalType.platoon);
                                           FormData formData = FormData.fromMap(
                                               dic1, ListFormat.multi, false);
-                                          var res = await add_farmer_animal_api(
+                                          var res = await Api.add_farmer_animal_api(
                                               form: formData);
                                           if (res.containsKey('message')) {
                                             showSnackbardone(
@@ -274,7 +274,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                        // print(animalType.platoon);
                                         FormData formData = FormData.fromMap(
                                             dic1, ListFormat.multi, false);
-                                        var res = await add_farmer_animal_api(
+                                        var res = await Api.add_farmer_animal_api(
                                             form: formData);
                                         if (res.containsKey('message')) {
                                           showSnackbardone(

@@ -115,8 +115,8 @@ class _FarmListState extends State<FarmList> {
                                       return const LoadingScreen();
                                     }
                                     if (widget.l1.isEmpty) {
-                                      return Card(
-                                        child: Container(
+                                      return const Card(
+                                        child: SizedBox(
                                             height: 100,
                                             child: Column(
                                               mainAxisAlignment:
@@ -196,7 +196,7 @@ class FarmItem extends StatelessWidget {
                 ),
                 Text(
                   id.toString(),
-                  style: TextStyle(fontSize: 20, color: Colors.red),
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
                 )
               ],
             ),
@@ -210,7 +210,7 @@ class FarmItem extends StatelessWidget {
                   style: TextStyle(fontSize: 20, color: Colors.blue),
                 ),
                 Text(farmName,
-                    style: TextStyle(fontSize: 20, color: Colors.red))
+                    style: const TextStyle(fontSize: 20, color: Colors.red))
               ],
             ),
             const SizedBox(
@@ -219,9 +219,9 @@ class FarmItem extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.location_on),
-                Text(
+                const Text(
                   " الموقع: ",
-                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                  style: TextStyle(fontSize: 20, color: Colors.red),
                 ),
                 Text(
                   "$village-",

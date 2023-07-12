@@ -24,33 +24,34 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       borderOnForeground: true,
-      color: Color(0xFF467061),
+      color: const Color(0xFF467061),
       child: Card(
           elevation: 10,
-          surfaceTintColor: Color(0xFF467061),
+          surfaceTintColor: const Color(0xFF467061),
           child: Row(
             children: [
               FutureBuilder(
                   future: image_farmer_api(ssn: ssn),
                   builder: (context, snap) {
-                    if (snap.data is ImageProvider<Object>)
+                    if (snap.data is ImageProvider<Object>) {
                       return CircleAvatar(
                         minRadius: 30,
                         backgroundImage: snap.data,
                       );
+                    }
                     return Container();
                   }),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('الاسم:' + name,
-                      style: TextStyle(color: Colors.black, fontSize: 15)),
+                  Text('الاسم:$name',
+                      style: const TextStyle(color: Colors.black, fontSize: 15)),
                   Text(
-                    'عدد المزارع:${farm_count}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    'عدد المزارع:$farm_count',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text('رقم التليقون:${phone}')
+                  Text('رقم التليقون:$phone')
                 ],
               ),
             ],
@@ -168,8 +169,8 @@ class _ListFarmerState extends State<ListFarmer> {
                                       return const LoadingScreen();
                                     }
                                     if (widget.l1.isEmpty) {
-                                      return Card(
-                                        child: Container(
+                                      return const Card(
+                                        child: SizedBox(
                                             height: 100,
                                             child: Column(
                                               mainAxisAlignment:

@@ -428,7 +428,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          AddAdmin(),
+                                                          const AddAdmin(),
                                                     ));
                                               }),
                                               child: const Card(
@@ -536,7 +536,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ConnectFarmAndFarmerScreen(),
+                                                          const ConnectFarmAndFarmerScreen(),
                                                     ));
                                               }),
                                               child: const Card(
@@ -644,7 +644,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          ConnectAnimalFarm(),
+                                                          const ConnectAnimalFarm(),
                                                     ));
                                               }),
                                               child: const Card(

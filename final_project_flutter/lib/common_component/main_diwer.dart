@@ -115,7 +115,7 @@ class MainDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ConnectFarmAndFarmerScreen(),
+                        builder: (context) => const ConnectFarmAndFarmerScreen(),
                       ));
                 }),
               ),
@@ -313,7 +313,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ConnectAnimalFarm(),
+                      builder: (context) => const ConnectAnimalFarm(),
                     ));
               }),
             ),
@@ -334,7 +334,7 @@ class MainDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddAdmin(),
+                      builder: (context) => const AddAdmin(),
                     ));
               }),
             ),
@@ -514,7 +514,7 @@ class ComputerDrawer extends StatelessWidget {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ConnectFarmAndFarmerScreen(),
+                        builder: (context) => const ConnectFarmAndFarmerScreen(),
                       ));
                 }),
               ),
@@ -730,7 +730,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ConnectAnimalFarm(),
+                      builder: (context) => const ConnectAnimalFarm(),
                     ));
               }),
             ),
@@ -800,7 +800,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AddAdmin(),
+                      builder: (context) => const AddAdmin(),
                     ));
               }),
             ),
@@ -939,7 +939,7 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
                   onTap: () {
                     Navigator.pushReplacement(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return ConnectFarmAndFarmerScreen();
+                        return const ConnectFarmAndFarmerScreen();
                       },
                     ));
                   },
@@ -1023,7 +1023,7 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
                   onTap: () {
                     Navigator.pushReplacement(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return AddAdmin();
+                        return const AddAdmin();
                       },
                     ));
                   },
@@ -1156,6 +1156,7 @@ abstract class A {
 }
 
 class B extends A {
+  @override
   int u;
 
   B({required super.u, required int m}) : u = m;

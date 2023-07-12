@@ -20,11 +20,26 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
       return Align(
         alignment: Alignment.center,
         child: widget.image is File
-            ? CircleAvatar(
-                radius: 50,
-                backgroundImage: FileImage(widget.image!),
-                backgroundColor: Colors.blue.shade300,
-              )
+            ? GestureDetector(onTap: () async{
+              if(Platform.isAndroid||Platform.isIOS)
+              imageClick = true;
+                        FilePickerResult? f = await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ["png", "jpg", "jpeg"]);
+              
+                        if (f is FilePickerResult) {
+                          widget.image = File(f.files.first.path.toString());
+                        }
+                        imageClick = false;
+                        hover = 100;
+                        setState(() {});
+            },
+              child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: FileImage(widget.image!),
+                  backgroundColor: Colors.blue.shade300,
+                ),
+            )
             : GestureDetector(onTap: () async {
                         imageClick = true;
                         FilePickerResult? f = await FilePicker.platform.pickFiles(
@@ -38,7 +53,7 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
                         hover = 100;
                         setState(() {});
                       },
-              child: CircleAvatar(radius: 50,
+              child: const CircleAvatar(radius: 50,
                 child: Column(mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
@@ -84,16 +99,20 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
                     : CircleAvatar(
                         radius: 100,
                         backgroundColor: Colors.blue.shade300,
-                        backgroundImage: AssetImage("assets/icons/user2.png"),
+                        backgroundImage: const AssetImage("assets/icons/user2.png"),
                       ),
               ),
               AnimatedPositioned(
                 curve: Curves.linear,
                 top: hover,
                 left: 0,
-                duration: Duration(milliseconds: 600),
+                duration: const Duration(milliseconds: 600),
                 child: Container(
                   width: 100, height: 100,
+                  //margin: EdgeInsets.all(100.0),
+                  decoration: BoxDecoration(
+                      color: Colors.black45.withOpacity(0.4),
+                      shape: BoxShape.rectangle),
                   child: Center(
                       child: IconButton(
                     onPressed: () async {
@@ -109,15 +128,11 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
                       hover = 100;
                       setState(() {});
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.camera_alt,
                       color: Colors.white,
                     ),
                   )),
-                  //margin: EdgeInsets.all(100.0),
-                  decoration: BoxDecoration(
-                      color: Colors.black45.withOpacity(0.4),
-                      shape: BoxShape.rectangle),
                 ),
               ),
             ],
