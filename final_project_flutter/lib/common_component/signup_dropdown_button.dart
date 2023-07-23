@@ -54,7 +54,7 @@ class _CustomeDropdownButtomSignUpState
                     builder: (context, snapout) {
                       return FutureBuilder(
                           future:
-                              image_farmer_api(ssn: snapout.data.toString()),
+                              Api.image_farmer_api(ssn: snapout.data.toString()),
                           builder: (context, snap) {
                             if (snap.data is ImageProvider) {
                               return Expanded(

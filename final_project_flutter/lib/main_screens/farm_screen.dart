@@ -7,6 +7,7 @@ import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:final_project_year/common_component/circle_image_animation.dart';
 import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
+import 'package:final_project_year/common_component/custome_radio_button.dart';
 import 'package:final_project_year/common_component/google_map.dart';
 import 'package:final_project_year/common_component/google_map_farm.dart';
 import 'package:final_project_year/common_component/select_location.dart';
@@ -46,14 +47,15 @@ class _FarmScreenState extends State<FarmScreen> {
   @override
   void initState() {
     //await CustomeSecureStorage.remove_all( );
-    add_farm_map_bounder_api().then((value) {
+    Api.add_farm_map_bounder_api().then((value) {
       if (value is List<LatLng>) {
         if (Platform.isAndroid || Platform.isIOS) {
-          googleMapComponent = GoogleMapFarmPhone(
+          googleMapComponent.googleMapComponent = GoogleMapFarmPhone(
             l1: LatLngBounds.fromPoints(value),
           );
         } else {
-          googleMapComponent = GoogleMapComponentDesktopFarmScreen(
+          googleMapComponent.googleMapComponent =
+              GoogleMapComponentDesktopFarmScreen(
             l1: LatLngBounds.fromPoints(value),
           );
         }
@@ -73,7 +75,7 @@ class _FarmScreenState extends State<FarmScreen> {
 
   double errorHeight = 0;
 
-  GoogleMapFarm googleMapComponent = GoogleMapComponentDesktopFarmScreen();
+  GoogleMapFarmScreen googleMapComponent = GoogleMapFarmScreen();
   SelectLocation selectLocation = SelectLocation(
     city: -1,
     village: -1,
@@ -108,26 +110,32 @@ class _FarmScreenState extends State<FarmScreen> {
 
   FarmTypeEnum _selectFarmType = FarmTypeEnum.barn;
   Future<dynamic> getLocation() async {
-    googleMapComponent;
-    if (googleMapComponent.point == null &&
-        googleMapComponent.list1.isEmpty &&
-        googleMapComponent.file != null) {
+    googleMapComponent.googleMapComponent;
+    if (googleMapComponent.googleMapComponent.point == null &&
+        googleMapComponent.googleMapComponent.list1.isEmpty &&
+        googleMapComponent.googleMapComponent.file != null) {
       var f = dio.MultipartFile.fromBytes(
-          await File(googleMapComponent.file.toString()).readAsBytes(),
-          filename: googleMapComponent.file.toString().split(
-              '/')[googleMapComponent.file.toString().split('/').length - 1]);
+          await File(googleMapComponent.googleMapComponent.file.toString())
+              .readAsBytes(),
+          filename: googleMapComponent.googleMapComponent.file
+              .toString()
+              .split('/')[googleMapComponent.googleMapComponent.file
+                  .toString()
+                  .split('/')
+                  .length -
+              1]);
 
       return f;
-    } else if (googleMapComponent.point != null) {
+    } else if (googleMapComponent.googleMapComponent.point != null) {
       return json.encode({
         "point": {
           "coordinates": [
-            googleMapComponent.point?.longitude,
-            googleMapComponent.point?.latitude
+            googleMapComponent.googleMapComponent.point?.longitude,
+            googleMapComponent.googleMapComponent.point?.latitude
           ]
         }
       });
-    } else if (googleMapComponent.list1.isNotEmpty) {
+    } else if (googleMapComponent.googleMapComponent.list1.isNotEmpty) {
       String s1 = """
 {
   "type": "FeatureCollection",
@@ -138,16 +146,16 @@ class _FarmScreenState extends State<FarmScreen> {
       "geometry": {
         "coordinates": [[
           [
-            ${googleMapComponent.list1[0].longitude},${googleMapComponent.list1[0].latitude}
+            ${googleMapComponent.googleMapComponent.list1[0].longitude},${googleMapComponent.googleMapComponent.list1[0].latitude}
           ],
            [
-            ${googleMapComponent.list1[1].longitude},${googleMapComponent.list1[1].latitude}
+            ${googleMapComponent.googleMapComponent.list1[1].longitude},${googleMapComponent.googleMapComponent.list1[1].latitude}
           ],
            [
-            ${googleMapComponent.list1[2].longitude},${googleMapComponent.list1[2].latitude}
+            ${googleMapComponent.googleMapComponent.list1[2].longitude},${googleMapComponent.googleMapComponent.list1[2].latitude}
           ],
            [
-            ${googleMapComponent.list1[3].longitude},${googleMapComponent.list1[3].latitude}
+            ${googleMapComponent.googleMapComponent.list1[3].longitude},${googleMapComponent.googleMapComponent.list1[3].latitude}
           ] 
         ]],
         "type": "Polygon"
@@ -255,14 +263,37 @@ class _FarmScreenState extends State<FarmScreen> {
                                       )
                                     : Container(),
                                 c,
+                                
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: Row(
                                     //direction: Axis.vertical,
                                     children: [
-                                      Radio( 
+                                      CustomeRadioButton(textStyle1: TextStyle(fontSize: 15),
+                                  text1: "مزرعة",
+                                  f1: () {
+                                    print(_selectFarmType);
+                                    if (_selectFarmType == FarmTypeEnum.barn) {
+                                      setState(() {});
+                                      _selectFarmType = FarmTypeEnum.farm;
+                                    }
+                                  },
+                                  text2: "حظيرة",
+                                  f2: () {
+                                    print(_selectFarmType);
+                                    if (_selectFarmType == FarmTypeEnum.farm) {
+                                      setState(() {});
+                                      _selectFarmType = FarmTypeEnum.barn;
+                                    }
+                                  },
+                                ),
+                                     /* Radio(
                                         focusColor: Colors.blue,
-                                        activeColor: Colors.blue,splashRadius: 0,fillColor: MaterialStateProperty.resolveWith((states) => Colors.red),
+                                        activeColor: Colors.blue,
+                                        splashRadius: 0,
+                                        fillColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.red),
                                         value: FarmTypeEnum.farm,
                                         groupValue: _selectFarmType,
                                         onChanged: (value) {
@@ -293,7 +324,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                         'الحظيرة',
                                         style: TextStyle(
                                             fontSize: 15, color: Colors.white),
-                                      )
+                                      )*/
                                     ],
                                   ),
                                 ),
@@ -741,37 +772,13 @@ class _FarmScreenState extends State<FarmScreen> {
                                       )
                                     : Container(),
                                 sectionType,
-                                Container(width: double.infinity,
-                                    height:Platform.isAndroid ||
-                                                Platform.isIOS? 40 :360,
+                                Container(
+                                    width: double.infinity,
+                                    height: Platform.isAndroid || Platform.isIOS
+                                        ? 40
+                                        : 360,
                                     margin: const EdgeInsets.all(10),
-                                    child: FutureBuilder(
-                                        future: add_farm_map_bounder_api(),
-                                        builder: (context, snap) {
-                                          if (snap.data is List) {
-                                            if (Platform.isAndroid ||
-                                                Platform.isIOS) {
-                                              return ElevatedButton(//style: ,
-                                                  onPressed: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return GoogleMapFarmPhone(  l1: LatLngBounds.fromPoints(
-                                                  snap.data!),);
-                                                      },
-                                                    );
-                                                  },
-                                                  child: Text("عرض علي الخؤيطة"));
-                                            }
-                                            googleMapComponent =
-                                                GoogleMapComponentDesktopFarmScreen(
-                                              l1: LatLngBounds.fromPoints(
-                                                  snap.data!),
-                                            );
-                                            return googleMapComponent;
-                                          }
-                                          return const LoadingScreen();
-                                        })),
+                                    child: googleMapComponent),
                                 SizedBox(
                                   child: Row(
                                     children: [
@@ -785,7 +792,6 @@ class _FarmScreenState extends State<FarmScreen> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                               
                                 Wrap(
                                   direction: Axis.vertical,
                                   children: [
@@ -887,7 +893,8 @@ class _FarmScreenState extends State<FarmScreen> {
                                             dic1,
                                           );
                                           Map<String, dynamic> res =
-                                              await Api.farm_api(form: formData);
+                                              await Api.farm_api(
+                                                  form: formData);
                                           if (res.containsKey('message')) {
                                             showSnackbardone(
                                                 context: context,
@@ -1078,7 +1085,7 @@ class FarmType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Api.section_type_api(),
+        future: Api.farm_type_api(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.done &&
               snap.data is List &&

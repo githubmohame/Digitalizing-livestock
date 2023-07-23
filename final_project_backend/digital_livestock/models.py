@@ -43,8 +43,8 @@ class city(models.Model):
     id = models.AutoField(primary_key=True , editable=False)
     governorate = models.ForeignKey(governorate, on_delete=models.CASCADE)
     location = models.GeometryField(geography=True,null=True)
-
-
+    class Meta:
+        unique_together = ('name', 'governorate',)
 
 
 
@@ -55,7 +55,8 @@ class village(models.Model):
     id = models.AutoField(primary_key=True , editable=False)
     city = models.ForeignKey(city, on_delete=models.CASCADE)
     location = models.GeometryField(geography=True,null=True)
-
+    class Meta:
+        unique_together = ('name', 'city',)
 
 
 

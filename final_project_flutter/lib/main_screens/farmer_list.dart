@@ -31,7 +31,7 @@ class ItemList extends StatelessWidget {
           child: Row(
             children: [
               FutureBuilder(
-                  future: image_farmer_api(ssn: ssn),
+                  future: Api.image_farmer_api(ssn: ssn),
                   builder: (context, snap) {
                     if (snap.data is ImageProvider<Object>) {
                       return CircleAvatar(
@@ -81,7 +81,7 @@ class _ListFarmerState extends State<ListFarmer> {
     controller.addListener(
       () {
         print("it listener is already");
-        search_farmer_api(
+        Api.search_farmer_api(
                 farmerName: controller.text.isEmpty ? null : controller.text,
                 url: '')
             .then((value) {
@@ -93,7 +93,7 @@ class _ListFarmerState extends State<ListFarmer> {
         });
       },
     );
-    search_farmer_api(farmerName: null, url: widget.url).then((value) {
+    Api.search_farmer_api(farmerName: null, url: widget.url).then((value) {
       if (value is (List<Map<String, dynamic>>, dynamic)) {
         widget.l1 = value.$1;
         widget.url = value.$2;
@@ -153,7 +153,7 @@ class _ListFarmerState extends State<ListFarmer> {
                                         name: widget.l1[index]["name"],
                                       );
                                     } else if (widget.url is String) {
-                                      search_farmer_api(
+                                      Api.search_farmer_api(
                                               farmerName: controller.text,
                                               url: widget.url)
                                           .then((value) {

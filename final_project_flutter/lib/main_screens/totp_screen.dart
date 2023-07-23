@@ -1,5 +1,6 @@
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
+import 'package:final_project_year/common_component/custome_text_field.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,10 @@ class TotpScreen extends StatelessWidget {
                                         color: Colors.white, size: 50),
                                     const SizedBox(height: 20),
                                     Builder(builder: (context) {
-                                      return TextField(
+                                      return CustomeTextField(keyboardType: TextInputType.text,inputFormatters: [ ],
+                                        validator: (p0) {
+                                          return null;
+                                        },
                                         controller: _controller,
                                       );
                                     }),

@@ -26,8 +26,7 @@ Marker createMarker(Map f) {
                 color: Colors.white,
               ),
             );*/
-      print(f );
-      return ShowInfoButtom(
+       return ShowInfoButtom(
         id: f["id"].toString(),
         name: f["farm_name"],
         numberOfWorkersInner: f["number_of_workers_inner"],

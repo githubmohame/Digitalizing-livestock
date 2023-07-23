@@ -165,9 +165,103 @@ Drop Trigger Syncing_typesense_delete_farm ;
 Drop Trigger Syncing_typesense_update_farmer_group ;
 Drop Trigger Syncing_typesense_delete_farmer_group ;
 Drop Trigger Syncing_typesense_insert_farmer_group;
-
-
+ DROP TRIGGER city_insert;
+DROP TRIGGER city_update;
+# Concat('DROP TRIGGER ', Trigger_Name, ';')
+DROP TRIGGER village_insert;
+DROP TRIGGER village_update;
+DROP TRIGGER update_user_fockeltpoint;
+DROP TRIGGER user_group_insert; 
+DROP TRIGGER user_group_update;
+drop trigger user_insert;
 
 
 select   run_script(concat('sh /home/mohamed/IdeaProjects/MainFinalProject/database/farms/bash_script_farm.sh  ','"','jjuuio','"',' ','"', 'uuiiiii','"'  ,' ','insert'))   ;
  select (count(*)<=0)  from  digital_livestock_farm where id='778900'    ;
+ 
+ use test_db;
+ 
+ 
+ 
+ 
+ 
+ SHOW TRIGGERS;   
+ 
+ 
+ 
+ 
+ 
+ SELECT Concat('DROP TRIGGER ', Trigger_Name, ';') FROM  information_schema.TRIGGERS WHERE TRIGGER_SCHEMA = 'test_db';
+ 
+ 
+ 
+ 
+delimiter //
+
+ create trigger user_group_insert after insert on test_db.digital_livestock_user_groups
+ for each row 
+ begin
+ declare flage bool;
+  declare flage2 bool;
+
+ select count(*)>0 into flage from test_db.auth_group group1 where group1.id=new.group_id and group1.name="fockeltpoint";
+ select location_id is null into flage2 from test_db.digital_livestock_user where new.user_id=ssn;
+ if(flage and flage2)
+ then 
+ signal sqlstate '45000'  SET MESSAGE_TEXT = 'fockeltpoint should have location' ;
+ end if;
+ -- join test_db.digital_livestock_user_groups usegroup on(group1.id=usegroup.id ) where group1.name="fockeltpoint" and usegroup.user_id=new.;
+ 
+ end//;
+ delimiter //;
+
+
+
+delimiter //
+
+ create trigger user_group_update after update on test_db.digital_livestock_user_groups
+ for each row 
+ begin
+ declare flage bool;
+  declare flage2 bool;
+
+ select count(*)>0 into flage from test_db.auth_group group1 where group1.id=new.group_id and group1.name="fockeltpoint";
+ select location_id is null into flage2 from test_db.digital_livestock_user where new.user_id=ssn;
+ if(flage and flage2)
+ then 
+ signal sqlstate '45000'  SET MESSAGE_TEXT = 'fockeltpoint should have location' ;
+ end if;
+ -- join test_db.digital_livestock_user_groups usegroup on(group1.id=usegroup.id ) where group1.name="fockeltpoint" and usegroup.user_id=new.;
+ 
+ end//;
+ delimiter //;
+
+
+
+
+delimiter //
+create trigger user_insert after update  on test_db.digital_livestock_user
+for each row
+begin
+ declare flage bool;
+select count(*)>0 into flage from test_db.auth_group gro join test_db.digital_livestock_user_groups usgro on(gro.id=usgro.group_id) where   gro.name="fockeltpoint" 
+and usgro.user_id=new.ssn;
+if(new.location_id is null and flage)
+then
+ signal sqlstate '45000'  SET MESSAGE_TEXT = 'fockeltpoint should have location' ;
+end if;
+end //;
+delimiter //;
+
+ 
+ 
+ alter table test_db.digital_livestock_city add unique key( name,governorate_id);
+ 
+ 
+ alter table test_db.digital_livestock_village add unique key( name,city_id);
+ 
+ 
+ alter table test_db.digital_livestock_governorate add unique key(name);
+
+
+ 

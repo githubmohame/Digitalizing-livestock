@@ -1,8 +1,11 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:final_project_year/apis/apis_functions.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+
+import 'show_load_screen.dart';
 
 abstract class GoogleMapFarm extends StatefulWidget {
   GoogleMapFarm({super.key, this.l1});
@@ -341,7 +344,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
         onPositionChanged: (position, hasGesture) {},
         onTap: (tapPosition, point) {
           if (widget.l1 is LatLngBounds) {}
-         
+
           widget.point = point;
           widget.list1 = [];
           setState(() {});
@@ -397,7 +400,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
                     onPressed: () {
                       widget.draw = !widget.draw;
                       widget.draw ? widget.point = null : null;
-                       hide = true;
+                      hide = true;
                       setState(() {});
                     },
                     style: ButtonStyle(
@@ -463,5 +466,30 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
         ),
       ],
     );
+  }
+}
+
+class GoogleMapFarmScreen extends StatefulWidget {
+  GoogleMapFarmScreen({super.key});
+  GoogleMapFarm googleMapComponent = GoogleMapComponentDesktopFarmScreen();
+
+  @override
+  State<GoogleMapFarmScreen> createState() => _GoogleMapFarmScreenState();
+}
+
+class _GoogleMapFarmScreenState extends State<GoogleMapFarmScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: Api.add_farm_map_bounder_api(),
+        builder: (context, snap) {
+          if (snap.data is List) {
+            widget.googleMapComponent = GoogleMapComponentDesktopFarmScreen(
+              l1: LatLngBounds.fromPoints(snap.data!),
+            );
+            return widget.googleMapComponent;
+          }
+          return const LoadingScreen();
+        });
   }
 }

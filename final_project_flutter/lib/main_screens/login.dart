@@ -150,14 +150,14 @@ class _LogINState extends State<LogIN> {
                                                       customePasswordUpdateTextField
                                                           .controller.text);
                                               Map m={};  
-                                              if (await check_totp_api()) {
+                                              if (await Api.check_totp_api()) {
                                                 Navigator.pushReplacement(
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           FarmerScreen(),
                                                     ));
-                                              } else if ((m=(await send_email_totp()))
+                                              } else if ((m=(await Api.send_email_totp()))
                                                   .containsKey("message")) {
                                                 Navigator.pushReplacement(
                                                     context,

@@ -197,6 +197,7 @@ def create_farmer(request :Request):
 @authentication_classes([CustomerBackendTotp])
 def modified_gavernorate(request :Request):
 	oper=request.data['operation']
+	print(oper=='insert') 
 	if(oper=='delete'):
 		g1=governorate.objects.get(id=request.data['gavernorate']).delete()
 		return  JsonResponse({"message":'تم مسح البيانات'})
@@ -212,7 +213,7 @@ def modified_gavernorate(request :Request):
 		g1.name=request.data['new_name']
 		set_geometry(obj=g1,dic1=request.data)
 		g1.save()
-		JsonResponse({"message":'تم اضافة البيانات'})
+		return JsonResponse({"message":'تم اضافة البيانات'})
 
 
 @api_view(['GET','POST'])
@@ -547,7 +548,8 @@ def get_locations_api(request :Request):
 		q=Q()
 	else:
 		q=Q(id=request.user.location.id )
-	g1=village.objects.all().get(q)
+	print(q)
+	g1=village.objects.all().filter(q)[0]
 	 
 	g1Seralizer= locatinSeralizer(instance=g1 )
 	return response.Response(data=g1Seralizer.data)
@@ -881,10 +883,12 @@ def farm_map_bounder_api(request :Request):
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendTotp])
 def img_farmer_api(request :Request):
-	farm1=User.farmer.get(ssn=request.headers["userssn" ])
-	farm.objects.filter
-	return  FileResponse(open(farm1.img.path,"rb"))
-
+	try:
+		farm1=User.farmer.get(ssn=request.headers.get("userssn" ))
+		
+		return  FileResponse(open(farm1.img.path,"rb"))
+	except Exception as e:
+		return FileResponse(open("/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/uploads/farmer_user/profile.png","rb"))
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendBasic])
@@ -895,9 +899,11 @@ def send_totpy_email(request :Request):
 	from uuid import uuid4
 	code=uuid4()
 	u1:User=User.objects.get(ssn=request.headers['ssn'])
+	print("&"*667)
+	print(u1.email)
 	subject = 'confirm email address'
 	code2=request.get_host()+"/"+"test_url/"+str(code)
-	#msg = EmailMultiAlternatives(subject,  "من فضلك اضغط علي الاينك\n"+code2,from_email=settings.EMAIL_HOST_USER , to=[u1.email ],reply_to= [request.data.get('email')])
+	msg = EmailMultiAlternatives(subject,  "من فضلك اضغط علي الاينك\n"+code2,from_email=settings.EMAIL_HOST_USER , to=[u1.email ],reply_to= [request.data.get('email')])
 	print( "http://"+request.get_host()+"/"+"test_url/"+str(code)  +"\t")
 	try:
 		pyotpv1=totpyUsers.objects.get(user=User.objects.get(ssn=request.headers['ssn'])).totp
@@ -914,6 +920,7 @@ def send_totpy_email(request :Request):
 	r=redis.Redis()
 	#send_mail('send totpy code','the url for totpy is\n'+"http://"+request.get_host()+"/"+"test_url/"+str(code)  +"\t",settings.EMAIL_HOST_USER,[   u1.email],fail_silently=False)
 	r.setex(name=str(code  ),time=5*60,value= pyotpv1)
+	r.set(name=request.headers["ssn"],value=pyotpv1,ex=60*60)
 	print(r.get(str(code)))
 	return JsonResponse({"message":'تم ارسال الرسالة'})
 

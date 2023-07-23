@@ -2,3 +2,4 @@ token
 diagrams_pic/*
 backend_env/*
 final_project_backend/digital_livestock/migrations/*
+final_project_backend/final_project_backend/settings.py

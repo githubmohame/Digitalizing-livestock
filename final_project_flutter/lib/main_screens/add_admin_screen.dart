@@ -56,7 +56,7 @@ class _AddAdminState extends State<AddAdmin> {
             ),
           ),
           backgroundColor: Colors.transparent,
-          drawer: MainDrawer(index: 9),
+          drawer: MainDrawer(index: 14),
           body: SingleChildScrollView(
             child: Center(
               child: Card(

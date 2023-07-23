@@ -48,7 +48,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: FutureBuilder(
-              future: farmInfo(formData: FormData.fromMap({"id": widget.farmId})),
+              future: Api.farmInfo(formData: FormData.fromMap({"id": widget.farmId})),
               builder: (context, snap) {
                 if (snap.connectionState == ConnectionState.done &&
                     snap.data != null) {
@@ -472,7 +472,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
   int k = 0;
   @override
   void initState() {
-    farm_info_list(
+    Api.farm_info_list(
         url: "",
         formData: FormData.fromMap({"farm_id": widget.farmId})).then((value) {
       if (value is (String, List<Map<String, dynamic>>)) {
@@ -507,7 +507,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
             itemBuilder: (context, index) {
               if (index == 0) {
                 return FutureBuilder(
-                    future: animal_farm_api(farmId: widget.farmId),
+                    future: Api.animal_farm_api(farmId: widget.farmId),
                     builder: (context, snap) {
                       if (snap.data != null &&
                           snap.data!.isNotEmpty &&
@@ -521,8 +521,8 @@ class _StatisticFarmState extends State<StatisticFarm> {
                           child: Builder(builder: (context) {
                             widget.selectAnimal ??= SelectAnimalTypeFarm(
                               farmId: widget.farmId,
-                              platoonApi: platoon_type_farm_api,
-                              speciesApi: animal_species_farm_api,
+                              platoonApi: Api.platoon_type_farm_api,
+                              speciesApi: Api.animal_species_farm_api,
                             );
 
                             return Wrap(
@@ -660,7 +660,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                       }
 
                                       widget.list1.clear();
-                                      farm_info_list(
+                                      Api.farm_info_list(
                                               url: "",
                                               formData: FormData.fromMap(dic1))
                                           .then((value) {
@@ -761,7 +761,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                     };
                   }
 
-                  farm_info_list(
+                  Api.farm_info_list(
                           url: widget.url, formData: FormData.fromMap(dic1))
                       .then((value) {
                     if (value is (String, List<Map<String, dynamic>>)) {
