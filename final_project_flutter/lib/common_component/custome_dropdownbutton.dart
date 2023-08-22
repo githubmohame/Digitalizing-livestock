@@ -31,6 +31,9 @@ class _CustomeDropdownButtonState extends State<CustomeDropdownButton> {
     return Container(
       color: widget.color ?? Colors.white,
       child: FutureBuilder<List<Map<String, dynamic>>>(
+        future: () async {
+          return [{"":""}];
+        }(),
         builder: (context, snapshot) => Wrap(
           children: [
             Text(

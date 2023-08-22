@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 
   @override
   Widget build(BuildContext context) {
-    return Container(decoration: const BoxDecoration( //color: Color(0xFF003e29),
-                  image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))
+    return Container(decoration: const BoxDecoration(  color: Color.fromARGB(234, 36, 93, 19),
+                  //image: DecorationImage(fit: BoxFit.cover,image: AssetImage('assets/images/farm.jpg'))
                 ),child:    child,);
   }
 }

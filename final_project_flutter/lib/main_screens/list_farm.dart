@@ -5,6 +5,7 @@ import 'package:final_project_year/common_component/show_load_screen.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../common_component/custome_search_field.dart';
 import '../common_component/main_diwer.dart';
 import 'show_farm_info.dart';
 
@@ -35,13 +36,13 @@ class _FarmListState extends State<FarmList> {
         });
       },
     );
-    Api.search_farm_api(farmerName: null, url: widget.url).then((value) {
+    /*Api.search_farm_api(farmerName: null, url: widget.url).then((value) {
       if (value is (List<Map<String, dynamic>>, dynamic)) {
         widget.l1 = value.$1;
         widget.url = value.$2;
         setState(() {});
       }
-    });
+    });*/
     super.initState();
   }
 
@@ -55,14 +56,119 @@ class _FarmListState extends State<FarmList> {
               appBar: AppBar(
                 title: const Center(
                   child: Text(
-                    'عرض المربين',
+                    'عرض  المزارع',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
                 backgroundColor: Colors.transparent,
               ),
               backgroundColor: Colors.transparent,
-              body: LayoutBuilder(builder: (context, constraint) {
+              body: CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 50),
+                    sliver: SliverFixedExtentList(
+                      delegate: SliverChildListDelegate.fixed([
+                        Wrap(
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomeSearch(
+                                controller: controller,
+                                width: null,
+                                text: 'ادخل اسم المربي'),
+                          ],
+                        ),
+                      ], semanticIndexOffset: 0),
+                      itemExtent: 60,
+                    ),
+                  ),
+                  SliverGrid.builder(
+                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                        mainAxisExtent: 400,
+                        maxCrossAxisExtent: 400,
+                        mainAxisSpacing: 5,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 0),
+                    itemBuilder: (context, index) {
+                      if (index < widget.l1.length) {
+                        print(index);
+                        print(widget.l1);
+                        return FarmItem(
+                          city: widget.l1[index]["city"],
+                          farmName: widget.l1[index]["farm_name"],
+                          governorate: widget.l1[index]["governorate"],
+                          id: widget.l1[index]["id"],
+                          sectionType: widget.l1[index]["section_type"],
+                          village: widget.l1[index]["village"],
+                          workers: widget.l1[index]["workers"],
+                        );
+                      } else if (widget.url is String) {
+                        Api.search_farm_api(
+                                farmerName: controller.text, url: widget.url)
+                            .then((value) {
+                          if (value is (List<Map<String, dynamic>>, dynamic)) {
+                            widget.l1 += value.$1;
+                            widget.url = value.$2;
+                            setState(() {});
+                          }
+                        });
+                      }
+
+                      return Container();
+                    },
+                    itemCount: widget.l1.length + 1,
+                  ),
+                  SliverFixedExtentList.builder(
+                    itemBuilder: (context, index) {
+                      if (widget.l1.isEmpty) {
+                        print('the done');
+                        String s = "هذه المزرعة غير موجود";
+                        if (widget.l1.isEmpty && controller.text.isEmpty) {
+                          s = "لا يوجد مزارع مسجلة";
+                        }
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                              Card(
+                              child: SizedBox(
+                                  //width: 200,
+                                 // height: 300,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,crossAxisAlignment:CrossAxisAlignment.center ,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(s,
+                                              style: TextStyle(fontSize: 20)),
+                                        ],
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                          ],
+                        );
+                      }
+                      if (widget.url != null)
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 500,
+                            ),
+                            SizedBox(width: 50, child: const LoadingScreen()),
+                            Spacer(),
+                          ],
+                        );
+                    },
+                    itemExtent: 200,
+                    itemCount: 1,
+                  ),
+                ],
+              )
+              /*LayoutBuilder(builder: (context, constraint) {
                 print(constraint.maxWidth);
                 return Row(children: [
                   constraint.maxWidth >= 1000 ? const Spacer() : Container(),
@@ -75,11 +181,13 @@ class _FarmListState extends State<FarmList> {
                         elevation: 20,
                         child: Column(
                           children: [
+                            /*
                             CustomeSearch(
                                 width: double.infinity,
                                 text: 'ادخل اسم المربي',
-                                controller: controller),
-                            Expanded(
+                                controller: controller),*/
+                                
+                            /*Expanded(
                               child: ListView.builder(
                                   itemCount: widget.l1.length + 1,
                                   itemBuilder: (context, index) {
@@ -137,7 +245,7 @@ class _FarmListState extends State<FarmList> {
                                     }
                                     return Container();
                                   }),
-                            ),
+                            ),*/
                           ],
                         ),
                       ),
@@ -145,7 +253,8 @@ class _FarmListState extends State<FarmList> {
                   ),
                   constraint.maxWidth >= 1000 ? const Spacer() : Container(),
                 ]);
-              })),
+              }) */
+              ),
         ));
   }
 

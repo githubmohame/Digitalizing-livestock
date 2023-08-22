@@ -287,44 +287,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                     }
                                   },
                                 ),
-                                     /* Radio(
-                                        focusColor: Colors.blue,
-                                        activeColor: Colors.blue,
-                                        splashRadius: 0,
-                                        fillColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (states) => Colors.red),
-                                        value: FarmTypeEnum.farm,
-                                        groupValue: _selectFarmType,
-                                        onChanged: (value) {
-                                          if (value is FarmTypeEnum) {
-                                            _selectFarmType = value;
-                                          }
-                                          setState(() {});
-                                        },
-                                      ),
-                                      const Text(
-                                        'المزرعة',
-                                        style: TextStyle(
-                                            fontSize: 15, color: Colors.white),
-                                      ),
-                                      Radio(
-                                        focusColor: Colors.blue,
-                                        activeColor: Colors.blue,
-                                        value: FarmTypeEnum.barn,
-                                        groupValue: _selectFarmType,
-                                        onChanged: (value) {
-                                          if (value is FarmTypeEnum) {
-                                            _selectFarmType = value;
-                                          }
-                                          setState(() {});
-                                        },
-                                      ),
-                                      const Text(
-                                        'الحظيرة',
-                                        style: TextStyle(
-                                            fontSize: 15, color: Colors.white),
-                                      )*/
+                                      
                                     ],
                                   ),
                                 ),
@@ -544,12 +507,13 @@ class _FarmScreenState extends State<FarmScreen> {
                                             ],
                                             controller: controller[4],
                                             validator: (value) {
-                                              if (_selectFarmType ==
+                                              if (_selectFarmType !=
                                                   FarmTypeEnum.farm) {
                                                 return null;
                                               }
                                               String s1 =
                                                   isEmpty(s1: value.toString());
+                                                  print(s1);
                                               if (s1.isNotEmpty) {
                                                 return s1;
                                               }
@@ -595,7 +559,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             ],
                                             controller: controller[5],
                                             validator: (value) {
-                                              if (_selectFarmType ==
+                                              if (_selectFarmType  !=
                                                   FarmTypeEnum.farm) {
                                                 return null;
                                               }
@@ -645,7 +609,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             ],
                                             controller: controller[6],
                                             validator: (value) {
-                                              if (_selectFarmType ==
+                                              if (_selectFarmType  !=
                                                   FarmTypeEnum.farm) {
                                                 return null;
                                               }
@@ -696,7 +660,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             ],
                                             controller: controller[7],
                                             validator: (value) {
-                                              if (_selectFarmType ==
+                                              if (_selectFarmType  !=
                                                   FarmTypeEnum.farm) {
                                                 return null;
                                               }
@@ -747,7 +711,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             ],
                                             controller: controller[8],
                                             validator: (value) {
-                                              if (_selectFarmType ==
+                                              if (_selectFarmType  !=
                                                   FarmTypeEnum.farm) {
                                                 return null;
                                               }

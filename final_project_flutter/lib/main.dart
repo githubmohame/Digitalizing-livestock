@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:final_project_year/common_component/custome_radio_button.dart';
 import 'package:final_project_year/common_component/google_map.dart';
 import 'package:final_project_year/common_component/google_map_farm.dart';
+import 'package:final_project_year/main_screens/jail_broken_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_jailbreak_detection/flutter_jailbreak_detection.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -94,7 +96,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
   late final NotificationServiceCustome notificationService;
   final LocalAuthentication auth = LocalAuthentication();
 
@@ -107,15 +109,28 @@ class _MyAppState extends State<MyApp> {
     //NotificationServiceCustome.displayNotificationRationale();
     super.initState();
   }
-
-  void didChangeAppLifecycleState(AppLifecycleState state) {}
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("d" * 8989);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
-        if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
+        if (Platform.isAndroid || Platform.isIOS) {
+          FutureBuilder(
+            future: FlutterJailbreakDetection.jailbroken,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return JailBreakScreen();
+              }
+              return const BimetricScreen();
+            },
+          );
+        }
+        if (Platform.isWindows) {
           return const BimetricScreen();
         } else {
           return LogIN();

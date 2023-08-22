@@ -78,6 +78,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
 
   @override
   Widget build(BuildContext context) {
+     Api.user_athority().then((value) => print(value));
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
@@ -132,6 +133,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         MainAxisAlignment.spaceAround,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      Text("اضافة المربي",style:TextStyle(fontSize: 30,color: Colors.white,)),
                                       c,
                                       Container(
                                         margin: const EdgeInsets.only(top: 10),
@@ -345,16 +347,18 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                   };
                                                   if (c.image is File) {
                                                     dic1["img"] =
-                                                        MultipartFile
-                                                            .fromBytes(
-                                                                await c.image!
-                                                                    .readAsBytes(),
-                                                                filename:
-                                                                    controller[4].text );
+                                                        MultipartFile.fromBytes(
+                                                            await c.image!
+                                                                .readAsBytes(),
+                                                            filename:
+                                                                controller[4]
+                                                                    .text);
                                                   }
-                                                   var res = await Api.farmer_api(
-                                                      form: FormData.fromMap(
-                                                          dic1));
+                                                  var res =
+                                                      await Api.farmer_api(
+                                                          form:
+                                                              FormData.fromMap(
+                                                                  dic1));
 
                                                   if (res
                                                       .containsKey('message')) {
@@ -480,16 +484,20 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                           print(dic1["fname"]);
                                           if (c.image is File) {
                                             dic1["img"] =
-                                               MultipartFile.fromBytes(
+                                                MultipartFile.fromBytes(
                                                     await c.image!
                                                         .readAsBytes(),
-                                                    filename: controller[4].text);
+                                                    filename:
+                                                        controller[4].text);
                                           }
 
                                           if (controller[4].text.isNotEmpty) {
                                             dic1['operation'] = 'update';
                                             var res = await Api.farmer_api(
-                                                form: FormData.fromMap(dic1,ListFormat.multiCompatible));
+                                                form: FormData.fromMap(
+                                                    dic1,
+                                                    ListFormat
+                                                        .multiCompatible));
                                             if (res.containsKey('message')) {
                                               showSnackbardone(
                                                   context: context,
@@ -501,7 +509,6 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                             }
                                             return;
                                           }
-
                                         },
                                         child: const Text(
                                           "تعديل",

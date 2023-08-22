@@ -14,7 +14,7 @@ class Api {
   static String url = "http://192.168.1.6:8000/";
   static Future<Map<String, String>> createHeader() async {
     return {
-      "code": await CustomeSecureStorage.gettotp(),
+      //"code": await CustomeSecureStorage.gettotp(),
       //"password": await CustomeSecureStorage.getpassword(),
       "ssn": await CustomeSecureStorage.getssn(),
       "totpy": OTP.generateTOTPCodeString(await CustomeSecureStorage.gettotp(),
@@ -37,7 +37,7 @@ class Api {
         map['id'] = res.data[index]['id'];
         return map;
       });
-       return l1;
+      return l1;
     } catch (e) {}
     return [];
   }
@@ -304,8 +304,7 @@ class Api {
                 listFormat: dio.ListFormat.multiCompatible,
               ));
       return res.data!;
-    } catch (e) {
-     }
+    } catch (e) {}
     return {
       //
     };
@@ -338,7 +337,7 @@ class Api {
       return [];
     }
     try {
-       dio.Dio dio1 = dio.Dio();
+      dio.Dio dio1 = dio.Dio();
 
       var res = await dio1.post(Api.url + 'location_api',
           queryParameters: <String, dynamic>{},
@@ -356,8 +355,7 @@ class Api {
       map['village'] = res.data['id'];
       l1.add(map);
       return l1;
-    } catch (e) {
-     }
+    } catch (e) {}
     return [];
   }
 
@@ -837,7 +835,7 @@ class Api {
 
   static Future<ImageProvider<Object>> image_farmer_api(
       {required String ssn}) async {
-     Map<String, String> u = (await Api.createHeader());
+    Map<String, String> u = (await Api.createHeader());
     Map<String, String> header = <String, String>{"ssn": ssn};
     header.addAll(u);
     return NetworkImage(
@@ -874,7 +872,23 @@ class Api {
           ));
       return res.data;
     } catch (e) {
-       return {"error": "يوجد مشاكل في الخدمة"};
+      return {"error": "يوجد مشاكل في الخدمة"};
+    }
+  }
+
+  static Future< List> user_athority() async {
+    try {
+      Map<String, String> header = await createHeader();
+      Dio dio1 = Dio();
+      var res = await dio1.post(
+          "http://192.168.1.6:8000/user_group",
+          options: dio.Options(
+            headers: header,
+          ));
+      return res.data;
+    } catch (e) {
+      print(e);
+      return [{"error": "يوجد مشاكل في الخدمة"}];
     }
   }
 }

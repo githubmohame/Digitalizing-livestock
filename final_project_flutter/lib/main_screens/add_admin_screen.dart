@@ -61,7 +61,7 @@ class _AddAdminState extends State<AddAdmin> {
             child: Center(
               child: Card(
                 elevation: 20,
-                color: const Color(0xFF467061),
+                color: Colors.green[800],
                 child: SizedBox(
                   // height:1000,
                   width: 700,

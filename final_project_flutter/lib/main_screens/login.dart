@@ -53,7 +53,7 @@ class _LogINState extends State<LogIN> {
               child: SingleChildScrollView(
                 child: SizedBox(
                   width: constraint.maxWidth > 900 ? 500 : null,
-                  height: 400,
+                  height: 450,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -141,6 +141,7 @@ class _LogINState extends State<LogIN> {
                                             var f = await Api.login_api(
                                                 formData:
                                                     FormData.fromMap(dic1));
+                                            
                                             if (f['token']) {
                                               CustomeSecureStorage.setssn(
                                                   ssn: _controller.text);
@@ -149,7 +150,7 @@ class _LogINState extends State<LogIN> {
                                                   password:
                                                       customePasswordUpdateTextField
                                                           .controller.text);
-                                              Map m={};  
+                                              Map m = {};
                                               if (await Api.check_totp_api()) {
                                                 Navigator.pushReplacement(
                                                     context,
@@ -157,7 +158,8 @@ class _LogINState extends State<LogIN> {
                                                       builder: (context) =>
                                                           FarmerScreen(),
                                                     ));
-                                              } else if ((m=(await Api.send_email_totp()))
+                                              } else if ((m = (await Api
+                                                      .send_email_totp()))
                                                   .containsKey("message")) {
                                                 Navigator.pushReplacement(
                                                     context,
@@ -166,7 +168,9 @@ class _LogINState extends State<LogIN> {
                                                           TotpScreen(),
                                                     ));
                                               } else {
-                                                showSnackbarerror(context: context,text:m["error"] );
+                                                showSnackbarerror(
+                                                    context: context,
+                                                    text: m["error"]);
                                               }
                                             } else {
                                               text = const Text(

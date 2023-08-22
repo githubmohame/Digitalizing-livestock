@@ -1,7 +1,7 @@
 
 String isEmpty({required String s1}) {
   if (s1.isEmpty) {
-    return 'the field should not be null';
+    return 'هذا الحقل يجب ادخالة';
   } else {
     return '';
   }
@@ -12,16 +12,16 @@ String isNumeric({required String s1}) {
      double.parse(s1);
     return '';
   } catch (e) {
-    return 'the field should   be number';
+    return 'هذا الحقل يجب ان يكون رقم';
   }
 }
 
-String biggerMin({required String s1, required double min}) {
+String biggerMin({required String s1, required int min}) {
   String s2 = isNumeric(s1: s1);
   if (s2.isEmpty) {
     double num1 = double.parse(s1);
     if (min >= num1) {
-      return 'the number should be >=$min';
+      return  'هذا الحقل يجب ان يكون اكبر من او يساوي'+' $min';
     } else {
       return '';
     }
