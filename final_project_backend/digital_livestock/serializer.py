@@ -1,7 +1,7 @@
 from rest_framework  import serializers
 from digital_livestock.models import *
 from django.db.models import  Sum
-
+from django.contrib.auth.models import Group
 class governorateSerializer(serializers.ModelSerializer):
     class Meta:
         model=governorate
@@ -205,3 +205,8 @@ class FarmerShowInfoSerializer(serializers.ModelSerializer):
     class Meta:
             model=User
             fields=['fname','lname','phone',"ssn" ,"farm_count" ,"total_cost","img"]
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        pass
+        model=Group
+        fields=["name"]

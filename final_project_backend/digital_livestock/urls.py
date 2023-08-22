@@ -42,4 +42,5 @@ urlpatterns = [
               path("change_password_email_template", send_totpy_email),
                 path("test_url/<str:id>", send_totpy_template),
                   path("check_totp",check_totp_api),
+                   path("user_group", user_group_api),
     ]

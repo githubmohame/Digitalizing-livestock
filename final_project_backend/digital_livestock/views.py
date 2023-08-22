@@ -946,3 +946,27 @@ def check_totp_api(request :Request):
 		return JsonResponse({"find":True})
 	except Exception as e:
 		return JsonResponse({"find":False})
+@api_view(['GET',"POST" ])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackendTotp])
+def user_group_api(request :Request):
+  return  response.Response(GroupSerializer( instance= request.user.groups.all(),many=True).data)
+
+@api_view(['GET',"POST" ])
+@permission_classes([permissions.AllowAny])
+def create_totpy_code_for_paseto_api(request :Request):
+	u1:User=User.objects.get(ssn=request.headers.get('ssn'))
+	return response.Response();
+@api_view(['GET',"POST" ])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackendTotp])
+def create_paseto_api(request :Request):
+  my_key = SymmetricKey.generate(protocol=ProtocolVersion4)
+            # create a paseto token that expires in 5 minutes (300 seconds)
+  token = paseto.create(
+                key=my_key,
+                purpose='local',
+                claims={'ssn':  request.user.ssn},
+                exp_seconds=86400
+            )
+  return  response.Response(GroupSerializer( instance= request.user.groups.all(),many=True).data)
