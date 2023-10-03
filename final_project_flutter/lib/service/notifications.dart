@@ -75,11 +75,9 @@ class NotificationServiceCustome {
   @pragma('vm:entry-point')
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-        //print('done\t'*546);
-    if (receivedAction.payload!['notificationId'] == '1234567890') {
+     if (receivedAction.payload!['notificationId'] == '1234567890') {
       
-      //print(receivedAction.actionType);
-    }
+     }
 
      
   }

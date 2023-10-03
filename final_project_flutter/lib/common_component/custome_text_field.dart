@@ -6,10 +6,10 @@ class CustomeTextField extends StatelessWidget {
   TextEditingController controller;
   String? Function(String?) validator;
   TextInputType keyboardType;
-   
+   String?  texthint;
   List<TextInputFormatter>? inputFormatters;
     CustomeTextField({
-    Key? key,
+    Key? key,this.texthint,
     required this.controller,
     required this.validator,
     required this.keyboardType,
@@ -21,9 +21,9 @@ class CustomeTextField extends StatelessWidget {
     return TextFormField(inputFormatters: inputFormatters,onSaved: validator,
       controller: controller,
       validator: validator,
-      decoration: const InputDecoration(
-        errorStyle: TextStyle(color: Colors.white, fontSize: 15),
-        contentPadding: EdgeInsets.all(20),
+      decoration:   InputDecoration(hintText: texthint,
+        errorStyle:const TextStyle(color: Colors.white, fontSize: 15),
+        contentPadding: const EdgeInsets.all(20),
         fillColor: Colors.white,
         filled: true,
         border: InputBorder.none,

@@ -1,5 +1,7 @@
+import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
+import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +54,9 @@ class TotpScreen extends StatelessWidget {
                                         color: Colors.white, size: 50),
                                     const SizedBox(height: 20),
                                     Builder(builder: (context) {
-                                      return CustomeTextField(keyboardType: TextInputType.text,inputFormatters: [ ],
+                                      return CustomeTextField(texthint:  'اكتب كود totp',
+                                        keyboardType: TextInputType.text,
+                                        inputFormatters: [],
                                         validator: (p0) {
                                           return null;
                                         },
@@ -68,12 +72,17 @@ class TotpScreen extends StatelessWidget {
                                           onPressed: () async {
                                             CustomeSecureStorage.settotp(
                                                 totp: _controller.text);
-                                            Navigator.pushReplacement(context,
+                                            if((await   Api.check_totp_api())){
+                                                 Navigator.pushReplacement(context,
                                                 MaterialPageRoute(
                                               builder: (context) {
                                                 return FarmerScreen();
                                               },
                                             ));
+                                            }
+                                          
+                                            
+                                           
                                           },
                                           style: ButtonStyle(
                                               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -92,6 +101,41 @@ class TotpScreen extends StatelessWidget {
                                                       style:
                                                           BorderStyle.solid))),
                                           child: const Text('استكمال', style: TextStyle(color: Colors.white))),
+                                    ),
+                                    SizedBox(
+                                      height: 70,
+                                      child: TextButton(
+                                          onPressed: () async {
+                                             Map m = {};
+                                             if ((m = (await Api
+                                                      .send_email_totp()))
+                                                  .containsKey("message")) {
+                                         
+                                              } else {
+                                                showSnackbarerror(
+                                                    context: context,
+                                                    text: m["error"]);
+                                              }
+
+                                           
+                                          },
+                                          style: ButtonStyle(
+                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                  const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.zero,
+                                                      side: BorderSide(
+                                                          color: Colors
+                                                              .transparent))),
+                                              backgroundColor:
+                                                  MaterialStateProperty.resolveWith(
+                                                      (states) => Colors.green),
+                                              side: MaterialStateProperty.resolveWith(
+                                                  (states) => const BorderSide(
+                                                      color: Colors.green,
+                                                      style:
+                                                          BorderStyle.solid))),
+                                          child: const Text('اعادة ارسال', style: TextStyle(color: Colors.white))),
                                     ),
                                   ],
                                 )),
@@ -112,3 +156,23 @@ class TotpScreen extends StatelessWidget {
     );
   }
 }
+//(await Api.send_email_totp())
+/*
+
+ if ((m = (await Api
+                                                      .send_email_totp()))
+                                                  .containsKey("message")) {
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          TotpScreen(),
+                                                    ));
+                                              } else {
+                                                showSnackbarerror(
+                                                    context: context,
+                                                    text: m["error"]);
+                                              }
+
+
+*/

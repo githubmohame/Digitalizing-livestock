@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:final_project_year/common_component/card_board.dart';
 import 'package:final_project_year/common_component/google_map.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 import 'package:final_project_year/common_component/pie_chart.dart';
 import 'package:final_project_year/common_component/signup_dropdown_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -37,34 +37,29 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
 
   @override
   void initState() {
-    super.initState();
+     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     SliverPadding;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    return Directionality(textDirection: TextDirection.ltr,
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: FutureBuilder(
-              future: Api.farmInfo(formData: FormData.fromMap({"id": widget.farmId})),
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: FutureBuilder(
+              future: Api.farmInfo(
+                  formData: FormData.fromMap({"id": widget.farmId})),
               builder: (context, snap) {
                 if (snap.connectionState == ConnectionState.done &&
                     snap.data != null) {
                   return LayoutBuilder(builder: (context, constraint) {
                     return Scaffold(
                       key: scaffoldKey,
-                      drawer: constraint.maxWidth < 1900.0
-                          ? const CustomeDrawerView2()
-                          : null,
+                      //drawer: constraint.maxWidth < 1900.0? const CustomeDrawerView2(): null,
                       backgroundColor: const Color(0xFFf3f3f5),
                       body: SafeArea(
                         child: Row(
                           children: [
-                            constraint.maxWidth >= 1920.0
-                                ? const CustomeDrawerView2()
-                                : Container(),
                             Expanded(
                                 child: ScrollConfiguration(
                               behavior: ScrollConfiguration.of(context)
@@ -76,24 +71,25 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                     return [
                                       SliverList(
                                         delegate: SliverChildListDelegate([
-                                          Row(mainAxisAlignment: MainAxisAlignment.end,children: [
-                                            constraint.maxWidth < 1920.0
-                                                ?  IconButton(
+                                          Wrap(
+                                              // mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                 IconButton(
                                                         icon: const Icon(
-                                                          Icons.menu,
+                                                          Icons.arrow_back,
                                                           color: Colors.green,
                                                         ),
                                                         onPressed: () {
-                                                          scaffoldKey.currentState!
-                                                              .openDrawer();
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                       )
-                                                : Container(),
-                                          ]),
+                                                     ,
+                                              ]),
                                           constraint.maxWidth > 1920.0
-                                              ? Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
+                                              ? Wrap(
+                                                  //mainAxisAlignment:
+                                                  // MainAxisAlignment.start,
                                                   children: [
                                                     IconButton(
                                                       icon: const Icon(
@@ -101,7 +97,8 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                         color: Colors.green,
                                                       ),
                                                       onPressed: () {
-                                                        scaffoldKey.currentState!
+                                                        scaffoldKey
+                                                            .currentState!
                                                             .openDrawer();
                                                       },
                                                     ),
@@ -123,11 +120,12 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                           ),
                                           Wrap(
                                             children: [
-                                              Column(
+                                              Wrap(
                                                 children: [
                                                   Container(
-                                                    margin: const EdgeInsets.only(
-                                                        left: 0),
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            left: 0),
                                                     child: Wrap(
                                                       alignment:
                                                           WrapAlignment.center,
@@ -136,7 +134,8 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                       spacing: 12,
                                                       runSpacing: 12,
                                                       crossAxisAlignment:
-                                                          WrapCrossAlignment.start,
+                                                          WrapCrossAlignment
+                                                              .start,
                                                       children: [
                                                         snap.data!["village"] !=
                                                                 null
@@ -149,21 +148,25 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                         .description,
                                                                     color: Colors
                                                                         .blue),
-                                                                color: Colors.blue,
-                                                                title: 'القارية')
+                                                                color:
+                                                                    Colors.blue,
+                                                                title:
+                                                                    'القارية')
                                                             : Container(),
                                                         snap.data!["village"]
                                                                     ["city"] !=
                                                                 null
                                                             ? CardDashBoard(
                                                                 value: snap.data![
-                                                                        "village"][
-                                                                    "city"]["name"],
+                                                                            "village"]
+                                                                        ["city"]
+                                                                    ["name"],
                                                                 right: 20,
                                                                 icon: const Image(
                                                                     image: AssetImage(
                                                                         'assets/icons/driver_google.png')),
-                                                                color: Colors.amber,
+                                                                color: Colors
+                                                                    .amber,
                                                                 title:
                                                                     'المدينة او المركز')
                                                             : Container(),
@@ -177,11 +180,12 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                 right: 20,
                                                                 icon: const Icon(
                                                                     Icons.cloud,
-                                                                    color: Color.fromARGB(
-                                                                        255,
-                                                                        188,
-                                                                        76,
-                                                                        76)),
+                                                                    color:
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            188,
+                                                                            76,
+                                                                            76)),
                                                                 color:
                                                                     const Color.fromARGB(
                                                                         255,
@@ -202,13 +206,11 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                         .access_time_outlined,
                                                                     color: Colors
                                                                         .blue),
-                                                                color: Colors.blue,
+                                                                color:
+                                                                    Colors.blue,
                                                                 title: 'القطاع')
                                                             : Container(),
-                                                        snap
-                                                                        .data![
-                                                                    "number_of_workers_outer"] !=
-                                                                0
+                                                        snap.data!["number_of_workers_outer"] != 0
                                                             ? CardDashBoard(
                                                                 value: snap.data![
                                                                         "number_of_workers_outer"]
@@ -223,7 +225,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                             76,
                                                                             76)),
                                                                 color: const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -231,10 +233,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                 title:
                                                                     ' عدد العمال الخارجين')
                                                             : Container(),
-                                                        snap
-                                                                        .data![
-                                                                    "number_of_workers_inner"] !=
-                                                                0
+                                                        snap.data!["number_of_workers_inner"] != 0
                                                             ? CardDashBoard(
                                                                 value: snap.data![
                                                                         "number_of_workers_inner"]
@@ -249,7 +248,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                             76,
                                                                             76)),
                                                                 color: const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -257,10 +256,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                 title:
                                                                     ' عدد العمال الداخلين')
                                                             : Container(),
-                                                        snap
-                                                                        .data![
-                                                                    "playground"] !=
-                                                                0
+                                                        snap.data!["playground"] != 0
                                                             ? CardDashBoard(
                                                                 value: snap.data![
                                                                         "playground"]
@@ -275,7 +271,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                             76,
                                                                             76)),
                                                                 color: const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -283,10 +279,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                 title:
                                                                     'عدد الملاعب')
                                                             : Container(),
-                                                        snap
-                                                                        .data![
-                                                                    'huge_playground'] !=
-                                                                0
+                                                        snap.data!['huge_playground'] != 0
                                                             ? CardDashBoard(
                                                                 value: snap.data![
                                                                         'huge_playground']
@@ -301,7 +294,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                             76,
                                                                             76)),
                                                                 color: const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -311,19 +304,20 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                             : Container(),
                                                         snap.data!['wards'] != 0
                                                             ? CardDashBoard(
-                                                                value: snap
-                                                                    .data!['wards']
+                                                                value: snap.data![
+                                                                        'wards']
                                                                     .toString(),
                                                                 right: 20,
                                                                 icon: const Icon(
                                                                     Icons.cloud,
-                                                                    color: Color.fromARGB(
-                                                                        255,
-                                                                        188,
-                                                                        76,
-                                                                        76)),
-                                                                color: const Color
+                                                                    color: Color
                                                                         .fromARGB(
+                                                                            255,
+                                                                            188,
+                                                                            76,
+                                                                            76)),
+                                                                color: const Color
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -331,10 +325,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                 title:
                                                                     'عدد العنابر')
                                                             : Container(),
-                                                        snap
-                                                                        .data![
-                                                                    "isolated_wards"] !=
-                                                                0
+                                                        snap.data!["isolated_wards"] != 0
                                                             ? CardDashBoard(
                                                                 value: snap.data![
                                                                         "isolated_wards"]
@@ -349,7 +340,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                             76,
                                                                             76)),
                                                                 color: const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -357,10 +348,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                 title:
                                                                     'عدد عنابر العزل')
                                                             : Container(),
-                                                        snap
-                                                                        .data![
-                                                                    "attached_area"] !=
-                                                                0
+                                                        snap.data!["attached_area"] != 0
                                                             ? CardDashBoard(
                                                                 value: snap.data![
                                                                         "attached_area"]
@@ -375,7 +363,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                                                             76,
                                                                             76)),
                                                                 color: const Color
-                                                                        .fromARGB(
+                                                                    .fromARGB(
                                                                     255,
                                                                     188,
                                                                     76,
@@ -403,8 +391,10 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                                           ),
                                           constraint.maxWidth < 1900.0
                                               ? TotalStatisticsPieChart(
+                                                  text: "احصائيات عن المزرعة",
                                                   width: 300,
-                                                  statistic: const [],
+                                                  statistic: snap.data![
+                                                      "connect_animal_farm"],
                                                 )
                                               : Container(),
                                           Container(
@@ -418,7 +408,10 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                             )),
                             constraint.maxWidth >= 1900.0
                                 ? TotalStatisticsPieChart(
-                                    width: 400, statistic: const [])
+                                    text: "احصائيات عن المزرعة",
+                                    width: 400,
+                                    statistic:
+                                        snap.data!["connect_animal_farm"])
                                 : Container(),
                           ],
                         ),
@@ -443,7 +436,7 @@ class _FarmInfoScreenState extends State<FarmInfoScreen> {
                     ],
                   );
                 }
-              })),
+              }) 
     );
   }
 }
@@ -472,16 +465,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
   int k = 0;
   @override
   void initState() {
-    Api.farm_info_list(
-        url: "",
-        formData: FormData.fromMap({"farm_id": widget.farmId})).then((value) {
-      if (value is (String, List<Map<String, dynamic>>)) {
-        var (m, l) = value;
-        widget.list1 = l;
-        widget.url = m;
-        setState(() {});
-      }
-    });
     widget.con.addListener(() {
       if (widget.con.position.minScrollExtent == widget.con.offset) {}
     });
@@ -647,7 +630,6 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                       if (widget.selectAnimal?.species !=
                                           null) {
                                         dic1.addAll({
-                                          
                                           "species":
                                               widget.selectAnimal?.species
                                         });

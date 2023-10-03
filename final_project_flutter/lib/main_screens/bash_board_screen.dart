@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/card_board.dart';
 import 'package:final_project_year/common_component/google_map.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 import 'package:final_project_year/common_component/pie_chart.dart';
 import 'package:final_project_year/common_component/search_field.dart';
 import 'package:final_project_year/common_component/select_location.dart';
@@ -43,231 +43,206 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   Widget build(BuildContext context) {
     SliverPadding;
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: FutureBuilder(
-            future: Api.dashBoard(),
-            builder: (context, snap) {
-              if (snap.connectionState == ConnectionState.done &&
-                  snap.data != null &&
-                  snap.data!.isNotEmpty) {
-                return LayoutBuilder(builder: (context, constraint) {
-                  return Scaffold(
-                    key: scaffoldKey,
-                    drawer: constraint.maxWidth < 1900.0
+    return FutureBuilder(
+        future: Api.dashBoard(),
+        builder: (context, snap) {
+          if (snap.connectionState == ConnectionState.done &&
+              snap.data != null &&
+              snap.data!.isNotEmpty) {
+            return LayoutBuilder(builder: (context, constraint) {
+              return Scaffold(
+                key: scaffoldKey,
+                drawer: null,
+                /*constraint.maxWidth < 1900.0
                         ? const CustomeDrawerView2()
-                        : null,
-                    backgroundColor: const Color(0xFFf3f3f5),
-                    body: Row(
-                      children: [
-                        constraint.maxWidth >= 1920.0
-                            ? const CustomeDrawerView2()
-                            : Container(),
-                        Expanded(
-                            child: NestedScrollView(
-                                controller: con,
-                                headerSliverBuilder:
-                                    (context, innerBoxIsScrolled) {
-                                  return [
-                                    SliverList(
-                                      delegate: SliverChildListDelegate([
-                                        Row(children: [
-                                          constraint.maxWidth < 1920.0
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    IconButton(
-                                                      icon: const Icon(
-                                                        Icons.menu,
-                                                        color: Colors.green,
-                                                      ),
-                                                      onPressed: () {
-                                                        scaffoldKey
-                                                            .currentState!
-                                                            .openDrawer();
-                                                      },
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container(),
-                                        ]),
-                                        constraint.maxWidth > 1920.0
-                                            ? Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  IconButton(
-                                                    icon: const Icon(
-                                                      Icons.menu,
-                                                      color: Colors.green,
-                                                    ),
-                                                    onPressed: () {
-                                                      scaffoldKey.currentState!
-                                                          .openDrawer();
-                                                    },
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
-                                        Container(height: 10),
-                                        Wrap(
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.center,
-                                          children: [
-                                            CustomeDropdownButtomSignUp(
-                                                value: 12),
-                                            SizedBox(
-                                              width: 300,
-                                              child: SearchTextField(
-                                                  width: constraint.maxWidth >=
-                                                          500
-                                                      ? 600 - 200
-                                                      : constraint.maxWidth -
-                                                          200),
+                        : null,*/
+                backgroundColor: const Color(0xFFf3f3f5),
+                body: Row(
+                  children: [
+                    Expanded(
+                        child: NestedScrollView(
+                            controller: con,
+                            headerSliverBuilder: (context, innerBoxIsScrolled) {
+                              return [
+                                SliverList(
+                                  delegate: SliverChildListDelegate([
+                                    Row(children: [
+                                      //constraint.maxWidth < 1920.0
+                                      //?
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.arrow_back,
+                                              color: Colors.green,
                                             ),
-                                          ],
-                                        ),
-                                        Container(
-                                          height: 10,
-                                        ),
+                                            onPressed: () {
+                                              /* Navigator.of(context)
+                                                        .history
+                                                        .forEach((element) {
+                                                     });*/
+                                              Navigator.of(context).pop();
+                                              //Navigator.pop(context);
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                      //: Container(),
+                                    ]),
+                                    constraint.maxWidth > 1920.0
+                                        ? Wrap(
+                                            // mainAxisAlignment:
+                                            //  MainAxisAlignment.start,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.arrow_back,
+                                                  color: Colors.green,
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                            ],
+                                          )
+                                        : Container(),
+                                    Container(height: 10),
+                                    Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.start,
+                                      children: [
+                                        CustomeDropdownButtomSignUp(value: 12),
+                                         
+                                      ],
+                                    ),
+                                    Container(
+                                      height: 10,
+                                    ),
+                                    Wrap(
+                                      children: [
                                         Wrap(
                                           children: [
-                                            Column(
-                                              children: [
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.only(
-                                                          left: 0),
-                                                  child: Wrap(
-                                                    runAlignment:
-                                                        WrapAlignment
-                                                            .spaceBetween,
-                                                    spacing: 12,
-                                                    runSpacing: 12,
-                                                    crossAxisAlignment:
-                                                        WrapCrossAlignment
-                                                            .start,
-                                                    children: [
-                                                      CardDashBoard(
-                                                          value: snap
-                                                              .data!['data'][
-                                                                  'farm_milk']
-                                                              .toString(),
-                                                          icon: const Icon(
-                                                              Icons
-                                                                  .description,
-                                                              color: Colors
-                                                                  .blue),
-                                                          color: Colors.blue,
-                                                          title:
-                                                              'مزارع  اللبان'),
-                                                      CardDashBoard(
-                                                          value: snap
-                                                              .data!['data'][
-                                                                  'farm_meat']
-                                                              .toString(),
-                                                          right: 20,
-                                                          icon: const Image(
-                                                              image: AssetImage(
-                                                                  'assets/icons/driver_google.png')),
-                                                          color: Colors.amber,
-                                                          title:
-                                                              'عدد مزارع اللحوم'),
-                                                      CardDashBoard(
-                                                          value: snap
-                                                              .data!['data'][
-                                                                  'farmer_count']
-                                                              .toString(),
-                                                          right: 20,
-                                                          icon: const Icon(
-                                                              Icons.cloud,
-                                                              color: Color
-                                                                  .fromARGB(
-                                                                      255,
-                                                                      188,
-                                                                      76,
-                                                                      76)),
-                                                          color: const Color
-                                                                  .fromARGB(
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: 0),
+                                              child: Wrap(
+                                                runAlignment:
+                                                    WrapAlignment.spaceBetween,
+                                                spacing: 12,
+                                                runSpacing: 12,
+                                                alignment:
+                                                    WrapAlignment.spaceAround,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.start,
+                                                children: [
+                                                  CardDashBoard(
+                                                      value: snap.data!['data']
+                                                              ['farm_milk']
+                                                          .toString(),
+                                                      icon: const Icon(
+                                                          Icons.description,
+                                                          color: Colors.blue),
+                                                      color: Colors.blue,
+                                                      title: 'مزارع  اللبان'),
+                                                  CardDashBoard(
+                                                      value: snap.data!['data']
+                                                              ['farm_meat']
+                                                          .toString(),
+                                                      right: 20,
+                                                      icon: const Image(
+                                                          image: AssetImage(
+                                                              'assets/icons/driver_google.png')),
+                                                      color: Colors.amber,
+                                                      title:
+                                                          'عدد مزارع اللحوم'),
+                                                  CardDashBoard(
+                                                      value: snap.data!['data']
+                                                              ['farmer_count']
+                                                          .toString(),
+                                                      right: 20,
+                                                      icon: const Icon(
+                                                          Icons.cloud,
+                                                          color: Color.fromARGB(
                                                               255,
                                                               188,
                                                               76,
-                                                              76),
-                                                          title:
-                                                              'عدد المربين'),
-                                                      CardDashBoard(
-                                                          value: snap
-                                                              .data!['data'][
-                                                                  'village_count']
-                                                              .toString(),
-                                                          right: 20,
-                                                          icon: const Icon(
-                                                              Icons
-                                                                  .access_time_outlined,
-                                                              color: Colors
-                                                                  .blue),
-                                                          color: Colors.blue,
-                                                          title:
-                                                              'عدد الاماكن'),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(height: 40),
-                                                Container(height: 30),
-                                               googleMapComponentDashBoardScreen
-                                              ],
+                                                              76)),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 188, 76, 76),
+                                                      title: 'عدد المربين'),
+                                                  CardDashBoard(
+                                                      value: snap.data!['data']
+                                                              ['village_count']
+                                                          .toString(),
+                                                      right: 20,
+                                                      icon: const Icon(
+                                                          Icons
+                                                              .access_time_outlined,
+                                                          color: Colors.blue),
+                                                      color: Colors.blue,
+                                                      title: 'عدد الاماكن'),
+                                                ],
+                                              ),
                                             ),
-                                            Container(
-                                              width: 10,
-                                            )
+                                            Container(height: 40),
+                                            Container(height: 30),
+                                            googleMapComponentDashBoardScreen
                                           ],
                                         ),
-                                        constraint.maxWidth < 1900.0
-                                            ? TotalStatisticsPieChart(
-                                                width: 300,
-                                                statistic: [
-                                                  snap.data!['data']
-                                                      ['total_beauty'],
-                                                  snap.data!['data']
-                                                      ['total_sheep'],
-                                                  snap.data!['data']
-                                                      ['total_cows']
-                                                ],
-                                              )
-                                            : Container(),
                                         Container(
-                                          height: 30,
-                                        ),
-                                      ]),
+                                          width: 10,
+                                        )
+                                      ],
                                     ),
-                                  ];
-                                },
-                                body: widget.wid)),
-                        constraint.maxWidth >= 1900.0
-                            ? TotalStatisticsPieChart(
-                                width: 400,
-                                statistic: [
-                                  snap.data!['data']['total_beauty'],
-                                  snap.data!['data']['total_sheep'],
-                                  snap.data!['data']['total_cows']
-                                ],
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  );
-                });
-              } else {
-                return Scaffold(key: scaffoldKey,backgroundColor: Colors.transparent,drawer: const CustomeDrawerView2(),appBar: AppBar(backgroundColor: Colors.transparent,elevation: 0, leading: IconButton(onPressed: () {
-                  scaffoldKey.currentState?.openDrawer();
-                },icon: const Icon(Icons.menu,color:Colors.blue),) ),
-                  body: const SafeArea(
-                    child: Center(child: LoadingScreen())
-                  ),
-                );
-              }
-            }));
+                                    constraint.maxWidth < 1900.0
+                                        ? TotalStatisticsPieChart(
+                                            text: "الاحصائيات عن النظام",
+                                            width: 300,
+                                            statistic: snap.data!['data']
+                                                ["connect_animal_farm"],
+                                          )
+                                        : Container(),
+                                    Container(
+                                      height: 30,
+                                    ),
+                                  ]),
+                                ),
+                              ];
+                            },
+                            body: widget.wid)),
+                    constraint.maxWidth >= 1900.0
+                        ? TotalStatisticsPieChart(
+                            text: "احصائيات عن النظام",
+                            width: 400,
+                            statistic: snap.data!['data']
+                                ["connect_animal_farm"],
+                          )
+                        : Container(),
+                  ],
+                ),
+              );
+            });
+          } else {
+            return Scaffold(
+              key: scaffoldKey,
+              backgroundColor: Colors.transparent,
+              // drawer: const CustomeDrawerView2(),
+              appBar: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  leading: IconButton(
+                    onPressed: () {
+                      scaffoldKey.currentState?.openDrawer();
+                    },
+                    icon: const Icon(Icons.menu, color: Colors.blue),
+                  )),
+              body: const SafeArea(child: Center(child: LoadingScreen())),
+            );
+          }
+        });
   }
 }
 
@@ -289,20 +264,55 @@ class StatisticFarm extends StatefulWidget {
 }
 
 class _StatisticFarmState extends State<StatisticFarm> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    initStatisticGovernorate();
+    super.initState();
+  }
+
+  void initStatisticGovernorate() {
+    Api.location_dash_info(formData: FormData.fromMap({"type": "gov"}))
+        .then((map) {
+      List<dynamic> u = map["gov_data"];
+      widget.list1 = {};
+      for (var i in u) {
+        if (widget.list1.containsKey(i["g_name"])) {
+          widget.list1[i["g_name"]].addAll({i["farm_type_name"]: i["count"]});
+        } else {
+          widget.list1[i["g_name"]] = {i["farm_type_name"]: i["count"]};
+        }
+      }
+      u = map["farm_type"];
+       droplist = [];
+
+      for (var i in u) {
+        if (i["type"] != null) {
+          droplist.add(DropdownMenuItem<String>(
+            value: i["type"],
+            child: Text(i["type"]),
+          ));
+        }
+      }
+      if (droplist.isNotEmpty) {
+        drop = droplist[0].value.toString();
+      }
+      setState(() {});
+    });
+  }
+
   String drop = "";
   List<DropdownMenuItem<String>> droplist = [];
   ScrollController con = ScrollController();
   bool ini = false;
   @override
   Widget build(BuildContext context) {
-    //print(widget.list1);
     return FutureBuilder(
         future: Api.location_api(stop: ini),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.done &&
               snap.data != null &&
               (snap.data!.isNotEmpty || ini)) {
-            ini = true;
             widget.locationCubit = LocationCubit(
                 gavernorate: !ini
                     ? snap.data![0]['governorate']
@@ -313,8 +323,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                 village: !ini
                     ? snap.data![0]['village']
                     : widget.locationCubit.state.village);
-
-            
+            ini = true;
             return BlocProvider(
               create: (context) => widget.locationCubit,
               child: ListView.separated(
@@ -330,9 +339,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                   itemBuilder: (context, index) {
                     List<String> u = widget.list1.keys.toList();
                     if (index == 0) {
-                      return Builder(builder: (context) {
-                        return widget.selectLocationDashBoard;
-                      });
+                      return widget.selectLocationDashBoard;
                     }
                     if (index == 1) {
                       return Builder(builder: (context) {
@@ -340,11 +347,8 @@ class _StatisticFarmState extends State<StatisticFarm> {
                           listenWhen: (previous, current) {
                             return true;
                           },
-                          
                           listener: (context, state) async {
                             if (state.gavernorate == -1) {
-                              
-                             
                               Map<String, dynamic> map =
                                   ((await Api.location_dash_info(
                                       formData:
@@ -362,8 +366,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                 }
                               }
                               u = map["farm_type"];
-                              //print(widget.list1);
-                              droplist = [];
+                               droplist = [];
 
                               for (var i in u) {
                                 if (i["type"] != null) {
@@ -397,8 +400,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                 }
                               }
                               u = map["farm_type"];
-                              //print(widget.list1);
-                              droplist = [];
+                               droplist = [];
 
                               for (var i in u) {
                                 if (i["type"] != null) {
@@ -413,8 +415,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                               }
                               setState(() {});
                             } else {
-                              // print(state.city);
-                              Map<String, dynamic> map =
+                               Map<String, dynamic> map =
                                   ((await Api.location_dash_info(
                                       formData: FormData.fromMap({
                                 "type": "village",
@@ -433,8 +434,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                 }
                               }
                               u = map["farm_type"];
-                              //print(widget.list1);
-                              droplist = [];
+                               droplist = [];
 
                               for (var i in u) {
                                 if (i["type"] != null) {
@@ -458,12 +458,12 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                   const Text(
                                     'المحافظة',
                                     style: TextStyle(
-                                    color: Colors.black, fontSize: 15),
+                                        color: Colors.black, fontSize: 15),
                                   ),
                                   const Text(
                                     'عدد المزارع',
                                     style: TextStyle(
-                                    color: Colors.black, fontSize: 15),
+                                        color: Colors.black, fontSize: 15),
                                   ),
                                   Builder(builder: (context) {
                                     if (droplist.isNotEmpty) {
@@ -503,16 +503,20 @@ class _StatisticFarmState extends State<StatisticFarm> {
                       });
                     } else {
                       return Card(
-                        child: SizedBox(height:150 ,
-                           child: Row(mainAxisSize: MainAxisSize.min,mainAxisAlignment:MainAxisAlignment.spaceAround ,
-                              children: [
+                        child: SizedBox(
+                          height: 150,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
                               Text(
                                 u[index - 2],
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 15),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     () {
@@ -526,7 +530,7 @@ class _StatisticFarmState extends State<StatisticFarm> {
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 15),
                                   ),
-                                  Container(width:10),
+                                  Container(width: 10),
                                 ],
                               )
                             ],
@@ -542,5 +546,3 @@ class _StatisticFarmState extends State<StatisticFarm> {
         });
   }
 }
-
-

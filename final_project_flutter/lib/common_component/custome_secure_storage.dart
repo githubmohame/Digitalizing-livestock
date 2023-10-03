@@ -14,8 +14,8 @@ class CustomeSecureStorage {
   static void setpassword({required String password}) {
     flutterSecureStorage.write(key: 'password', value: password);
   }
-  static void settotp({required String totp}) {
-    flutterSecureStorage.write(key: 'totp', value: totp);
+  static void settotp({required String totp}) async{
+    await flutterSecureStorage.write(key: 'totp', value: totp);
   }
   static Future<String> gettotp( ) async{
    return await flutterSecureStorage.read(key:"totp" )??"";
@@ -23,16 +23,18 @@ class CustomeSecureStorage {
   static Future<String> getpassword() async {
     return await flutterSecureStorage.read(key: 'password') ?? '';
   }
-static Future<List<Map<String, dynamic>>?> remove_all(
+static Future< void> remove_all(
       ) async {
     
       FlutterSecureStorage storage = const FlutterSecureStorage();
 
       await storage.deleteAll();
       return null;
-
- 
- 
-
+}
+static Future<String> getauth() async {
+    return await flutterSecureStorage.read(key: 'user_auth') ?? '';
+  } 
+  static void setauth({required String user_auth}) async{
+    await flutterSecureStorage.write(key: 'user_auth', value: user_auth);
   }
 }

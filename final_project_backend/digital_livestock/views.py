@@ -7,6 +7,7 @@ from digital_livestock.backend import *
 from digital_livestock.permission import *
 from django.utils.html import strip_tags
 # Create your views here.
+import smtplib
 from django.template.loader import render_to_string
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth.models import  Group
@@ -23,9 +24,7 @@ from rest_framework.request import Request
 from django.contrib.gis.gdal import DataSource
 from .serializer import *
 from django.contrib.gis.gdal.geometries import Polygon,Point
-import geopandas as gpd
-import json
-
+ 
 from django.contrib.gis.geos import GEOSGeometry
 def set_geometry(obj:models.Model,dic1:dict[str,]):
  	if(dic1.get('geometry')!=None):
@@ -169,12 +168,7 @@ def farm_type_api(request :Request):
 @permission_classes([CustomerAccessPermission])
 def login(request :Request):
 	user1=User.objects.all().filter(ssn=request.data.get('ssn'))
-	print(user1)
 	if(user1.count()>0):
-		print(request.data.get('password')=="999")
-		print(request.data.get('password'))
-
-		print(user1[0].check_password(  request.data.get('password')) )
 		if(user1[0].check_password( request.data.get('password'))):
 			return  JsonResponse({"token":True})
 		return JsonResponse({"token":False})
@@ -197,7 +191,6 @@ def create_farmer(request :Request):
 @authentication_classes([CustomerBackendTotp])
 def modified_gavernorate(request :Request):
 	oper=request.data['operation']
-	print(oper=='insert') 
 	if(oper=='delete'):
 		g1=governorate.objects.get(id=request.data['gavernorate']).delete()
 		return  JsonResponse({"message":'تم مسح البيانات'})
@@ -453,14 +446,14 @@ def farmer_api(request :Request):
 		user1=User.farmer.filter(ssn=dic1['ssn'])
 		if(len(user1)==0):
 			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
-		if(user1[0].is_superuser):
-			return  JsonResponse({"error":'الرقم القومي غير صحيح'})
 		else:
 			if(user1[0].groups.all().count() > 1):
-				user1[0].groups.remove(Group.objects.get(name="farmer"))
+				user1[0].groups.remove(CustomeGroup.objects.get(name="farmer"))
 			else:
 				user1[0].delete()
 			return  JsonResponse({"message":'تم مسح البيانات'})
+	"""if(user1[0].is_superuser):
+			return  JsonResponse({"error":'الرقم القومي غير صحيح'})"""
 	if(oper=='update'):
 		dic1=request.data.dict()
 		dic1.pop('operation')
@@ -481,18 +474,20 @@ def farmer_api(request :Request):
 			return  JsonResponse({"error":'من فضلك ادخل اميل اخر'})
 
 		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age',"img"])):
+			print("&"*654);
 			try:
 				user1=User.objects.get(ssn=dic1["ssn"])
+				for key,value in dic1.items() :
+					if(value ==None  and  key not in ['ssn','fnane','lname','email','phone','photo',"img"]):
+						continue
+					setattr(user1,key,value)
 			except Exception as e:
 					user1=User.objects.create_user(**dic1)
-					return JsonResponse({"message":'تم حفظ البيانات'})
-			for key,value in dic1.items() :
-				if(value ==None  and  key not in ['ssn','fnane','lname','email','phone','photo',"img"]):
-					continue
-				setattr(user1,key,value)
+					#return JsonResponse({"message":'تم حفظ البيانات'})
 			user1.set_password(dic1["password"])
-			user1.groups.add(Group.objects.all().get(name="farmer"))
+			user1.groups.add(CustomeGroup.objects.all().get(name="farmer"))
 			user1.save()
+			print(CustomeGroup.objects.all().get(name="farmer"))
 	return JsonResponse({"message":'تم حفظ البيانات'})
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
@@ -548,7 +543,6 @@ def get_locations_api(request :Request):
 		q=Q()
 	else:
 		q=Q(id=request.user.location.id )
-	print(q)
 	g1=village.objects.all().filter(q)[0]
 	 
 	g1Seralizer= locatinSeralizer(instance=g1 )
@@ -584,7 +578,6 @@ def change_password_email(request :Request):
 	msg = EmailMultiAlternatives(subject,  "kkkkkkkk",from_email=settings.EMAIL_HOST_USER , to=[ u1.email],reply_to= [ u1.email])
 	msg.content_subtype = 'html'  # Main content is text/html
 	msg.attach_alternative(html_content, 'text/html')
-	print( request.get_host()+"/"+"change_password_email_template/?")
 	msg.mixed_subtype = 'related'
 	 # This is critical, otherwise images will be displayed as attachments!
 	msg.send( )
@@ -663,7 +656,7 @@ def admin_api(request :Request):
 		 
 		else:
 			if(user1[0].groups.all().count() > 1):
-				user1[0].groups.remove( Group.objects.all().get(name=g_name ) )
+				user1[0].groups.remove( CustomeGroup.objects.all().get(name=g_name ) )
 			else:
 				user1[0].delete()
 			return JsonResponse({"error":'تم مسح البيانات'})
@@ -676,7 +669,7 @@ def admin_api(request :Request):
 		for key,value in dic1.items() :
 			if(key==g_name):
 				if(g_name=="" and g_name):
-					user1.groups.add(Group.objects.all().get(name=g_name))
+					user1.groups.add(CustomeGroup.objects.all().get(name=g_name))
 
 			if(key =='location' and value!=""):
 				user1.location = village.objects.get(id=int(request.data['location']))
@@ -702,7 +695,7 @@ def admin_api(request :Request):
 			except Exception as e:
 				user1=User.objects.all().get(ssn=dic1["ssn"])
 			if(g_name):
-					user1.groups.add(Group.objects.all().get(name=g_name))
+					user1.groups.add(CustomeGroup.objects.all().get(name=g_name))
 			else:
 				pass
 			return JsonResponse({"message":"تم اضافة البيانات"})
@@ -711,7 +704,7 @@ def admin_api(request :Request):
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendTotp])
 def search_farm_api(request :Request):
-	import translate
+	#import translate
 	import typesense
 	client = typesense.Client({
 					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
@@ -726,9 +719,16 @@ def search_farm_api(request :Request):
 	if(q==None):
 		q="*"
 	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name","sort_by":"_text_match:desc","prioritize_exact_match":False,"pre_segmented_query":True})
+	
 	l1=[i['document']['id'] for i in d1['hits']]
 	pagination=CustomePagenation()
-	p1=pagination.paginate_queryset(farm.objects.all().filter(id__in= l1),request)
+	q=Q()
+	if(request.data.get("ssn")!=None):
+		if(request.data.get("auth")=="farmer" and request.user.groups.all().filter(name= request.data.get("auth")).count()>0):
+			q=Q(**{"connect_farm_farmer__farmer":request.data.get("ssn")})
+		else:
+			q=Q(**{"connect_farm_farmer__farmer__village__city__governorate":request.user.location.city.governorate})
+	p1=pagination.paginate_queryset(farm.objects.all().filter(Q(id__in= l1) &q) ,request)
 	next=pagination.get_next_link()
 	ser1=FarmListSerializer(instance=p1,many=True)
 
@@ -754,9 +754,12 @@ def search_farmer_api(request :Request):
 	if(q==None):
 		q="*"
 	d1=client.collections['farmer'].documents.search({"q":q,"query_by":"name","drop_tokens_threshold":1 ,"prioritize_exact_match":False,})
+	#q=Q(**{"connect_farm_farmer__farmer__location__city__governorate__id":request.user.location.city.governorate.id})
+ 
 	l1=[i['document']['id'] for i in d1['hits']]
+	print(l1);
 	pagination=CustomePagenation()
-	p1=pagination.paginate_queryset(User.farmer.all().filter(ssn__in= l1,groups__name='farmer'),request)
+	p1=pagination.paginate_queryset(User.farmer.all().filter(ssn__in= l1,groups__name='farmer')  ,request)
 	next=pagination.get_next_link()
 	ser1=FarmerShowInfoSerializer(instance=p1,many=True)
 	return JsonResponse({"data":ser1.data,"next":next})
@@ -767,17 +770,19 @@ def search_farmer_api(request :Request):
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendTotp])
 def summary_governorate(request :Request):
+	
 	stat1=farm.objects.all().aggregate(village_count=Count("village__city__governorate__name"))
 	stat2={"farm_meat":connect_farm_farmtype.objects.filter(farm_type__name__exact='انتاج لحوم').count()}
 	stat3={"farm_milk":connect_farm_farmtype.objects.filter(farm_type__name__exact='انتاج البان').count()}
-	stat4=User.farmer.all().aggregate(farmer_count=Count("ssn",Q(is_superuser=0)))
+	stat4=User.farmer.all().aggregate(farmer_count=Count("ssn",Q(groups__name="farmer")))
 	stat4={"farmer_count":connect_farm_farmer.objects.all().aggregate(farmer_count=Count("farmer__ssn"))["farmer_count"]+stat4["farmer_count"]}
 	stat5={"total_cows":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الابقار').count()}
 	stat6={"total_sheep":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الماعز').count()}
 	stat7={"total_beauty":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الجمال').count()}
+	stat8={"connect_animal_farm":list(connect_animal_farm.objects.all().values("animal_sub_type__platoon__name"  ).annotate(animal_number2=Sum("animal_number"),platoon=F("animal_sub_type__platoon__name")).values("animal_number2","platoon"))}
 	#
 	stattest=governorate.objects.all().annotate(g_name=F('name'),farm_meat_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('city__village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
-	summary_info={"gov_data":list(  stattest )}|stat1|stat2|stat3|stat4|stat5|stat6|stat7
+	summary_info={"gov_data":list(  stattest )}|stat1|stat2|stat3|stat4|stat5|stat6|stat7|stat8
 	return JsonResponse({"data":summary_info}) 
 
 
@@ -893,18 +898,14 @@ def img_farmer_api(request :Request):
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendBasic])
 def send_totpy_email(request :Request):
-	print(request.data)
 	if(User.objects.filter(ssn=request.headers['ssn']).count()==0):
 		return JsonResponse({"error":"login first"})
 	from uuid import uuid4
 	code=uuid4()
 	u1:User=User.objects.get(ssn=request.headers['ssn'])
-	print("&"*667)
-	print(u1.email)
 	subject = 'confirm email address'
 	code2=request.get_host()+"/"+"test_url/"+str(code)
 	msg = EmailMultiAlternatives(subject,  "من فضلك اضغط علي الاينك\n"+code2,from_email=settings.EMAIL_HOST_USER , to=[u1.email ],reply_to= [request.data.get('email')])
-	print( "http://"+request.get_host()+"/"+"test_url/"+str(code)  +"\t")
 	try:
 		pyotpv1=totpyUsers.objects.get(user=User.objects.get(ssn=request.headers['ssn'])).totp
 	except Exception as e:
@@ -914,14 +915,17 @@ def send_totpy_email(request :Request):
 		totpyUsers.objects.create(totp=pyotpv1, user=User.objects.get(ssn=request.headers['ssn']))
 		
  	 # This is critical, otherwise images will be displayed as attachments!
-	#msg.send( )
 	import redis
-	print(u1.email)
 	r=redis.Redis()
-	#send_mail('send totpy code','the url for totpy is\n'+"http://"+request.get_host()+"/"+"test_url/"+str(code)  +"\t",settings.EMAIL_HOST_USER,[   u1.email],fail_silently=False)
+	#"http://"+request.get_host()+"/"+"test_url/"+str(code)
+	#render(request,template_name='totp_email.html',)
+	html_content = render_to_string('totp_email.html',  context={"url":"http://"+request.get_host()+"/"+"test_url/"+str(code)},request=request).strip()
+	subject = 'confirm email address'
+	send_mail(auth_password=settings.EMAIL_HOST_PASSWORD,subject=subject,recipient_list=[ u1.email],from_email =settings.EMAIL_HOST_USER, html_message= render_to_string('totp_email.html',  context={"url":"http://"+request.get_host()+"/"+"test_url/"+str(code)},request=request).strip(),message=None);
+	#send_mail('send totpy code','the url for totpy is\n'+  +"\t",settings.EMAIL_HOST_USER,[   u1.email],fail_silently=False)
 	r.setex(name=str(code  ),time=5*60,value= pyotpv1)
 	r.set(name=request.headers["ssn"],value=pyotpv1,ex=60*60)
-	print(r.get(str(code)))
+	#msg.send( )
 	return JsonResponse({"message":'تم ارسال الرسالة'})
 
 def send_totpy_template(request ,id ):
@@ -929,11 +933,9 @@ def send_totpy_template(request ,id ):
 	r=redis.Redis()
 	totpy=r.get( id)
 	r.delete(id)
-	print( ( id))
 	try:
 		return  render(request=request,template_name="totpy.html",context={"code":totpy.decode()},);
 	except Exception as e:
-		print(e)
 		return    render(request=request,template_name="totpy_error.html",);
 
 #NULL
@@ -942,7 +944,7 @@ def send_totpy_template(request ,id ):
 @authentication_classes([CustomerBackendBasic])
 def check_totp_api(request :Request):
 	try:
-		totpy1=totpyUsers.objects.get(totp=request.headers.get("totp"))
+		totpy1=totpyUsers.objects.get(totp=request.headers.get("totp"),user=request.user)
 		return JsonResponse({"find":True})
 	except Exception as e:
 		return JsonResponse({"find":False})
@@ -962,11 +964,45 @@ def create_totpy_code_for_paseto_api(request :Request):
 @authentication_classes([CustomerBackendTotp])
 def create_paseto_api(request :Request):
   my_key = SymmetricKey.generate(protocol=ProtocolVersion4)
-            # create a paseto token that expires in 5 minutes (300 seconds)
+			# create a paseto token that expires in 5 minutes (300 seconds)
   token = paseto.create(
-                key=my_key,
-                purpose='local',
-                claims={'ssn':  request.user.ssn},
-                exp_seconds=86400
-            )
+				key=my_key,
+				purpose='local',
+				claims={'ssn':  request.user.ssn},
+				exp_seconds=86400
+			)
   return  response.Response(GroupSerializer( instance= request.user.groups.all(),many=True).data)
+
+@api_view(['GET',"POST" ])
+@permission_classes([permissions.IsAuthenticated])
+@authentication_classes([CustomerBackendTotp])
+def search_google_map(request :Request):
+	f1=farm.objects.all().filter(id__startswith=request.data["search"]);
+	pagination=CustomePagenation()
+	if(f1.count()>0):
+		p1=pagination.paginate_queryset( f1 ,request)
+		next=pagination.get_next_link()
+		ser1=FarmerGoogleMapSerializer(instance=p1,many=True)
+		return JsonResponse({"data":ser1.data,"next":next})
+	import typesense
+	client = typesense.Client({
+					'api_key': 'AA3jvgcuaEfuB3GAtWjNS3LG66404bd6KHOBK1YqstLgBTtT',
+					'nodes': [{
+							'host': 'localhost',
+							'port': '8108',
+							'protocol': 'http'
+					}],
+					'connection_timeout_seconds': 2
+			})
+	q=request.data.get('name')
+	if(q==None):
+		q="*"
+	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name","sort_by":"_text_match:desc","prioritize_exact_match":False,"pre_segmented_query":True})
+	
+	l1=[i['document']['id'] for i in d1['hits']]
+	pagination=CustomePagenation()
+	 
+	p1=pagination.paginate_queryset(farm.objects.all().filter(Q(id__in= l1)  ) ,request)
+	next=pagination.get_next_link()
+	ser1=FarmerGoogleMapSerializer(instance=p1,many=True)
+	return JsonResponse({"data":ser1.data,"next":next})

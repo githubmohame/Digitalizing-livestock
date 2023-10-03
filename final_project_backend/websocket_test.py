@@ -5,16 +5,16 @@ import time
 import rel
 
 def on_message(ws, message):
-    print(message)
+    pass
 
 def on_error(ws, error):
-    print(error)
+    pass
 
 def on_close(ws, close_status_code, close_msg):
-    print("### closed ###")
+    pass
 
 def on_open(ws):
-    print("Opened connection")
+    pass
 
 if __name__ == "__main__":
     websocket.enableTrace(True)

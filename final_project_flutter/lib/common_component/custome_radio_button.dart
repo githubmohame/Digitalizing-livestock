@@ -98,8 +98,7 @@ class _CustomeRadioButtonState extends State<CustomeRadioButton> {
             GestureDetector(
               onTap: () {
                 click = true;
-                print("kkkkllll");
-
+ 
                 widget.f2();
                 setState(() {});
               },

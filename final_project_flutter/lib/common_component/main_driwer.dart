@@ -14,6 +14,8 @@ import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 
+import 'custome_dropdownbutton.dart';
+
 class MainDrawer extends StatelessWidget {
   int index;
   MainDrawer({
@@ -23,7 +25,7 @@ class MainDrawer extends StatelessWidget {
   //>
   @override
   Widget build(BuildContext context) {
-    return Drawer(
+     return Drawer(
       backgroundColor: const Color(0xFF003e29),
       child: ListView(
         scrollDirection: Axis.vertical,
@@ -61,7 +63,9 @@ class MainDrawer extends StatelessWidget {
                 title: const Text("صفحة الترحيب",
                     style: TextStyle(color: Colors.white)),
                 onTap: (() {
-                  Navigator.pushReplacement(
+                  Navigator.of(context).history.forEach((element) {
+                   });
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DashBoardScreen(),
@@ -244,13 +248,13 @@ class MainDrawer extends StatelessWidget {
               contentPadding: EdgeInsets.zero,
               minVerticalPadding: 1,
               leading: const Icon(Icons.password),
-              title: const Text('تسجيل كلمة المرور',
+              title: const Text('تغير كلمة المرور',
                   style: TextStyle(color: Colors.white)),
               onTap: (() {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ChangePasswordScreen(),
+                      builder: (context) => ChangePasswordScreen(),
                     ));
               }),
             ),
@@ -457,7 +461,7 @@ class ComputerDrawer extends StatelessWidget {
                 title: const Text("صفحة الترحيب",
                     style: TextStyle(color: Colors.white)),
                 onTap: (() {
-                  Navigator.pushReplacement(
+                   Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => DashBoardScreen(),
@@ -663,7 +667,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ChangePasswordScreen(),
+                      builder: (context) => ChangePasswordScreen(),
                     ));
               }),
             ),
@@ -1052,7 +1056,7 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
                   onTap: () {
                     Navigator.pushReplacement(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return const ChangePasswordScreen();
+                        return ChangePasswordScreen();
                       },
                     ));
                   },

@@ -123,7 +123,6 @@ def add_Governorate():
 	for j,i in na1.iterrows():
 		g1=Governorate.create(name=i['ADM1_AR'],id=count)
 		 
-		print(Governorate.select().count())
 		count+=1
 def add_city():
 	count=1

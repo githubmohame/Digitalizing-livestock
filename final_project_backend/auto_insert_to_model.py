@@ -1,14 +1,16 @@
 from digital_livestock.models import governorate,city,village,section_type,platoon,farm_type,species,farm
-from django.contrib.auth.models import Group ,Permission
+from django.contrib.auth.models import  Permission
+from digital_livestock.models import CustomeGroup
 from django.contrib.contenttypes.models import ContentType
 import geopandas as gpd
+from digital_livestock.models import *
 from django.contrib.gis.geos import GEOSGeometry
+import digital_livestock.models  as models
 def insert_into_governorate():
     df=gpd.read_file('./egy_admbnda_adm1_capmas_20170421.zip')
     f1=df.loc[ 0:,['ADM1_AR' ,'geometry']]
     na1=f1.drop_duplicates()
     for j,i in na1.iterrows():
-        #print(i["ADM1_AR"])
         g1=governorate()
         g1.name=i['ADM1_AR']
         g1.location= GEOSGeometry(str(i['geometry']))
@@ -86,9 +88,8 @@ for i in city.objects.all():
    
 def test_city():
     c1=city.objects.all().filter(location__within=governorate.objects.all()[3].location)
-    print(c1.count())
     for i in c1:
-        print(i.governorate.name)
+        pass
 #test_city()
 import json
 def test():
@@ -132,25 +133,24 @@ def test():
         ]
       }
   ))
-    print(f1)
 #test()
 #farm.objects.all().delete()
 def create_supervisor():
-  admin,create=Group.objects.get_or_create(name="supervisor")
+  admin,create=CustomeGroup.objects.get_or_create(name="supervisor")
   context_table=ContentType.objects.all().filter(app_label='digital_livestock' )
   p1=Permission.objects.all().filter(content_type_id__in=context_table)
   for perm in p1:
     admin.permissions.add(perm)
 
 def create_admin():
-  admin,create=Group.objects.get_or_create(name="admin")
+  admin,create=CustomeGroup.objects.get_or_create(name="admin")
   context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["village","city","governorate","platoon","species",])
   p1=Permission.objects.all().filter(content_type_id__in=context_table)
   for perm in p1:
     admin.permissions.add(perm)
 
 def create_fockeltpoint():
-  admin,create=Group.objects.get_or_create(name="fockeltpoint")
+  admin,create=CustomeGroup.objects.get_or_create(name="fockeltpoint")
   context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["village","city","governorate","platoon","species",])
   p1=Permission.objects.all().filter(content_type_id__in=context_table,codename__startswith="view")
   for perm in p1:
@@ -160,24 +160,32 @@ def create_fockeltpoint():
   for perm in p1:
     admin.permissions.add(perm)
 def create_farmer():
-  admin,create=Group.objects.get_or_create(name="farmer")
+  admin,create=CustomeGroup.objects.get_or_create(name="farmer")
   context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["farm","village", ])
   p1=Permission.objects.all().filter(content_type_id__in=context_table ,codename__startswith="view")
   for perm in p1:
     admin.permissions.add(perm)
+def create_user():
+    u1= User.objects.create_user( ssn="30109061201153", fname="محمد",lname="احمد", phone="01024215977", password="Mohammmed123#", location=village.objects.get(id=1), )
+    u1.groups.set(list(CustomeGroup.objects.all()))
+    u1.save()
 def auto_insert():
-  
+  insert_farrm_type
   insert_into_governorate()
   insert_into_city()
   insert_into_village()
   insert_section_type()
   remove_newline_governorate_model()
   insert_farrm_type(list1=['انتاج طلايع','انتاج البان','انتاج لحوم'])
-  insert_platoon_type(list1=['الجمال',"الماعز",'الابقار'])
-  insert_species(list1=['الأكتين الشقراء','الآيرشاير','الجيرسي','الهولشتاين','الأنجوس','هيريفورد','شاروليز'],platoon1='الابقار')  
+  insert_platoon_type(list1=['الجمال',"الماعز",'الابقار',"الأغنام"])
+  insert_species(list1=['الأكتين الشقراء','الآيرشاير','الجيرسي','الهولشتاين','الأنجوس','هيريفورد','شاروليز'],platoon1='الابقار')
+  insert_species(list1=['الأكتين الشقراء','الماعز النوبى أو ( الزرابى )','الماعز البرقى أو (الصحراوى) ','الماعز البلدى'  ],platoon1='الماعز') 
+  insert_species(list1=[' الساوث داون',' أغنام المارينو','الأغنام الفلاحي','الهامبشير'  ],platoon1='الأغنام')   
   create_farmer()
   create_fockeltpoint()
   create_admin()
+  create_user() 
+  #create_user()
 auto_insert()
 ''' 
 insert_into_governorate()

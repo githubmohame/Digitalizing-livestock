@@ -2,26 +2,6 @@
 '''
 from openpyxl import Workbook,load_workbook
 import os
-"""
-wb=Workbook()
-ws=wb.active
-ws.title="table_locations"
-wb['table_locations']
-l1=[]
-l2=[]
-print(wb.sheetnames)
-for i in x:
-    ws.append(i)
-print(ws.max_row)
-for i in range(1,ws.max_row):
-    if ws['b'+str(i)].value in l1 and ws['c'+str(i)].value  in l2:
-        continue
-    l1.append(ws['b'+str(i)].value)
-    l2.append(ws['c'+str(i)].value)
-print(len(l1))
-wb.save("table_locations.xlsx")
-#603
-"""
 def directory_file(file_name):
     list=os.listdir()
     return file_name in list 
@@ -30,16 +10,13 @@ def directory_file(file_name):
 def open_file(x,file_name,sheet_name)->Workbook:
     if  directory_file(file_name)==False:
         wb=Workbook()
-        print('done')
         ws=wb.active
         ws.title=sheet_name
         wb.save(file_name)
-        print(x)
         if(wb is not None):
             update_file(wb,x,sheet_name)
         return wb
     wb=load_workbook(file_name)
-    print(x is not None)
     if(x is not None):
             update_file(wb,x,sheet_name,file_name)
     return wb
@@ -79,6 +56,3 @@ def distinct_village(wb):
         l1.append(ws['b'+str(i)].value)
         l2.append(ws['c'+str(i)].value)
     return l1,l2
-#l1,l2=distinct_village(open_file(x,"table_locations.xlsx","table_locations"))
-#open_file(fsm)
-#print(len(fsm))

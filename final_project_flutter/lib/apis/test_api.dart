@@ -22,7 +22,8 @@ void main() async {
       }
     }
   }
-  print(plogons);}
+   
+  }
 
   /*dio.Dio dio1 = dio.Dio();
   dio.FormData formData = dio.FormData.fromMap({
@@ -47,5 +48,5 @@ void main() async {
         responseType: dio.ResponseType.json,
         listFormat: dio.ListFormat.multi,
       ));
-  print(res);*/
+  */
 //}

@@ -90,16 +90,13 @@ def locations_script():
 			is_end=WebDriverWait(driver, 20,poll_frequency=2 ).until(func())
 			time.sleep(4)
 			if(len(is_end)<=city):
-				#print(counter)
 				while(counter>0):        
 					WebDriverWait(driver, 6,poll_frequency=2 ).until(element_has_css_class(driver,"btnRegionsUp"))
 					time.sleep(4)
 					counter-=1
-				#print("max city")
 				counter=0
 				city=0
 				gavernorate+=1
-				print(gavernorate)
 				name=[] 
 				continue
 			city+=1
@@ -122,12 +119,9 @@ def locations_script():
 				time.sleep(4)
 				counter-=1
 			if(name in array):
-				#print('Error')
 				pass
-			#array.append(name)
 			name=[] 
 			time.sleep(12)
-	print(len(array))
 	open_file(array,"table_locations.xlsx","table_locations")
 #locations_script()
 def cow_web_script():
@@ -142,12 +136,10 @@ def cow_web_script():
 	array.append(heads)
 	for k in list1:
 		rows=k.find_all("tr")
-		print(len(rows))
 		for f1 in rows:
 			data=f1.find_all('td')
 			array.append([fuk.text for fuk in data[0:7]])
 			#array.append(f1[1:7])
-	print(array[len(array)-2])
 	return array
 def sheep_web_script():
     array=[]
@@ -163,8 +155,5 @@ def sheep_web_script():
         for f1 in rows:
             data=f1.find_all('td')
             array.append([fuk.text for fuk in data[0:6]])
-    print(array[0])
     return array
 open_file(cow_web_script(),'animal_file.xlsx','cow')
-#wikitable sortable jquery-tablesorter
-#['بقر توريس/(بقر زيبو) hybrid', 'Colombia', 'اللحم']

@@ -4,8 +4,7 @@ import 'select_location.dart';
 
 class CustomeCheckBox extends StatefulWidget {
   CustomeCheckBox({Key? key, required this.text}) : super(key: key) {
-    print("Checking");
-    wid = Row(
+     wid = Row(
       children: [
         Expanded(
           child: selectLocation,
@@ -24,18 +23,17 @@ class CustomeCheckBox extends StatefulWidget {
 class _CustomeCheckBoxState extends State<CustomeCheckBox> {
   @override
   Widget build(BuildContext context) {
-    TextField;
-    return Column(
+     return Wrap(// direction: Axis.vertical,alignment: WrapAlignment.spaceAround,//mainAxisAlignment:MainAxisAlignment.start,
       children: [
         
         SizedBox(
-            height: widget.value=="fockeltpoint" ? null : 0,
+            height: widget.value=="fockeltpoint" ? 300 :0 ,
             width: widget.value=="fockeltpoint" ? null : 0,
             child: widget.wid),
         //Visibility(maintainState: true,visible: widget.value,child: widget.wid) ,
-        Column(
+        Wrap(//alignment: WrapAlignment.start,crossAxisAlignment: WrapCrossAlignment.start,runAlignment: WrapAlignment.start,direction: Axis.vertical,//mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(children: [
+            Wrap(alignment: WrapAlignment.start,crossAxisAlignment: WrapCrossAlignment.start,runAlignment: WrapAlignment.start,children: [
               Radio<String>(
               value:  "admin",groupValue:  widget.value ,
               onChanged: (value) {
@@ -48,7 +46,7 @@ class _CustomeCheckBoxState extends State<CustomeCheckBox> {
             ],),
            
 
-             Row(children: [
+             Wrap(alignment: WrapAlignment.start,crossAxisAlignment: WrapCrossAlignment.start,runAlignment: WrapAlignment.start,children: [
               Radio<String>(
               value:  "fockeltpoint",groupValue:  widget.value ,
               onChanged: (value) {
@@ -61,9 +59,9 @@ class _CustomeCheckBoxState extends State<CustomeCheckBox> {
             ],),
 
 
-            Row(
+            Wrap(alignment: WrapAlignment.start,crossAxisAlignment: WrapCrossAlignment.start,runAlignment: WrapAlignment.start,
           children: [
-            Row(children: [
+            Wrap(alignment: WrapAlignment.start,children: [
               Radio<String>(
               value:  "supervisor",groupValue:  widget.value ,
               onChanged: (value) {

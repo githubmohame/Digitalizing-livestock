@@ -8,7 +8,7 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/circle_image_animation.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 
@@ -78,15 +78,22 @@ class _FarmerScreenState extends State<FarmerScreen> {
 
   @override
   Widget build(BuildContext context) {
-     Api.user_athority().then((value) => print(value));
+     Api.user_athority().then((value) =>  null);
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
         child: LayoutBuilder(builder: (context, constraint) {
+           
           return Scaffold(
             backgroundColor: Colors.transparent,
             drawer: MainDrawer(index: 2),
-            appBar: constraint.maxWidth < 900
+            appBar:AppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    title: const Text(
+                      "اضافه المربين",
+                      style: TextStyle(color: Colors.white),
+                    )),/* constraint.maxWidth < 900
                 ? AppBar(
                     elevation: 0,
                     backgroundColor: Colors.transparent,
@@ -94,28 +101,28 @@ class _FarmerScreenState extends State<FarmerScreen> {
                       "اضافه المربين",
                       style: TextStyle(color: Colors.white),
                     ))
-                : null,
+                : null,*/
             body: SizedBox(
-              height: 500 + 156 + 100 + errorHeight + 20 + 100 + 54 + 60 + 116,
+              height: 500 + 130+160 + 100 + errorHeight + 20  +  116,
               child: SingleChildScrollView(
                 child: SizedBox(
                   height: 500 +
-                      156 +
-                      100 +
+                      130 +
+                       
                       errorHeight +
                       100 +
-                      20 +
+                      20 +160+
                       100 +
                       54 +
-                      60 +
-                      116,
+                      60  ,
                   child: Column(
                     children: [
-                      constraint.maxWidth > 900
-                          ? SizedBox(
-                              height: 100, child: ComputerDrawer(index: 2))
-                          : Container(),
-                      const Spacer(flex: 2),
+                      /*constraint.maxWidth > 900
+                          ? Container(
+                              height: 100,  child: ComputerDrawer(index: 2)
+                              )
+                          : Container(),*/
+                      const Spacer(flex: 1),
                       Center(
                         child: Card(
                           color: const Color(0xFF357515),
@@ -449,8 +456,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                     (states) => Colors.red)),
                                         onPressed: () async {
                                           update_screen();
-                                          //print( controller[0].text.isNotEmpty);
-                                          Map<String, dynamic> dic1 = {
+                                           Map<String, dynamic> dic1 = {
                                             'operation': "update",
                                             "fname":
                                                 controller[0].text.isNotEmpty
@@ -481,8 +487,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                                 customePasswordEnterTextField
                                                     .password,
                                           };
-                                          print(dic1["fname"]);
-                                          if (c.image is File) {
+                                           if (c.image is File) {
                                             dic1["img"] =
                                                 MultipartFile.fromBytes(
                                                     await c.image!
@@ -521,8 +526,8 @@ class _FarmerScreenState extends State<FarmerScreen> {
                           ),
                         ),
                       ),
-                      const Spacer(flex: 2),
-                    ],
+                     
+                     ],
                   ),
                 ),
               ),

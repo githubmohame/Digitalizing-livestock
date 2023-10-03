@@ -4,7 +4,7 @@ import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/bloc/animals_selection/cubit/animal_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -401,7 +401,13 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
                     ),
                   ]),
               backgroundColor: Colors.transparent,
-              appBar: constraint.maxWidth < 900
+              appBar:AppBar(
+                      title: const Text(
+                        "تعديل الفصيلة او النوع",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      elevation: 0,
+                      backgroundColor: Colors.transparent)/* constraint.maxWidth < 900
                   ? AppBar(
                       title: const Text(
                         "تعديل الفصيلة او النوع",
@@ -409,24 +415,26 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
                       ),
                       elevation: 0,
                       backgroundColor: Colors.transparent)
-                  : null,
+                  : null*/,
               drawer: MainDrawer(index: 7),
               body: SingleChildScrollView(
-                child: Column(
+                child: Column(mainAxisAlignment: MainAxisAlignment.end,crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    constraint.maxWidth > 900
-                        ? SizedBox(height: 100, child: ComputerDrawer(index: 7))
-                        : Container(),
+                   
                        constraint.maxWidth > 900
                         ? SizedBox(height: constraint.maxHeight/4, )
                         : Container(), 
-                     Card(
-                        elevation: 20,
-                        color: const Color(0xFF357515),
-                        child: SizedBox(
-                          width: 600,
-                          child: list[index],
-                        )),
+                     Row(mainAxisAlignment: MainAxisAlignment.center,
+                       children: [
+                         Card(
+                            elevation: 20,
+                            color: const Color(0xFF357515),
+                            child: SizedBox(
+                              width: 600,
+                              child: list[index],
+                            )),
+                       ],
+                     ),
                    ],
                 ),
               ));

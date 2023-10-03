@@ -1,6 +1,7 @@
 from rest_framework  import serializers
 from digital_livestock.models import *
 from django.db.models import  Sum
+from django.db.models import  F,Count
 from django.contrib.auth.models import Group
 class governorateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -164,6 +165,21 @@ class villageFarmInfoSerializerTest(serializers.ModelSerializer):
     class Meta:
         model=village
         fields=['name' ,"city" ]
+
+class PlatoonInfoShow(serializers.ModelSerializer):
+    class Meta:
+            model=platoon
+            fields = ['name', ] 
+class SpeciesFarmInfoShow():
+    platoon=PlatoonInfoShow()
+    class Meta:
+            model=species
+            fields = ['platoon', ]
+class ConnectFarmAnimalFarmInfoShow(serializers.ModelSerializer):
+    animal_sub_type=SpeciesFarmInfoShow()
+    class Meta:
+            model=connect_animal_farm
+            fields =  ["animal_sub_type","animal_number"]
 class FarmInfoShowSerializer(serializers.ModelSerializer):
 
     section_type=section_typeFarmListSerializer()
@@ -171,6 +187,7 @@ class FarmInfoShowSerializer(serializers.ModelSerializer):
     location=serializers.SerializerMethodField()
     total_cost=serializers.SerializerMethodField()
     center=serializers.SerializerMethodField()
+    connect_animal_farm=serializers.SerializerMethodField()
     class Meta:
             model=farm
             fields = '__all__'
@@ -182,11 +199,17 @@ class FarmInfoShowSerializer(serializers.ModelSerializer):
         if(obj.location.geom_type!="MultiPolygon"):
             return obj.location.geojson
         return  obj.location.geojson
+    
+    def get_connect_animal_farm(self,obj:farm):
+        d=connect_animal_farm.objects.all().filter(farm_id=obj.id).values("animal_sub_type__platoon__name").annotate(animal_number2=Sum("animal_number"),platoon=F("animal_sub_type__platoon__name")).values("animal_number2","platoon")
+        #ConnectFarmAnimalFarmInfoShow( instance=connect_animal_farm.objects.all().filter(farm_id=obj.id).values("animal_sub_type","animal_number")).data
+        return d 
     def get_center(self,obj:farm):
         if(obj.location==None):
             return None
         if(obj.location.geom_type=="Point"):
             return  obj.location.geojson
+        return  obj.location.point_on_surface.geojson
     location=serializers.SerializerMethodField()
     def get_location(self,obj:farm):
         return obj.location.geojson
@@ -205,8 +228,25 @@ class FarmerShowInfoSerializer(serializers.ModelSerializer):
     class Meta:
             model=User
             fields=['fname','lname','phone',"ssn" ,"farm_count" ,"total_cost","img"]
+            
+            
+            
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         pass
-        model=Group
-        fields=["name"]
+        model=CustomeGroup
+        fields=["name","ar_name"]
+        
+
+class FarmerGoogleMapSerializer(serializers.ModelSerializer):
+    village=villageFarmInfoSerializerTest()
+    def get_center(self,obj:farm):
+        if(obj.location==None):
+            return None
+        if(obj.location.geom_type=="Point"):
+            return  obj.location.geojson
+        return  obj.location.point_on_surface.geojson
+    center=serializers.SerializerMethodField()
+    class Meta:
+            model=farm
+            fields=["farm_name","id" ,"village" ,"center"]

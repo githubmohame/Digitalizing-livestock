@@ -10,7 +10,7 @@ import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 
 class ConnectAnimalFarm extends StatefulWidget {
   const ConnectAnimalFarm({Key? key}) : super(key: key);
@@ -133,8 +133,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
 
                                         return BlocProvider(
                                           create: (context) {
-                                            //print(snap.data![0]['platoon']);
-                                            //print(snap.data![0]['id']);
+                                             
                                             animalType.platoon =
                                                 snap.data![0]['platoon'];
                                             return AnimalCubit(
@@ -199,12 +198,10 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
                                         int k = 0;
-                                        //print(customeCheckbox.value);
-                                        if (customeCheckbox.value) {
+                                         if (customeCheckbox.value) {
                                           k = 1;
                                         }
-                                        //print(k);
-                                        if (formKey.currentState!.validate()) {
+                                         if (formKey.currentState!.validate()) {
                                           Map<String, dynamic> dic1 = {
                                             'operation': "insert",
                                             'species': animalType.platoon,
@@ -213,8 +210,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                             'date': date,
                                             "is_male": k,
                                           };
-                                         // print(animalType.platoon);
-                                          FormData formData = FormData.fromMap(
+                                           FormData formData = FormData.fromMap(
                                               dic1, ListFormat.multi, false);
                                           var res = await Api.add_farmer_animal_api(
                                               form: formData);
@@ -257,8 +253,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                                 (states) => Colors.red)),
                                     onPressed: () async {
                                       int k = 0;
-                                     // print(customeCheckbox.value);
-                                      if (customeCheckbox.value) {
+                                       if (customeCheckbox.value) {
                                         k = 1;
                                       }
                                       delete = true;
@@ -271,8 +266,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
                                           'date': date,
                                           "is_male": k,
                                         };
-                                       // print(animalType.platoon);
-                                        FormData formData = FormData.fromMap(
+                                         FormData formData = FormData.fromMap(
                                             dic1, ListFormat.multi, false);
                                         var res = await Api.add_farmer_animal_api(
                                             form: formData);
@@ -311,24 +305,7 @@ class _ConnectAnimalFarmState extends State<ConnectAnimalFarm> {
 }
 
 
-//class CustomeContainer extends Container {}
-
-/*
- OutlinedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (states) => Colors.grey),
-                                        overlayColor:
-                                            MaterialStateProperty.resolveWith(
-                                                (states) => Colors.orange)),
-                                    onPressed: () {},
-                                    child: Text(
-                                      "تعديل",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-*/
+ 
 class CustomeCheckbox extends StatefulWidget {
   bool value;
   String text;

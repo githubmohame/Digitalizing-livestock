@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, empty_catches
 
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
@@ -37,7 +39,7 @@ class Api {
         map['id'] = res.data[index]['id'];
         return map;
       });
-      return l1;
+       return l1;
     } catch (e) {}
     return [];
   }
@@ -61,8 +63,7 @@ class Api {
       });
       return l1;
     } catch (e) {
-      print(e);
-    }
+     }
     return [];
   }
 
@@ -451,8 +452,7 @@ class Api {
       {required dio.FormData formData}) async {
     try {
       dio.Dio dio1 = dio.Dio();
-
-      var res = await dio1.post(Api.url + 'login_api',
+       var res = await dio1.post(Api.url + 'login_api',
           queryParameters: <String, dynamic>{},
           data: formData,
           options: dio.Options(
@@ -514,7 +514,7 @@ class Api {
                 responseType: dio.ResponseType.json,
                 listFormat: dio.ListFormat.multi,
               ));
-      return res.data!;
+       return res.data!;
     } catch (e) {}
     return {};
   }
@@ -525,8 +525,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       List<Polygon> plogons = [];
       List<Marker> markers = [];
-      Response<List> res = await dio1.post<List>(
-          "http://192.168.1.6:8000/get_data_map",
+      Response<List> res = await dio1.post<List>(Api.url + "get_data_map",
           queryParameters: {},
           data: formData,
           options: dio.Options(
@@ -540,11 +539,9 @@ class Api {
           createPolygon(plogons, f);
         }
       }
-      //print(plogons);
-      return {"ploygons": plogons, "markers": markers};
+       return {"ploygons": plogons, "markers": markers};
     } catch (e) {
-      print(e);
-    }
+     }
     return {};
   }
 
@@ -582,6 +579,8 @@ class Api {
             listFormat: dio.ListFormat.multi,
           ));
       List<Map<String, dynamic>> l1 = [];
+
+       
       for (var i in res.data["data"]) {
         Map<String, dynamic> map = <String, dynamic>{};
         map["animal_sub_type"] = i["animal_sub_type"]["name"];
@@ -590,11 +589,9 @@ class Api {
         map['date'] = i['date'];
         l1.add(map);
       }
-      //print(l1);
-      return (res.data["next"].toString(), l1);
+       return (res.data["next"].toString(), l1);
     } catch (e) {
-      print(e);
-    }
+     }
     return null;
   }
 
@@ -612,11 +609,10 @@ class Api {
                 responseType: dio.ResponseType.json,
                 listFormat: dio.ListFormat.multi,
               ));
-      //print(res.data);
+     
       return res.data!;
     } catch (e) {
-      print(e);
-    }
+     }
     return {};
   }
 
@@ -629,7 +625,9 @@ class Api {
           options: dio.Options(
               headers: await Api.createHeader(),
               responseType: dio.ResponseType.json));
-      List<Map<String, dynamic>> l1 = List.generate(res.data.length, (index) {
+      
+      List<Map<String, dynamic>> l1 =
+          List.generate(res.data["data"].length, (index) {
         Map<String, dynamic> map = <String, dynamic>{};
         map['name'] = res.data["data"][index]['name'];
         map['id'] = res.data["data"][index]['id'];
@@ -725,12 +723,10 @@ class Api {
             l1.add(LatLng(l[1], l[0]));
           }
         }
-        //print(l1);
-        return l1;
+         return l1;
       }
     } catch (e) {
-      print(e);
-    }
+     }
     return null;
   }
 
@@ -753,8 +749,7 @@ class Api {
             responseType: dio.ResponseType.json,
             listFormat: dio.ListFormat.multi,
           ));
-      print(res.data["data"]);
-      if (res.data is Map) {
+       if (res.data is Map) {
         List<Map<String, dynamic>> l1 = [];
 
         for (Map<String, dynamic> k in res.data["data"]) {
@@ -771,8 +766,7 @@ class Api {
 
       //return l1;
     } catch (e) {
-      print(e);
-    }
+     }
     return (
       [
         {"": ""}
@@ -782,7 +776,7 @@ class Api {
   }
 
   static Future<(List<Map<String, dynamic>>, dynamic)?> search_farm_api(
-      {required String? farmerName, required String? url}) async {
+      {required String? farmerName, required String? url, String? ssn}) async {
     try {
       dio.Dio dio1 = dio.Dio();
       if (url == null) {
@@ -791,8 +785,15 @@ class Api {
       if (url == '') {
         url = Api.url + 'search_farm_api';
       }
+      Map<String, dynamic> map = {};
+
+      if (ssn is String) {
+        map["ssn"] = ssn;
+      }
+      map["name"] = farmerName;
+      map["auth"] = (await CustomeSecureStorage.getauth());
       var res = await dio1.post(url,
-          data: FormData.fromMap({"name": farmerName}),
+          data: FormData.fromMap(map),
           queryParameters: <String, dynamic>{},
           options: dio.Options(
             headers: await Api.createHeader(),
@@ -800,13 +801,11 @@ class Api {
             responseType: dio.ResponseType.json,
             listFormat: dio.ListFormat.multi,
           ));
-      print(res.data["data"]);
       if (res.data is Map) {
         List<Map<String, dynamic>> l1 = [];
 
         for (Map<String, dynamic> k in res.data["data"]) {
           Map<String, dynamic> map = <String, dynamic>{};
-          print(k["id"].runtimeType);
           map["id"] = k["id"];
           map['farm_name'] = k['farm_name'];
           map['workers'] =
@@ -817,20 +816,13 @@ class Api {
           map['section_type'] = k['section_type']["name"];
           l1.add(map);
         }
-        print(l1);
         return (l1, res.data["next"]);
       }
 
       //return l1;
     } catch (e) {
-      print(e);
-    }
-    return (
-      [
-        {"": ""}
-      ],
-      null
-    );
+     }
+    return null;
   }
 
   static Future<ImageProvider<Object>> image_farmer_api(
@@ -839,23 +831,27 @@ class Api {
     Map<String, String> header = <String, String>{"ssn": ssn};
     header.addAll(u);
     return NetworkImage(
-      "http://192.168.1.6:8000/img_farmer_api",
+      Api.url + "img_farmer_api",
       headers: header,
     );
   }
 
   static Future<bool> check_totp_api() async {
-    Map<String, String> header = <String, String>{
-      "ssn": await CustomeSecureStorage.getssn(),
-      "password": await CustomeSecureStorage.getpassword(),
-      "totp": await CustomeSecureStorage.gettotp(),
-    };
-    Dio dio1 = Dio();
-    var res = await dio1.get("http://192.168.1.6:8000/check_totp",
-        options: dio.Options(
-          headers: header,
-        ));
-    return res.data["find"];
+    try {
+      Map<String, String> header = <String, String>{
+        "ssn": await CustomeSecureStorage.getssn(),
+        "password": await CustomeSecureStorage.getpassword(),
+        "totp": await CustomeSecureStorage.gettotp(),
+      };
+      Dio dio1 = Dio();
+      var res = await dio1.get(Api.url + "check_totp",
+          options: dio.Options(
+            headers: header,
+          ));
+       return res.data["find"];
+    } catch (e) {
+       return false;
+    }
   }
 
   static Future<Map<String, dynamic>> send_email_totp() async {
@@ -865,8 +861,7 @@ class Api {
         "password": await CustomeSecureStorage.getpassword(),
       };
       Dio dio1 = Dio();
-      var res = await dio1.post(
-          "http://192.168.1.6:8000/change_password_email_template",
+      var res = await dio1.post(Api.url + "change_password_email_template",
           options: dio.Options(
             headers: header,
           ));
@@ -876,19 +871,74 @@ class Api {
     }
   }
 
-  static Future< List> user_athority() async {
+  static Future<List<Map<String, dynamic>>> user_athority() async {
     try {
       Map<String, String> header = await createHeader();
       Dio dio1 = Dio();
-      var res = await dio1.post(
-          "http://192.168.1.6:8000/user_group",
+      var res = await dio1.post(Api.url + "user_group",
           options: dio.Options(
             headers: header,
           ));
-      return res.data;
+      List<Map<String, dynamic>> list = [];
+      for (Map<String, dynamic> map in res.data) {
+        list.add(map);
+      }
+      return list;
     } catch (e) {
-      print(e);
-      return [{"error": "يوجد مشاكل في الخدمة"}];
+       return [
+        {"error": "يوجد مشاكل في الخدمة"}
+      ];
     }
+  }
+
+  static Future<(List<Map<String, dynamic>>, dynamic)?>
+      search_farm_google_map_api({required String? url, String? search}) async {
+    try {
+      dio.Dio dio1 = dio.Dio();
+      if (url == null) {
+        return null;
+      }
+      if (url == '') {
+        url = Api.url + 'search_google_map';
+      }
+      Map<String, dynamic> map = {};
+
+      if (search is String) {
+        map["search"] = search;
+      }
+      //map["name"] = farmerName;
+      //map["auth"] = (await CustomeSecureStorage.getauth());
+      var res = await dio1.post(url,
+          data: FormData.fromMap(map),
+          queryParameters: <String, dynamic>{},
+          options: dio.Options(
+            headers: await Api.createHeader(),
+            contentType: "application/json",
+            responseType: dio.ResponseType.json,
+            listFormat: dio.ListFormat.multi,
+          ));
+      if (res.data is Map) {
+         List<Map<String, dynamic>> l1 = [];
+
+        for (Map<String, dynamic> k in res.data["data"]) {
+          Map<String, dynamic> map = <String, dynamic>{};
+           var lk=json.decode(k["center"])  ;
+          map["id"] = k["id"];
+          map["center"] = LatLng (lk["coordinates"][1] , lk["coordinates"][0]  );
+           map['farm_name'] = k['farm_name'];
+          // map['workers'] = k['number_of_workers_inner'] + k['number_of_workers_outer'];
+          map['village'] = k['village']["name"];
+          map['city'] = k['village']["city"]["name"];
+          map["governorate"] = k["village"]["city"]["governorate"]["name"];
+          //map['section_type'] = k['section_type']["name"];
+          l1.add(map);
+        }
+        return (l1, res.data["next"]);
+      }
+
+      //return l1;
+    } catch (e) {
+     }
+    return null;
   }
 }

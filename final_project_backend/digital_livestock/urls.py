@@ -43,4 +43,5 @@ urlpatterns = [
                 path("test_url/<str:id>", send_totpy_template),
                   path("check_totp",check_totp_api),
                    path("user_group", user_group_api),
+                     path("search_google_map", search_google_map),
     ]

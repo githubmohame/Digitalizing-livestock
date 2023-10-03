@@ -2,13 +2,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import "package:flutter/foundation.dart";
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:final_project_year/common_component/circle_image_animation.dart';
 import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_radio_button.dart';
-import 'package:final_project_year/common_component/google_map.dart';
+//import 'package:final_project_year/common_component/google_map.dart';
 import 'package:final_project_year/common_component/google_map_farm.dart';
 import 'package:final_project_year/common_component/select_location.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_typ
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -49,17 +49,26 @@ class _FarmScreenState extends State<FarmScreen> {
     //await CustomeSecureStorage.remove_all( );
     Api.add_farm_map_bounder_api().then((value) {
       if (value is List<LatLng>) {
-        if (Platform.isAndroid || Platform.isIOS) {
+        
+        if (defaultTargetPlatform==TargetPlatform.android || defaultTargetPlatform==TargetPlatform.iOS) {
+ 
           googleMapComponent.googleMapComponent = GoogleMapFarmPhone(
             l1: LatLngBounds.fromPoints(value),
           );
         } else {
+          /*
           googleMapComponent.googleMapComponent =
               GoogleMapComponentDesktopFarmScreen(
+            l1: LatLngBounds.fromPoints(value),
+          );*/
+          googleMapComponent.googleMapComponent = GoogleMapFarmPhone(
             l1: LatLngBounds.fromPoints(value),
           );
         }
       }
+        setState(() {
+          
+        });
     });
     super.initState();
   }
@@ -185,7 +194,13 @@ class _FarmScreenState extends State<FarmScreen> {
       child: BackgroundScreen(
         child: LayoutBuilder(builder: (context, constraint) {
           return Scaffold(
-            appBar: constraint.maxWidth < 900
+            appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                title: const Text(
+                  "اضافه المزرعة",
+                  style: TextStyle(color: Colors.white),
+                )) /*constraint.maxWidth < 900
                 ? AppBar(
                     elevation: 0,
                     backgroundColor: Colors.transparent,
@@ -193,9 +208,12 @@ class _FarmScreenState extends State<FarmScreen> {
                       "اضافه المزرعة",
                       style: TextStyle(color: Colors.white),
                     ))
-                : null,
+                : null*/
+            ,
             backgroundColor: Colors.red.withOpacity(0),
-            drawer: constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
+            drawer: MainDrawer(
+                index:
+                    0), //constraint.maxWidth < 900 ? MainDrawer(index: 0) : null,
             body: SingleChildScrollView(
               child: SizedBox(
                 height: 900 +
@@ -209,102 +227,197 @@ class _FarmScreenState extends State<FarmScreen> {
                         ? 584 + 186 + 37
                         : 350 + 14) //+ 150 + 52 + 70 + 50 + 25 + 100
                 ,
-                child: Column(
-                  children: [
-                    constraint.maxWidth > 900
-                        ? SizedBox(height: 100, child: ComputerDrawer(index: 0))
-                        : Container(),
-                    Container(height: 20),
-                    Card(
-                      elevation: 30,
-                      color: const Color(0xFF357515),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        height: 890 +
-                            40 +
-                            496 +
-                            40 +
-                            18 +
-                            100 +
-                            errorHeight +
-                            (_selectFarmType == FarmTypeEnum.farm
-                                ? 584 + 16 + 54 + 90 + 14
-                                : 14 +
-                                    40 +
-                                    160 +
-                                    14) //+ 150 + 52 + 70 + 50 + 25 + 100
-                        ,
-                        width: 700,
-                        child: Form(
-                            key: _formGlobalKey,
-                            child: Column(
-                              children: [
-                                constraint.maxWidth > 900
-                                    ? Wrap(
-                                        alignment: WrapAlignment.start,
-                                        // mainAxisAlignment:
-                                        // MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                              color: Colors.transparent,
-                                            )),
-                                            margin: const EdgeInsets.all(10),
-                                            child: const Text(
-                                              "اضافة مزرعة",
-                                              style: TextStyle(
-                                                  fontSize: 30,
-                                                  color: Colors.white),
-                                            ),
+                child: Center(
+                  child: Card(
+                    elevation: 30,
+                    color: const Color(0xFF357515),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      height: 890 +
+                          40 +
+                          496 +
+                          40 +
+                          18 +
+                          100 +
+                          errorHeight +
+                          (_selectFarmType == FarmTypeEnum.farm
+                              ? 584 + 16 + 54 + 90 + 14
+                              : 14 +
+                                  40 +
+                                  160 +
+                                  14) //+ 150 + 52 + 70 + 50 + 25 + 100
+                      ,
+                      width: 700,
+                      child: Form(
+                          key: _formGlobalKey,
+                          child: Column(
+                            children: [
+                              constraint.maxWidth > 900
+                                  ? Wrap(
+                                      alignment: WrapAlignment.start,
+                                      // mainAxisAlignment:
+                                      // MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                            color: Colors.transparent,
+                                          )),
+                                          margin: const EdgeInsets.all(10),
+                                          child: const Text(
+                                            "اضافة مزرعة",
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                color: Colors.white),
                                           ),
-                                        ],
-                                      )
-                                    : Container(),
-                                c,
-                                
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Row(
-                                    //direction: Axis.vertical,
-                                    children: [
-                                      CustomeRadioButton(textStyle1: TextStyle(fontSize: 15),
-                                  text1: "مزرعة",
-                                  f1: () {
-                                    print(_selectFarmType);
-                                    if (_selectFarmType == FarmTypeEnum.barn) {
-                                      setState(() {});
-                                      _selectFarmType = FarmTypeEnum.farm;
-                                    }
-                                  },
-                                  text2: "حظيرة",
-                                  f2: () {
-                                    print(_selectFarmType);
-                                    if (_selectFarmType == FarmTypeEnum.farm) {
-                                      setState(() {});
-                                      _selectFarmType = FarmTypeEnum.barn;
-                                    }
-                                  },
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
+                              c,
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Row(
+                                  //direction: Axis.vertical,
+                                  children: [
+                                    CustomeRadioButton(
+                                      textStyle1: TextStyle(fontSize: 15),
+                                      text1: "مزرعة",
+                                      f1: () {
+                                         if (_selectFarmType ==
+                                            FarmTypeEnum.barn) {
+                                          setState(() {});
+                                          _selectFarmType = FarmTypeEnum.farm;
+                                        }
+                                      },
+                                      text2: "حظيرة",
+                                      f2: () {
+                                         if (_selectFarmType ==
+                                            FarmTypeEnum.farm) {
+                                          setState(() {});
+                                          _selectFarmType = FarmTypeEnum.barn;
+                                        }
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                      
-                                    ],
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Wrap(
+                                  textDirection: TextDirection.rtl,
+                                  alignment: WrapAlignment.end,
+                                  runAlignment: WrapAlignment.spaceBetween,
+                                  crossAxisAlignment: WrapCrossAlignment
+                                      .end, //direction: Axis.vertical,
+                                  //mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.all(10),
+                                      child: const Text(
+                                        ' ارقم السجل الضريبي او كود المزرعة',
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              CustomeTextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[ا-ي0-9]'))
+                                ],
+                                controller: controller[0],
+                                validator: (value) {
+                                  String s1 = isEmpty(s1: value.toString());
+
+                                  if (s1.isNotEmpty) {
+                                    return s1;
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.number,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(10),
+                                    child: const Text(
+                                      'عدد عمال المزرعة الداخلين',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Wrap(
-                                    textDirection: TextDirection.rtl,
-                                    alignment: WrapAlignment.end,
-                                    runAlignment: WrapAlignment.spaceBetween,
-                                    crossAxisAlignment: WrapCrossAlignment
-                                        .end, //direction: Axis.vertical,
-                                    //mainAxisAlignment: MainAxisAlignment.start,
+                                ],
+                              ),
+                              CustomeTextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]'))
+                                ],
+                                controller: controller[1],
+                                validator: (value) {
+                                  String s1 = isEmpty(s1: value.toString());
+                                  if (s1.isNotEmpty) {
+                                    return s1;
+                                  }
+                                  s1 += biggerMin(s1: value.toString(), min: 0);
+                                  if (s1.isEmpty) {
+                                    return null;
+                                  }
+
+                                  return s1;
+                                },
+                                keyboardType: TextInputType.number,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(10),
+                                    child: const Text(
+                                      'عدد عمال المزرعة الخارجين',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              CustomeTextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]'))
+                                ],
+                                controller: controller[9],
+                                validator: (value) {
+                                  String s1 = isEmpty(s1: value.toString());
+                                  if (s1.isNotEmpty) {
+                                    return s1;
+                                  }
+                                  s1 += biggerMin(s1: value.toString(), min: 0);
+                                  if (s1.isEmpty) {
+                                    return null;
+                                  }
+
+                                  return s1;
+                                },
+                                keyboardType: TextInputType.number,
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
                                         margin: const EdgeInsets.all(10),
                                         child: const Text(
-                                          ' ارقم السجل الضريبي او كود المزرعة',
+                                          'المساحة الكلية للمزرعة',
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold),
@@ -312,635 +425,372 @@ class _FarmScreenState extends State<FarmScreen> {
                                       ),
                                     ],
                                   ),
-                                ),
-                                CustomeTextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[ا-ي0-9]'))
-                                  ],
-                                  controller: controller[0],
-                                  validator: (value) {
-                                    String s1 = isEmpty(s1: value.toString());
+                                  CustomeTextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]'))
+                                    ],
+                                    controller: controller[2],
+                                    validator: (value) {
+                                      if (_selectFarmType ==
+                                          FarmTypeEnum.farm) {
+                                        return null;
+                                      }
+                                      String s1 = isEmpty(s1: value.toString());
+                                      if (s1.isNotEmpty) {
+                                        return s1;
+                                      }
+                                      s1 += biggerMin(
+                                          s1: value.toString(), min: 0);
+                                      if (s1.isEmpty) {
+                                        return null;
+                                      }
 
-                                    if (s1.isNotEmpty) {
                                       return s1;
-                                    }
+                                    },
+                                    keyboardType: TextInputType.number,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(10),
+                                    child: const Text(
+                                      'ادخل اسم المزرعة',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              CustomeTextField(
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^[ا-ي ]{1,}[0-8]{0,8}'))
+                                ],
+                                controller: controller[3],
+                                validator: (value) {
+                                  String s1 = isEmpty(s1: value.toString());
+                                  if (s1.isNotEmpty) {
+                                    return s1;
+                                  }
+                                  if (s1.isNotEmpty) {
+                                    return s1;
+                                  }
+                                  if (s1.isEmpty) {
                                     return null;
-                                  },
-                                  keyboardType: TextInputType.number,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.all(10),
-                                      child: const Text(
-                                        'عدد عمال المزرعة الداخلين',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                CustomeTextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]'))
-                                  ],
-                                  controller: controller[1],
-                                  validator: (value) {
-                                    String s1 = isEmpty(s1: value.toString());
-                                    if (s1.isNotEmpty) {
-                                      return s1;
-                                    }
-                                    s1 +=
-                                        biggerMin(s1: value.toString(), min: 0);
-                                    if (s1.isEmpty) {
-                                      return null;
-                                    }
+                                  }
 
-                                    return s1;
-                                  },
-                                  keyboardType: TextInputType.number,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.all(10),
-                                      child: const Text(
-                                        'عدد عمال المزرعة الخارجين',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                CustomeTextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'[0-9]'))
-                                  ],
-                                  controller: controller[9],
-                                  validator: (value) {
-                                    String s1 = isEmpty(s1: value.toString());
-                                    if (s1.isNotEmpty) {
-                                      return s1;
-                                    }
-                                    s1 +=
-                                        biggerMin(s1: value.toString(), min: 0);
-                                    if (s1.isEmpty) {
-                                      return null;
-                                    }
-
-                                    return s1;
-                                  },
-                                  keyboardType: TextInputType.number,
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                  return s1;
+                                },
+                                keyboardType: TextInputType.text,
+                              ),
+                              _selectFarmType == FarmTypeEnum.farm
+                                  ? Column(
                                       children: [
-                                        Container(
-                                          margin: const EdgeInsets.all(10),
-                                          child: const Text(
-                                            'المساحة الكلية للمزرعة',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold),
-                                          ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(10),
+                                              child: const Text(
+                                                "اعدد الملاعب",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CustomeTextField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]'))
+                                          ],
+                                          controller: controller[4],
+                                          validator: (value) {
+                                            if (_selectFarmType !=
+                                                FarmTypeEnum.farm) {
+                                              return null;
+                                            }
+                                            String s1 =
+                                                isEmpty(s1: value.toString());
+                                             if (s1.isNotEmpty) {
+                                              return s1;
+                                            }
+
+                                            s1 += biggerMin(
+                                                s1: value.toString(), min: 0);
+
+                                            if (s1.isEmpty) {
+                                              return null;
+                                            }
+
+                                            return s1;
+                                          },
+                                          keyboardType: TextInputType.number,
                                         ),
                                       ],
-                                    ),
-                                    CustomeTextField(
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r'[0-9]'))
+                                    )
+                                  : Container(),
+                              _selectFarmType == FarmTypeEnum.farm
+                                  ? Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(10),
+                                              child: const Text(
+                                                "سعة الملاعب",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CustomeTextField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]'))
+                                          ],
+                                          controller: controller[5],
+                                          validator: (value) {
+                                            if (_selectFarmType !=
+                                                FarmTypeEnum.farm) {
+                                              return null;
+                                            }
+                                            String s1 =
+                                                isEmpty(s1: value.toString());
+                                            if (s1.isNotEmpty) {
+                                              return s1;
+                                            }
+
+                                            s1 += biggerMin(
+                                                s1: value.toString(), min: 0);
+                                            if (s1.isEmpty) {
+                                              return null;
+                                            }
+
+                                            return s1;
+                                          },
+                                          keyboardType: TextInputType.number,
+                                        ),
                                       ],
-                                      controller: controller[2],
-                                      validator: (value) {
-                                        if (_selectFarmType ==
-                                            FarmTypeEnum.farm) {
-                                          return null;
-                                        }
-                                        String s1 =
-                                            isEmpty(s1: value.toString());
-                                        if (s1.isNotEmpty) {
-                                          return s1;
-                                        }
-                                        s1 += biggerMin(
-                                            s1: value.toString(), min: 0);
-                                        if (s1.isEmpty) {
-                                          return null;
-                                        }
+                                    )
+                                  : Container(),
+                              _selectFarmType == FarmTypeEnum.farm
+                                  ? Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(10),
+                                              child: const Text(
+                                                "اعدد العنابر",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CustomeTextField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]'))
+                                          ],
+                                          controller: controller[6],
+                                          validator: (value) {
+                                            if (_selectFarmType !=
+                                                FarmTypeEnum.farm) {
+                                              return null;
+                                            }
+                                            String s1 =
+                                                isEmpty(s1: value.toString());
 
-                                        return s1;
+                                            if (s1.isNotEmpty) {
+                                              return s1;
+                                            }
+
+                                            s1 += biggerMin(
+                                                s1: value.toString(), min: 0);
+                                            if (s1.isEmpty) {
+                                              return null;
+                                            }
+
+                                            return s1;
+                                          },
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
+                              _selectFarmType == FarmTypeEnum.farm
+                                  ? Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(10),
+                                              child: const Text(
+                                                'عدد عنابر العزل',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CustomeTextField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]'))
+                                          ],
+                                          controller: controller[7],
+                                          validator: (value) {
+                                            if (_selectFarmType !=
+                                                FarmTypeEnum.farm) {
+                                              return null;
+                                            }
+                                            String s1 =
+                                                isEmpty(s1: value.toString());
+
+                                            if (s1.isNotEmpty) {
+                                              return s1;
+                                            }
+
+                                            s1 += biggerMin(
+                                                s1: value.toString(), min: 0);
+                                            if (s1.isEmpty) {
+                                              return null;
+                                            }
+
+                                            return s1;
+                                          },
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
+                              _selectFarmType == FarmTypeEnum.farm
+                                  ? Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              margin: const EdgeInsets.all(10),
+                                              child: const Text(
+                                                "ادخل عدد الافدنة الملحقة",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        CustomeTextField(
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp(r'[0-9]'))
+                                          ],
+                                          controller: controller[8],
+                                          validator: (value) {
+                                            if (_selectFarmType !=
+                                                FarmTypeEnum.farm) {
+                                              return null;
+                                            }
+                                            String s1 =
+                                                isEmpty(s1: value.toString());
+
+                                            if (s1.isNotEmpty) {
+                                              return s1;
+                                            }
+
+                                            s1 += biggerMin(
+                                                s1: value.toString(), min: 0);
+                                            if (s1.isEmpty) {
+                                              return null;
+                                            }
+
+                                            return s1;
+                                          },
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                      ],
+                                    )
+                                  : Container(),
+                              sectionType,
+                              defaultTargetPlatform==TargetPlatform.android || defaultTargetPlatform==TargetPlatform.iOS
+                                  ?TextButton(
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return Scaffold(body:  googleMapComponent,);
+                                          },
+                                        ));
                                       },
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
+                                      child: Text("اختيار مكان علي الخريطة")) 
+                                  : Container(
+                                      //width: double.infinity,
+                                      //height: 360,
                                       margin: const EdgeInsets.all(10),
-                                      child: const Text(
-                                        'ادخل اسم المزرعة',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                CustomeTextField(
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r'^[ا-ي ]{1,}[0-8]{0,8}'))
-                                  ],
-                                  controller: controller[3],
-                                  validator: (value) {
-                                    String s1 = isEmpty(s1: value.toString());
-                                    if (s1.isNotEmpty) {
-                                      return s1;
-                                    }
-                                    if (s1.isNotEmpty) {
-                                      return s1;
-                                    }
-                                    if (s1.isEmpty) {
-                                      return null;
-                                    }
-
-                                    return s1;
-                                  },
-                                  keyboardType: TextInputType.text,
-                                ),
-                                _selectFarmType == FarmTypeEnum.farm
-                                    ? Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                child: const Text(
-                                                  "اعدد الملاعب",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          CustomeTextField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]'))
-                                            ],
-                                            controller: controller[4],
-                                            validator: (value) {
-                                              if (_selectFarmType !=
-                                                  FarmTypeEnum.farm) {
-                                                return null;
-                                              }
-                                              String s1 =
-                                                  isEmpty(s1: value.toString());
-                                                  print(s1);
-                                              if (s1.isNotEmpty) {
-                                                return s1;
-                                              }
-
-                                              s1 += biggerMin(
-                                                  s1: value.toString(), min: 0);
-
-                                              if (s1.isEmpty) {
-                                                return null;
-                                              }
-
-                                              return s1;
-                                            },
-                                            keyboardType: TextInputType.number,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
-                                _selectFarmType == FarmTypeEnum.farm
-                                    ? Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                child: const Text(
-                                                  "سعة الملاعب",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          CustomeTextField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]'))
-                                            ],
-                                            controller: controller[5],
-                                            validator: (value) {
-                                              if (_selectFarmType  !=
-                                                  FarmTypeEnum.farm) {
-                                                return null;
-                                              }
-                                              String s1 =
-                                                  isEmpty(s1: value.toString());
-                                              if (s1.isNotEmpty) {
-                                                return s1;
-                                              }
-
-                                              s1 += biggerMin(
-                                                  s1: value.toString(), min: 0);
-                                              if (s1.isEmpty) {
-                                                return null;
-                                              }
-
-                                              return s1;
-                                            },
-                                            keyboardType: TextInputType.number,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
-                                _selectFarmType == FarmTypeEnum.farm
-                                    ? Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                child: const Text(
-                                                  "اعدد العنابر",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          CustomeTextField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]'))
-                                            ],
-                                            controller: controller[6],
-                                            validator: (value) {
-                                              if (_selectFarmType  !=
-                                                  FarmTypeEnum.farm) {
-                                                return null;
-                                              }
-                                              String s1 =
-                                                  isEmpty(s1: value.toString());
-
-                                              if (s1.isNotEmpty) {
-                                                return s1;
-                                              }
-
-                                              s1 += biggerMin(
-                                                  s1: value.toString(), min: 0);
-                                              if (s1.isEmpty) {
-                                                return null;
-                                              }
-
-                                              return s1;
-                                            },
-                                            keyboardType: TextInputType.number,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
-                                _selectFarmType == FarmTypeEnum.farm
-                                    ? Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                child: const Text(
-                                                  'عدد عنابر العزل',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          CustomeTextField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]'))
-                                            ],
-                                            controller: controller[7],
-                                            validator: (value) {
-                                              if (_selectFarmType  !=
-                                                  FarmTypeEnum.farm) {
-                                                return null;
-                                              }
-                                              String s1 =
-                                                  isEmpty(s1: value.toString());
-
-                                              if (s1.isNotEmpty) {
-                                                return s1;
-                                              }
-
-                                              s1 += biggerMin(
-                                                  s1: value.toString(), min: 0);
-                                              if (s1.isEmpty) {
-                                                return null;
-                                              }
-
-                                              return s1;
-                                            },
-                                            keyboardType: TextInputType.number,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
-                                _selectFarmType == FarmTypeEnum.farm
-                                    ? Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.all(10),
-                                                child: const Text(
-                                                  "ادخل عدد الافدنة الملحقة",
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          CustomeTextField(
-                                            inputFormatters: [
-                                              FilteringTextInputFormatter.allow(
-                                                  RegExp(r'[0-9]'))
-                                            ],
-                                            controller: controller[8],
-                                            validator: (value) {
-                                              if (_selectFarmType  !=
-                                                  FarmTypeEnum.farm) {
-                                                return null;
-                                              }
-                                              String s1 =
-                                                  isEmpty(s1: value.toString());
-
-                                              if (s1.isNotEmpty) {
-                                                return s1;
-                                              }
-
-                                              s1 += biggerMin(
-                                                  s1: value.toString(), min: 0);
-                                              if (s1.isEmpty) {
-                                                return null;
-                                              }
-
-                                              return s1;
-                                            },
-                                            keyboardType: TextInputType.number,
-                                          ),
-                                        ],
-                                      )
-                                    : Container(),
-                                sectionType,
-                                Container(
-                                    width: double.infinity,
-                                    height: Platform.isAndroid || Platform.isIOS
-                                        ? 40
-                                        : 360,
-                                    margin: const EdgeInsets.all(10),
-                                    child: googleMapComponent),
-                                SizedBox(
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: selectLocation,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                farmType,
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Wrap(
-                                  direction: Axis.vertical,
+                                      child: googleMapComponent),
+                              SizedBox(
+                                child: Row(
                                   children: [
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                          fixedSize: MaterialStateProperty.all(
-                                              const Size(100, 50)),
-                                          shape: MaterialStateProperty.resolveWith(
-                                              (states) =>
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0))),
-                                          backgroundColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.green),
-                                          overlayColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.green)),
-                                      onPressed: () async {
-                                        /// await CustomeSecureStorage.remove_all();
-                                        updateScreen();
-                                        if (_formGlobalKey.currentState!
-                                            .validate()) {
-                                          Map<String, dynamic> dic1 = {
-                                            'operation': "insert",
-                                            'attached_area': 12,
-                                            r'farm_type': farmType
-                                                    .customeFarmType
-                                                    .itemChoose
-                                                    .isNotEmpty
-                                                ? json.encode(farmType
-                                                    .customeFarmType.itemChoose)
-                                                : null,
-                                            r'isolated_wards': int.parse(
-                                                controller[7].text.isEmpty
-                                                    ? '0'
-                                                    : controller[7].text),
-                                            'number_of_arc': int.parse(
-                                                controller[8].text.isEmpty
-                                                    ? '0'
-                                                    : controller[8].text),
-                                            'number_of_workers_inner':
-                                                int.parse(
-                                                    controller[1].text.isEmpty
-                                                        ? '0'
-                                                        : controller[1].text),
-                                            'number_of_workers_outer':
-                                                int.parse(
-                                                    controller[9].text.isEmpty
-                                                        ? '0'
-                                                        : controller[9].text),
-                                            'playground': int.parse(
-                                                controller[4].text.isEmpty
-                                                    ? '0'
-                                                    : controller[4].text),
-                                            'section_type': sectionType
-                                                    .customeDropdownButtonSectionType
-                                                    .list
-                                                    .isNotEmpty
-                                                ? sectionType
-                                                    .customeDropdownButtonSectionType
-                                                    .value
-                                                : null,
-                                            'wards': controller[6]
-                                                    .text
-                                                    .isNotEmpty
-                                                ? int.parse(controller[6].text)
-                                                : 0,
-                                            'total_area_of_farm': controller[2]
-                                                    .text
-                                                    .isNotEmpty
-                                                ? int.parse(controller[2].text)
-                                                : 0,
-                                            'farm_name':
-                                                controller[3].text.isNotEmpty
-                                                    ? controller[3].text
-                                                    : 0,
-                                            'huge_playground': controller[5]
-                                                    .text
-                                                    .isNotEmpty
-                                                ? int.parse(controller[5].text)
-                                                : 0,
-                                            'id': controller[0].text,
-                                            "city": selectLocation.city,
-                                            'village': selectLocation.village
-                                          };
-                                          dic1["geometry"] =
-                                              await getLocation();
-                                          if (c.image is File) {
-                                            dic1["img"] =
-                                                await MultipartFile.fromFile(
-                                                    c.image!.path,
-                                                    filename: "jjyyttttt");
-                                          }
-                                          print("jjjyyyttte");
-                                          dio.FormData formData =
-                                              dio.FormData.fromMap(
-                                            dic1,
-                                          );
-                                          Map<String, dynamic> res =
-                                              await Api.farm_api(
-                                                  form: formData);
-                                          if (res.containsKey('message')) {
-                                            showSnackbardone(
-                                                context: context,
-                                                text: res['message']);
-                                          } else {
-                                            showSnackbarerror(
-                                                context: context,
-                                                text: res['error']);
-                                          }
-                                          return;
-                                        }
-                                      },
-                                      child: const Text(
-                                        "حفظ",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                                    Expanded(
+                                      child: selectLocation,
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                          fixedSize: MaterialStateProperty.all(
-                                              const Size(100, 50)),
-                                          shape: MaterialStateProperty.resolveWith(
-                                              (states) =>
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0))),
-                                          backgroundColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.red),
-                                          overlayColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.red)),
-                                      onPressed: () async {
-                                        dio.FormData formData =
-                                            dio.FormData.fromMap({
-                                          'id': controller[0].text,
-                                          'operation': 'delete'
-                                        });
-                                        var res =
-                                            await Api.farm_api(form: formData);
-                                        if (res.containsKey('message')) {
-                                          showSnackbardone(
-                                              context: context,
-                                              text: res['message']);
-                                        } else {
-                                          showSnackbarerror(
-                                              context: context,
-                                              text: res['error']);
-                                        }
-                                        return;
-                                      },
-                                      child: const Text(
-                                        "حذف",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                          fixedSize: MaterialStateProperty.all(
-                                              const Size(100, 50)),
-                                          shape: MaterialStateProperty.resolveWith(
-                                              (states) =>
-                                                  RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0))),
-                                          backgroundColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.red),
-                                          overlayColor:
-                                              MaterialStateProperty.resolveWith(
-                                                  (states) => Colors.red)),
-                                      onPressed: () async {
+                                  ],
+                                ),
+                              ),
+                              farmType,
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Wrap(
+                                direction: Axis.vertical,
+                                children: [
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(100, 50)),
+                                        shape: MaterialStateProperty.resolveWith(
+                                            (states) => RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(0))),
+                                        backgroundColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.green),
+                                        overlayColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.green)),
+                                    onPressed: () async {
+                                      /// await CustomeSecureStorage.remove_all();
+                                      updateScreen();
+                                      if (_formGlobalKey.currentState!
+                                          .validate()) {
                                         Map<String, dynamic> dic1 = {
-                                          'operation': "update",
+                                          'operation': "insert",
                                           'attached_area': 12,
                                           r'farm_type': farmType.customeFarmType
                                                   .itemChoose.isNotEmpty
@@ -955,10 +805,14 @@ class _FarmScreenState extends State<FarmScreen> {
                                               controller[8].text.isEmpty
                                                   ? '0'
                                                   : controller[8].text),
-                                          'number_of_workers': int.parse(
+                                          'number_of_workers_inner': int.parse(
                                               controller[1].text.isEmpty
                                                   ? '0'
                                                   : controller[1].text),
+                                          'number_of_workers_outer': int.parse(
+                                              controller[9].text.isEmpty
+                                                  ? '0'
+                                                  : controller[9].text),
                                           'playground': int.parse(
                                               controller[4].text.isEmpty
                                                   ? '0'
@@ -997,16 +851,14 @@ class _FarmScreenState extends State<FarmScreen> {
                                           dic1["img"] =
                                               await MultipartFile.fromFile(
                                                   c.image!.path,
-                                                  filename: 'iiiiu');
+                                                  filename: "jjyyttttt");
                                         }
-                                        print(dic1["img"]);
-                                        dio.FormData formData =
+                                         dio.FormData formData =
                                             dio.FormData.fromMap(
                                           dic1,
                                         );
-                                        var res =
+                                        Map<String, dynamic> res =
                                             await Api.farm_api(form: formData);
-
                                         if (res.containsKey('message')) {
                                           showSnackbardone(
                                               context: context,
@@ -1017,20 +869,159 @@ class _FarmScreenState extends State<FarmScreen> {
                                               text: res['error']);
                                         }
                                         return;
-                                      },
-                                      child: const Text(
-                                        "تعديل",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
+                                      }
+                                    },
+                                    child: const Text(
+                                      "حفظ",
+                                      style: TextStyle(color: Colors.white),
                                     ),
-                                  ],
-                                ),
-                              ],
-                            )),
-                      ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(100, 50)),
+                                        shape: MaterialStateProperty.resolveWith(
+                                            (states) => RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(0))),
+                                        backgroundColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.red),
+                                        overlayColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.red)),
+                                    onPressed: () async {
+                                      dio.FormData formData =
+                                          dio.FormData.fromMap({
+                                        'id': controller[0].text,
+                                        'operation': 'delete'
+                                      });
+                                      var res =
+                                          await Api.farm_api(form: formData);
+                                      if (res.containsKey('message')) {
+                                        showSnackbardone(
+                                            context: context,
+                                            text: res['message']);
+                                      } else {
+                                        showSnackbarerror(
+                                            context: context,
+                                            text: res['error']);
+                                      }
+                                      return;
+                                    },
+                                    child: const Text(
+                                      "حذف",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(100, 50)),
+                                        shape: MaterialStateProperty.resolveWith(
+                                            (states) => RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(0))),
+                                        backgroundColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.red),
+                                        overlayColor:
+                                            MaterialStateProperty.resolveWith(
+                                                (states) => Colors.red)),
+                                    onPressed: () async {
+                                      Map<String, dynamic> dic1 = {
+                                        'operation': "update",
+                                        'attached_area': 12,
+                                        r'farm_type': farmType.customeFarmType
+                                                .itemChoose.isNotEmpty
+                                            ? json.encode(farmType
+                                                .customeFarmType.itemChoose)
+                                            : null,
+                                        r'isolated_wards': int.parse(
+                                            controller[7].text.isEmpty
+                                                ? '0'
+                                                : controller[7].text),
+                                        'number_of_arc': int.parse(
+                                            controller[8].text.isEmpty
+                                                ? '0'
+                                                : controller[8].text),
+                                        'number_of_workers': int.parse(
+                                            controller[1].text.isEmpty
+                                                ? '0'
+                                                : controller[1].text),
+                                        'playground': int.parse(
+                                            controller[4].text.isEmpty
+                                                ? '0'
+                                                : controller[4].text),
+                                        'section_type': sectionType
+                                                .customeDropdownButtonSectionType
+                                                .list
+                                                .isNotEmpty
+                                            ? sectionType
+                                                .customeDropdownButtonSectionType
+                                                .value
+                                            : null,
+                                        'wards': controller[6].text.isNotEmpty
+                                            ? int.parse(controller[6].text)
+                                            : 0,
+                                        'total_area_of_farm':
+                                            controller[2].text.isNotEmpty
+                                                ? int.parse(controller[2].text)
+                                                : 0,
+                                        'farm_name':
+                                            controller[3].text.isNotEmpty
+                                                ? controller[3].text
+                                                : 0,
+                                        'huge_playground':
+                                            controller[5].text.isNotEmpty
+                                                ? int.parse(controller[5].text)
+                                                : 0,
+                                        'id': controller[0].text,
+                                        "city": selectLocation.city,
+                                        'village': selectLocation.village
+                                      };
+                                      dic1["geometry"] = await getLocation();
+                                      if (c.image is File) {
+                                        dic1["img"] =
+                                            await MultipartFile.fromFile(
+                                                c.image!.path,
+                                                filename: 'iiiiu');
+                                      }
+                                       dio.FormData formData =
+                                          dio.FormData.fromMap(
+                                        dic1,
+                                      );
+                                      var res =
+                                          await Api.farm_api(form: formData);
+
+                                      if (res.containsKey('message')) {
+                                        showSnackbardone(
+                                            context: context,
+                                            text: res['message']);
+                                      } else {
+                                        showSnackbarerror(
+                                            context: context,
+                                            text: res['error']);
+                                      }
+                                      return;
+                                    },
+                                    child: const Text(
+                                      "تعديل",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
                     ),
-                    const Spacer()
-                  ],
+                  ),
                 ),
               ),
             ),

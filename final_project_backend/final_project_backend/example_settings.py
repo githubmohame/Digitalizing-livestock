@@ -63,7 +63,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 TEMPLATES_DIR = Path(BASE_DIR,'templates')
-#print(TEMPLATES_DIR)
 ROOT_URLCONF = 'final_project_backend.urls'
 
 TEMPLATES = [

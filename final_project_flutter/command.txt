@@ -1,0 +1,1 @@
+flutter run -d chrome --web-renderer  skwasm  --web-hostname 127.0.0.1 --web-port 9000 --web-browser-flag "--disable-web-security"

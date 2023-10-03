@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:final_project_year/common_component/background.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 
 class ScreenGavernorate extends StatefulWidget {
   const ScreenGavernorate({Key? key}) : super(key: key);
@@ -343,10 +343,8 @@ class _SelectGavernorateState extends State<SelectGavernorate> {
               if (snap.connectionState == ConnectionState.done &&
                   snap.data is List<Map<String, dynamic>> &&
                   snap.data!.isNotEmpty) {
-                //print(snap.data);
-                widget.gavernorate = snap.data![0]['id']!;
-                //print(widget.gavernorate);
-                return CustomeDropdownButton(
+                 widget.gavernorate = snap.data![0]['id']!;
+                 return CustomeDropdownButton(
                     id: 'id',
                     func: (int value) {
                       BlocProvider.of<LocationCubit>(context)
@@ -937,8 +935,7 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
       textDirection: TextDirection.rtl,
       child: BackgroundScreen(
         child: LayoutBuilder(builder: (context, constraint) {
-          print(constraint.maxHeight);
-          return Scaffold(
+           return Scaffold(
             bottomNavigationBar: BottomNavigationBar(
                 backgroundColor:
                     const Color.fromARGB(255, 202, 197, 197).withOpacity(0.5),
@@ -972,7 +969,15 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                   ),
                 ]),
             backgroundColor: Colors.transparent,
-            appBar: constraint.maxWidth < 900
+            appBar:AppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    title: const Text(
+                      'تعديل الاماكن',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+             /*constraint.maxWidth < 900
                 ? AppBar(
                     elevation: 0,
                     backgroundColor: Colors.transparent,
@@ -981,21 +986,23 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                       style: TextStyle(color: Colors.white),
                     ),
                   )
-                : null,
+                : null,*/,
             drawer: MainDrawer(index: 6),
-            body: SingleChildScrollView(
-              child: Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                runAlignment: WrapAlignment.spaceBetween,
-                children: [
-                  constraint.maxWidth > 900
-                      ? SizedBox(height: 100, child: ComputerDrawer(index: 6))
-                      : Container(),
-                  constraint.maxWidth > 900
-                      ? SizedBox(height: constraint.maxHeight / 4)
-                      : Container(),
-                  Center(child: list[index]),
-                ],
+            body: Center(
+              child: SingleChildScrollView(
+                child: Wrap(
+                  alignment: WrapAlignment.spaceBetween,
+                  runAlignment: WrapAlignment.spaceBetween,
+                  children: [
+                   /* constraint.maxWidth > 900
+                        ? SizedBox(height: 100, child: ComputerDrawer(index: 6))
+                        : Container(),*/
+                    constraint.maxWidth > 900
+                        ? SizedBox(height: constraint.maxHeight / 4)
+                        : Container(),
+                    Center(child: list[index]),
+                  ],
+                ),
               ),
             ),
           );

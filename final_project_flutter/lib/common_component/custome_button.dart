@@ -28,14 +28,12 @@ class _CustomeButtonState extends State<CustomeButton> {
                     child: InkWell(onTapDown: (details) {
                        click = true;
                         elevation += 1;
-                        print(elevation);
-                        setState(() {});
+                         setState(() {});
                     },
                       onTapUp: (details) {
                         click = false;
                         elevation += 1;
-                        print(elevation);
-                        setState(() {});
+                         setState(() {});
                       },
                       child: Stack(
                         alignment: Alignment.centerLeft,

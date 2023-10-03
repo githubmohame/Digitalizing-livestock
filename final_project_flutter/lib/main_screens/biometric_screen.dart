@@ -33,26 +33,20 @@ class BimetricScreen extends StatelessWidget {
     try {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } catch (e) {
-      print("error biome trics $e");
-    }
+     }
 
-    print("biometric is available: $canCheckBiometrics");
-
+ 
     List<BiometricType> availableBiometrics = [];
     try {
       availableBiometrics = await auth.getAvailableBiometrics();
     } catch (e) {
-      print("error enumerate biometrics $e");
-    }
+     }
 
-    print("following biometrics are available");
-    if (availableBiometrics.isNotEmpty) {
+     if (availableBiometrics.isNotEmpty) {
       for (var ab in availableBiometrics) {
-        print("\ttech: $ab");
-      }
+       }
     } else {
-      print("no biometrics are available");
-    }
+     }
 
     bool authenticated = false;
     try {
@@ -60,10 +54,8 @@ class BimetricScreen extends StatelessWidget {
         localizedReason: 'Touch your finger on the sensor to login',
       );
     } catch (e) {
-      print("error using biometric auth: $e");
-    }
+     }
 
-    print("authenticated: $authenticated");
-    return authenticated;
+     return authenticated;
   }
 }

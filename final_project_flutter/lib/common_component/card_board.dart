@@ -30,8 +30,8 @@ class CardDashBoard extends StatelessWidget {
           ),
           elevation: 0,
           color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Wrap(alignment: WrapAlignment.end,
+            //crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                   //margin: const EdgeInsets.only(left: 10, top: 5),
@@ -47,12 +47,12 @@ class CardDashBoard extends StatelessWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(left: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Wrap(
+                  //mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                         margin: const EdgeInsets.only(left: 20),
-                        width: 100,
+                       // width: 100,
                         child: Text(
                           value,
                           style: const TextStyle(

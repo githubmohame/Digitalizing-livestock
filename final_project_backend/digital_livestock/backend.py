@@ -22,14 +22,10 @@ class CustomerBackendTotp(BaseAuthentication):
             totp = pyotp.TOTP(  totp, interval=60)
             totp_request = str(request.headers.get("totpy"))
             if (totp.verify(totp_request)):
-                print("killer") 
-                print(User.objects.get(ssn=request.headers["ssn"]))
                 return (User.objects.get(ssn=request.headers["ssn"]), None)
             else:
-                #print("killer")
                 return (AnonymousUser(), None)
         except Exception as e:
-            print(e)
             return (AnonymousUser(), None)
 
 class CustomerBackendTotpVerifiedPaseto(BaseAuthentication):
@@ -40,7 +36,6 @@ class CustomerBackendTotpVerifiedPaseto(BaseAuthentication):
             ssn=r.get(request.headers["totp"]+":"+"token")
             return(User.objects.get(ssn=ssn),None)
         except Exception as e:
-            print(e)
             return (AnonymousUser(), None)
 
 
@@ -50,7 +45,6 @@ class CustomerBackendCreatePasto(BaseAuthentication):
             pass
             
         except Exception as e:
-            print(e)
             return (AnonymousUser(), None)
 class CustomerBackendVerifiedPasto(BaseAuthentication):
     def authenticate(self, request, **kwargs):
@@ -62,7 +56,6 @@ class CustomerBackendVerifiedPasto(BaseAuthentication):
                     token=request.headers["token"],
                 )
         except Exception as e:
-            print(e)
             return (AnonymousUser(), None)
 
 class CustomerBackendBasic(BaseAuthentication):
@@ -75,5 +68,4 @@ class CustomerBackendBasic(BaseAuthentication):
             else:
                 return (AnonymousUser(), None)
         except Exception as e:
-            print(e)
             return (AnonymousUser(), None)

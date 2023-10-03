@@ -4,6 +4,8 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
+import 'package:final_project_year/main_screens/auth_screen.dart';
+import 'package:final_project_year/main_screens/change_password_screen.dart';
 import 'package:final_project_year/main_screens/totp_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -123,15 +125,39 @@ class _LogINState extends State<LogIN> {
                                           return customePasswordUpdateTextField;
                                         }),
                                     const SizedBox(
-                                      height: 20,
+                                      height: 1,
                                     ),
                                     text,
+                                    Row(
+                                      children: [
+                                        TextButton(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty
+                                                        .resolveWith((states) =>
+                                                            Colors.green
+                                                                .shade400)),
+                                            onPressed: () {
+                                              Navigator.push(context,
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  return ChangePasswordScreen(
+                                                    showDrawer: false,
+                                                  );
+                                                },
+                                              ));
+                                            },
+                                            child: Text(
+                                              "تغير كلمة المرور",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )),
+                                      ],
+                                    ),
                                     SizedBox(
                                       height: 70,
                                       child: TextButton(
                                           onPressed: () async {
-                                            print(customePasswordUpdateTextField
-                                                .controller.text);
                                             Map<String, dynamic> dic1 = {
                                               "ssn": _controller.text,
                                               "password":
@@ -141,8 +167,7 @@ class _LogINState extends State<LogIN> {
                                             var f = await Api.login_api(
                                                 formData:
                                                     FormData.fromMap(dic1));
-                                            
-                                            if (f['token']) {
+                                             if (f['token']) {
                                               CustomeSecureStorage.setssn(
                                                   ssn: _controller.text);
 
@@ -151,16 +176,38 @@ class _LogINState extends State<LogIN> {
                                                       customePasswordUpdateTextField
                                                           .controller.text);
                                               Map m = {};
-                                              if (await Api.check_totp_api()) {
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          FarmerScreen(),
-                                                    ));
+                                               if (await Api.check_totp_api()) {
+                                                 Navigator.pushReplacement(
+                                                    context, MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return FutureBuilder(
+                                                      future:
+                                                          Api.user_athority(),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .done) {                                                          if (snapshot.data!
+                                                                  .length >
+                                                              1) {
+                                                            return AuthScreen(
+                                                              list: snapshot
+                                                                  .data!,
+                                                            );
+                                                          } else {
+                                                            return FarmerScreen();
+                                                          }
+                                                        }
+                                                        return Container();
+                                                      },
+                                                    );
+                                                  },
+                                                ));
                                               } else if ((m = (await Api
                                                       .send_email_totp()))
                                                   .containsKey("message")) {
+
                                                 Navigator.pushReplacement(
                                                     context,
                                                     MaterialPageRoute(

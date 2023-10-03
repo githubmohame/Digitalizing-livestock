@@ -6,7 +6,7 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_check_button.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/common_component/main_diwer.dart';
+import 'package:final_project_year/common_component/main_driwer.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -198,7 +198,11 @@ class _AddAdminState extends State<AddAdmin> {
                                       borderSide: BorderSide(
                                           color: Colors.grey, width: 2)))),
                           const SizedBox(height: 20),
-                          checkUser,
+                          Row(  
+                            children: [  
+                              Expanded(child: checkUser),
+                            ],
+                          ),
                           const SizedBox(
                             height: 20,
                           ),

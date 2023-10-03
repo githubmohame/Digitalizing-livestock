@@ -64,7 +64,7 @@ class _GoogleMapComponentDashBoardScreenState
             if (biggest < (position.bounds?.northEast)! ||
                 smallest > (position.bounds?.southWest)! ||
                 biggest.longitude == 0) {
-               smallest =
+              smallest =
                   handleLocation(latLng: position.bounds!.southWest, value: -5);
 
               biggest =
@@ -107,7 +107,11 @@ class _GoogleMapComponentDashBoardScreenState
             Container(
                 margin: const EdgeInsets.all(3),
                 width: 300,
-                child: SearchTextField(width: 100)),
+                child: SearchGoogleMap(
+                    changePosition: ({required LatLng latLng}) {
+                      mapController.move(latLng, mapController.zoom);
+                    },
+                    width: 100)),
             SizedBox(
               height: 30,
               child: TextButton(
@@ -172,7 +176,7 @@ class _GoogleCompenentFarmInfoState extends State<GoogleCompenentFarmInfo>
   bool draw = false;
   @override
   Widget build(BuildContext context) {
-      FlutterMap map = FlutterMap(
+    FlutterMap map = FlutterMap(
       options: MapOptions(
         interactiveFlags: InteractiveFlag.all,
         center: widget.center,
@@ -192,7 +196,7 @@ class _GoogleCompenentFarmInfoState extends State<GoogleCompenentFarmInfo>
       ],
     );
 
-     if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid || Platform.isIOS) {
       return ElevatedButton(
           //style: ,
           onPressed: () {

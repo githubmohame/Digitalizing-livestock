@@ -1,0 +1,13 @@
+{
+    "cmake.sourceDirectory": "/home/mohamed/IdeaProjects/MainFinalProject/final_project_flutter/linux",
+    "editor.accessibilityPageSize": 10,
+    "workbench.activityBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.statusBar.visible": true,
+    "workbench.view.alwaysShowHeaderActions": true,
+    "workbench.editor.centeredLayoutFixedWidth": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "gitHistory.showEditorTitleMenuBarIcons": true,
+    "workbench.layoutControl.type": "menu"
+}

@@ -44,7 +44,7 @@ class SelectLocation extends StatelessWidget {
                             color: Colors.white,
                           )),
                           child: FutureBuilder(
-                              future:  Api.gavernorate_api(),
+                              future: Api.gavernorate_api(),
                               builder: (context, snap) {
                                 try {
                                   if (snap.connectionState ==
@@ -81,7 +81,8 @@ class SelectLocation extends StatelessWidget {
                         },
                         builder: (context, state) {
                           return FutureBuilder(
-                              future:  Api.city_api(gavernorate: state.gavernorate),
+                              future:
+                                  Api.city_api(gavernorate: state.gavernorate),
                               builder: (context, snap) {
                                 if (snap.connectionState ==
                                         ConnectionState.done &&
@@ -127,7 +128,7 @@ class SelectLocation extends StatelessWidget {
                         },
                         builder: (context, state) {
                           return FutureBuilder(
-                              future:  Api.village_api(city: state.city),
+                              future: Api.village_api(city: state.city),
                               builder: (context, snap) {
                                 if (snap.connectionState ==
                                         ConnectionState.done &&
@@ -178,10 +179,8 @@ class SelectLocation extends StatelessWidget {
   }
 }
 
-class SelectLocationDashBoard extends StatelessWidget {
-  int village = 0;
-  int city = 0;
-  int governorate = 0;
+class SelectLocationDashBoard extends StatefulWidget {
+
   SelectLocationDashBoard({
     Key? key,
     //required this.village,
@@ -189,107 +188,116 @@ class SelectLocationDashBoard extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SelectLocationDashBoard> createState() => _SelectLocationDashBoardState();
+}
+
+class _SelectLocationDashBoardState extends State<SelectLocationDashBoard> with AutomaticKeepAliveClientMixin{
+  int village = 0;
+
+  int city = 0;
+
+  int governorate = 0;
+
+  @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) {
-      return SizedBox(
-        child: Builder(builder: (context) {
-          return Wrap(
-            children: [
-              Container(
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                    color: Colors.white,
-                  )),
-                  child: FutureBuilder(
-                      future:  Api.gavernorate_api(),
-                      builder: (context, snap) {
-                        try {
-                          if (snap.connectionState == ConnectionState.done) {
-                            // print(snap.data);
-                            (snap.data as List).add({"id": -1, "name": "__"});
-                            return SizedBox(
-                              child: BlocBuilder<LocationCubit, LocationState>(
-                                builder: (context, state) {
-                                  // print("the governorate value =${state.gavernorate}");
-                                  return CustomeDropdownButton(
-                                      color: const Color(0xffc79154),
-                                      textColor: Colors.white,
-                                      id: 'id',
-                                      func: (int value) {
-                                        BlocProvider.of<LocationCubit>(context)
-                                            .updateGavernorate(value);
-                                      },
-                                      list: snap.data ??
-                                          const [
-                                            {"name": "اسيوط"},
-                                            {"name": "القاهرة"},
-                                            {"name": "المنةفية"}
-                                          ],
-                                      expanded: false,
-                                      value: state.gavernorate,
-                                      text: "المحافظة");
-                                },
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          //
-                        }
-
-                        return Container();
-                      })),
-              BlocBuilder<LocationCubit, LocationState>(
-                buildWhen: (previous, current) {
-                  //
-                  return previous.gavernorate != current.gavernorate;
-                },
-                builder: (context, state) {
-                  return FutureBuilder(
-                      future:  Api.city_api(gavernorate: state.gavernorate),
-                      builder: (context, snap) {
-                        if (snap.connectionState == ConnectionState.done &&
-                            snap.data is List<Map<String, dynamic>> &&
-                            snap.data!.isNotEmpty) {
-                          (snap.data as List).add({"id": -1, "name": "__"});
-                          city = snap.data!.first['id'] ?? -1;
-
-                          return Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                              color: Colors.white,
-                            )),
-                            child: CustomeDropdownButton(
-                                color: const Color(0xffc79154),
-                                textColor: Colors.white,
-                                id: 'id',
-                                func: (int value) {
-                                  BlocProvider.of<LocationCubit>(context)
-                                      .updateCity(value);
-                                  city = value;
-                                },
-                                list: snap.data ??
-                                    const [
-                                      {"name": "اسيوط"},
-                                      {"name": "القاهرة"},
-                                      {"name": "المنةفية"}
-                                    ],
-                                expanded: false,
-                                value: state.city,
-                                text: "المركز او المدينة"),
-                          );
-                        }
-                        return const SizedBox(
-                          height: 0,
-                          width: 0,
+    return SizedBox(
+      child: Wrap(
+        children: [
+          Container(
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                color: Colors.white,
+              )),
+              child: FutureBuilder(
+                  future: Api.gavernorate_api(),
+                  builder: (context, snap) {
+                    try {
+                      if (snap.connectionState == ConnectionState.done) {
+                         (snap.data as List).add({"id": -1, "name": "__"});
+                        return SizedBox(
+                          child: BlocBuilder<LocationCubit, LocationState>(
+                            builder: (context, state) {
+                               return CustomeDropdownButton(
+                                  color: const Color(0xffc79154),
+                                  textColor: Colors.white,
+                                  id: 'id',
+                                  func: (int value) {
+                                    BlocProvider.of<LocationCubit>(context)
+                                        .updateGavernorate(value);
+                                  },
+                                  list: snap.data ??
+                                      const [
+                                        {"name": "اسيوط"},
+                                        {"name": "القاهرة"},
+                                        {"name": "المنةفية"}
+                                      ],
+                                  expanded: false,
+                                  value: state.gavernorate,
+                                  text: "المحافظة");
+                            },
+                          ),
                         );
-                      });
-                },
-              ),
-            ],
-          );
-        }),
-      );
-    });
+                      }
+                    } catch (e) {
+                      //
+                    }
+
+                    return Container();
+                  })),
+          BlocBuilder<LocationCubit, LocationState>(
+            buildWhen: (previous, current) {
+              //
+              return previous.gavernorate != current.gavernorate;
+            },
+            builder: (context, state) {
+              return FutureBuilder(
+                  future: Api.city_api(gavernorate: state.gavernorate),
+                  builder: (context, snap) {
+                    if (snap.connectionState == ConnectionState.done &&
+                        snap.data is List<Map<String, dynamic>> &&
+                        snap.data!.isNotEmpty) {
+                      (snap.data as List).add({"id": -1, "name": "__"});
+                      city = snap.data!.first['id'] ?? -1;
+
+                      return Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          color: Colors.white,
+                        )),
+                        child: CustomeDropdownButton(
+                            color: const Color(0xffc79154),
+                            textColor: Colors.white,
+                            id: 'id',
+                            func: (int value) {
+                              BlocProvider.of<LocationCubit>(context)
+                                  .updateCity(value);
+                              city = value;
+                            },
+                            list: snap.data ??
+                                const [
+                                  {"name": "اسيوط"},
+                                  {"name": "القاهرة"},
+                                  {"name": "المنةفية"}
+                                ],
+                            expanded: false,
+                            value: state.city,
+                            text: "المركز او المدينة"),
+                      );
+                    }
+                    return const SizedBox(
+                      height: 0,
+                      width: 0,
+                    );
+                  });
+            },
+          ),
+        ],
+      ),
+    );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -27,7 +27,7 @@ class _SelectAnimalTypeState extends State<SelectAnimalType> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Wrap(
       children: [
         Container(
             decoration: BoxDecoration(

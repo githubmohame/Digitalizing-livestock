@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
  import 'package:flutter/material.dart';
@@ -63,11 +65,8 @@ class _GoogleMapComponentFarmDesktopScreenState
     extends State<GoogleMapComponentDesktopFarmScreen> {
   void _initStyle() async {
     try {} catch (e, stack) {
-      // ignore: avoid_print
-      print(e);
-      // ignore: avoid_print
-      print(stack);
-    }
+
+     }
     setState(() {});
   }
 
@@ -270,10 +269,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
   bool hide = false;
   void _initStyle() async {
     try {} catch (e, stack) {
-      // ignore: avoid_print
-      print(e);
-      // ignore: avoid_print
-      print(stack);
+   
     }
     setState(() {});
   }
@@ -292,7 +288,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
         zoom: 12,
         boundsOptions: const FitBoundsOptions(
             forceIntegerZoomLevel: false, maxZoom: 12, inside: false),
-        screenSize: const Size(120, 330 - 18),
+        //screenSize: const Size(120, 330 - 18),
         pinchZoomWinGestures:
             MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
         maxBounds: widget.l1,
@@ -326,8 +322,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
         onLongPress: (tapPosition, point) {
           hide = !hide;
           setState(() {
-            print("jjuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
-          });
+           });
         },
         //absorbPanEventsOnScrollables: false,
         onPointerHover: (event, point) {},
@@ -484,9 +479,16 @@ class _GoogleMapFarmScreenState extends State<GoogleMapFarmScreen> {
         future: Api.add_farm_map_bounder_api(),
         builder: (context, snap) {
           if (snap.data is List) {
-            widget.googleMapComponent = GoogleMapComponentDesktopFarmScreen(
+            if(Platform.isAndroid||Platform.isIOS){
+              widget.googleMapComponent = GoogleMapFarmPhone(
               l1: LatLngBounds.fromPoints(snap.data!),
             );
+            }
+            else{
+               widget.googleMapComponent = GoogleMapComponentDesktopFarmScreen(
+              l1: LatLngBounds.fromPoints(snap.data!),
+            );
+            }
             return widget.googleMapComponent;
           }
           return const LoadingScreen();
