@@ -1,3 +1,4 @@
+![plot](./imageScreenshoot/Screenshot.png)
 ![plot](./imageScreenshoot/Screenshot%20from%202023-10-14%2011-48-25.png)
 ![plot](./imageScreenshoot/Screenshot%20from%202023-10-14%2011-48-42.png)
 ![plot](./imageScreenshoot/Screenshot%20from%202023-10-15%2009-50-20.png)
