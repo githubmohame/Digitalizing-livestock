@@ -1,3 +1,15 @@
+![plot](./imageScreenshoot/Screenshot1.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-14%2011-48-25.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-14%2011-48-42.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-15%2009-50-20.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-21%2014-50-55.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-21%2014-51-00.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-21%2014-51-10.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-21%2014-51-44.png)
+![plot](./imageScreenshoot/Screenshot%20from%202023-10-21%2014-52-36.png)
+![plot](./imageScreenshoot/Screenshot1.png)
+
+./videos/Screencast%20from%202023-10-20%2016-44-30.webm
 # digitalization Live Stock
 
 ##  prerequisites
@@ -14,3 +26,5 @@
     - run file `database/event.sql`
     - run command `python database/typesense_script_schema.py`
     - run file `final_project_backend/auto_insert_to_model.py`
+# Images Screen
+

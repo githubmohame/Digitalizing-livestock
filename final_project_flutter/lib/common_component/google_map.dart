@@ -57,7 +57,7 @@ class _GoogleMapComponentDashBoardScreenState
     FlutterMap map = FlutterMap(
       mapController: mapController,
       options: MapOptions(
-        interactiveFlags: InteractiveFlag.all,
+        interactiveFlags: InteractiveFlag.all&~InteractiveFlag.rotate,
         center: const LatLng(30, 30),
         onPositionChanged: (position, hasGesture) async {
           if ((position.zoom ?? 0) >= 6) {
@@ -109,10 +109,10 @@ class _GoogleMapComponentDashBoardScreenState
                 width: 300,
                 child: SearchGoogleMap(
                     changePosition: ({required LatLng latLng}) {
-                      mapController.move(latLng, mapController.zoom);
+                      mapController.move(latLng,  15);
                     },
                     width: 100)),
-            SizedBox(
+            /*SizedBox(
               height: 30,
               child: TextButton(
                   style: ButtonStyle(
@@ -121,7 +121,7 @@ class _GoogleMapComponentDashBoardScreenState
                   onPressed: () {},
                   child: const Text('search',
                       style: TextStyle(color: Colors.white))),
-            )
+            )*/
           ],
         ),
       ],

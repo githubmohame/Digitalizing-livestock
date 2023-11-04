@@ -3,6 +3,8 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
+import 'package:final_project_year/main_screens/add_admin_screen.dart';
+import 'package:final_project_year/main_screens/auth_screen.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +56,8 @@ class TotpScreen extends StatelessWidget {
                                         color: Colors.white, size: 50),
                                     const SizedBox(height: 20),
                                     Builder(builder: (context) {
-                                      return CustomeTextField(texthint:  'اكتب كود totp',
+                                      return CustomeTextField(
+                                        texthint: 'اكتب كود totp',
                                         keyboardType: TextInputType.text,
                                         inputFormatters: [],
                                         validator: (p0) {
@@ -72,17 +75,51 @@ class TotpScreen extends StatelessWidget {
                                           onPressed: () async {
                                             CustomeSecureStorage.settotp(
                                                 totp: _controller.text);
-                                            if((await   Api.check_totp_api())){
+                                            if ((await Api.check_totp_api())) {
+                                              List<Map<String, dynamic>> l1 =
+                                                  (await Api.user_athority());
+                                              if(l1.length>1){
+                                                Navigator.pushReplacement(context,
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  return AuthScreen(list: l1,);
+                                                },
+                                              ));
+                                              }
+                                              CustomeSecureStorage.setauth(user_auth: l1[0]["name"]);
+                                              if(l1.length==1&&l1[0]["name"]=="farmer"){
                                                  Navigator.pushReplacement(context,
-                                                MaterialPageRoute(
-                                              builder: (context) {
-                                                return FarmerScreen();
-                                              },
-                                            ));
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  return FarmerScreen();
+                                                },
+                                              ));
+                                              }
+                                              else if(l1.length==1&&l1[0]["name"]=="supervisor"){
+                                                 Navigator.pushReplacement(context,
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  return FarmerScreen();
+                                                },
+                                              ));
+                                              }
+                                               else if(l1.length==1&&l1[0]["name"]=="admin"){
+                                                 Navigator.pushReplacement(context,
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  return AddAdmin();
+                                                },
+                                              ));
+                                              }
+                                               else if(l1.length==1&&l1[0]["name"]=="fockeltpoint"){
+                                                 Navigator.pushReplacement(context,
+                                                  MaterialPageRoute(
+                                                builder: (context) {
+                                                  return FarmerScreen();
+                                                },
+                                              ));
+                                              }
                                             }
-                                          
-                                            
-                                           
                                           },
                                           style: ButtonStyle(
                                               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -106,18 +143,15 @@ class TotpScreen extends StatelessWidget {
                                       height: 70,
                                       child: TextButton(
                                           onPressed: () async {
-                                             Map m = {};
-                                             if ((m = (await Api
-                                                      .send_email_totp()))
-                                                  .containsKey("message")) {
-                                         
-                                              } else {
-                                                showSnackbarerror(
-                                                    context: context,
-                                                    text: m["error"]);
-                                              }
-
-                                           
+                                            Map m = {};
+                                            if ((m = (await Api
+                                                    .send_email_totp()))
+                                                .containsKey("message")) {
+                                            } else {
+                                              showSnackbarerror(
+                                                  context: context,
+                                                  text: m["error"]);
+                                            }
                                           },
                                           style: ButtonStyle(
                                               shape: MaterialStateProperty.all<RoundedRectangleBorder>(

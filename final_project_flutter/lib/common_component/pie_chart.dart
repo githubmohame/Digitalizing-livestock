@@ -12,8 +12,9 @@ class TotalStatisticsPieChart extends StatelessWidget {
       statistic = [];
     }
     int access = 0;
-     for (Map s in statistic) {
-       pieSection.add(PieChartSectionData(
+    print(statistic);
+    for (Map s in statistic) {
+      pieSection.add(PieChartSectionData(
           title: s["platoon"],
           titleStyle: const TextStyle(color: Colors.black),
           showTitle: true,
@@ -51,7 +52,6 @@ class TotalStatisticsPieChart extends StatelessWidget {
       access += 1;
       access = access % Colors.primaries.length;
     }
- 
   }
   List<PieChartSectionData> pieSection = [];
   List<TotalStatisticsPieChartItem> listTotalStatisticsPieChartItem = [];
@@ -89,7 +89,6 @@ class TotalStatisticsPieChart extends StatelessWidget {
                         ),
                         centerSpaceRadius: 0,
                         sections: () {
-                          
                           return pieSection;
                         }(),
                       )),
@@ -102,7 +101,6 @@ class TotalStatisticsPieChart extends StatelessWidget {
               height: 100,
             ),
             ...() {
-               
               return listTotalStatisticsPieChartItem;
             }(),
           ],

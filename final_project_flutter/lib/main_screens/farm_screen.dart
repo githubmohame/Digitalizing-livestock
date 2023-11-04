@@ -20,7 +20,7 @@ import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_typ
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
 import 'package:final_project_year/common_component/custome_text_field.dart';
-import 'package:final_project_year/common_component/main_driwer.dart';
+import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -49,9 +49,8 @@ class _FarmScreenState extends State<FarmScreen> {
     //await CustomeSecureStorage.remove_all( );
     Api.add_farm_map_bounder_api().then((value) {
       if (value is List<LatLng>) {
-        
-        if (defaultTargetPlatform==TargetPlatform.android || defaultTargetPlatform==TargetPlatform.iOS) {
- 
+        if (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS) {
           googleMapComponent.googleMapComponent = GoogleMapFarmPhone(
             l1: LatLngBounds.fromPoints(value),
           );
@@ -66,9 +65,7 @@ class _FarmScreenState extends State<FarmScreen> {
           );
         }
       }
-        setState(() {
-          
-        });
+      setState(() {});
     });
     super.initState();
   }
@@ -119,6 +116,7 @@ class _FarmScreenState extends State<FarmScreen> {
 
   FarmTypeEnum _selectFarmType = FarmTypeEnum.barn;
   Future<dynamic> getLocation() async {
+    print(googleMapComponent.googleMapComponent.point);
     googleMapComponent.googleMapComponent;
     if (googleMapComponent.googleMapComponent.point == null &&
         googleMapComponent.googleMapComponent.list1.isEmpty &&
@@ -285,7 +283,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       textStyle1: TextStyle(fontSize: 15),
                                       text1: "مزرعة",
                                       f1: () {
-                                         if (_selectFarmType ==
+                                        if (_selectFarmType ==
                                             FarmTypeEnum.barn) {
                                           setState(() {});
                                           _selectFarmType = FarmTypeEnum.farm;
@@ -293,7 +291,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                       },
                                       text2: "حظيرة",
                                       f2: () {
-                                         if (_selectFarmType ==
+                                        if (_selectFarmType ==
                                             FarmTypeEnum.farm) {
                                           setState(() {});
                                           _selectFarmType = FarmTypeEnum.barn;
@@ -520,7 +518,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                             }
                                             String s1 =
                                                 isEmpty(s1: value.toString());
-                                             if (s1.isNotEmpty) {
+                                            if (s1.isNotEmpty) {
                                               return s1;
                                             }
 
@@ -738,17 +736,21 @@ class _FarmScreenState extends State<FarmScreen> {
                                     )
                                   : Container(),
                               sectionType,
-                              defaultTargetPlatform==TargetPlatform.android || defaultTargetPlatform==TargetPlatform.iOS
-                                  ?TextButton(
+                              defaultTargetPlatform == TargetPlatform.android ||
+                                      defaultTargetPlatform ==
+                                          TargetPlatform.iOS
+                                  ? TextButton(
                                       onPressed: () {
                                         Navigator.push(context,
                                             MaterialPageRoute(
                                           builder: (context) {
-                                            return Scaffold(body:  googleMapComponent,);
+                                            return Scaffold(
+                                              body: googleMapComponent,
+                                            );
                                           },
                                         ));
                                       },
-                                      child: Text("اختيار مكان علي الخريطة")) 
+                                      child: Text("اختيار مكان علي الخريطة"))
                                   : Container(
                                       //width: double.infinity,
                                       //height: 360,
@@ -853,7 +855,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                   c.image!.path,
                                                   filename: "jjyyttttt");
                                         }
-                                         dio.FormData formData =
+                                        dio.FormData formData =
                                             dio.FormData.fromMap(
                                           dic1,
                                         );
@@ -993,7 +995,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                                 c.image!.path,
                                                 filename: 'iiiiu');
                                       }
-                                       dio.FormData formData =
+                                      dio.FormData formData =
                                           dio.FormData.fromMap(
                                         dic1,
                                       );

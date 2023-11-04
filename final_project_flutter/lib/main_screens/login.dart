@@ -4,8 +4,11 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
+import 'package:final_project_year/main_screens/add_animal.dart';
 import 'package:final_project_year/main_screens/auth_screen.dart';
+import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:final_project_year/main_screens/change_password_screen.dart';
+import 'package:final_project_year/main_screens/show_farmer_info.dart';
 import 'package:final_project_year/main_screens/totp_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -167,7 +170,7 @@ class _LogINState extends State<LogIN> {
                                             var f = await Api.login_api(
                                                 formData:
                                                     FormData.fromMap(dic1));
-                                             if (f['token']) {
+                                            if (f['token']) {
                                               CustomeSecureStorage.setssn(
                                                   ssn: _controller.text);
 
@@ -176,8 +179,8 @@ class _LogINState extends State<LogIN> {
                                                       customePasswordUpdateTextField
                                                           .controller.text);
                                               Map m = {};
-                                               if (await Api.check_totp_api()) {
-                                                 Navigator.pushReplacement(
+                                              if (await Api.check_totp_api()) {
+                                                Navigator.pushReplacement(
                                                     context, MaterialPageRoute(
                                                   builder: (context) {
                                                     return FutureBuilder(
@@ -188,14 +191,51 @@ class _LogINState extends State<LogIN> {
                                                         if (snapshot
                                                                 .connectionState ==
                                                             ConnectionState
-                                                                .done) {                                                          if (snapshot.data!
+                                                                .done) {
+                                                          print(snapshot.data);
+                                                          CustomeSecureStorage
+                                                              .setauthCount(
+                                                                  user_auth:
+                                                                      snapshot
+                                                                          .data!
+                                                                          .length);
+                                                          if (snapshot.data!
                                                                   .length >
                                                               1) {
                                                             return AuthScreen(
                                                               list: snapshot
                                                                   .data!,
                                                             );
-                                                          } else {
+                                                          }
+                                                          CustomeSecureStorage.setauth(
+                                                              user_auth: snapshot
+                                                                      .data![0]
+                                                                  ["name"]);
+                                                          if (snapshot.data![0]
+                                                                  ["name"] ==
+                                                              "farmer") {
+                                                            print(
+                                                                customePasswordUpdateTextField
+                                                                    .controller
+                                                                    .text);
+                                                            return ShowFarmerInfo(
+                                                                ssn: customePasswordUpdateTextField
+                                                                    .controller
+                                                                    .text);
+                                                          } else if (snapshot
+                                                                      .data![0]
+                                                                  ["name"] ==
+                                                              "admin") {
+                                                            return UpdateAnimal();
+                                                          } else if (snapshot
+                                                                      .data![0]
+                                                                  ["name"] ==
+                                                              "supervisor") {
+                                                            return DashBoardScreen();
+                                                          } else if (snapshot
+                                                                      .data![0]
+                                                                  ["name"] ==
+                                                              "fockeltpoint") {
                                                             return FarmerScreen();
                                                           }
                                                         }
@@ -207,7 +247,6 @@ class _LogINState extends State<LogIN> {
                                               } else if ((m = (await Api
                                                       .send_email_totp()))
                                                   .containsKey("message")) {
-
                                                 Navigator.pushReplacement(
                                                     context,
                                                     MaterialPageRoute(

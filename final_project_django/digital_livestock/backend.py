@@ -9,6 +9,7 @@ from paseto.protocols.v4 import ProtocolVersion4
 my_key = SymmetricKey.generate(protocol=ProtocolVersion4)
 class CustomerBackendTotp(BaseAuthentication):
     def authenticate(self, request, **kwargs):
+        print(request.headers );
         try:
             # u1=User.objects.get(ssn=request.headers["ssn"])
             r = redis.Redis(host='localhost', port=6379, decode_responses=True)
@@ -16,7 +17,9 @@ class CustomerBackendTotp(BaseAuthentication):
             if(  totp ) :
                 pass
             else:
-                u1 = totpyUsers.objects.get(user=request.headers["ssn"])
+    
+                u1 = totpyUsers.objects.get(user=request.headers.get("ssn"))
+                
                 totp=u1.totp
                 r.set(name=request.headers["ssn"],value=u1.totp,ex=60*60)
             totp = pyotp.TOTP(  totp, interval=60)
@@ -26,6 +29,7 @@ class CustomerBackendTotp(BaseAuthentication):
             else:
                 return (AnonymousUser(), None)
         except Exception as e:
+            print(e)
             return (AnonymousUser(), None)
 
 class CustomerBackendTotpVerifiedPaseto(BaseAuthentication):

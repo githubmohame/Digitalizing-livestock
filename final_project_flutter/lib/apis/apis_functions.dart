@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, empty_catches
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart' as dio;
@@ -13,10 +14,15 @@ import 'package:latlong2/latlong.dart';
 import 'package:otp/otp.dart';
 
 class Api {
-  static String url = "http://192.168.1.6:8000/";
+  static const String EnvServerDomain = String.fromEnvironment('ServerDomain');
+  static String url = () {
+    print("https://" + EnvServerDomain + '/');
+    return "https://" + EnvServerDomain + '/';
+  }();
   static Future<Map<String, String>> createHeader() async {
     return {
-      //"code": await CustomeSecureStorage.gettotp(),
+      "userauth": await CustomeSecureStorage.getauth(),
+      "code": await CustomeSecureStorage.gettotp(),
       //"password": await CustomeSecureStorage.getpassword(),
       "ssn": await CustomeSecureStorage.getssn(),
       "totpy": OTP.generateTOTPCodeString(await CustomeSecureStorage.gettotp(),
@@ -39,7 +45,8 @@ class Api {
         map['id'] = res.data[index]['id'];
         return map;
       });
-       return l1;
+      print(l1);
+      return l1;
     } catch (e) {}
     return [];
   }
@@ -62,8 +69,7 @@ class Api {
         return map;
       });
       return l1;
-    } catch (e) {
-     }
+    } catch (e) {}
     return [];
   }
 
@@ -354,6 +360,7 @@ class Api {
 
       map['city'] = res.data['city']['id'];
       map['village'] = res.data['id'];
+      print(map);
       l1.add(map);
       return l1;
     } catch (e) {}
@@ -438,7 +445,7 @@ class Api {
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
-                //headers: await Api.createHeader(),
+                headers: await Api.createHeader(),
                 responseType: dio.ResponseType.json,
                 listFormat: dio.ListFormat.multi,
               ));
@@ -452,7 +459,7 @@ class Api {
       {required dio.FormData formData}) async {
     try {
       dio.Dio dio1 = dio.Dio();
-       var res = await dio1.post(Api.url + 'login_api',
+      var res = await dio1.post(Api.url + 'login_api',
           queryParameters: <String, dynamic>{},
           data: formData,
           options: dio.Options(
@@ -460,7 +467,9 @@ class Api {
             listFormat: dio.ListFormat.multi,
           ));
       return res.data;
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return {};
   }
 
@@ -514,7 +523,7 @@ class Api {
                 responseType: dio.ResponseType.json,
                 listFormat: dio.ListFormat.multi,
               ));
-       return res.data!;
+      return res.data!;
     } catch (e) {}
     return {};
   }
@@ -539,9 +548,8 @@ class Api {
           createPolygon(plogons, f);
         }
       }
-       return {"ploygons": plogons, "markers": markers};
-    } catch (e) {
-     }
+      return {"ploygons": plogons, "markers": markers};
+    } catch (e) {}
     return {};
   }
 
@@ -580,7 +588,6 @@ class Api {
           ));
       List<Map<String, dynamic>> l1 = [];
 
-       
       for (var i in res.data["data"]) {
         Map<String, dynamic> map = <String, dynamic>{};
         map["animal_sub_type"] = i["animal_sub_type"]["name"];
@@ -589,9 +596,8 @@ class Api {
         map['date'] = i['date'];
         l1.add(map);
       }
-       return (res.data["next"].toString(), l1);
-    } catch (e) {
-     }
+      return (res.data["next"].toString(), l1);
+    } catch (e) {}
     return null;
   }
 
@@ -609,10 +615,9 @@ class Api {
                 responseType: dio.ResponseType.json,
                 listFormat: dio.ListFormat.multi,
               ));
-     
+
       return res.data!;
-    } catch (e) {
-     }
+    } catch (e) {}
     return {};
   }
 
@@ -625,7 +630,7 @@ class Api {
           options: dio.Options(
               headers: await Api.createHeader(),
               responseType: dio.ResponseType.json));
-      
+
       List<Map<String, dynamic>> l1 =
           List.generate(res.data["data"].length, (index) {
         Map<String, dynamic> map = <String, dynamic>{};
@@ -723,10 +728,9 @@ class Api {
             l1.add(LatLng(l[1], l[0]));
           }
         }
-         return l1;
+        return l1;
       }
-    } catch (e) {
-     }
+    } catch (e) {}
     return null;
   }
 
@@ -745,11 +749,11 @@ class Api {
           queryParameters: <String, dynamic>{},
           options: dio.Options(
             headers: await Api.createHeader(),
-            contentType: "application/json",
+            // contentType: "application/json",
             responseType: dio.ResponseType.json,
             listFormat: dio.ListFormat.multi,
           ));
-       if (res.data is Map) {
+      if (res.data is Map) {
         List<Map<String, dynamic>> l1 = [];
 
         for (Map<String, dynamic> k in res.data["data"]) {
@@ -765,8 +769,7 @@ class Api {
       }
 
       //return l1;
-    } catch (e) {
-     }
+    } catch (e) {}
     return (
       [
         {"": ""}
@@ -791,13 +794,14 @@ class Api {
         map["ssn"] = ssn;
       }
       map["name"] = farmerName;
-      map["auth"] = (await CustomeSecureStorage.getauth());
+      //map["auth"] = (await CustomeSecureStorage.getauth());
+      print(await Api.createHeader());
       var res = await dio1.post(url,
           data: FormData.fromMap(map),
           queryParameters: <String, dynamic>{},
           options: dio.Options(
             headers: await Api.createHeader(),
-            contentType: "application/json",
+            //contentType: "application/json",
             responseType: dio.ResponseType.json,
             listFormat: dio.ListFormat.multi,
           ));
@@ -820,8 +824,7 @@ class Api {
       }
 
       //return l1;
-    } catch (e) {
-     }
+    } catch (e) {}
     return null;
   }
 
@@ -848,9 +851,9 @@ class Api {
           options: dio.Options(
             headers: header,
           ));
-       return res.data["find"];
+      return res.data["find"];
     } catch (e) {
-       return false;
+      return false;
     }
   }
 
@@ -885,8 +888,8 @@ class Api {
       }
       return list;
     } catch (e) {
-       return [
-        {"error": "يوجد مشاكل في الخدمة"}
+      return [
+        //{"error": "يوجد مشاكل في الخدمة"}
       ];
     }
   }
@@ -918,14 +921,15 @@ class Api {
             listFormat: dio.ListFormat.multi,
           ));
       if (res.data is Map) {
-         List<Map<String, dynamic>> l1 = [];
+        List<Map<String, dynamic>> l1 = [];
 
         for (Map<String, dynamic> k in res.data["data"]) {
           Map<String, dynamic> map = <String, dynamic>{};
-           var lk=json.decode(k["center"])  ;
+          var lk = json.decode(k["center"]);
+          //print(k);
           map["id"] = k["id"];
-          map["center"] = LatLng (lk["coordinates"][1] , lk["coordinates"][0]  );
-           map['farm_name'] = k['farm_name'];
+          map["center"] = LatLng(lk["coordinates"][1], lk["coordinates"][0]);
+          map['farm_name'] = k['farm_name'];
           // map['workers'] = k['number_of_workers_inner'] + k['number_of_workers_outer'];
           map['village'] = k['village']["name"];
           map['city'] = k['village']["city"]["name"];
@@ -933,12 +937,14 @@ class Api {
           //map['section_type'] = k['section_type']["name"];
           l1.add(map);
         }
+
         return (l1, res.data["next"]);
       }
 
       //return l1;
     } catch (e) {
-     }
+      //print(e);
+    }
     return null;
   }
 }

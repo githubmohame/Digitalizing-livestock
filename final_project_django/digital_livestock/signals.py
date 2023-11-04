@@ -188,3 +188,4 @@ def  post_delete_User(sender, instance:User , *args, **kwargs):
     m.pop("old_kwargs")
     instance.old_kwargs=m
     instance.old_kwargs["img"]=ImageFieldFile(instance=instance,field=instance.img.field,name=instance.img.name)
+

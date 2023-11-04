@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/card_board.dart';
 import 'package:final_project_year/common_component/google_map.dart';
-import 'package:final_project_year/common_component/main_driwer.dart';
+import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:final_project_year/common_component/pie_chart.dart';
 import 'package:final_project_year/common_component/search_field.dart';
 import 'package:final_project_year/common_component/select_location.dart';

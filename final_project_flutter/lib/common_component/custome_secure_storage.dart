@@ -37,4 +37,10 @@ static Future<String> getauth() async {
   static void setauth({required String user_auth}) async{
     await flutterSecureStorage.write(key: 'user_auth', value: user_auth);
   }
+  static Future<int?> getauthCount() async {
+    return int.parse((await flutterSecureStorage.read(key: 'user_auth_count')).toString()) ;
+  } 
+  static void setauthCount({required int user_auth}) async{
+    await flutterSecureStorage.write(key: 'user_auth_count', value: user_auth.toString());
+  }
 }

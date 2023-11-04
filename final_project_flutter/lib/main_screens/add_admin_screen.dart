@@ -6,7 +6,7 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_check_button.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/common_component/main_driwer.dart';
+import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

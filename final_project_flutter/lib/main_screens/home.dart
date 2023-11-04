@@ -1,7 +1,7 @@
 // ignore_for_file: use_full_hex_values_for_flutter_colors
 
 import 'package:final_project_year/common_component/background.dart';
-import 'package:final_project_year/common_component/main_driwer.dart';
+import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:final_project_year/main_screens/add_admin_screen.dart';
 import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';

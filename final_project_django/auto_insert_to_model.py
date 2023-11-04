@@ -159,6 +159,19 @@ def create_fockeltpoint():
   p1=Permission.objects.all().filter(content_type_id__in=context_table )
   for perm in p1:
     admin.permissions.add(perm)
+
+
+def create_supervisor():
+  admin,create=CustomeGroup.objects.get_or_create(name="supervisor")
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["farmer","village","city","governorate","platoon","species",])
+  p1=Permission.objects.all().filter(content_type_id__in=context_table,codename__startswith="view")
+  for perm in p1:
+    admin.permissions.add(perm)
+  context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["farm","farmer", ])
+  p1=Permission.objects.all().filter(content_type_id__in=context_table )
+  for perm in p1:
+    admin.permissions.add(perm)
+
 def create_farmer():
   admin,create=CustomeGroup.objects.get_or_create(name="farmer")
   context_table=ContentType.objects.all().filter(app_label='digital_livestock',model__in=["farm","village", ])
@@ -166,7 +179,7 @@ def create_farmer():
   for perm in p1:
     admin.permissions.add(perm)
 def create_user():
-    u1= User.objects.create_user( ssn="30109061201153", fname="محمد",lname="احمد", phone="01024215977", password="Mohammmed123#", location=village.objects.get(id=1), )
+    u1= User.objects.create_user(email="mohammmedayman5@gmail.com", ssn="30109061201153", fname="محمد",lname="احمد", phone="01024215977", password="Mohammmed123#", location=village.objects.get(id=1), )
     u1.groups.set(list(CustomeGroup.objects.all()))
     u1.save()
 def auto_insert():
@@ -184,9 +197,11 @@ def auto_insert():
   create_farmer()
   create_fockeltpoint()
   create_admin()
-  create_user() 
+  create_user()
+  create_supervisor()
   #create_user()
-auto_insert()
+#auto_insert()
+create_supervisor()
 ''' 
 insert_into_governorate()
 insert_into_city()

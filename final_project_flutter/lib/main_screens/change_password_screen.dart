@@ -5,12 +5,12 @@ import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/custome_password_field.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/common_component/main_driwer.dart';
+import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  ChangePasswordScreen({super.key,this.showDrawer=true});
-  bool showDrawer=true;
+  ChangePasswordScreen({super.key, this.showDrawer = true});
+  bool showDrawer = true;
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
@@ -37,16 +37,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         child: LayoutBuilder(builder: (context, constraint) {
           return Scaffold(
             backgroundColor: Colors.transparent,
-            drawer:widget.showDrawer? MainDrawer(index: 10,):null,
+            drawer: widget.showDrawer
+                ? MainDrawer(
+                    index: 10,
+                  )
+                : null,
             appBar: AppBar(
               elevation: 0,
               backgroundColor: Colors.transparent,
-              title:constraint.maxWidth>900?Container(): const Center(
-                  child: Center(
-                      child: Text(
-                'تغير الرقم السري',
-                style: TextStyle(color: Colors.white),
-              ))),
+              title: constraint.maxWidth > 900
+                  ? Container()
+                  : const Center(
+                      child: Center(
+                          child: Text(
+                      'تغير الرقم السري',
+                      style: TextStyle(color: Colors.white),
+                    ))),
             ),
             /*constraint.maxWidth < 900
                 ? AppBar(
@@ -62,14 +68,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 : null,*/
             body: Center(
               child: SingleChildScrollView(
-                child: Container(   height: 260,
-                  child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                child: Container(
+                  height: 260,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
                       /*constraint.maxWidth > 900
                           ? SizedBox(height: 100, child: ComputerDrawer(index: 10))
                           : Container(),*/
-                       Card(
+                      Card(
                         color: const Color(0xFF357515),
                         elevation: 20,
                         child: SizedBox(
@@ -79,14 +86,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                               constraint.maxWidth>900? Text( 'تغير الرقم السري',style: TextStyle(fontSize: 20,color: Colors.white),):Container(),
+                                constraint.maxWidth > 900
+                                    ? Text(
+                                        'تغير الرقم السري',
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      )
+                                    : Container(),
                                 Theme(
                                     data: ThemeData(
                                       primaryColor: Colors.green,
                                       colorScheme: const ColorScheme.light(),
                                       canvasColor: Colors.transparent,
                                     ),
-                                    child: Container(height: 200,
+                                    child: Container(
+                                      height: 200,
                                       child: Column(
                                         children: [
                                           /*constraint.maxWidth > 900
@@ -173,11 +187,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                                 FormData
                                                                     .fromMap(
                                                                         dic1);
-                                                                        
-                                                            await Api
+
+                                                           Map<String,dynamic> message= await Api
                                                                 .change_password_email_done_api(
                                                                     formData:
                                                                         formData);
+                                                            showSnackbardone(context: context,text: message["message"]);
                                                           }
                                                           details
                                                               .onStepContinue!();
@@ -277,7 +292,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                         'التأكيد',
                                                       ),
                                                       content: Container(
-                                                       // height: 400,
+                                                        // height: 400,
                                                         color:
                                                             Colors.transparent,
                                                         child: Column(
@@ -333,7 +348,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           )),
                         ),
                       ),
-                     ],
+                    ],
                   ),
                 ),
               ),

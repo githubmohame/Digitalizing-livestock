@@ -2,7 +2,7 @@
 
 import 'package:final_project_year/bloc/select_muilt_type/cubit/select_muilt_type_cubit.dart';
 import 'package:final_project_year/common_component/background.dart';
-import 'package:final_project_year/common_component/main_driwer.dart';
+import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:final_project_year/main_screens/connect_animal_farm_screen.dart';
 import 'package:final_project_year/main_screens/farm_screen.dart';
 import 'package:flutter/material.dart';

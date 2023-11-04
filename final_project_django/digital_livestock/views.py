@@ -102,7 +102,8 @@ class OncePerDayUserThrottle(UserRateThrottle):
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendTotp])
 def governorate_api(request :Request):
-	if(request.user.groups.filter(name="admin").count()  > 0):
+	print(request.headers.get("user_auth"));
+	if(request.user.groups.filter(name__in=["admin","supervisor"]).count()  > 0 and (request.headers.get("userauth") in ["admin" ,"supervisor"]) ):
 		q=Q()
 	else:
 		q=Q(id=request.user.location.city.governorate.id )
@@ -279,7 +280,8 @@ def farm_api(request :Request):
 			farm1=farm.objects.get(id=request.data['id'])
 		except Exception as e:
 			farm1=farm()
-		dic1=request.data.dict() 
+		dic1=request.data.dict()
+		print(request.data)
 		except1=set_geometry(obj=farm1,dic1=dic1)
 		if(isinstance(except1,JsonResponse)):
 			
@@ -474,7 +476,6 @@ def farmer_api(request :Request):
 			return  JsonResponse({"error":'من فضلك ادخل اميل اخر'})
 
 		if(set(dic1).issubset(['ssn','fname','lname','email','password','phone','photo','job','age',"img"])):
-			print("&"*654);
 			try:
 				user1=User.objects.get(ssn=dic1["ssn"])
 				for key,value in dic1.items() :
@@ -724,7 +725,8 @@ def search_farm_api(request :Request):
 	pagination=CustomePagenation()
 	q=Q()
 	if(request.data.get("ssn")!=None):
-		if(request.data.get("auth")=="farmer" and request.user.groups.all().filter(name= request.data.get("auth")).count()>0):
+		print(request.headers.get("userauth"))
+		if( request.headers.get("userauth")=="farmer" and request.user.groups.all().filter(name= request.headers.get("userauth")).count()>0):
 			q=Q(**{"connect_farm_farmer__farmer":request.data.get("ssn")})
 		else:
 			q=Q(**{"connect_farm_farmer__farmer__village__city__governorate":request.user.location.city.governorate})
@@ -780,7 +782,7 @@ def summary_governorate(request :Request):
 	stat6={"total_sheep":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الماعز').count()}
 	stat7={"total_beauty":connect_animal_farm.objects.all().filter(animal_sub_type__platoon__name='الجمال').count()}
 	stat8={"connect_animal_farm":list(connect_animal_farm.objects.all().values("animal_sub_type__platoon__name"  ).annotate(animal_number2=Sum("animal_number"),platoon=F("animal_sub_type__platoon__name")).values("animal_number2","platoon"))}
-	#
+	print(stat8);
 	stattest=governorate.objects.all().annotate(g_name=F('name'),farm_meat_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج لحوم')),farm_milk_gov=Count('city__village__farm__connect_farm_farmtype__farm__id',Q(city__village__farm__connect_farm_farmtype__farm_type__name__exact='انتاج البان')),total_villages=Count('city__village__farm')).values("g_name","total_villages","farm_meat_gov","farm_milk_gov")
 	summary_info={"gov_data":list(  stattest )}|stat1|stat2|stat3|stat4|stat5|stat6|stat7|stat8
 	return JsonResponse({"data":summary_info}) 
@@ -889,11 +891,11 @@ def farm_map_bounder_api(request :Request):
 @authentication_classes([CustomerBackendTotp])
 def img_farmer_api(request :Request):
 	try:
-		farm1=User.farmer.get(ssn=request.headers.get("userssn" ))
+		farm1=User.farmer.get(ssn=request.headers.get("ssn" ))
 		
 		return  FileResponse(open(farm1.img.path,"rb"))
 	except Exception as e:
-		return FileResponse(open("/home/mohamed/IdeaProjects/MainFinalProject/final_project_backend/uploads/farmer_user/profile.png","rb"))
+		return FileResponse(open("/home/mohamed/IdeaProjects/MainFinalProject/final_project_django/uploads/farmer_user/profile.png","rb"))
 @api_view(['GET','POST'])
 @permission_classes([CustomerAccessPermission])
 @authentication_classes([CustomerBackendBasic])
@@ -922,6 +924,7 @@ def send_totpy_email(request :Request):
 	html_content = render_to_string('totp_email.html',  context={"url":"http://"+request.get_host()+"/"+"test_url/"+str(code)},request=request).strip()
 	subject = 'confirm email address'
 	send_mail(auth_password=settings.EMAIL_HOST_PASSWORD,subject=subject,recipient_list=[ u1.email],from_email =settings.EMAIL_HOST_USER, html_message= render_to_string('totp_email.html',  context={"url":"http://"+request.get_host()+"/"+"test_url/"+str(code)},request=request).strip(),message=None);
+	print(u1.email);
 	#send_mail('send totpy code','the url for totpy is\n'+  +"\t",settings.EMAIL_HOST_USER,[   u1.email],fail_silently=False)
 	r.setex(name=str(code  ),time=5*60,value= pyotpv1)
 	r.set(name=request.headers["ssn"],value=pyotpv1,ex=60*60)
@@ -997,8 +1000,9 @@ def search_google_map(request :Request):
 	q=request.data.get('name')
 	if(q==None):
 		q="*"
-	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name","sort_by":"_text_match:desc","prioritize_exact_match":False,"pre_segmented_query":True})
-	
+	d1=client.collections['farm'].documents.search({"q":q,"query_by":"name","sort_by":"_text_match:desc",#"prioritize_exact_match":False 
+												 })
+	print(d1);
 	l1=[i['document']['id'] for i in d1['hits']]
 	pagination=CustomePagenation()
 	 

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-3lirl@%%2#2xv&fy3g5a5sjpzeeh54l94!lgqy(!w5lq_m7x3%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ '192.168.1.6', '127.0.0.1',"156.197.225.116"]
+ALLOWED_HOSTS = [ '192.168.1.6', '127.0.0.1',"inviting-fast-starfish.ngrok-free.app"]
 
 
 # Application definition
