@@ -1,3 +1,5 @@
+# Images Screen
+
 ![plot](./imageScreenshoot/Screenshot.png)
 ![plot](./imageScreenshoot/Screenshot%20from%202023-10-14%2011-48-25.png)
 ![plot](./imageScreenshoot/Screenshot%20from%202023-10-14%2011-48-42.png)
@@ -27,5 +29,4 @@
     - run file `database/event.sql`
     - run command `python database/typesense_script_schema.py`
     - run file `final_project_backend/auto_insert_to_model.py`
-# Images Screen
 
