@@ -3,9 +3,7 @@ import 'package:final_project_year/common_component/custome_dropdownbutton.dart'
 import 'package:final_project_year/common_component/custome_secure_storage.dart';
 import 'package:final_project_year/main_screens/add_animal.dart';
 import 'package:final_project_year/main_screens/bash_board_screen.dart';
-import 'package:final_project_year/main_screens/farmer_list.dart';
 import 'package:final_project_year/main_screens/farmer_screen.dart';
-import 'package:final_project_year/main_screens/list_farm.dart';
 import 'package:final_project_year/main_screens/show_farmer_info.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +21,7 @@ class AuthScreen extends StatelessWidget {
                 .transparent, //appBar: AppBar(title: Text('صفة الدخول'),),
             body: SafeArea(
                 child: Center(
-                    child: Container(
+                    child: SizedBox(
               height: 300,
               width: 300,
               child: Card(
@@ -33,7 +31,7 @@ class AuthScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
@@ -42,7 +40,7 @@ class AuthScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Spacer(),
+                      const Spacer(),
                       () {
                         customeDropDownButtonSelectAuth =
                             CustomeDropDownButtonSelectAuth(
@@ -87,7 +85,7 @@ class AuthScreen extends StatelessWidget {
                                 "admin") {
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
-                                  return UpdateAnimal();
+                                  return const UpdateAnimal();
                                 },
                               ));
                             }
@@ -108,9 +106,9 @@ class AuthScreen extends StatelessWidget {
                               ));
                             }
                           },
-                          child: Text("دخول",
+                          child: const Text("دخول",
                               style: TextStyle(color: Colors.white))),
-                      Spacer(),
+                      const Spacer(),
                     ]),
               ),
             ))),

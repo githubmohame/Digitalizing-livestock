@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'select_location.dart';
 
 class CustomeCheckBox extends StatefulWidget {
-  CustomeCheckBox({Key? key, required this.text}) : super(key: key) {
+  CustomeCheckBox({super.key, required this.text}) {
      wid = Row(
       children: [
         Expanded(

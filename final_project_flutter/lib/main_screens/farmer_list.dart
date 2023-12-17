@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
-import 'dart:async';
 
 import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/color_plette.dart';
@@ -9,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_drower.dart';
-import 'package:final_project_year/main_screens/bash_board_screen.dart';
 
 import '../common_component/custome_search_field.dart';
 
@@ -21,29 +19,30 @@ class FarmerItem extends StatelessWidget {
   bool isNavigation;
   Color color;
   FarmerItem({
-    Key? key,
+    super.key,
     required this.name,required this.color,
     required this.isNavigation,
     required this.ssn,
     required this.farm_count,
     required this.phone,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (isNavigation)
+        if (isNavigation) {
           Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ShowFarmerInfo(ssn: ssn),
               ));
+        }
       },
       child: Card(
         elevation: 40,
-        margin: EdgeInsets.all(0),
-        shape: BeveledRectangleBorder(
+        margin: const EdgeInsets.all(0),
+        shape: const BeveledRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(120))),
         child: Material(
           borderOnForeground: true,
@@ -72,23 +71,23 @@ class FarmerItem extends StatelessWidget {
               Wrap(
                 children: [
                   const Text('الاسم:',
-                      style: const TextStyle(color: Colors.white, fontSize: 20)),
-                  Text(name, style: TextStyle(color: Colors.white, fontSize: 20))
+                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                  Text(name, style: const TextStyle(color: Colors.white, fontSize: 20))
                 ],
               ),
               Wrap(
                 children: [
                   const Text('عدد المزارع',
-                      style: const TextStyle(color: Colors.white, fontSize: 20)),
-                  Text(farm_count.toString(),
                       style: TextStyle(color: Colors.white, fontSize: 20)),
+                  Text(farm_count.toString(),
+                      style: const TextStyle(color: Colors.white, fontSize: 20)),
                 ],
               ),
               Wrap(
                 children: [
-                  Text('رقم التليقون:',
+                  const Text('رقم التليقون:',
                       style: TextStyle(color: Colors.white, fontSize: 20)),
-                  Text(phone, style: TextStyle(color: Colors.white, fontSize: 20))
+                  Text(phone, style: const TextStyle(color: Colors.white, fontSize: 20))
                 ],
               )
             ],
@@ -100,7 +99,7 @@ class FarmerItem extends StatelessWidget {
 }
 
 class ListFarmer extends StatefulWidget {
-  ListFarmer({Key? key}) : super(key: key);
+  ListFarmer({super.key});
   List<Map<String, dynamic>> l1 = [];
   String? url = "";
 
@@ -153,7 +152,7 @@ class _ListFarmerState extends State<ListFarmer> {
               body: CustomScrollView(
                 slivers: [
                   SliverPadding(
-                    padding: EdgeInsets.only(bottom: 50 ),
+                    padding: const EdgeInsets.only(bottom: 50 ),
                     sliver: SliverFixedExtentList(
                       delegate: SliverChildListDelegate.fixed([
                         Padding(
@@ -168,7 +167,7 @@ class _ListFarmerState extends State<ListFarmer> {
                     ),
                   ),
                   SliverGrid.builder(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                         mainAxisExtent: 300,
                         maxCrossAxisExtent: 300,
                         mainAxisSpacing: 10,
@@ -220,14 +219,14 @@ class _ListFarmerState extends State<ListFarmer> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(s, style: TextStyle(fontSize: 20)),
+                                      Text(s, style: const TextStyle(fontSize: 20)),
                                     ],
                                   )),
                             ),
                           ],
                         );
                       }
-                      if (widget.url != null)
+                      if (widget.url != null) {
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -235,10 +234,13 @@ class _ListFarmerState extends State<ListFarmer> {
                             Container(
                               width: 500,
                             ),
-                            SizedBox(width: 50, child: const LoadingScreen()),
-                            Spacer(),
+                            const SizedBox(width: 50, child: LoadingScreen()),
+                            const Spacer(),
                           ],
                         );
+                      return null;
+                      }
+                      return null;
                     },
                     itemExtent: 200,
                     itemCount: 1,

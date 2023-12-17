@@ -29,7 +29,7 @@ static Future< void> remove_all(
       FlutterSecureStorage storage = const FlutterSecureStorage();
 
       await storage.deleteAll();
-      return null;
+      return;
 }
 static Future<String> getauth() async {
     return await flutterSecureStorage.read(key: 'user_auth') ?? '';

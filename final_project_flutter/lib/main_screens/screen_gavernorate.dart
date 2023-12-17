@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:final_project_year/common_component/custome_dropdownbutton.dart';
 import 'package:final_project_year/common_component/custome_stackbar.dart';
-import 'package:final_project_year/common_component/google_map.dart';
 import 'package:final_project_year/common_component/google_map_farm.dart';
 import 'package:final_project_year/common_component/select_location.dart';
 import 'package:latlong2/latlong.dart';
@@ -18,7 +17,7 @@ import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/main_drower.dart';
 
 class ScreenGavernorate extends StatefulWidget {
-  const ScreenGavernorate({Key? key}) : super(key: key);
+  const ScreenGavernorate({super.key});
 
   @override
   State<ScreenGavernorate> createState() => _ScreenGavernorateState();
@@ -322,11 +321,11 @@ class SelectGavernorate extends StatefulWidget {
   String title;
   List<Map<String, String>> list;
   SelectGavernorate({
-    Key? key,
+    super.key,
     this.gavernorate = -1,
     required this.title,
     required this.list,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectGavernorate> createState() => _SelectGavernorateState();
@@ -369,12 +368,12 @@ class SelectCity extends StatefulWidget {
   int? city;
   List<String> titles;
   SelectCity({
-    Key? key,
+    super.key,
     required this.list,
     required this.list2,
     this.city,
     required this.titles,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectCity> createState() => _SelectCityState();
@@ -483,7 +482,7 @@ class _SelectCityState extends State<SelectCity> {
 }
 
 class ScreenCity extends StatefulWidget {
-  const ScreenCity({Key? key}) : super(key: key);
+  const ScreenCity({super.key});
 
   @override
   State<ScreenCity> createState() => _ScreenCityState();
@@ -723,7 +722,7 @@ class _ScreenCityState extends State<ScreenCity> {
 }
 
 class ScreenVillage extends StatefulWidget {
-  const ScreenVillage({Key? key}) : super(key: key);
+  const ScreenVillage({super.key});
 
   @override
   State<ScreenVillage> createState() => _ScreenVillageState();
@@ -916,7 +915,7 @@ class _ScreenVillageState extends State<ScreenVillage> {
 }
 
 class AddLocationScreen extends StatefulWidget {
-  const AddLocationScreen({Key? key}) : super(key: key);
+  const AddLocationScreen({super.key});
 
   @override
   State<AddLocationScreen> createState() => _AddLocationScreenState();

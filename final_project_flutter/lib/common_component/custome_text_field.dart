@@ -9,12 +9,12 @@ class CustomeTextField extends StatelessWidget {
    String?  texthint;
   List<TextInputFormatter>? inputFormatters;
     CustomeTextField({
-    Key? key,this.texthint,
+    super.key,this.texthint,
     required this.controller,
     required this.validator,
     required this.keyboardType,
       this.inputFormatters,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,9 +6,9 @@ import 'package:latlong2/latlong.dart';
 class SearchGoogleMap extends StatefulWidget {
   SearchGoogleMap({
     required this.changePosition,
-    Key? key,
+    super.key,
     required this.width,
-  }) : super(key: key);
+  });
   void Function({required LatLng latLng}) changePosition;
   double width;
 
@@ -74,7 +74,7 @@ class _SearchGoogleMapState extends State<SearchGoogleMap> {
               ),
             ),
             Container(
-             margin: EdgeInsets.only(left: 20),
+             margin: const EdgeInsets.only(left: 20),
               height: 500,width: 400,
               child: ListView.builder(
                 itemCount: l1.length + 1,
@@ -104,10 +104,10 @@ class _SearchGoogleMapState extends State<SearchGoogleMap> {
                         l1 = value.$1;
                         url = value.$2;
                       }
-                      ;
                       setState(() {});
                     });
                   }
+                   return null;
                 },
               ),
             ),
@@ -123,15 +123,14 @@ class SearchGoogleMapItem extends StatelessWidget {
   LatLng center;
   String ssn, name, governorate, city, village;
   SearchGoogleMapItem(
-      {Key? key,
+      {super.key,
       required this.changePosition,
       required this.center,
       required this.village,
       required this.city,
       required this.name,
       required this.governorate,
-      required this.ssn})
-      : super(key: key);
+      required this.ssn});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -148,23 +147,15 @@ class SearchGoogleMapItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Wrap(
-              children: [Text(" رقم المزرعة او الحظيرة: "), Text(ssn)],
+              children: [const Text(" رقم المزرعة او الحظيرة: "), Text(ssn)],
             ),
             Wrap(
-              children: [Text("اسم المربي: "), Text(name)],
+              children: [const Text("اسم المربي: "), Text(name)],
             ),
             Wrap(
               children: [
-                Text(" الموقع: "),
-                Text(governorate +
-                    " " +
-                    ">" +
-                    " " +
-                    city +
-                    " " +
-                    ">" +
-                    " " +
-                    village)
+                const Text(" الموقع: "),
+                Text("$governorate > $city > $village")
               ],
             )
           ],

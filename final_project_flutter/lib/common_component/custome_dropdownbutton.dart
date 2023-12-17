@@ -11,7 +11,7 @@ class CustomeDropdownButton extends StatefulWidget {
   List<Map<String, dynamic>> list;
   void Function(int value)? func;
   CustomeDropdownButton({
-    Key? key,
+    super.key,
     required this.id,
     this.textColor,
     this.func,
@@ -20,7 +20,7 @@ class CustomeDropdownButton extends StatefulWidget {
     required this.text,
     required this.expanded,
     required this.list,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomeDropdownButton> createState() => _CustomeDropdownButtonState();
@@ -93,7 +93,7 @@ class CustomeDropDownButtonSelectAuth extends StatefulWidget {
   List<Map<String, dynamic>> list;
   void Function(String value)? func;
   CustomeDropDownButtonSelectAuth({
-    Key? key,
+    super.key,
     required this.value,
     required this.id,
     required this.text,
@@ -103,7 +103,7 @@ class CustomeDropDownButtonSelectAuth extends StatefulWidget {
     this.textColor,
     required this.expanded,
     required this.list,
-  }) : super(key: key);
+  });
   @override
   State<CustomeDropDownButtonSelectAuth> createState() =>
       _CustomeDropDownButtonSelectAuthState();
@@ -191,15 +191,15 @@ class _CustomeDropDownButtonDrawerState
           child: TextButton.icon(
               style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => Color(0xff14452f)),
+                      (states) => const Color(0xff14452f)),
                   overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Color(0xff14452f))),
+                      (states) => const Color(0xff14452f))),
               onPressed: () {
                 visable = !visable;
                 setState(() {});
               },
-              icon: Icon(Icons.arrow_drop_down),
-              label: Text("الاضافة البيانات")),
+              icon: const Icon(Icons.arrow_drop_down),
+              label: const Text("الاضافة البيانات")),
         ),
         Expanded(
           child: Visibility(
@@ -211,12 +211,12 @@ class _CustomeDropDownButtonDrawerState
                   itemBuilder: (context, index) {
                     return ElevatedButton(
                       onPressed: () {},
-                      child: Text("اضافة المزرعة"),
                       style: ButtonStyle(
                           shape: MaterialStateProperty.resolveWith(
-                              (states) => BeveledRectangleBorder()),
+                              (states) => const BeveledRectangleBorder()),
                           overlayColor: MaterialStateColor.resolveWith(
                               (states) => Colors.white)),
+                      child: const Text("اضافة المزرعة"),
                     );
                   },
                 ),

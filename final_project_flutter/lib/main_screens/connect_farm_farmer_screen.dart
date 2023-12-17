@@ -9,7 +9,7 @@ import 'package:final_project_year/input_validation/validations.dart';
 import 'package:flutter/material.dart';
 
 class ConnectFarmAndFarmerScreen extends StatefulWidget {
-  const ConnectFarmAndFarmerScreen({Key? key}) : super(key: key);
+  const ConnectFarmAndFarmerScreen({super.key});
 
   @override
   State<ConnectFarmAndFarmerScreen> createState() => _ConnectFarmAndFarmerScreenState();

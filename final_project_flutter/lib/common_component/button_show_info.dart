@@ -8,15 +8,14 @@ class ShowInfoButtom extends StatefulWidget {
   String sectionType;
   num numberOfWorkersInner, numberOfWorkersOuter;
   ShowInfoButtom(
-      {Key? key,
+      {super.key,
       required this.name,
       required this.totalCostFarm,
       required this.id,
       required this.totalAreaOfFarm,
       required this.sectionType,
       required this.numberOfWorkersOuter,
-      required this.numberOfWorkersInner})
-      : super(key: key);
+      required this.numberOfWorkersInner});
   @override
   State<ShowInfoButtom> createState() => _ShowInfoButtomState();
 }

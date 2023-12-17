@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../common_component/custome_dropdownbutton.dart';
 
 class AddAnimalScreen extends StatefulWidget {
-  const AddAnimalScreen({Key? key}) : super(key: key);
+  const AddAnimalScreen({super.key});
 
   @override
   State<AddAnimalScreen> createState() => _AddAnimalScreenState();
@@ -171,7 +171,7 @@ class _AddAnimalScreenState extends State<AddAnimalScreen> {
 }
 
 class ScreenAddAnimalSubtype extends StatefulWidget {
-  const ScreenAddAnimalSubtype({Key? key}) : super(key: key);
+  const ScreenAddAnimalSubtype({super.key});
 
   @override
   State<ScreenAddAnimalSubtype> createState() => _ScreenAddAnimalSubtypeState();
@@ -363,7 +363,7 @@ class _ScreenAddAnimalSubtypeState extends State<ScreenAddAnimalSubtype> {
 }
 
 class UpdateAnimal extends StatefulWidget {
-  const UpdateAnimal({Key? key}) : super(key: key);
+  const UpdateAnimal({super.key});
 
   @override
   State<UpdateAnimal> createState() => _UpdateAnimalState();
@@ -449,11 +449,11 @@ class SelectPlotoon extends StatefulWidget {
   String title;
   List<Map<String, dynamic>> list;
   SelectPlotoon({
-    Key? key,
+    super.key,
     this.village,
     required this.title,
     required this.list,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectPlotoon> createState() => _SelectAnimalState();
@@ -502,13 +502,13 @@ class SelectSpecies extends StatefulWidget {
   int? platoon;
   List<String> titles;
   SelectSpecies({
-    Key? key,
+    super.key,
     required this.list,
     required this.list2,
     this.species,
     this.platoon,
     required this.titles,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectSpecies> createState() => _SelectSpeciesState();

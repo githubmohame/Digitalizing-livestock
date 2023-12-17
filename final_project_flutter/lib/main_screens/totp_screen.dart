@@ -59,7 +59,7 @@ class TotpScreen extends StatelessWidget {
                                       return CustomeTextField(
                                         texthint: 'اكتب كود totp',
                                         keyboardType: TextInputType.text,
-                                        inputFormatters: [],
+                                        inputFormatters: const [],
                                         validator: (p0) {
                                           return null;
                                         },
@@ -107,7 +107,7 @@ class TotpScreen extends StatelessWidget {
                                                  Navigator.pushReplacement(context,
                                                   MaterialPageRoute(
                                                 builder: (context) {
-                                                  return AddAdmin();
+                                                  return const AddAdmin();
                                                 },
                                               ));
                                               }

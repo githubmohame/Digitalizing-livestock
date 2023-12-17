@@ -21,7 +21,7 @@ String biggerMin({required String s1, required int min}) {
   if (s2.isEmpty) {
     double num1 = double.parse(s1);
     if (min >= num1) {
-      return  'هذا الحقل يجب ان يكون اكبر من او يساوي'+' $min';
+      return  'هذا الحقل يجب ان يكون اكبر من او يساوي'' $min';
     } else {
       return '';
     }

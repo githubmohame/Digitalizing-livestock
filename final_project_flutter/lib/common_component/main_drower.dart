@@ -17,14 +17,13 @@ import 'package:final_project_year/main_screens/farmer_screen.dart';
 import 'package:final_project_year/main_screens/login.dart';
 import 'package:final_project_year/main_screens/screen_gavernorate.dart';
 
-import 'custome_dropdownbutton.dart';
 
 class MainDrawer extends StatefulWidget {
   int index;
   MainDrawer({
-    Key? key,
+    super.key,
     required this.index,
-  }) : super(key: key);
+  });
   @override
   State<MainDrawer> createState() => _MainDrawerState();
 }
@@ -832,7 +831,7 @@ class ComputerDrawer extends StatelessWidget {
               builder: (context, snap) {
                 print("hell" * 765);
                 print(snap.data);
-                if (snap.data! > 1)
+                if (snap.data! > 1) {
                   return Column(
                     children: [
                       Container(
@@ -849,7 +848,7 @@ class ComputerDrawer extends StatelessWidget {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => AuthScreen(list: []),
+                                  builder: (context) => AuthScreen(list: const []),
                                 ));
                           }),
                         ),
@@ -861,6 +860,7 @@ class ComputerDrawer extends StatelessWidget {
                       ),
                     ],
                   );
+                }
                 return Container();
               })
           //

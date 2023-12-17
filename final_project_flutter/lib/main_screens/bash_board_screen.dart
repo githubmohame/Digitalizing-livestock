@@ -1,13 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, no_logic_in_create_state
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:final_project_year/bloc/location/cubit/choice_cubit.dart';
 import 'package:final_project_year/common_component/card_board.dart';
 import 'package:final_project_year/common_component/google_map.dart';
-import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:final_project_year/common_component/pie_chart.dart';
-import 'package:final_project_year/common_component/search_field.dart';
 import 'package:final_project_year/common_component/select_location.dart';
 import 'package:final_project_year/common_component/signup_dropdown_button.dart';
 
@@ -253,7 +250,7 @@ class StatisticFarm extends StatefulWidget {
     gavernorate: -1,
     village: -1,
   );
-  SelectLocationDashBoard selectLocationDashBoard = SelectLocationDashBoard();
+  SelectLocationDashBoard selectLocationDashBoard = const SelectLocationDashBoard();
   StatisticFarm({
     super.key,
     this.list1 = const {},

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0016_group_user_groups'),
+        
     ]
 
     operations = [
@@ -48,6 +48,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('group_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='auth.group')),
                 ('ar_name', models.CharField(blank=True, default='kkkk', max_length=345, null=True)),
+                ("p",models.CharField(max_length=123))
             ],
             options={
                 'managed': True,

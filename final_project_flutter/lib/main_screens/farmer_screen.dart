@@ -14,15 +14,14 @@ import 'package:flutter/material.dart';
 
 class FarmerScreen extends StatefulWidget {
   FarmerScreen(
-      {Key? key,
+      {super.key,
       String? phone,
       this.edit = true,
       String? ssn,
       String? name,
       this.city,
       this.country,
-      this.village})
-      : super(key: key);
+      this.village});
   String? villlage_code, city, country, village;
   double errorHeight = 0;
 
@@ -140,7 +139,7 @@ class _FarmerScreenState extends State<FarmerScreen> {
                                         MainAxisAlignment.spaceAround,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text("اضافة المربي",style:TextStyle(fontSize: 30,color: Colors.white,)),
+                                      const Text("اضافة المربي",style:TextStyle(fontSize: 30,color: Colors.white,)),
                                       c,
                                       Container(
                                         margin: const EdgeInsets.only(top: 10),

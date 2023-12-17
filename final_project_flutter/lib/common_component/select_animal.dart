@@ -12,11 +12,11 @@ class SelectAnimalType extends StatefulWidget {
   Future<List<Map<String, dynamic>>> Function({required int platoon})
       speciesApi;
   SelectAnimalType({
-    Key? key,
+    super.key,
     this.platoon,
     required this.platoonApi,
     required this.speciesApi,
-  }) : super(key: key);
+  });
   @override
   State<SelectAnimalType> createState() => _SelectAnimalTypeState();
 }
@@ -120,13 +120,13 @@ class SelectAnimalTypeFarm extends StatefulWidget {
       platoonApi;
 
   SelectAnimalTypeFarm({
-    Key? key,
+    super.key,
     required this.farmId,
     this.platoon,
     this.species,
     required this.platoonApi,
     required this.speciesApi,
-  }) : super(key: key);
+  });
   @override
   State<SelectAnimalTypeFarm> createState() => _SelectAnimalTypeFarmState();
 }

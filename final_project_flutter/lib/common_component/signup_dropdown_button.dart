@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 class CustomeDropdownButtomSignUp extends StatefulWidget {
   int value;
   CustomeDropdownButtomSignUp({
-    Key? key,
+    super.key,
     required this.value,
-  }) : super(key: key);
+  });
   @override
   State<CustomeDropdownButtomSignUp> createState() =>
       _CustomeDropdownButtomSignUpState();

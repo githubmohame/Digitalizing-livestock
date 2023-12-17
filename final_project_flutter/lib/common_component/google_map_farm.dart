@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:final_project_year/apis/apis_functions.dart';
- import 'package:flutter/material.dart';
-import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-
+import 'package:geoclue/geoclue.dart';
 import 'show_load_screen.dart';
 
 abstract class GoogleMapFarm extends StatefulWidget {
@@ -17,7 +18,22 @@ abstract class GoogleMapFarm extends StatefulWidget {
   List<LatLng> list1 = [];
   Polygon plogon = Polygon(points: []);
   bool draw = false;
-  Future<Position> _determinePosition() async {
+  Future<LatLng> _determinePosition() async {
+    if (Platform.isLinux) {
+      final location = await GeoClue.getLocation(desktopId: '<desktop-id>');
+      print('Current location: $location');
+
+      print('Waiting 10s for location updates...');
+      late final StreamSubscription sub;
+      sub = GeoClue.getLocationUpdates(desktopId: '<desktop-id>')
+          .timeout(const Duration(seconds: 10), onTimeout: (_) => sub.cancel())
+          .listen((location) {
+        print('... $location');
+      });
+      location.latitude;
+      print("hhhyyyu");
+      return LatLng(location.latitude, location.longitude);
+    }
     Position p = await Geolocator.getCurrentPosition(
       forceAndroidLocationManager: true,
     );
@@ -57,19 +73,21 @@ abstract class GoogleMapFarm extends StatefulWidget {
 
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
-    return p;
+    return LatLng(
+      p.latitude,
+      p.longitude,
+    );
   }
 }
 
 class _GoogleMapComponentFarmDesktopScreenState
     extends State<GoogleMapComponentDesktopFarmScreen> {
   void _initStyle() async {
-    try {} catch (e, stack) {
-
-     }
+    try {} catch (e) {}
     setState(() {});
   }
 
+  MapController mapController = MapController();
   @override
   void initState() {
     _initStyle();
@@ -114,8 +132,9 @@ class _GoogleMapComponentFarmDesktopScreenState
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () async {
-                Position p = await widget._determinePosition();
-                widget.point = LatLng(p.latitude, p.longitude);
+                LatLng p = await widget._determinePosition();
+                widget.point = p;
+                print("the point is " + p.toString());
                 widget.list1 = [];
                 setState(() {});
               },
@@ -155,94 +174,119 @@ class _GoogleMapComponentFarmDesktopScreenState
         ),
         SizedBox(
           height: 330 - 18,
-          child: FlutterMap(
-            mapController: MapController(),
-            options: MapOptions(
-              zoom: 12,
-              boundsOptions: const FitBoundsOptions(
-                  forceIntegerZoomLevel: false, maxZoom: 12, inside: false),
-              screenSize: const Size(120, 330 - 18),
-              pinchZoomWinGestures:
-                  MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
-              maxBounds: widget.l1,
-              //center: widget.l1!.first,
-              onPointerMove: (tapPosition, point) {
-                if (!widget.draw) return;
-                widget.list1[2] = point;
-                widget.list1[1] =
-                    LatLng(point.latitude, widget.list1[0].longitude);
-                widget.list1[3] =
-                    LatLng(widget.list1[0].latitude, point.longitude);
+          child: Listener(
+            onPointerMove: (event) {
+              LatLng point =
+                  mapController.camera.offsetToCrs(event.localPosition);
+              if (!widget.draw) return;
+              widget.list1[2] = point;
+              widget.list1[1] =
+                  LatLng(point.latitude, widget.list1[0].longitude);
+              widget.list1[3] =
+                  LatLng(widget.list1[0].latitude, point.longitude);
 
-                widget.plogon = Polygon(
-                    points: widget.list1,
-                    borderColor: Colors.black,
-                    isFilled: true,
-                    borderStrokeWidth: 2,
-                    color: Colors.blue.withOpacity(0.2));
-                //widget.draw = false;
-                setState(() {});
-              },
-              onPointerDown: (event, point) {
-                if (!widget.draw) return;
-                widget.list1.clear();
-                widget.list1 = <LatLng>[
-                  const LatLng(0, 0),
-                  const LatLng(0, 0),
-                  const LatLng(0, 0),
-                  const LatLng(0, 0),
-                ];
-                widget.list1[0] = point;
-              },
-              onLongPress: (tapPosition, point) {},
-              //absorbPanEventsOnScrollables: false,
-              onPointerHover: (event, point) {},
-              interactiveFlags: widget.draw
-                  ? InteractiveFlag.pinchZoom &
-                      InteractiveFlag.none &
-                      //InteractiveFlag.pinchMove &
-                      InteractiveFlag.flingAnimation // &
-                  // InteractiveFlag.pinchMove
-                  : InteractiveFlag
-                      .all //|InteractiveFlag.doubleTapZoom|InteractiveFlag.pinchZoom|InteractiveFlag.pinchMove
-              ,
-              onPointerCancel: (event, point) {},
-              onPositionChanged: (position, hasGesture) {},
-              onTap: (tapPosition, point) {
-                if (widget.l1 is LatLngBounds) {}
+              widget.plogon = Polygon(
+                  points: widget.list1,
+                  borderColor: Colors.black,
+                  isFilled: true,
+                  borderStrokeWidth: 2,
+                  color: Colors.blue.withOpacity(0.2));
+              //widget.draw = false;
+              setState(() {});
+            },
+            child: FlutterMap(
+              mapController: mapController,
+              options: MapOptions(
+                //zoom: 12,
+                // boundsOptions: const FitBoundsOptions(
+                //   forceIntegerZoomLevel: false, maxZoom: 12, inside: false),
+                //screenSize: const Size(120, 330 - 18),
+                //pinchZoomWinGestures:MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
+                cameraConstraint: CameraConstraint.contain(bounds: widget.l1!),
+                //center: widget.l1!.first,
+                onMapReady: () {},
+                /*onPointerMoclve: (tapPosition, point) {
+                  if (!widget.draw) return;
+                  widget.list1[2] = point;
+                  widget.list1[1] =
+                      LatLng(point.latitude, widget.list1[0].longitude);
+                  widget.list1[3] =
+                      LatLng(widget.list1[0].latitude, point.longitude);
+                  
+                  widget.plogon = Polygon(
+                      points: widget.list1,
+                      borderColor: Colors.black,
+                      isFilled: true,
+                      borderStrokeWidth: 2,
+                      color: Colors.blue.withOpacity(0.2));
+                  //widget.draw = false;
+                  setState(() {});
+                },*/
+                onPointerDown: (event, point) {
+                  if (!widget.draw) return;
+                  widget.list1.clear();
+                  widget.list1 = <LatLng>[
+                    const LatLng(0, 0),
+                    const LatLng(0, 0),
+                    const LatLng(0, 0),
+                    const LatLng(0, 0),
+                  ];
+                  widget.list1[0] = point;
+                },
+                onLongPress: (tapPosition, point) {},
+                //absorbPanEventsOnScrollables: false,
+                onPointerHover: (event, point) {},
+                interactionOptions: InteractionOptions(
+                    flags: widget.draw
+                        ? InteractiveFlag.pinchZoom &
+                            InteractiveFlag.none &
+                            //InteractiveFlag.pinchMove &
+                            InteractiveFlag.flingAnimation // &
+                        // InteractiveFlag.pinchMove
+                        : InteractiveFlag.all),
+                //interactiveFlags: //|InteractiveFlag.doubleTapZoom|InteractiveFlag.pinchZoom|InteractiveFlag.pinchMove ,
+                onPointerCancel: (event, point) {},
+                onPositionChanged: (position, hasGesture) {},
+                onTap: (tapPosition, point) {
+                  if (widget.l1 is LatLngBounds) {}
 
-                widget.point = point;
-                widget.list1 = [];
-                setState(() {});
-              },
-              onMapEvent: (p0) {},
-              onPointerUp: (event, point) {
-                widget.draw = false;
-                setState(() {});
-              },
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.app',
+                  widget.point = point;
+                  widget.list1 = [];
+                  setState(() {});
+                },
+                onMapEvent: (p0) {},
+                onPointerUp: (event, point) {
+                  widget.draw = false;
+                  setState(() {});
+                },
               ),
-              widget.point == null && widget.list1.isNotEmpty
-                  ? PolygonLayer(polygons: () {
-                      return [widget.plogon];
-                    }())
-                  : Container(),
-              !(widget.point == null)
-                  ? MarkerLayer(
-                      markers: [
-                        Marker(
-                            height: 200,
-                            width: 200,
-                            point: widget.point!,
-                            builder: (context) => const Icon(Icons.location_on))
-                      ],
-                    )
-                  : Container(),
-            ],
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.example.app',
+                ),
+                widget.point == null && widget.list1.isNotEmpty
+                    ? PolygonLayer(polygons: () {
+                        return [widget.plogon];
+                      }())
+                    : Container(),
+                () {
+                  print("test the positioning"+widget.point.toString());
+                  if ((widget.point == null)) {
+                    return Container();
+                  }
+                  return MarkerLayer(
+                    markers: [
+                      Marker(
+                          height: 200,
+                          width: 200,
+                          point: widget.point!,
+                          child: Icon(Icons.location_on))
+                    ],
+                  );
+                }()
+              ],
+            ),
           ),
         ),
       ],
@@ -268,9 +312,7 @@ class GoogleMapFarmPhone extends GoogleMapFarm {
 class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
   bool hide = false;
   void _initStyle() async {
-    try {} catch (e, stack) {
-   
-    }
+    try {} catch (e) {}
     setState(() {});
   }
 
@@ -285,15 +327,20 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
     return FlutterMap(
       mapController: MapController(),
       options: MapOptions(
-        zoom: 12,
-        boundsOptions: const FitBoundsOptions(
-            forceIntegerZoomLevel: false, maxZoom: 12, inside: false),
+        initialCameraFit: CameraFit.bounds(
+            bounds: LatLngBounds.fromPoints([]),
+            forceIntegerZoomLevel: false,
+            maxZoom: 12),
+        initialZoom: 12,
+        // boundsOptions: const FitBoundsOptions(),
         //screenSize: const Size(120, 330 - 18),
-        pinchZoomWinGestures:
-            MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
-        maxBounds: widget.l1,
+        interactionOptions: InteractionOptions(
+          flags: MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
+        ),
+        //
+        cameraConstraint: CameraConstraint.contain(bounds: widget.l1!), // ,
         //center: widget.l1!.first,
-        onPointerMove: (tapPosition, point) {
+        /*onPointerMove: (tapPosition, point) {
           if (!widget.draw) return;
           widget.list1[2] = point;
           widget.list1[1] = LatLng(point.latitude, widget.list1[0].longitude);
@@ -307,7 +354,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
               color: Colors.blue.withOpacity(0.2));
           //widget.draw = false;
           setState(() {});
-        },
+        },*/
         onPointerDown: (event, point) {
           if (!widget.draw) return;
           widget.list1.clear();
@@ -321,8 +368,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
         },
         onLongPress: (tapPosition, point) {
           hide = !hide;
-          setState(() {
-           });
+          setState(() {});
         },
         //absorbPanEventsOnScrollables: false,
         onPointerHover: (event, point) {},
@@ -361,14 +407,14 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
                 return [widget.plogon];
               }())
             : Container(),
-        !(widget.point == null)
+        (widget.point != null)
             ? MarkerLayer(
                 markers: [
                   Marker(
                       height: 200,
                       width: 200,
                       point: widget.point!,
-                      builder: (context) => const Icon(Icons.location_on))
+                      child: const Icon(Icons.location_on))
                 ],
               )
             : Container(),
@@ -388,7 +434,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text("حفظ")),
+                    child: const Text("حفظ")),
                 Tooltip(
                   message: "رسم مستطيل للمزرعة",
                   child: ElevatedButton(
@@ -417,9 +463,10 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    Position p = await widget._determinePosition();
+                    LatLng p = await widget._determinePosition();
                     widget.point = LatLng(p.latitude, p.longitude);
                     widget.list1 = [];
+                    print(widget.point);
                     setState(() {});
                   },
                 ),
@@ -479,15 +526,14 @@ class _GoogleMapFarmScreenState extends State<GoogleMapFarmScreen> {
         future: Api.add_farm_map_bounder_api(),
         builder: (context, snap) {
           if (snap.data is List) {
-            if(Platform.isAndroid||Platform.isIOS){
+            if (Platform.isAndroid || Platform.isIOS) {
               widget.googleMapComponent = GoogleMapFarmPhone(
-              l1: LatLngBounds.fromPoints(snap.data!),
-            );
-            }
-            else{
-               widget.googleMapComponent = GoogleMapComponentDesktopFarmScreen(
-              l1: LatLngBounds.fromPoints(snap.data!),
-            );
+                l1: LatLngBounds.fromPoints(snap.data!),
+              );
+            } else {
+              widget.googleMapComponent = GoogleMapComponentDesktopFarmScreen(
+                l1: LatLngBounds.fromPoints(snap.data!),
+              );
             }
             return widget.googleMapComponent;
           }

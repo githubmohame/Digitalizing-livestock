@@ -84,7 +84,7 @@ class _GoogleMapComponentDashBoardScreenState
           } else {
             plogon.clear();
             list1.clear();
-            biggest = LatLng(0, 0);
+            biggest = const LatLng(0, 0);
           } /*else if (plogon.isNotEmpty) {
             plogon.clear();
             list1.clear();
@@ -137,7 +137,7 @@ class _GoogleMapComponentDashBoardScreenState
               },
             );
           },
-          child: Text("عرض علي الخؤيطة"));
+          child: const Text("عرض علي الخؤيطة"));
     }
     return Card(
       child: SizedBox(
@@ -207,7 +207,7 @@ class _GoogleCompenentFarmInfoState extends State<GoogleCompenentFarmInfo>
               },
             );
           },
-          child: Text("عرض علي الخؤيطة"));
+          child: const Text("عرض علي الخؤيطة"));
     }
     return Card(
       child: SizedBox(

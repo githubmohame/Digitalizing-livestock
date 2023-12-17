@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'farmer_screen.dart';
 
 class LogIN extends StatefulWidget {
-  const LogIN({Key? key}) : super(key: key);
+  const LogIN({super.key});
 
   @override
   State<LogIN> createState() => _LogINState();
@@ -150,7 +150,7 @@ class _LogINState extends State<LogIN> {
                                                 },
                                               ));
                                             },
-                                            child: Text(
+                                            child: const Text(
                                               "تغير كلمة المرور",
                                               style: TextStyle(
                                                   color: Colors.white),
@@ -226,7 +226,7 @@ class _LogINState extends State<LogIN> {
                                                                       .data![0]
                                                                   ["name"] ==
                                                               "admin") {
-                                                            return UpdateAnimal();
+                                                            return const UpdateAnimal();
                                                           } else if (snapshot
                                                                       .data![0]
                                                                   ["name"] ==

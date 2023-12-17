@@ -11,7 +11,7 @@ class JailBreakScreen extends StatelessWidget {
       children: [
         ElevatedButton(onPressed:() {
           
-        },   child: Text(" هذا الهاتف تم تغير اعداداتة الاصلية",style: TextStyle(color:Colors.white ,fontSize: 18 ),),) ,
+        },   child: const Text(" هذا الهاتف تم تغير اعداداتة الاصلية",style: TextStyle(color:Colors.white ,fontSize: 18 ),),) ,
       ],
     ))),)),);
   }

@@ -112,12 +112,12 @@ class TotalStatisticsPieChart extends StatelessWidget {
 
 class TotalStatisticsPieChartItem extends StatelessWidget {
   TotalStatisticsPieChartItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.diescript,
     required this.size,
     required this.text,
-  }) : super(key: key);
+  });
 
   Widget diescript;
   Widget icon;

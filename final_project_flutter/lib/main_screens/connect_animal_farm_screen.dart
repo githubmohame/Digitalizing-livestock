@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_project_year/common_component/main_drower.dart';
 
 class ConnectAnimalFarm extends StatefulWidget {
-  const ConnectAnimalFarm({Key? key}) : super(key: key);
+  const ConnectAnimalFarm({super.key});
 
   @override
   State<ConnectAnimalFarm> createState() => _ConnectAnimalFarmState();
@@ -310,10 +310,10 @@ class CustomeCheckbox extends StatefulWidget {
   bool value;
   String text;
   CustomeCheckbox({
-    Key? key,
+    super.key,
     required this.text,
     required this.value,
-  }) : super(key: key);
+  });
   @override
   State<CustomeCheckbox> createState() => _CustomeCheckboxState();
 }

@@ -77,7 +77,7 @@ class _ShowFarmerInfoState extends State<ShowFarmerInfo> {
               ]),
             ),
             SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   mainAxisExtent: 300,
                   maxCrossAxisExtent: 300,
                   mainAxisSpacing: 5,
@@ -85,7 +85,6 @@ class _ShowFarmerInfoState extends State<ShowFarmerInfo> {
                   crossAxisSpacing: 0),
               itemBuilder: (context2, index) {
                 if (index < widget.l1.length) {
-                  ;
                   return FarmItem(color: CustomeColor.colorListItem[index%CustomeColor.colorListItem.length],
                     context2: context,
                     city: widget.l1[index]["city"],
@@ -132,14 +131,14 @@ class _ShowFarmerInfoState extends State<ShowFarmerInfo> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(s, style: TextStyle(fontSize: 20)),
+                                Text(s, style: const TextStyle(fontSize: 20)),
                               ],
                             )),
                       ),
                     ],
                   );
                 }
-                if (widget.url != null)
+                if (widget.url != null) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -147,10 +146,13 @@ class _ShowFarmerInfoState extends State<ShowFarmerInfo> {
                       Container(
                         width: 500,
                       ),
-                      SizedBox(width: 50, child: const LoadingScreen()),
-                      Spacer(),
+                      const SizedBox(width: 50, child: LoadingScreen()),
+                      const Spacer(),
                     ],
                   );
+                return null;
+                }
+                return null;
               },
               itemExtent: 200,
               itemCount: widget.l1.length + 1,

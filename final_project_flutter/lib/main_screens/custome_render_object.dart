@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class ShirtWidget extends LeafRenderObjectWidget {
   final Color color;
   const ShirtWidget({
-    Key? key,
+    super.key,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   RenderObject createRenderObject(BuildContext context) {

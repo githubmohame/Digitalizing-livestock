@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class CustomePasswordEnterTextField extends StatefulWidget {
   int widgetIndex;
   CustomePasswordEnterTextField({
-    Key? key,
+    super.key,
     required this.widgetIndex,
-  }) : super(key: key);
+  });
   String? password;
   GlobalKey<FormState> f = GlobalKey<FormState>();
   @override

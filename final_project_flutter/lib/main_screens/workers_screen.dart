@@ -10,8 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
 class Worker_Screen extends StatelessWidget {
-  Worker_Screen({Key? key, String? phone, this.edit = true, String? ssn, String? name,this.city,this.country,this.village})
-      : super(key: key) {
+  Worker_Screen({super.key, String? phone, this.edit = true, String? ssn, String? name,this.city,this.country,this.village}) {
     if (!edit) {
       list[0].text = "رقم التليفون$phone";
       list[1].text = "الرقم القومي:$ssn";

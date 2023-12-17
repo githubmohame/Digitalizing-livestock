@@ -3,7 +3,6 @@ import 'package:final_project_year/apis/apis_functions.dart';
 import 'package:final_project_year/common_component/background.dart';
 import 'package:final_project_year/common_component/color_plette.dart';
 import 'package:final_project_year/common_component/show_load_screen.dart';
-import 'package:final_project_year/main_screens/bash_board_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../common_component/custome_search_field.dart';
@@ -66,7 +65,7 @@ class _FarmListState extends State<FarmList> {
               body: CustomScrollView(
                 slivers: [
                   SliverPadding(
-                    padding: EdgeInsets.only(bottom: 50),
+                    padding: const EdgeInsets.only(bottom: 50),
                     sliver: SliverFixedExtentList.builder(
                       itemExtent: 100,
                       itemBuilder: (context, index) {
@@ -88,7 +87,7 @@ class _FarmListState extends State<FarmList> {
                     ),
                   ),
                   SliverGrid.builder(
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                         mainAxisExtent: 300,
                         maxCrossAxisExtent: 300,
                         //mainAxisSpacing: 5,
@@ -142,14 +141,14 @@ class _FarmListState extends State<FarmList> {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(s, style: TextStyle(fontSize: 20)),
+                                      Text(s, style: const TextStyle(fontSize: 20)),
                                     ],
                                   )),
                             ),
                           ],
                         );
                       }
-                      if (widget.url != null)
+                      if (widget.url != null) {
                         return Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -157,10 +156,13 @@ class _FarmListState extends State<FarmList> {
                             Container(
                               width: 500,
                             ),
-                            SizedBox(width: 50, child: const LoadingScreen()),
-                            Spacer(),
+                            const SizedBox(width: 50, child: LoadingScreen()),
+                            const Spacer(),
                           ],
                         );
+                      return null;
+                      }
+                      return null;
                     },
                     itemExtent: 200,
                     itemCount: 1,
@@ -185,7 +187,7 @@ class FarmItem extends StatelessWidget {
   int workers;
   Color color;
   FarmItem({
-    Key? key,
+    super.key,
     required this.farmName,required this.color,
     required this.village,
     required this.context2,
@@ -194,7 +196,7 @@ class FarmItem extends StatelessWidget {
     required this.sectionType,
     required this.id,
     required this.workers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

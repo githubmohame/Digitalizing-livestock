@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:final_project_year/common_component/card_board.dart';
 import 'package:final_project_year/common_component/google_map.dart';
-import 'package:final_project_year/common_component/main_drower.dart';
 import 'package:final_project_year/common_component/pie_chart.dart';
 import 'package:final_project_year/common_component/signup_dropdown_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -452,9 +451,9 @@ class StatisticFarm extends StatefulWidget {
   DateTime? startDate;
   DateTime? endDate;
   StatisticFarm({
-    Key? key,
+    super.key,
     required this.farmId,
-  }) : super(key: key);
+  });
   @override
   State<StatisticFarm> createState() => _StatisticFarmState();
 }

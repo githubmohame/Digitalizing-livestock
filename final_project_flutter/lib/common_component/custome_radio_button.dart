@@ -8,14 +8,14 @@ class CustomeRadioButton extends StatefulWidget {
   Function() f2;
   TextStyle? textStyle1, textStyle2;
   CustomeRadioButton({
-    Key? key,
+    super.key,
     this.textStyle1,
     this.textStyle2,
     required this.text1,
     required this.text2,
     required this.f1,
     required this.f2,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomeRadioButton> createState() => _CustomeRadioButtonState();
@@ -42,17 +42,17 @@ class _CustomeRadioButtonState extends State<CustomeRadioButton> {
                 children: [
                   AnimatedOpacity(
                     opacity: click ? 0 : 1,
-                    duration: Duration(milliseconds: 1),
+                    duration: const Duration(milliseconds: 1),
                     child: Container(
                         width: 100,
-                        padding: EdgeInsets.only(left: 3),
+                        padding: const EdgeInsets.only(left: 3),
                         height: 20,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Colors.lightGreen.withOpacity(0.4)),
                         child: Wrap(
                           children: [
-                            CircleAvatar(
+                            const CircleAvatar(
                               radius: 10,
                               backgroundColor: Colors.lightGreen,
                               child: Center(
@@ -70,13 +70,13 @@ class _CustomeRadioButtonState extends State<CustomeRadioButton> {
                   ),
                   AnimatedOpacity(
                     opacity: click ? 1 : 0,
-                    duration: Duration(milliseconds: 1),
+                    duration: const Duration(milliseconds: 1),
                     child: Wrap(
                       children: [
                         Container(
                           height: 20,
                           width: 20,
-                          margin: EdgeInsets.only(left: 5),
+                          margin: const EdgeInsets.only(left: 5),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
@@ -106,17 +106,17 @@ class _CustomeRadioButtonState extends State<CustomeRadioButton> {
                 children: [
                   AnimatedOpacity(
                     opacity: click ? 1 : 0,
-                    duration: Duration(milliseconds: 1),
+                    duration: const Duration(milliseconds: 1),
                     child: Container(
                         width: 100,
-                        padding: EdgeInsets.only(left: 3),
+                        padding: const EdgeInsets.only(left: 3),
                         height: 20,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             color: Colors.lightGreen.withOpacity(0.4)),
                         child: Wrap(
                           children: [
-                            CircleAvatar(
+                            const CircleAvatar(
                               radius: 10,
                               backgroundColor: Colors.lightGreen,
                               child: Center(
@@ -131,13 +131,13 @@ class _CustomeRadioButtonState extends State<CustomeRadioButton> {
                   ),
                   AnimatedOpacity(
                     opacity: click ? 0 : 1,
-                    duration: Duration(milliseconds: 1),
+                    duration: const Duration(milliseconds: 1),
                     child: Wrap(
                       children: [
                         Container(
                           height: 20,
                           width: 20,
-                          margin: EdgeInsets.only(left: 5),
+                          margin: const EdgeInsets.only(left: 5),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(

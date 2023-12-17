@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomeButton extends StatefulWidget {
-  CustomeButton({super.key});
+  const CustomeButton({super.key});
 
   @override
   State<CustomeButton> createState() => _CustomeButtonState();
@@ -17,12 +17,12 @@ class _CustomeButtonState extends State<CustomeButton> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
+            const Spacer(),
             Expanded(
               child: Row(
                 children: [
-                  Spacer(),
-                  Container(//color: Colors.red,
+                  const Spacer(),
+                  SizedBox(//color: Colors.red,
                     height: 30,
                     width: 150,
                     child: InkWell(onTapDown: (details) {
@@ -46,7 +46,7 @@ class _CustomeButtonState extends State<CustomeButton> {
                           AnimatedPositioned(
                               top: click ? 0 : 1,
                               left: click ? 0 : 0,
-                              duration: Duration(microseconds: 1),
+                              duration: const Duration(microseconds: 1),
                               height: 30,
                               child: Container(
                                 decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(20)),
@@ -57,7 +57,7 @@ class _CustomeButtonState extends State<CustomeButton> {
                           AnimatedPositioned(
                               top: click ? 0 : 0,
                               left: click ? 0 : 1,
-                              duration: Duration(microseconds: 1),
+                              duration: const Duration(microseconds: 1),
                               child: Container(
                                 decoration: BoxDecoration(color: Colors.blue,borderRadius: BorderRadius.circular(20)),
                                 height: 30,
@@ -67,7 +67,7 @@ class _CustomeButtonState extends State<CustomeButton> {
                       ),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             ),

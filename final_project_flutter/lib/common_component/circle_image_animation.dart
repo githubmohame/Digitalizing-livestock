@@ -21,8 +21,9 @@ class _CircleImageAnimationState extends State<CircleImageAnimation> {
         alignment: Alignment.center,
         child: widget.image is File
             ? GestureDetector(onTap: () async{
-              if(Platform.isAndroid||Platform.isIOS)
-              imageClick = true;
+              if(Platform.isAndroid||Platform.isIOS) {
+                imageClick = true;
+              }
                         FilePickerResult? f = await FilePicker.platform.pickFiles(
                             type: FileType.custom,
                             allowedExtensions: ["png", "jpg", "jpeg"]);

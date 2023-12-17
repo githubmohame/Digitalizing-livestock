@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CustomeSearch extends StatefulWidget {
   CustomeSearch({
-    Key? key,
+    super.key,
     required this.width,
     required this.controller,
     required this.text,
-  }) : super(key: key);
+  });
 
   String text;
   double? width;
@@ -28,7 +28,7 @@ class _CustomeSearchState extends State<CustomeSearch> {
           Container(
                  width:500,
                   //height: height,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       //shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.all(Radius.circular(120))),
                   child: TextField(//expands: true,maxLines: null,minLines: null,
@@ -62,7 +62,7 @@ class _CustomeSearchState extends State<CustomeSearch> {
             child: Container(
                //width:100,
                 //height: height,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     //shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.all(Radius.circular(120))),
                 child: TextField( expands: true,maxLines: null,minLines: null,

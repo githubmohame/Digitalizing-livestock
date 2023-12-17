@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Supplier extends StatelessWidget {
-  Supplier({Key? key, String? phone, this.edit = true, String? ssn, String? name,this.city,this.country,this.village})
-      : super(key: key) {
+  Supplier({super.key, String? phone, this.edit = true, String? ssn, String? name,this.city,this.country,this.village}) {
     if (!edit) {
       list[0].text = "رقم التليفون$phone";
       list[1].text = "الرقم القومي:$ssn";

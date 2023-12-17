@@ -10,10 +10,10 @@ class SelectLocation extends StatelessWidget {
   int village;
   int city;
   SelectLocation({
-    Key? key,
+    super.key,
     required this.village,
     required this.city,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -181,11 +181,11 @@ class SelectLocation extends StatelessWidget {
 
 class SelectLocationDashBoard extends StatefulWidget {
 
-  SelectLocationDashBoard({
-    Key? key,
+  const SelectLocationDashBoard({
+    super.key,
     //required this.village,
     //required this.city,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectLocationDashBoard> createState() => _SelectLocationDashBoardState();

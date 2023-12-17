@@ -68,7 +68,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 : null,*/
             body: Center(
               child: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   height: 260,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -87,7 +87,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 constraint.maxWidth > 900
-                                    ? Text(
+                                    ? const Text(
                                         'تغير الرقم السري',
                                         style: TextStyle(
                                             fontSize: 20, color: Colors.white),
@@ -99,7 +99,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                       colorScheme: const ColorScheme.light(),
                                       canvasColor: Colors.transparent,
                                     ),
-                                    child: Container(
+                                    child: SizedBox(
                                       height: 200,
                                       child: Column(
                                         children: [

@@ -36,7 +36,7 @@ Future<List<Map<String, dynamic>>> f1() {
 }
 
 class FarmScreen extends StatefulWidget {
-  const FarmScreen({Key? key}) : super(key: key);
+  const FarmScreen({super.key});
 
   @override
   State<FarmScreen> createState() => _FarmScreenState();
@@ -280,7 +280,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                   //direction: Axis.vertical,
                                   children: [
                                     CustomeRadioButton(
-                                      textStyle1: TextStyle(fontSize: 15),
+                                      textStyle1: const TextStyle(fontSize: 15),
                                       text1: "مزرعة",
                                       f1: () {
                                         if (_selectFarmType ==
@@ -750,7 +750,7 @@ class _FarmScreenState extends State<FarmScreen> {
                                           },
                                         ));
                                       },
-                                      child: Text("اختيار مكان علي الخريطة"))
+                                      child: const Text("اختيار مكان علي الخريطة"))
                                   : Container(
                                       //width: double.infinity,
                                       //height: 360,
@@ -1111,8 +1111,7 @@ class CustomeType extends StatefulWidget {
   bool visiable = false;
   List<String> itemChoose = [];
   _CustomeTypeState state = _CustomeTypeState();
-  CustomeType({Key? key, required this.list, required this.title})
-      : super(key: key);
+  CustomeType({super.key, required this.list, required this.title});
   @override
   State<CustomeType> createState() {
     return _CustomeTypeState();
@@ -1225,12 +1224,12 @@ class CustomeButton extends StatefulWidget {
   Function f;
   Color customeColor;
   CustomeButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.customeColor,
     required this.click,
     required this.f,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomeButton> createState() => _CustomeButtonState();

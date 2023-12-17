@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
  class BackgroundScreen extends StatelessWidget {
   Widget child;
     BackgroundScreen({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
    
 
   @override

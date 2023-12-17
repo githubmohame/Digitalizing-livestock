@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddSupplierScreen extends StatelessWidget {
-  const AddSupplierScreen({Key? key}) : super(key: key);
+  const AddSupplierScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

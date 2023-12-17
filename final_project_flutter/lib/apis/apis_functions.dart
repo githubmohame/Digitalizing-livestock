@@ -1,9 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names, empty_catches
 
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:final_project_year/common_component/create_map_component.dart';
@@ -34,7 +32,7 @@ class Api {
   static Future gavernorate_api() async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.get(Api.url + 'governorate',
+      var res = await dio1.get('${Api.url}governorate',
           data: {},
           options: dio.Options(
               headers: await Api.createHeader(),
@@ -56,7 +54,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = dio.FormData.fromMap({'filter': gavernorate});
-      var res = await dio1.post(Api.url + 'city',
+      var res = await dio1.post('${Api.url}city',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -78,7 +76,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = dio.FormData.fromMap({'filter': city});
-      var res = await dio1.post(Api.url + 'village',
+      var res = await dio1.post('${Api.url}village',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -98,7 +96,7 @@ class Api {
   static Future<List<Map<String, dynamic>>> section_type_api() async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.get(Api.url + 'section_type',
+      var res = await dio1.get('${Api.url}section_type',
           data: {},
           options: dio.Options(
               headers: await Api.createHeader(),
@@ -117,7 +115,7 @@ class Api {
   static Future<List<Map<String, dynamic>>> farm_type_api() async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.get(Api.url + 'farm_type',
+      var res = await dio1.get('${Api.url}farm_type',
           data: {},
           options: dio.Options(
               headers: await Api.createHeader(),
@@ -139,7 +137,7 @@ class Api {
   static Future<List<Map<String, dynamic>>> platoon_type_api() async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.get(Api.url + 'platoon',
+      var res = await dio1.get('${Api.url}platoon',
           data: {},
           options: dio.Options(
               headers: await Api.createHeader(),
@@ -162,7 +160,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = dio.FormData.fromMap({'filter': platoon});
-      var res = await dio1.post(Api.url + 'species',
+      var res = await dio1.post('${Api.url}species',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -185,7 +183,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = dio.FormData.fromMap(dic1);
-      var res = await dio1.post(Api.url + 'modify_gavernorate',
+      var res = await dio1.post('${Api.url}modify_gavernorate',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -202,7 +200,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.FormData formData = dio.FormData.fromMap(dic1);
-      var res = await dio1.post(Api.url + 'modify_city',
+      var res = await dio1.post('${Api.url}modify_city',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -219,7 +217,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = dio.FormData.fromMap(dic1);
-      var res = await dio1.post(Api.url + 'modify_village',
+      var res = await dio1.post('${Api.url}modify_village',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -239,7 +237,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = dio.FormData.fromMap(
           {'operation': operation, 'platoon': platoon, 'new_name': new_name});
-      var res = await dio1.post(Api.url + 'modified_platoon',
+      var res = await dio1.post('${Api.url}modified_platoon',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -263,7 +261,7 @@ class Api {
         'new_name': new_name,
         'platoon': platoon
       });
-      var res = await dio1.post(Api.url + 'modified_species',
+      var res = await dio1.post('${Api.url}modified_species',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -281,7 +279,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = form;
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'farm_api',
+          await dio1.post('${Api.url}farm_api',
               data: formData,
               queryParameters: <String, dynamic>{},
               options: dio.Options(
@@ -302,7 +300,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = form;
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'farmer_api',
+          await dio1.post('${Api.url}farmer_api',
               data: formData,
               queryParameters: <String, dynamic>{},
               options: dio.Options(
@@ -324,7 +322,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData = form;
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'add_farme_animal_api',
+          await dio1.post('${Api.url}add_farme_animal_api',
               data: formData,
               queryParameters: <String, dynamic>{},
               options: dio.Options(
@@ -346,7 +344,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
 
-      var res = await dio1.post(Api.url + 'location_api',
+      var res = await dio1.post('${Api.url}location_api',
           queryParameters: <String, dynamic>{},
           options: dio.Options(
             headers: await Api.createHeader(),
@@ -371,7 +369,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
 
-      var res = await dio1.post(Api.url + 'animal_api',
+      var res = await dio1.post('${Api.url}animal_api',
           queryParameters: <String, dynamic>{},
           options: dio.Options(
             headers: await Api.createHeader(),
@@ -401,7 +399,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
 
-      var res = await dio1.post(Api.url + 'change_password_email',
+      var res = await dio1.post('${Api.url}change_password_email',
           queryParameters: <String, dynamic>{},
           data: formData,
           options: dio.Options(
@@ -421,7 +419,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'change_password_done',
+          await dio1.post('${Api.url}change_password_done',
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
@@ -441,7 +439,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'connect_farm_farmer_api',
+          await dio1.post('${Api.url}connect_farm_farmer_api',
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
@@ -459,7 +457,7 @@ class Api {
       {required dio.FormData formData}) async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.post(Api.url + 'login_api',
+      var res = await dio1.post('${Api.url}login_api',
           queryParameters: <String, dynamic>{},
           data: formData,
           options: dio.Options(
@@ -479,7 +477,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'admin_api',
+          await dio1.post('${Api.url}admin_api',
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
@@ -498,7 +496,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'operation_admin_api',
+          await dio1.post('${Api.url}operation_admin_api',
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
@@ -516,7 +514,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'summary_governorate',
+          await dio1.post('${Api.url}summary_governorate',
               queryParameters: <String, dynamic>{},
               options: dio.Options(
                 headers: await Api.createHeader(),
@@ -534,7 +532,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       List<Polygon> plogons = [];
       List<Marker> markers = [];
-      Response<List> res = await dio1.post<List>(Api.url + "get_data_map",
+      Response<List> res = await dio1.post<List>("${Api.url}get_data_map",
           queryParameters: {},
           data: formData,
           options: dio.Options(
@@ -559,7 +557,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'location_statistics',
+          await dio1.post('${Api.url}location_statistics',
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
@@ -578,7 +576,7 @@ class Api {
       {required FormData formData, required String url}) async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.post(url.isEmpty ? Api.url + 'farm_info_list' : url,
+      var res = await dio1.post(url.isEmpty ? '${Api.url}farm_info_list' : url,
           queryParameters: <String, dynamic>{},
           data: formData,
           options: dio.Options(
@@ -607,7 +605,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
 
       dio.Response<Map<String, dynamic>> res =
-          await dio1.post(Api.url + 'farm_info',
+          await dio1.post('${Api.url}farm_info',
               queryParameters: <String, dynamic>{},
               data: formData,
               options: dio.Options(
@@ -625,7 +623,7 @@ class Api {
       {required String farmId}) async {
     try {
       dio.Dio dio1 = dio.Dio();
-      var res = await dio1.post(Api.url + 'farm_platoon_api',
+      var res = await dio1.post('${Api.url}farm_platoon_api',
           data: {"farm_id": farmId},
           options: dio.Options(
               headers: await Api.createHeader(),
@@ -650,7 +648,7 @@ class Api {
       dio.Dio dio1 = dio.Dio();
       dio.FormData formData =
           dio.FormData.fromMap({'filter': platoon, "farm_id": farmId});
-      var res = await dio1.post(Api.url + 'farm_species_api',
+      var res = await dio1.post('${Api.url}farm_species_api',
           data: formData,
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -674,7 +672,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
 
-      var res = await dio1.post(Api.url + 'animal_farm_api',
+      var res = await dio1.post('${Api.url}animal_farm_api',
           data: FormData.fromMap({"farm_id": farmId}),
           queryParameters: <String, dynamic>{},
           options: dio.Options(
@@ -705,7 +703,7 @@ class Api {
     try {
       dio.Dio dio1 = dio.Dio();
       List<LatLng> l1 = [];
-      var res = await dio1.get(Api.url + 'farm_map_bounder_api',
+      var res = await dio1.get('${Api.url}farm_map_bounder_api',
           queryParameters: <String, dynamic>{},
           options: dio.Options(
             headers: await Api.createHeader(),
@@ -742,7 +740,7 @@ class Api {
         return null;
       }
       if (url == '') {
-        url = Api.url + 'search_farmer_api';
+        url = '${Api.url}search_farmer_api';
       }
       var res = await dio1.post(url,
           data: FormData.fromMap({"name": farmerName}),
@@ -786,7 +784,7 @@ class Api {
         return null;
       }
       if (url == '') {
-        url = Api.url + 'search_farm_api';
+        url = '${Api.url}search_farm_api';
       }
       Map<String, dynamic> map = {};
 
@@ -834,7 +832,7 @@ class Api {
     Map<String, String> header = <String, String>{"ssn": ssn};
     header.addAll(u);
     return NetworkImage(
-      Api.url + "img_farmer_api",
+      "${Api.url}img_farmer_api",
       headers: header,
     );
   }
@@ -847,7 +845,7 @@ class Api {
         "totp": await CustomeSecureStorage.gettotp(),
       };
       Dio dio1 = Dio();
-      var res = await dio1.get(Api.url + "check_totp",
+      var res = await dio1.get("${Api.url}check_totp",
           options: dio.Options(
             headers: header,
           ));
@@ -864,7 +862,7 @@ class Api {
         "password": await CustomeSecureStorage.getpassword(),
       };
       Dio dio1 = Dio();
-      var res = await dio1.post(Api.url + "change_password_email_template",
+      var res = await dio1.post("${Api.url}change_password_email_template",
           options: dio.Options(
             headers: header,
           ));
@@ -878,7 +876,7 @@ class Api {
     try {
       Map<String, String> header = await createHeader();
       Dio dio1 = Dio();
-      var res = await dio1.post(Api.url + "user_group",
+      var res = await dio1.post("${Api.url}user_group",
           options: dio.Options(
             headers: header,
           ));
@@ -902,7 +900,7 @@ class Api {
         return null;
       }
       if (url == '') {
-        url = Api.url + 'search_google_map';
+        url = '${Api.url}search_google_map';
       }
       Map<String, dynamic> map = {};
 
