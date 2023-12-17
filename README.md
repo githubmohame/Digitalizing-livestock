@@ -9,7 +9,8 @@
 ![plot](./imageScreenshoot/Screenshot%20from%202023-10-21%2014-52-36.png)
 ![plot](./imageScreenshoot/Screenshot1.png)
 ![plot](./imageScreenshoot/Screenshot%20from%202023-12-17%2016-57-02.png)
-./videos/Screencast%20from%202023-10-20%2016-44-30.webm
+![plot](./imageScreenshoot/Screenshot%20from%202023-12-17%2017-51-28.png)
+
 # digitalization Live Stock
 
 ##  prerequisites
