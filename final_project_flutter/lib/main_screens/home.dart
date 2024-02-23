@@ -376,7 +376,7 @@ class HomeScreen extends StatelessWidget {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const AddLocationScreen(),
+                                                            AddLocationScreen(),
                                                     ));
                                               }),
                                               child: Card(

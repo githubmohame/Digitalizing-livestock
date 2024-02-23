@@ -622,6 +622,8 @@ def change_password_done(request :Request):
 @authentication_classes([CustomerBackendTotp])
 def connect_farm_farmer_api(request :Request):
 	if(request.data.get('operation')=='insert'):
+		if(User.farmer.all().filter(ssn=request.data.get('farmer_id')).count()==0):
+			return JsonResponse({"error":"هذا المربي غير مسجل" });
 		try:
 			connect_farm_farmer1=connect_farm_farmer()
 			connect_farm_farmer1.farmer=User.farmer.get(ssn=request.data.get('farmer_id'))
@@ -631,7 +633,9 @@ def connect_farm_farmer_api(request :Request):
 			con1=connectFarmFarmerSeralizer(instance=connect_farm_farmer1)
 			return JsonResponse({"message":"تم اضافة البيانات"})
 		except:
-			 
+			print("********************************"*45)
+			print(request.data.get('farmer_id'));
+			print(User.farmer.all().count())
 			connect_farm_farmer1=connect_farm_farmer.objects.get(farmer_id=User.farmer.get(ssn=request.data.get('farmer_id')),farm=farm.objects.get(id=request.data.get('farm_id')))
 			connect_farm_farmer1.total_cost=request.data.get('total_cost')
 			con1=connectFarmFarmerSeralizer(instance=connect_farm_farmer1)
@@ -962,6 +966,7 @@ def user_group_api(request :Request):
 def create_totpy_code_for_paseto_api(request :Request):
 	u1:User=User.objects.get(ssn=request.headers.get('ssn'))
 	return response.Response();
+"""
 @api_view(['GET',"POST" ])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackendTotp])
@@ -976,6 +981,7 @@ def create_paseto_api(request :Request):
 			)
   return  response.Response(GroupSerializer( instance= request.user.groups.all(),many=True).data)
 
+"""
 @api_view(['GET',"POST" ])
 @permission_classes([permissions.IsAuthenticated])
 @authentication_classes([CustomerBackendTotp])

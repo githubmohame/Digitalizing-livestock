@@ -228,9 +228,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             title: const Text("صفحة الترحيب",
                                 style: TextStyle(color: Colors.white)),
                             onTap: (() {
-                              Navigator.of(context)
-                                  .history
-                                  .forEach((element) {});
+                            //Navigator.of(context).history.forEach((element) {});
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -287,7 +285,7 @@ class _MainDrawerState extends State<MainDrawer> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const AddLocationScreen(),
+                                builder: (context) =>   AddLocationScreen(),
                               ));
                         }),
                       ),
@@ -603,7 +601,7 @@ class ComputerDrawer extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const AddLocationScreen(),
+                      builder: (context) =>   AddLocationScreen(),
                     ));
               }),
             ),
@@ -1001,7 +999,7 @@ class _CustomeDrawerView2State extends State<CustomeDrawerView2> {
                   onTap: () {
                     Navigator.pushReplacement(context, PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return const AddLocationScreen();
+                        return   AddLocationScreen();
                       },
                     ));
                   },

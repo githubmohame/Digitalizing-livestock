@@ -14,8 +14,9 @@ import 'package:otp/otp.dart';
 class Api {
   static const String EnvServerDomain = String.fromEnvironment('ServerDomain');
   static String url = () {
-    print("https://" + EnvServerDomain + '/');
-    return "https://" + EnvServerDomain + '/';
+     //print("https://" + EnvServerDomain + '/');
+    //return "https://" + EnvServerDomain + '/';
+     return "https://" + EnvServerDomain + '/';
   }();
   static Future<Map<String, String>> createHeader() async {
     return {
@@ -43,8 +44,7 @@ class Api {
         map['id'] = res.data[index]['id'];
         return map;
       });
-      print(l1);
-      return l1;
+       return l1;
     } catch (e) {}
     return [];
   }
@@ -358,8 +358,7 @@ class Api {
 
       map['city'] = res.data['city']['id'];
       map['village'] = res.data['id'];
-      print(map);
-      l1.add(map);
+       l1.add(map);
       return l1;
     } catch (e) {}
     return [];
@@ -456,7 +455,7 @@ class Api {
   static Future<Map<String, dynamic>> login_api(
       {required dio.FormData formData}) async {
     try {
-      dio.Dio dio1 = dio.Dio();
+       dio.Dio dio1 = dio.Dio();
       var res = await dio1.post('${Api.url}login_api',
           queryParameters: <String, dynamic>{},
           data: formData,
@@ -793,8 +792,7 @@ class Api {
       }
       map["name"] = farmerName;
       //map["auth"] = (await CustomeSecureStorage.getauth());
-      print(await Api.createHeader());
-      var res = await dio1.post(url,
+       var res = await dio1.post(url,
           data: FormData.fromMap(map),
           queryParameters: <String, dynamic>{},
           options: dio.Options(

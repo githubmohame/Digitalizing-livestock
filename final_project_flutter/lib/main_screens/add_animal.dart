@@ -431,7 +431,12 @@ class _UpdateAnimalState extends State<UpdateAnimal> {
                             color: const Color(0xFF357515),
                             child: SizedBox(
                               width: 600,
-                              child: list[index],
+                              child: Stack(
+                                children: [
+                                  SizedBox(height: index==0?null:0,child: list[0]),
+                                  SizedBox(height: index==1?null:0,child: list[1]),
+                                ],
+                              ),
                             )),
                        ],
                      ),

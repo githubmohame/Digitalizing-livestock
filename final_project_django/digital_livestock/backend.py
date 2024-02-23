@@ -4,9 +4,11 @@ from digital_livestock.models import User, totpyUsers
 import pyotp
 import redis
 import paseto
-from paseto.keys.symmetric_key import SymmetricKey
-from paseto.protocols.v4 import ProtocolVersion4
-my_key = SymmetricKey.generate(protocol=ProtocolVersion4)
+
+#from paseto.keys.symmetric_key import SymmetricKey
+#from paseto.protocols.v4 import ProtocolVersion4
+import secrets
+my_key =  secrets.token_bytes(32)
 class CustomerBackendTotp(BaseAuthentication):
     def authenticate(self, request, **kwargs):
         print(request.headers );
@@ -42,7 +44,7 @@ class CustomerBackendTotpVerifiedPaseto(BaseAuthentication):
         except Exception as e:
             return (AnonymousUser(), None)
 
-
+"""
 class CustomerBackendCreatePasto(BaseAuthentication):
     def authenticate(self, request, **kwargs):
         try:
@@ -61,7 +63,18 @@ class CustomerBackendVerifiedPasto(BaseAuthentication):
                 )
         except Exception as e:
             return (AnonymousUser(), None)
-
+"""
+class CustomerBackendVerifiedPasto(BaseAuthentication):
+    def authenticate(self, request, **kwargs):
+        try:
+            pass
+            parsed = paseto.parse(
+                    key=my_key,
+                    purpose='local',
+                    token=request.headers["token"],
+                )
+        except Exception as e:
+            return (AnonymousUser(), None)
 class CustomerBackendBasic(BaseAuthentication):
     def authenticate(self, request, **kwargs):
 

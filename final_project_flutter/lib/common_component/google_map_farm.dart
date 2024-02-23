@@ -134,7 +134,7 @@ class _GoogleMapComponentFarmDesktopScreenState
               onPressed: () async {
                 LatLng p = await widget._determinePosition();
                 widget.point = p;
-                print("the point is " + p.toString());
+                print("the point is $p");
                 widget.list1 = [];
                 setState(() {});
               },
@@ -271,7 +271,7 @@ class _GoogleMapComponentFarmDesktopScreenState
                       }())
                     : Container(),
                 () {
-                  print("test the positioning"+widget.point.toString());
+                  print("test the positioning${widget.point}");
                   if ((widget.point == null)) {
                     return Container();
                   }
@@ -281,7 +281,7 @@ class _GoogleMapComponentFarmDesktopScreenState
                           height: 200,
                           width: 200,
                           point: widget.point!,
-                          child: Icon(Icons.location_on))
+                          child: const Icon(Icons.location_on))
                     ],
                   );
                 }()
@@ -334,7 +334,7 @@ class _GoogleMapFarmTestState extends State<GoogleMapFarmPhone> {
         initialZoom: 12,
         // boundsOptions: const FitBoundsOptions(),
         //screenSize: const Size(120, 330 - 18),
-        interactionOptions: InteractionOptions(
+        interactionOptions: const InteractionOptions(
           flags: MultiFingerGesture.pinchZoom | MultiFingerGesture.none,
         ),
         //
